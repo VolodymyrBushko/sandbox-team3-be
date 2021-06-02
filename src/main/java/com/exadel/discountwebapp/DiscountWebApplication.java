@@ -1,12 +1,12 @@
-package com.exadel.sandboxteam3be;
+package com.exadel.discountwebapp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SandboxTeam3BeApplication {
+public class DiscountWebApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SandboxTeam3BeApplication.class, args);
+        SpringApplication.run(DiscountWebApplication.class, args);
     }
 }

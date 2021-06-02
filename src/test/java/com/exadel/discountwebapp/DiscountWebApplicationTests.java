@@ -1,10 +1,10 @@
-package com.exadel.sandboxteam3be;
+package com.exadel.discountwebapp;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SandboxTeam3BeApplicationTests {
+class DiscountWebApplicationTests {
 
     @Test
     void contextLoads() {
