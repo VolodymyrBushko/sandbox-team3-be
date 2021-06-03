@@ -1,16 +1,18 @@
 package com.exadel.discountwebapp.category.entity;
 
+import com.exadel.discountwebapp.discount.entity.Discount;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "category")
 @Data
-@NoArgsConstructor
 @EqualsAndHashCode
 public class Category {
 
@@ -37,7 +39,17 @@ public class Category {
     @Column(name = "modified_at", nullable = false)
     private LocalDateTime modifiedAt;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "category")
+    private List<Discount> discounts;
+
+    public Category() {
+        discounts = new ArrayList<>();
+    }
+
     public Category(String title, String imageUrl) {
+        this();
         this.title = title;
         this.imageUrl = imageUrl;
     }

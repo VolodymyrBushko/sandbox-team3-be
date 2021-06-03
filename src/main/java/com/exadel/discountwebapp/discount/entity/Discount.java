@@ -1,5 +1,8 @@
 package com.exadel.discountwebapp.discount.entity;
 
+import com.exadel.discountwebapp.category.entity.Category;
+import com.exadel.discountwebapp.location.entity.Location;
+import com.exadel.discountwebapp.vendor.entity.Vendor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -10,11 +13,12 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "discount")
 @Data
-@NoArgsConstructor
 @EqualsAndHashCode
 public class Discount {
 
@@ -72,7 +76,43 @@ public class Discount {
     @Column(name = "modified_at", nullable = false)
     private LocalDateTime modifiedAt;
 
-    public Discount(String title, String shortDescription, String description, String imageUrl, int percentage, int amount, int perUser, BigDecimal price, LocalDateTime startDate, LocalDateTime expirationDate) {
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @ManyToOne
+    @JoinColumn(name = "vendor_id", nullable = false)
+    private Vendor vendor;
+
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(
+            name = "discount_location",
+            joinColumns = @JoinColumn(name = "discount_id"),
+            inverseJoinColumns = @JoinColumn(name = "location_id")
+    )
+    private List<Location> locations;
+
+    public Discount() {
+        locations = new ArrayList<>();
+    }
+
+    public Discount(String title,
+                    String shortDescription,
+                    String description,
+                    String imageUrl,
+                    int percentage,
+                    int amount,
+                    int perUser,
+                    BigDecimal price,
+                    LocalDateTime startDate,
+                    LocalDateTime expirationDate,
+                    Category category,
+                    Vendor vendor) {
+        this();
         this.title = title;
         this.shortDescription = shortDescription;
         this.description = description;
@@ -83,5 +123,7 @@ public class Discount {
         this.price = price;
         this.startDate = startDate;
         this.expirationDate = expirationDate;
+        this.category = category;
+        this.vendor = vendor;
     }
 }
