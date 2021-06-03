@@ -88,6 +88,8 @@ public class Discount {
     @JoinColumn(name = "vendor_id", nullable = false)
     private Vendor vendor;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
             name = "discount_location",
