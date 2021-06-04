@@ -3,22 +3,19 @@ package com.exadel.discountwebapp.role.entity;
 import com.exadel.discountwebapp.user.entity.User;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-import net.bytebuddy.dynamic.loading.InjectionClassLoader;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.UUID;
+
 
 @Data
 @Entity
 @EqualsAndHashCode
-@Table(name = "roles")
+@Table(name = "role")
 public class Role {
 
 //    @Id
@@ -27,24 +24,25 @@ public class Role {
 //    @Column(name = "id", updatable = false, nullable = false)
 //    private UUID id;
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @EqualsAndHashCode.Exclude
+    @Column(name = "rol_id")
     private Long id;
 
-    @Column(name = "name", length = 25, unique = true, nullable = false)
+    @Column(name = "rol_name", length = 25, unique = true, nullable = false)
     private String name;
 
-    @CreationTimestamp
-    @Column(name="created_at", nullable = false)
-    private Date createdAt;
+     @OneToMany(mappedBy = "role")
+    private List<User> users = new ArrayList<>();
 
-    @UpdateTimestamp
-    @Column(name="modified_at", nullable = false)
-    private Date modifiedAt;
+    @CreatedDate
+    @EqualsAndHashCode.Exclude
+    @Column(name="rol_created", nullable = false, updatable = false)
+    private LocalDateTime  created;
 
-//    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-//    private List<User> users = new ArrayList<>();
-
+    @LastModifiedDate
+    @EqualsAndHashCode.Exclude
+    @Column(name="rol_modified", nullable = false)
+    private LocalDateTime modified;
 }
