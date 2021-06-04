@@ -1,10 +1,10 @@
 package com.exadel.discountwebapp.role.entity;
 
 import com.exadel.discountwebapp.user.entity.User;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,15 +14,12 @@ import java.util.List;
 
 @Data
 @Entity
-@EqualsAndHashCode
+@Builder
 @Table(name = "role")
+@NoArgsConstructor
+@AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Role {
-
-//    @Id
-//    @GeneratedValue(generator = "UUID")
-//    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-//    @Column(name = "id", updatable = false, nullable = false)
-//    private UUID id;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,16 +30,16 @@ public class Role {
     @Column(name = "rol_name", length = 25, unique = true, nullable = false)
     private String name;
 
-     @OneToMany(mappedBy = "role")
+    @OneToMany(mappedBy = "role")
     private List<User> users = new ArrayList<>();
 
     @CreatedDate
     @EqualsAndHashCode.Exclude
-    @Column(name="rol_created", nullable = false, updatable = false)
-    private LocalDateTime  created;
+    @Column(name = "rol_created", nullable = false, updatable = false)
+    private LocalDateTime created;
 
     @LastModifiedDate
     @EqualsAndHashCode.Exclude
-    @Column(name="rol_modified", nullable = false)
+    @Column(name = "rol_modified", nullable = false)
     private LocalDateTime modified;
 }
