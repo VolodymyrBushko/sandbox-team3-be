@@ -1,11 +1,10 @@
 package com.exadel.discountwebapp.vendor.entity;
 
 import com.exadel.discountwebapp.location.entity.Location;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,7 +13,10 @@ import java.time.LocalDateTime;
 @Data
 @Table(name = "vendor")
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode
+@Builder
+@EntityListeners(AuditingEntityListener.class)
 public class Vendor {
     @EqualsAndHashCode.Exclude
     @Id
@@ -50,12 +52,4 @@ public class Vendor {
     @ManyToOne
     @JoinColumn(name = "loc_id")
     private Location location;
-
-    public Vendor(String title, String description, String imageUrl, String email, Location location) {
-        this.title = title;
-        this.description = description;
-        this.imageUrl = imageUrl;
-        this.email = email;
-        this.location = location;
-    }
 }

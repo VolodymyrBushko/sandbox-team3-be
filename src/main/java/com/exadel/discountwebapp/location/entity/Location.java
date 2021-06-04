@@ -1,11 +1,10 @@
 package com.exadel.discountwebapp.location.entity;
 
 import com.exadel.discountwebapp.vendor.entity.Vendor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,8 +13,11 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode
 @Table(name = "location")
+@Builder
+@EntityListeners(AuditingEntityListener.class)
 public class Location {
     @EqualsAndHashCode.Exclude
     @Id
@@ -42,10 +44,4 @@ public class Location {
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "location")
     private List<Vendor> vendors;
-
-
-    public Location(String country, String city) {
-        this.country = country;
-        this.city = city;
-    }
 }
