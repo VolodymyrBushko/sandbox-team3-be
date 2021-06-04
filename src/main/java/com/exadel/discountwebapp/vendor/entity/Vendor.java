@@ -26,7 +26,7 @@ public class Vendor {
     private String title;
 
     @EqualsAndHashCode.Exclude
-    @Column(name = "vn_description", length = 500, nullable = false)
+    @Column(name = "vn_description", length = 510, nullable = false)
     private String description;
 
     @EqualsAndHashCode.Exclude
