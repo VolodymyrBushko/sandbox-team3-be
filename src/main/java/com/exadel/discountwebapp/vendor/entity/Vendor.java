@@ -48,7 +48,7 @@ public class Vendor {
 
     @EqualsAndHashCode.Exclude
     @ManyToOne
-    @JoinColumn(name = "location_id")
+    @JoinColumn(name = "loc_id")
     private Location location;
 
     public Vendor(String title, String description, String imageUrl, String email, Location location) {
