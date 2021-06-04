@@ -7,6 +7,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.*;
 
 @Data
@@ -46,21 +47,27 @@ public class User {
     @JoinColumn(name = "role_id")
     private Role role;
 
-//    @ManyToOne
-//    @EqualsAndHashCode.Exclude
-//    @JoinColumn(name = "loc_id")
-//    private Location location;
+    @ManyToOne
+    @EqualsAndHashCode.Exclude
+    @JoinColumn(name = "loc_id")
+    private Location location;
 
 
 //    @ManyToMany(mappedBy = "discount")
-////    @JoinTable
-//    private List<Discount> discounts;
+//@EqualsAndHashCode.Exclude
+////    @JoinTable()
+//    private List<UserDiscount> discounts;
+
+
+    @OneToMany(mappedBy = "user")
+    @EqualsAndHashCode.Exclude
+    private List<UserDiscount> discounts = new ArrayList<>();
 
 
     @CreatedDate
     @EqualsAndHashCode.Exclude
     @Column(name="usr_created", nullable = false, updatable = false)
-    private LocalDateTime  created;
+    private LocalDateTime created;
 
     @LastModifiedDate
     @EqualsAndHashCode.Exclude
