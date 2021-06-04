@@ -22,7 +22,7 @@ public class Vendor {
     @Column(name = "vn_id")
     private Long id;
 
-    @Column(name = "vn_title", length = 55, nullable = false)
+    @Column(name = "vn_title", length = 50, nullable = false)
     private String title;
 
     @EqualsAndHashCode.Exclude
@@ -30,10 +30,10 @@ public class Vendor {
     private String description;
 
     @EqualsAndHashCode.Exclude
-    @Column(name = "vn_image_url", length = 255, nullable = false)
+    @Column(name = "vn_image_url", length = 510, nullable = false)
     private String imageUrl;
 
-    @Column(name = "vn_email", length = 100, nullable = false, unique = true)
+    @Column(name = "vn_email", length = 255, nullable = false, unique = true)
     private String email;
 
     @EqualsAndHashCode.Exclude
