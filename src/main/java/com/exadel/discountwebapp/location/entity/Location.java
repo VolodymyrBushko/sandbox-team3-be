@@ -4,8 +4,8 @@ import com.exadel.discountwebapp.vendor.entity.Vendor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -17,35 +17,35 @@ import java.util.List;
 @EqualsAndHashCode
 @Table(name = "location")
 public class Location {
+    @EqualsAndHashCode.Exclude
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "loc_id")
     private Long id;
 
-    @Column(name = "country", length = 50, unique = true, nullable = false)
+    @Column(name = "loc_country", length = 50, nullable = false)
     private String country;
 
-    @Column(name = "city", length = 50, nullable = false)
+    @Column(name = "loc_city", length = 50, nullable = false)
     private String city;
 
-    @CreationTimestamp
+    @CreatedDate
     @EqualsAndHashCode.Exclude
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
+    @Column(name = "loc_created", nullable = false, updatable = false)
+    private LocalDateTime created;
 
-    @UpdateTimestamp
+    @LastModifiedDate
     @EqualsAndHashCode.Exclude
-    @Column(name = "modified_at", nullable = false)
-    private LocalDateTime modifiedAt;
+    @Column(name = "loc_modified", nullable = false)
+    private LocalDateTime modified;
 
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "location")
     private List<Vendor> vendors;
 
 
-    public Location(String country, String city, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+    public Location(String country, String city) {
         this.country = country;
         this.city = city;
-        this.createdAt = createdAt;
-        this.modifiedAt = modifiedAt;
     }
 }
