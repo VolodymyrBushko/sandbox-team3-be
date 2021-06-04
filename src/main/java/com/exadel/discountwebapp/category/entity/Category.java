@@ -2,56 +2,49 @@ package com.exadel.discountwebapp.category.entity;
 
 import com.exadel.discountwebapp.discount.entity.Discount;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "category")
 @Data
-@EqualsAndHashCode
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Exclude
-    @Column(name = "id")
+    @Column(name = "cat_id")
     private Long id;
 
-    @Column(name = "title", length = 25, nullable = false, unique = true)
+    @Column(name = "cat_title", length = 25, nullable = false, unique = true)
     private String title;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @Column(name = "image_url", length = 255, nullable = false)
+    @Column(name = "cat_image_url", length = 510)
     private String imageUrl;
 
     @EqualsAndHashCode.Exclude
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
+    @CreatedDate
+    @Column(name = "cat_created", nullable = false, updatable = false)
+    private LocalDateTime created;
 
     @EqualsAndHashCode.Exclude
-    @UpdateTimestamp
-    @Column(name = "modified_at", nullable = false)
-    private LocalDateTime modifiedAt;
+    @LastModifiedDate
+    @Column(name = "cat_modified", nullable = false)
+    private LocalDateTime modified;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "category")
     private List<Discount> discounts;
-
-    public Category() {
-        discounts = new ArrayList<>();
-    }
-
-    public Category(String title, String imageUrl) {
-        this();
-        this.title = title;
-        this.imageUrl = imageUrl;
-    }
 }
