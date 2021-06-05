@@ -93,8 +93,8 @@ public class Discount {
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
             name = "location_discount",
-            joinColumns = @JoinColumn(name = "ld_dis_id"),
-            inverseJoinColumns = @JoinColumn(name = "ld_loc_id")
+            joinColumns = @JoinColumn(name = "dis_id"),
+            inverseJoinColumns = @JoinColumn(name = "loc_id")
     )
     private List<Location> locations;
 }
