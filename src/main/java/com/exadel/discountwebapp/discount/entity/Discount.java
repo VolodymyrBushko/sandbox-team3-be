@@ -46,6 +46,9 @@ public class Discount {
     @Column(name = "dis_percentage", nullable = false)
     private int percentage;
 
+    @Column(name = "dis_flatAmount", nullable = false)
+    private BigDecimal flatAmount;
+
     @Column(name = "dis_quantity", nullable = false)
     private int quantity;
 
