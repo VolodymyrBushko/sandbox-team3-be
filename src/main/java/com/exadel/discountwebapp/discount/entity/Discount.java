@@ -31,17 +31,14 @@ public class Discount {
     @Column(name = "dis_title", length = 25, nullable = false)
     private String title;
 
-    @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @Column(name = "dis_short_description", length = 50, nullable = false)
     private String shortDescription;
 
-    @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @Column(name = "dis_description", length = 510, nullable = false)
     private String description;
 
-    @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @Column(name = "dis_image_url", length = 510)
     private String imageUrl;

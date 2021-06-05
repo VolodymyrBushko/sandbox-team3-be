@@ -28,7 +28,6 @@ public class Category {
     @Column(name = "cat_title", length = 25, nullable = false, unique = true)
     private String title;
 
-    @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @Column(name = "cat_image_url", length = 510)
     private String imageUrl;
