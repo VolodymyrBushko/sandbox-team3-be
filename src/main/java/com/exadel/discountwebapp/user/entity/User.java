@@ -34,22 +34,22 @@ public class User {
     @Column(name = "usr_surname", length = 50, nullable = false)
     private String surname;
 
-    @Column(name = "usr_email", length = 100, unique = true, nullable = false)
+    @Column(name = "usr_email", length = 255, unique = true, nullable = false)
     private String email;
 
     @EqualsAndHashCode.Exclude
-    @Column(name = "usr_password", length = 255, nullable = false)
+    @Column(name = "usr_password", length = 510, nullable = false)
     private String password;
-
-    @ManyToOne
-    @EqualsAndHashCode.Exclude
-    @JoinColumn(name = "rol_id")
-    private Role role;
 
     @ManyToOne
     @EqualsAndHashCode.Exclude
     @JoinColumn(name = "loc_id")
     private Location location;
+
+    @ManyToOne
+    @EqualsAndHashCode.Exclude
+    @JoinColumn(name = "rol_id")
+    private Role role;
 
     @OneToMany(mappedBy = "user")
     @EqualsAndHashCode.Exclude
