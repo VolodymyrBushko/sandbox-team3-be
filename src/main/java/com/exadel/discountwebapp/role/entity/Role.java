@@ -30,13 +30,13 @@ public class Role {
     @Column(name = "rol_name", length = 25, unique = true, nullable = false)
     private String name;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "role")
     @EqualsAndHashCode.Exclude
     private List<User> users = new ArrayList<>();
 
     @CreatedDate
     @EqualsAndHashCode.Exclude
-    @ToString.Exclude
     @Column(name = "rol_created", nullable = false, updatable = false)
     private LocalDateTime created;
 
