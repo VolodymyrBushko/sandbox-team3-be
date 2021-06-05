@@ -1,9 +1,9 @@
 package com.exadel.discountwebapp.user.entity;
 
 import com.exadel.discountwebapp.role.entity.Role;
-import com.exadel.discountwebapp.userdiscount.entitiy.UserDiscount;
 import com.exadel.discountwebapp.location.entity.Location;
 
+import com.exadel.discountwebapp.userdiscount.entity.UserDiscount;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -11,6 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.*;
 
 @Data
@@ -28,16 +29,15 @@ public class User {
     @Column(name = "usr_id")
     private Long id;
 
-    @Column(name = "usr_name", length = 50, nullable = false)
-    private String name;
+    @Column(name = "usr_first_name", length = 50, nullable = false)
+    private String firstName;
 
-    @Column(name = "usr_surname", length = 50, nullable = false)
-    private String surname;
+    @Column(name = "usr_last_name", length = 50, nullable = false)
+    private String lastName;
 
     @Column(name = "usr_email", length = 255, unique = true, nullable = false)
     private String email;
 
-    @EqualsAndHashCode.Exclude
     @Column(name = "usr_password", length = 510, nullable = false)
     private String password;
 
@@ -64,5 +64,4 @@ public class User {
     @EqualsAndHashCode.Exclude
     @Column(name = "usr_modified", nullable = false)
     private LocalDateTime modified;
-
 }

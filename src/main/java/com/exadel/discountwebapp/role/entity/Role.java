@@ -31,10 +31,12 @@ public class Role {
     private String name;
 
     @OneToMany(mappedBy = "role")
+    @EqualsAndHashCode.Exclude
     private List<User> users = new ArrayList<>();
 
     @CreatedDate
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @Column(name = "rol_created", nullable = false, updatable = false)
     private LocalDateTime created;
 
