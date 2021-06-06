@@ -3,6 +3,7 @@ package com.exadel.discountwebapp.category.service.impl;
 import com.exadel.discountwebapp.category.entity.Category;
 import com.exadel.discountwebapp.category.repository.CategoryRepository;
 import com.exadel.discountwebapp.category.service.CategoryService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
 
+    @Autowired
     public CategoryServiceImpl(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
