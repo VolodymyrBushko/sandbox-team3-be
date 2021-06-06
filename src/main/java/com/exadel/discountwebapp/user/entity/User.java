@@ -3,7 +3,6 @@ package com.exadel.discountwebapp.user.entity;
 import com.exadel.discountwebapp.role.entity.Role;
 import com.exadel.discountwebapp.location.entity.Location;
 
-import com.exadel.discountwebapp.userdiscount.entity.UserDiscount;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;

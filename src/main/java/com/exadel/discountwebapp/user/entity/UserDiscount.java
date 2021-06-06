@@ -1,4 +1,4 @@
-package com.exadel.discountwebapp.userdiscount.entity;
+package com.exadel.discountwebapp.user.entity;
 
 import com.exadel.discountwebapp.discount.entity.Discount;
 import com.exadel.discountwebapp.user.entity.User;
@@ -25,12 +25,14 @@ public class UserDiscount {
     private UserDiscountId id = new UserDiscountId();
 
     @ToString.Exclude
-    @MapsId("userId")
+    @MapsId("usr_id")
+    @JoinColumn(name = "usr_id")
     @ManyToOne
     private User user;
 
     @ToString.Exclude
-    @MapsId("discountId")
+    @MapsId("dis_id")
+    @JoinColumn(name = "dis_id")
     @ManyToOne
     private Discount discount;
 
@@ -53,8 +55,10 @@ public class UserDiscount {
     @AllArgsConstructor
     public static class UserDiscountId implements Serializable {
 
+        @Column(name="usr_id")
         private Long userId;
 
+        @Column(name="dis_id")
         private Long discountId;
     }
 }
