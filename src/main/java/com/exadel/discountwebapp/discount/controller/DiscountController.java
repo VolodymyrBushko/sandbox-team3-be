@@ -1,41 +1,38 @@
 package com.exadel.discountwebapp.discount.controller;
 
-import com.exadel.discountwebapp.discount.entity.Discount;
 import com.exadel.discountwebapp.discount.service.DiscountService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.exadel.discountwebapp.discount.vo.RequestDiscountVO;
+import com.exadel.discountwebapp.discount.vo.ResponseDiscountVO;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/discount")
+@AllArgsConstructor
 public class DiscountController {
 
     private final DiscountService discountService;
 
-    @Autowired
-    public DiscountController(DiscountService discountService) {
-        this.discountService = discountService;
-    }
-
-    @GetMapping({"", "/"})
-    public List<Discount> findAll() {
+    @GetMapping
+    public List<ResponseDiscountVO> findAll() {
         return discountService.findAll();
     }
 
     @GetMapping("/{id}")
-    public Discount findById(@PathVariable long id) {
+    public ResponseDiscountVO findById(@PathVariable long id) {
         return discountService.findById(id);
     }
 
-    @PostMapping({"", "/"})
-    public Discount save(@RequestBody Discount discount) {
-        return discountService.save(discount);
+    @PostMapping
+    public ResponseDiscountVO create(@RequestBody RequestDiscountVO request) {
+        return discountService.create(request);
     }
 
-    @PutMapping({"", "/"})
-    public Discount update(@RequestBody Discount discount) {
-        return discountService.update(discount);
+    @PutMapping("/{id}")
+    public ResponseDiscountVO update(@PathVariable long id, @RequestBody RequestDiscountVO request) {
+        return discountService.update(id, request);
     }
 
     @DeleteMapping("/{id}")
