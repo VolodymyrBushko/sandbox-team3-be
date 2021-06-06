@@ -33,7 +33,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category save(Category category) {
-        if (category != null && category.getId() <= 0) {
+        if (category != null && category.getId() == null) {
             return categoryRepository.save(category);
         }
         return null;
@@ -41,7 +41,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category update(Category category) {
-        if (category != null && category.getId() > 0) {
+        if (category != null && category.getId() != null) {
             return categoryRepository.save(category);
         }
         return null;
