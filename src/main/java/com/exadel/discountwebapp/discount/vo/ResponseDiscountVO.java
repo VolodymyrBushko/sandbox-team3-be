@@ -19,6 +19,7 @@ public class ResponseDiscountVO extends BaseDiscountVO {
     public static ResponseDiscountVO fromDiscount(Discount discount) {
         return ResponseDiscountVO.builder()
                 .id(discount.getId())
+                .title(discount.getTitle())
                 .shortDescription(discount.getShortDescription())
                 .description(discount.getDescription())
                 .imageUrl(discount.getImageUrl())
