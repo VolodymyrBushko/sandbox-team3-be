@@ -33,7 +33,7 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     public Discount save(Discount discount) {
-        if (discount != null && discount.getId() <= 0) {
+        if (discount != null && discount.getId() == null) {
             return discountRepository.save(discount);
         }
         return null;
@@ -41,7 +41,7 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     public Discount update(Discount discount) {
-        if (discount != null && discount.getId() > 0) {
+        if (discount != null && discount.getId() != null) {
             return discountRepository.save(discount);
         }
         return null;
