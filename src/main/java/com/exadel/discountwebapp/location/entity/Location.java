@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -43,5 +44,5 @@ public class Location {
 
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "location")
-    private List<Vendor> vendors;
+    private List<Vendor> vendors = new ArrayList<>();
 }

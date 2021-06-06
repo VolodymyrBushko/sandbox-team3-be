@@ -11,6 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -96,5 +97,5 @@ public class Discount {
             joinColumns = @JoinColumn(name = "dis_id"),
             inverseJoinColumns = @JoinColumn(name = "loc_id")
     )
-    private List<Location> locations;
+    private List<Location> locations = new ArrayList<>();
 }
