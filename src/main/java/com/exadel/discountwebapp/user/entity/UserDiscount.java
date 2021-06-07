@@ -55,10 +55,10 @@ public class UserDiscount {
     @AllArgsConstructor
     public static class UserDiscountId implements Serializable {
 
-        @Column(name="usr_id")
+        @Column(name = "usr_id")
         private Long userId;
 
-        @Column(name="dis_id")
+        @Column(name = "dis_id")
         private Long discountId;
     }
 }
