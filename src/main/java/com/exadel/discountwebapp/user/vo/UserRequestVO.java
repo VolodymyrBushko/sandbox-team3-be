@@ -1,11 +1,12 @@
 package com.exadel.discountwebapp.user.vo;
 
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+
+@Data
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class UserRequestVO extends UserBaseVO {
 }

@@ -5,21 +5,17 @@ import com.exadel.discountwebapp.user.exception.UserNotFoundException;
 import com.exadel.discountwebapp.user.mapper.UserMapper;
 import com.exadel.discountwebapp.user.repository.UserRepository;
 import com.exadel.discountwebapp.user.vo.UserResponseVO;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
-
-    @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     public UserResponseVO findById(long id) throws UserNotFoundException {
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("No user found with id = %d\", id)"));

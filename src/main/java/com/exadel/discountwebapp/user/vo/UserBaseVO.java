@@ -1,18 +1,14 @@
 package com.exadel.discountwebapp.user.vo;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
 
-@Getter
-@Setter
+@Data
 @SuperBuilder
 @NoArgsConstructor
-@Data
+@AllArgsConstructor
 public class UserBaseVO implements Serializable {
 
     private String firstName;
