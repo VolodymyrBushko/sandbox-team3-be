@@ -9,13 +9,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class RoleRequestVO extends RoleBaseVO {
+
     public static Role toRole(RoleRequestVO request) {
         return Role.builder()
                 .name(request.getName())
-                .users(request.getUsers())
-                .created(request.getCreated())
-                .modified(request.getModified())
                 .build();
     }
-
 }

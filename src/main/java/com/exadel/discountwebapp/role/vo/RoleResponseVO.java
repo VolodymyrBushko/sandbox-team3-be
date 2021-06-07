@@ -13,15 +13,13 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoleResponseVO extends RoleBaseVO {
+
     private long id;
 
     public static RoleResponseVO fromRole(Role role) {
         return RoleResponseVO.builder()
                 .id(role.getId())
                 .name(role.getName())
-                .users(role.getUsers())
-                .created(role.getCreated())
-                .modified(role.getModified())
                 .build();
     }
 }
