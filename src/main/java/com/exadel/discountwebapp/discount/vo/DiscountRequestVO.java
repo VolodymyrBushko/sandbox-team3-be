@@ -8,9 +8,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class RequestDiscountVO extends BaseDiscountVO {
+public class DiscountRequestVO extends DiscountBaseVO {
 
-    public static Discount toDiscount(RequestDiscountVO request) {
+    public static Discount toDiscount(DiscountRequestVO request) {
         return Discount.builder()
                 .title(request.getTitle())
                 .shortDescription(request.getShortDescription())

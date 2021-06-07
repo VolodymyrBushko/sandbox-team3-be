@@ -1,8 +1,8 @@
 package com.exadel.discountwebapp.category.controller;
 
 import com.exadel.discountwebapp.category.service.CategoryService;
-import com.exadel.discountwebapp.category.vo.RequestCategoryVO;
-import com.exadel.discountwebapp.category.vo.ResponseCategoryVO;
+import com.exadel.discountwebapp.category.vo.CategoryRequestVO;
+import com.exadel.discountwebapp.category.vo.CategoryResponseVO;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,22 +16,22 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping
-    public List<ResponseCategoryVO> findAll() {
+    public List<CategoryResponseVO> findAll() {
         return categoryService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseCategoryVO findById(@PathVariable long id) {
+    public CategoryResponseVO findById(@PathVariable long id) {
         return categoryService.findById(id);
     }
 
     @PostMapping
-    public ResponseCategoryVO create(@RequestBody RequestCategoryVO request) {
+    public CategoryResponseVO create(@RequestBody CategoryRequestVO request) {
         return categoryService.create(request);
     }
 
     @PutMapping("/{id}")
-    public ResponseCategoryVO update(@PathVariable long id, @RequestBody RequestCategoryVO request) {
+    public CategoryResponseVO update(@PathVariable long id, @RequestBody CategoryRequestVO request) {
         return categoryService.update(id, request);
     }
 

@@ -12,12 +12,12 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResponseDiscountVO extends BaseDiscountVO {
+public class DiscountResponseVO extends DiscountBaseVO {
 
     private long id;
 
-    public static ResponseDiscountVO fromDiscount(Discount discount) {
-        return ResponseDiscountVO.builder()
+    public static DiscountResponseVO fromDiscount(Discount discount) {
+        return DiscountResponseVO.builder()
                 .id(discount.getId())
                 .title(discount.getTitle())
                 .shortDescription(discount.getShortDescription())

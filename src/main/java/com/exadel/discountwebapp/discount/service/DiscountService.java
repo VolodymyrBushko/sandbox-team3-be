@@ -2,8 +2,8 @@ package com.exadel.discountwebapp.discount.service;
 
 import com.exadel.discountwebapp.discount.entity.Discount;
 import com.exadel.discountwebapp.discount.repository.DiscountRepository;
-import com.exadel.discountwebapp.discount.vo.RequestDiscountVO;
-import com.exadel.discountwebapp.discount.vo.ResponseDiscountVO;
+import com.exadel.discountwebapp.discount.vo.DiscountRequestVO;
+import com.exadel.discountwebapp.discount.vo.DiscountResponseVO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,28 +16,28 @@ public class DiscountService {
 
     private final DiscountRepository discountRepository;
 
-    public List<ResponseDiscountVO> findAll() {
-        List<ResponseDiscountVO> response = new ArrayList<>();
-        discountRepository.findAll().forEach(e -> response.add(ResponseDiscountVO.fromDiscount(e)));
+    public List<DiscountResponseVO> findAll() {
+        List<DiscountResponseVO> response = new ArrayList<>();
+        discountRepository.findAll().forEach(e -> response.add(DiscountResponseVO.fromDiscount(e)));
         return response;
     }
 
-    public ResponseDiscountVO findById(long id) {
+    public DiscountResponseVO findById(long id) {
         Discount discount = discountRepository.findById(id).orElse(null);
-        return discount != null ? ResponseDiscountVO.fromDiscount(discount) : null;
+        return discount != null ? DiscountResponseVO.fromDiscount(discount) : null;
     }
 
-    public ResponseDiscountVO create(RequestDiscountVO request) {
-        Discount discount = RequestDiscountVO.toDiscount(request);
-        return ResponseDiscountVO.fromDiscount(discountRepository.save(discount));
+    public DiscountResponseVO create(DiscountRequestVO request) {
+        Discount discount = DiscountRequestVO.toDiscount(request);
+        return DiscountResponseVO.fromDiscount(discountRepository.save(discount));
     }
 
-    public ResponseDiscountVO update(long id, RequestDiscountVO request) {
+    public DiscountResponseVO update(long id, DiscountRequestVO request) {
         Discount oldDiscount = discountRepository.findById(id).orElse(null);
         if (oldDiscount != null) {
-            Discount newDiscount = RequestDiscountVO.toDiscount(request);
+            Discount newDiscount = DiscountRequestVO.toDiscount(request);
             newDiscount.setId(id);
-            return ResponseDiscountVO.fromDiscount(discountRepository.save(newDiscount));
+            return DiscountResponseVO.fromDiscount(discountRepository.save(newDiscount));
         }
         return null;
     }

@@ -12,12 +12,12 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResponseCategoryVO extends BaseCategoryVO {
+public class CategoryResponseVO extends CategoryBaseVO {
 
     private long id;
 
-    public static ResponseCategoryVO fromCategory(Category category) {
-        return ResponseCategoryVO.builder()
+    public static CategoryResponseVO fromCategory(Category category) {
+        return CategoryResponseVO.builder()
                 .id(category.getId())
                 .title(category.getTitle())
                 .imageUrl(category.getImageUrl())

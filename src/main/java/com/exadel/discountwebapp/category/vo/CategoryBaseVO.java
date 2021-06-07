@@ -10,7 +10,7 @@ import java.io.Serializable;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class BaseCategoryVO implements Serializable {
+public abstract class CategoryBaseVO implements Serializable {
 
     protected String title;
     protected String imageUrl;

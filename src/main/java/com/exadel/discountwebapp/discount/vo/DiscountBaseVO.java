@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class BaseDiscountVO implements Serializable {
+public abstract class DiscountBaseVO implements Serializable {
 
     protected String title;
     protected String shortDescription;

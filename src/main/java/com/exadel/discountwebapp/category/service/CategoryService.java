@@ -2,8 +2,8 @@ package com.exadel.discountwebapp.category.service;
 
 import com.exadel.discountwebapp.category.entity.Category;
 import com.exadel.discountwebapp.category.repository.CategoryRepository;
-import com.exadel.discountwebapp.category.vo.RequestCategoryVO;
-import com.exadel.discountwebapp.category.vo.ResponseCategoryVO;
+import com.exadel.discountwebapp.category.vo.CategoryRequestVO;
+import com.exadel.discountwebapp.category.vo.CategoryResponseVO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,28 +16,28 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    public List<ResponseCategoryVO> findAll() {
-        List<ResponseCategoryVO> response = new ArrayList<>();
-        categoryRepository.findAll().forEach(e -> response.add(ResponseCategoryVO.fromCategory(e)));
+    public List<CategoryResponseVO> findAll() {
+        List<CategoryResponseVO> response = new ArrayList<>();
+        categoryRepository.findAll().forEach(e -> response.add(CategoryResponseVO.fromCategory(e)));
         return response;
     }
 
-    public ResponseCategoryVO findById(long id) {
+    public CategoryResponseVO findById(long id) {
         Category category = categoryRepository.findById(id).orElse(null);
-        return category != null ? ResponseCategoryVO.fromCategory(category) : null;
+        return category != null ? CategoryResponseVO.fromCategory(category) : null;
     }
 
-    public ResponseCategoryVO create(RequestCategoryVO request) {
-        Category category = RequestCategoryVO.toCategory(request);
-        return ResponseCategoryVO.fromCategory(categoryRepository.save(category));
+    public CategoryResponseVO create(CategoryRequestVO request) {
+        Category category = CategoryRequestVO.toCategory(request);
+        return CategoryResponseVO.fromCategory(categoryRepository.save(category));
     }
 
-    public ResponseCategoryVO update(long id, RequestCategoryVO request) {
+    public CategoryResponseVO update(long id, CategoryRequestVO request) {
         Category oldCategory = categoryRepository.findById(id).orElse(null);
         if (oldCategory != null) {
-            Category newCategory = RequestCategoryVO.toCategory(request);
+            Category newCategory = CategoryRequestVO.toCategory(request);
             newCategory.setId(id);
-            return ResponseCategoryVO.fromCategory(categoryRepository.save(newCategory));
+            return CategoryResponseVO.fromCategory(categoryRepository.save(newCategory));
         }
         return null;
     }
