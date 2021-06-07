@@ -1,6 +1,7 @@
 package com.exadel.discountwebapp.category.service;
 
 import com.exadel.discountwebapp.category.entity.Category;
+import com.exadel.discountwebapp.category.mapper.CategoryMapper;
 import com.exadel.discountwebapp.category.repository.CategoryRepository;
 import com.exadel.discountwebapp.category.vo.CategoryRequestVO;
 import com.exadel.discountwebapp.category.vo.CategoryResponseVO;
@@ -14,30 +15,31 @@ import java.util.List;
 @AllArgsConstructor
 public class CategoryService {
 
+    private final CategoryMapper categoryMapper;
     private final CategoryRepository categoryRepository;
 
     public List<CategoryResponseVO> findAll() {
         List<CategoryResponseVO> response = new ArrayList<>();
-        categoryRepository.findAll().forEach(e -> response.add(CategoryResponseVO.fromCategory(e)));
+        categoryRepository.findAll().forEach(e -> response.add(categoryMapper.toVO(e)));
         return response;
     }
 
     public CategoryResponseVO findById(long id) {
         Category category = categoryRepository.findById(id).orElse(null);
-        return category != null ? CategoryResponseVO.fromCategory(category) : null;
+        return category != null ? categoryMapper.toVO(category) : null;
     }
 
     public CategoryResponseVO create(CategoryRequestVO request) {
-        Category category = CategoryRequestVO.toCategory(request);
-        return CategoryResponseVO.fromCategory(categoryRepository.save(category));
+        Category category = categoryMapper.toEntity(request);
+        return categoryMapper.toVO(categoryRepository.save(category));
     }
 
     public CategoryResponseVO update(long id, CategoryRequestVO request) {
         Category oldCategory = categoryRepository.findById(id).orElse(null);
         if (oldCategory != null) {
-            Category newCategory = CategoryRequestVO.toCategory(request);
+            Category newCategory = categoryMapper.toEntity(request);
             newCategory.setId(id);
-            return CategoryResponseVO.fromCategory(categoryRepository.save(newCategory));
+            return categoryMapper.toVO(categoryRepository.save(newCategory));
         }
         return null;
     }

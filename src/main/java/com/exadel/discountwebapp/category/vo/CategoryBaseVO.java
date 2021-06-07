@@ -5,8 +5,7 @@ import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
 
-@Getter
-@Setter
+@Data
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
