@@ -43,6 +43,6 @@ public class Location {
     private LocalDateTime modified;
 
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "location")
+    @OneToMany(mappedBy = "location",fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     private List<Vendor> vendors = new ArrayList<>();
 }
