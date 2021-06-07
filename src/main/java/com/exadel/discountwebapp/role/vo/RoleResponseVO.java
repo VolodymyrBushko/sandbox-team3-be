@@ -1,25 +1,13 @@
 package com.exadel.discountwebapp.role.vo;
 
-import com.exadel.discountwebapp.role.entity.Role;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-@Getter
-@Setter
+@Data
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoleResponseVO extends RoleBaseVO {
 
     private long id;
-
-    public static RoleResponseVO fromRole(Role role) {
-        return RoleResponseVO.builder()
-                .id(role.getId())
-                .name(role.getName())
-                .build();
-    }
 }
