@@ -8,7 +8,6 @@ import java.io.Serializable;
 @Data
 @SuperBuilder
 @NoArgsConstructor
-@AllArgsConstructor
 public abstract class CategoryBaseVO implements Serializable {
 
     protected String title;

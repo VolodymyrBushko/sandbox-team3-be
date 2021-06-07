@@ -3,14 +3,14 @@ package com.exadel.discountwebapp.category.controller;
 import com.exadel.discountwebapp.category.service.CategoryService;
 import com.exadel.discountwebapp.category.vo.CategoryRequestVO;
 import com.exadel.discountwebapp.category.vo.CategoryResponseVO;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/category")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CategoryController {
 
     private final CategoryService categoryService;

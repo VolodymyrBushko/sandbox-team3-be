@@ -1,35 +1,15 @@
 package com.exadel.discountwebapp.discount.vo;
 
-import com.exadel.discountwebapp.discount.entity.Discount;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-@Getter
-@Setter
+@Data
 @SuperBuilder
 @NoArgsConstructor
-@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class DiscountResponseVO extends DiscountBaseVO {
 
     private long id;
-
-    public static DiscountResponseVO fromDiscount(Discount discount) {
-        return DiscountResponseVO.builder()
-                .id(discount.getId())
-                .title(discount.getTitle())
-                .shortDescription(discount.getShortDescription())
-                .description(discount.getDescription())
-                .imageUrl(discount.getImageUrl())
-                .flatAmount(discount.getFlatAmount())
-                .price(discount.getPrice())
-                .startDate(discount.getStartDate())
-                .expirationDate(discount.getExpirationDate())
-                .percentage(discount.getPercentage())
-                .quantity(discount.getQuantity())
-                .perUser(discount.getPerUser())
-                .build();
-    }
 }

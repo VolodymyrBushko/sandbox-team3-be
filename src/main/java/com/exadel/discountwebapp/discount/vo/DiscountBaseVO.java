@@ -1,20 +1,15 @@
 package com.exadel.discountwebapp.discount.vo;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+@Data
 @SuperBuilder
 @NoArgsConstructor
-@AllArgsConstructor
 public abstract class DiscountBaseVO implements Serializable {
 
     protected String title;
@@ -29,4 +24,7 @@ public abstract class DiscountBaseVO implements Serializable {
     protected int percentage;
     protected int quantity;
     protected int perUser;
+
+    protected long categoryId;
+    protected long vendorId;
 }

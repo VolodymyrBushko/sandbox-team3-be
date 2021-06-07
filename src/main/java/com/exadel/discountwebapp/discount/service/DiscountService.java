@@ -1,47 +1,56 @@
 package com.exadel.discountwebapp.discount.service;
 
 import com.exadel.discountwebapp.discount.entity.Discount;
+import com.exadel.discountwebapp.discount.mapper.DiscountMapper;
 import com.exadel.discountwebapp.discount.repository.DiscountRepository;
 import com.exadel.discountwebapp.discount.vo.DiscountRequestVO;
 import com.exadel.discountwebapp.discount.vo.DiscountResponseVO;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class DiscountService {
 
+    private final DiscountMapper discountMapper;
     private final DiscountRepository discountRepository;
 
+    @Transactional(readOnly = true)
     public List<DiscountResponseVO> findAll() {
         List<DiscountResponseVO> response = new ArrayList<>();
-        discountRepository.findAll().forEach(e -> response.add(DiscountResponseVO.fromDiscount(e)));
+        discountRepository.findAll().forEach(e -> response.add(discountMapper.toVO(e)));
         return response;
     }
 
+    @Transactional(readOnly = true)
     public DiscountResponseVO findById(long id) {
         Discount discount = discountRepository.findById(id).orElse(null);
-        return discount != null ? DiscountResponseVO.fromDiscount(discount) : null;
+        return discount != null ? discountMapper.toVO(discount) : null;
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public DiscountResponseVO create(DiscountRequestVO request) {
-        Discount discount = DiscountRequestVO.toDiscount(request);
-        return DiscountResponseVO.fromDiscount(discountRepository.save(discount));
+        Discount discount = discountMapper.toEntity(request);
+        return discountMapper.toVO(discountRepository.save(discount));
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public DiscountResponseVO update(long id, DiscountRequestVO request) {
         Discount oldDiscount = discountRepository.findById(id).orElse(null);
         if (oldDiscount != null) {
-            Discount newDiscount = DiscountRequestVO.toDiscount(request);
+            Discount newDiscount = discountMapper.toEntity(request);
             newDiscount.setId(id);
-            return DiscountResponseVO.fromDiscount(discountRepository.save(newDiscount));
+            return discountMapper.toVO(discountRepository.save(newDiscount));
         }
         return null;
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public void deleteById(long id) {
         discountRepository.deleteById(id);
     }
