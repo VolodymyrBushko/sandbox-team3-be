@@ -21,6 +21,12 @@ public class LocationService {
         return locationRepository.findById(id).orElse(null);
     }
 
+    public Location findEntityById(Long id) {
+        return locationRepository.findById(id).orElse(null);
+    }
+
+
+
     public List<Location> findAllByCounty(String country) {
         return locationRepository.findAllByCountry(country);
     }

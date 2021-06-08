@@ -13,11 +13,11 @@ import org.springframework.stereotype.Component;
 @Component
 @AllArgsConstructor
 public class VendorMapper {
-    private LocationRepository locationRepository;
+    private LocationService locationService;
 
     public Vendor toEntity(VendorRequestVO request) {
 
-        Location location = locationRepository.findById(request.getLocationId()).orElse(null);
+        Location location = locationService.findEntityById(request.getLocationId());
 
         return Vendor.builder()
                 .title(request.getTitle())
@@ -40,7 +40,7 @@ public class VendorMapper {
     }
 
     public Vendor updateVO(Vendor vendor, VendorRequestVO request){
-        Location location = locationRepository.findById(request.getLocationId()).orElse(null);
+        Location location = locationService.findEntityById(request.getLocationId());
 
         vendor.setTitle((request.getTitle()));
         vendor.setDescription(request.getDescription());
