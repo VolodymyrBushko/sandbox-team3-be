@@ -9,7 +9,7 @@ import java.io.Serializable;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserBaseVO implements Serializable {
+public abstract class UserBaseVO implements Serializable {
 
     private String firstName;
     private String lastName;

@@ -17,7 +17,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserResponseVO findById(long id) throws UserNotFoundException {
+    public UserResponseVO findById(long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("No user found with id = %d\", id)"));
         return UserMapper.toVO(user);
     }
