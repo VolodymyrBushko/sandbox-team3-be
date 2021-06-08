@@ -6,8 +6,6 @@ import com.exadel.discountwebapp.vendor.repository.VendorRepository;
 import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
 import com.exadel.discountwebapp.vendor.vo.VendorResponseVO;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,7 +19,6 @@ public class VendorService {
     VendorRepository vendorRepository;
 
     public List<VendorResponseVO> findAll() {
-        System.out.println("Vendor Service" + vendorRepository);
         List<VendorResponseVO> response = new ArrayList<>();
         vendorRepository.findAll().forEach(en -> response.add(vendorMapper.toResponseVO(en)));
         return response;
@@ -42,13 +39,9 @@ public class VendorService {
     }
 
     public VendorResponseVO update(Long id, VendorRequestVO request) {
-        Vendor oldVendor = vendorRepository.findById(id).orElse(null);
-        if (oldVendor != null) {
-            Vendor newVendor = vendorMapper.toEntity(request);
-            newVendor.setId(id);
-            return vendorMapper.toResponseVO(vendorRepository.save(newVendor));
-        }
-        return null;
+        Vendor vendor = vendorRepository.findById(id).orElse(null);
+        Vendor updatedVendor = vendorMapper.updateVO(vendor, request);
+        return vendorMapper.toResponseVO(vendorRepository.save(updatedVendor));
     }
 
     public void deleteById(Long id) {

@@ -18,25 +18,22 @@ public class VendorController {
 
     @GetMapping
     public List<VendorResponseVO> findAllVendors() {
-        System.out.println("Vendor controller" + vendorService);
         return vendorService.findAll();
     }
 
     @GetMapping("/{id}")
-
     public VendorResponseVO findById(@PathVariable Long id) {
-        System.out.println("search by ID" + vendorService);
         return vendorService.findById(id);
     }
 
     @GetMapping("/title/{title}")
     public VendorResponseVO findByTitle(@PathVariable String title) {
-        System.out.println("search by TITLE" + vendorService);
         return vendorService.findByTitle(title);
     }
 
     @PostMapping
     public VendorResponseVO save(@RequestBody VendorRequestVO request) {
+        System.out.println("SAVE in Controller" + vendorService);
         return vendorService.create(request);
     }
 

@@ -50,7 +50,7 @@ public class Vendor {
     private LocalDateTime modified;
 
     @EqualsAndHashCode.Exclude
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
+    @ManyToOne
     @JoinColumn(name = "loc_id")
     private Location location;
 }
