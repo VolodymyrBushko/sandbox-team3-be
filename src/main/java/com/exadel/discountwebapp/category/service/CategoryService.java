@@ -41,11 +41,10 @@ public class CategoryService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public CategoryResponseVO update(Long id, CategoryRequestVO request) {
-        Category oldCategory = categoryRepository.findById(id).orElse(null);
-        if (oldCategory != null) {
-            Category newCategory = categoryMapper.toEntity(request);
-            newCategory.setId(id);
-            return categoryMapper.toVO(categoryRepository.save(newCategory));
+        Category category = categoryRepository.findById(id).orElse(null);
+        if (category != null) {
+            categoryMapper.updateEntity(request, category);
+            return categoryMapper.toVO(categoryRepository.save(category));
         }
         return null;
     }

@@ -57,4 +57,24 @@ public class DiscountMapper {
                 .vendor(vendor)
                 .build();
     }
+
+    public void updateEntity(DiscountRequestVO request, Discount discount) {
+
+        Vendor vendor = vendorRepository.findById(request.getVendorId()).orElse(null);
+        Category category = categoryRepository.findById(request.getCategoryId()).orElse(null);
+
+        discount.setTitle(request.getTitle());
+        discount.setShortDescription(request.getShortDescription());
+        discount.setDescription(request.getDescription());
+        discount.setImageUrl(request.getImageUrl());
+        discount.setFlatAmount(request.getFlatAmount());
+        discount.setPrice(request.getPrice());
+        discount.setStartDate(request.getStartDate());
+        discount.setExpirationDate(request.getExpirationDate());
+        discount.setPercentage(request.getPercentage());
+        discount.setQuantity(request.getQuantity());
+        discount.setPerUser(request.getPerUser());
+        discount.setCategory(category);
+        discount.setVendor(vendor);
+    }
 }

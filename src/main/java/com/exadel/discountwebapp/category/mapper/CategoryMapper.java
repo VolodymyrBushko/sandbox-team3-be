@@ -22,4 +22,9 @@ public class CategoryMapper {
                 .imageUrl(request.getImageUrl())
                 .build();
     }
+
+    public void updateEntity(CategoryRequestVO request, Category category) {
+        category.setTitle(request.getTitle());
+        category.setImageUrl(request.getImageUrl());
+    }
 }

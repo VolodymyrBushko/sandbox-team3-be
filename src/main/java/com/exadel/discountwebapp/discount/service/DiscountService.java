@@ -41,11 +41,10 @@ public class DiscountService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public DiscountResponseVO update(Long id, DiscountRequestVO request) {
-        Discount oldDiscount = discountRepository.findById(id).orElse(null);
-        if (oldDiscount != null) {
-            Discount newDiscount = discountMapper.toEntity(request);
-            newDiscount.setId(id);
-            return discountMapper.toVO(discountRepository.save(newDiscount));
+        Discount discount = discountRepository.findById(id).orElse(null);
+        if (discount != null) {
+            discountMapper.updateEntity(request, discount);
+            return discountMapper.toVO(discountRepository.save(discount));
         }
         return null;
     }
