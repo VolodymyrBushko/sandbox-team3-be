@@ -10,6 +10,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 public abstract class CategoryBaseVO implements Serializable {
 
-    protected String title;
-    protected String imageUrl;
+    private String title;
+    private String imageUrl;
 }

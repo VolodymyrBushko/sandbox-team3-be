@@ -20,15 +20,15 @@ public class CategoryService {
     private final CategoryMapper categoryMapper;
     private final CategoryRepository categoryRepository;
 
-    @Transactional(readOnly = true)
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public List<CategoryResponseVO> findAll() {
         List<CategoryResponseVO> response = new ArrayList<>();
         categoryRepository.findAll().forEach(e -> response.add(categoryMapper.toVO(e)));
         return response;
     }
 
-    @Transactional(readOnly = true)
-    public CategoryResponseVO findById(long id) {
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    public CategoryResponseVO findById(Long id) {
         Category category = categoryRepository.findById(id).orElse(null);
         return category != null ? categoryMapper.toVO(category) : null;
     }
@@ -40,18 +40,17 @@ public class CategoryService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public CategoryResponseVO update(long id, CategoryRequestVO request) {
-        Category oldCategory = categoryRepository.findById(id).orElse(null);
-        if (oldCategory != null) {
-            Category newCategory = categoryMapper.toEntity(request);
-            newCategory.setId(id);
-            return categoryMapper.toVO(categoryRepository.save(newCategory));
+    public CategoryResponseVO update(Long id, CategoryRequestVO request) {
+        Category category = categoryRepository.findById(id).orElse(null);
+        if (category != null) {
+            categoryMapper.updateEntity(request, category);
+            return categoryMapper.toVO(categoryRepository.save(category));
         }
         return null;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public void deleteById(long id) {
+    public void deleteById(Long id) {
         categoryRepository.deleteById(id);
     }
 }

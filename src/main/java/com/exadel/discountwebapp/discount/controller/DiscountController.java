@@ -21,7 +21,7 @@ public class DiscountController {
     }
 
     @GetMapping("/{id}")
-    public DiscountResponseVO findById(@PathVariable long id) {
+    public DiscountResponseVO findById(@PathVariable Long id) {
         return discountService.findById(id);
     }
 
@@ -31,12 +31,12 @@ public class DiscountController {
     }
 
     @PutMapping("/{id}")
-    public DiscountResponseVO update(@PathVariable long id, @RequestBody DiscountRequestVO request) {
+    public DiscountResponseVO update(@PathVariable Long id, @RequestBody DiscountRequestVO request) {
         return discountService.update(id, request);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable long id) {
+    public void deleteById(@PathVariable Long id) {
         discountService.deleteById(id);
     }
 }
