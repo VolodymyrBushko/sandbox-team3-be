@@ -3,28 +3,23 @@ package com.exadel.discountwebapp.category.mapper;
 import com.exadel.discountwebapp.category.entity.Category;
 import com.exadel.discountwebapp.category.vo.CategoryRequestVO;
 import com.exadel.discountwebapp.category.vo.CategoryResponseVO;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CategoryMapper {
 
+    private final ModelMapper modelMapper = new ModelMapper();
+
     public CategoryResponseVO toVO(Category category) {
-        return CategoryResponseVO.builder()
-                .id(category.getId())
-                .title(category.getTitle())
-                .imageUrl(category.getImageUrl())
-                .build();
+        return modelMapper.map(category, CategoryResponseVO.class);
     }
 
     public Category toEntity(CategoryRequestVO request) {
-        return Category.builder()
-                .title(request.getTitle())
-                .imageUrl(request.getImageUrl())
-                .build();
+        return modelMapper.map(request, Category.class);
     }
 
     public void updateEntity(CategoryRequestVO request, Category category) {
-        category.setTitle(request.getTitle());
-        category.setImageUrl(request.getImageUrl());
+        modelMapper.map(request, category);
     }
 }

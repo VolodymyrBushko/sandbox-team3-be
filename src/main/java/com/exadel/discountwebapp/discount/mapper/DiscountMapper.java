@@ -8,6 +8,7 @@ import com.exadel.discountwebapp.discount.vo.DiscountResponseVO;
 import com.exadel.discountwebapp.vendor.entity.Vendor;
 import com.exadel.discountwebapp.vendor.repository.VendorRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,65 +17,29 @@ public class DiscountMapper {
 
     private final VendorRepository vendorRepository;
     private final CategoryRepository categoryRepository;
+    private final ModelMapper modelMapper = new ModelMapper();
 
     public DiscountResponseVO toVO(Discount discount) {
-        return DiscountResponseVO.builder()
-                .id(discount.getId())
-                .title(discount.getTitle())
-                .shortDescription(discount.getShortDescription())
-                .description(discount.getDescription())
-                .imageUrl(discount.getImageUrl())
-                .flatAmount(discount.getFlatAmount())
-                .price(discount.getPrice())
-                .startDate(discount.getStartDate())
-                .expirationDate(discount.getExpirationDate())
-                .percentage(discount.getPercentage())
-                .quantity(discount.getQuantity())
-                .perUser(discount.getPerUser())
-                .categoryId(discount.getCategory().getId())
-                .vendorId(discount.getVendor().getId())
-                .build();
+        return modelMapper.map(discount, DiscountResponseVO.class);
     }
 
     public Discount toEntity(DiscountRequestVO request) {
-
-        Vendor vendor = vendorRepository.findById(request.getVendorId()).orElse(null);
-        Category category = categoryRepository.findById(request.getCategoryId()).orElse(null);
-
-        return Discount.builder()
-                .title(request.getTitle())
-                .shortDescription(request.getShortDescription())
-                .description(request.getDescription())
-                .imageUrl(request.getImageUrl())
-                .flatAmount(request.getFlatAmount())
-                .price(request.getPrice())
-                .startDate(request.getStartDate())
-                .expirationDate(request.getExpirationDate())
-                .percentage(request.getPercentage())
-                .quantity(request.getQuantity())
-                .perUser(request.getPerUser())
-                .category(category)
-                .vendor(vendor)
-                .build();
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        Discount discount = modelMapper.map(request, Discount.class);
+        provideDiscountDependencies(request, discount);
+        return discount;
     }
 
     public void updateEntity(DiscountRequestVO request, Discount discount) {
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        provideDiscountDependencies(request, discount);
+        modelMapper.map(request, discount);
+    }
 
+    private void provideDiscountDependencies(DiscountRequestVO request, Discount discount) {
         Vendor vendor = vendorRepository.findById(request.getVendorId()).orElse(null);
         Category category = categoryRepository.findById(request.getCategoryId()).orElse(null);
-
-        discount.setTitle(request.getTitle());
-        discount.setShortDescription(request.getShortDescription());
-        discount.setDescription(request.getDescription());
-        discount.setImageUrl(request.getImageUrl());
-        discount.setFlatAmount(request.getFlatAmount());
-        discount.setPrice(request.getPrice());
-        discount.setStartDate(request.getStartDate());
-        discount.setExpirationDate(request.getExpirationDate());
-        discount.setPercentage(request.getPercentage());
-        discount.setQuantity(request.getQuantity());
-        discount.setPerUser(request.getPerUser());
-        discount.setCategory(category);
         discount.setVendor(vendor);
+        discount.setCategory(category);
     }
 }
