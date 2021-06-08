@@ -11,5 +11,5 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 public class CategoryResponseVO extends CategoryBaseVO {
 
-    private long id;
+    private Long id;
 }

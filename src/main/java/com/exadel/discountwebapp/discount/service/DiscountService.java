@@ -20,15 +20,15 @@ public class DiscountService {
     private final DiscountMapper discountMapper;
     private final DiscountRepository discountRepository;
 
-    @Transactional(readOnly = true)
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public List<DiscountResponseVO> findAll() {
         List<DiscountResponseVO> response = new ArrayList<>();
         discountRepository.findAll().forEach(e -> response.add(discountMapper.toVO(e)));
         return response;
     }
 
-    @Transactional(readOnly = true)
-    public DiscountResponseVO findById(long id) {
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    public DiscountResponseVO findById(Long id) {
         Discount discount = discountRepository.findById(id).orElse(null);
         return discount != null ? discountMapper.toVO(discount) : null;
     }
@@ -40,7 +40,7 @@ public class DiscountService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public DiscountResponseVO update(long id, DiscountRequestVO request) {
+    public DiscountResponseVO update(Long id, DiscountRequestVO request) {
         Discount oldDiscount = discountRepository.findById(id).orElse(null);
         if (oldDiscount != null) {
             Discount newDiscount = discountMapper.toEntity(request);
@@ -51,7 +51,7 @@ public class DiscountService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public void deleteById(long id) {
+    public void deleteById(Long id) {
         discountRepository.deleteById(id);
     }
 }

@@ -11,5 +11,5 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 public class DiscountResponseVO extends DiscountBaseVO {
 
-    private long id;
+    private Long id;
 }

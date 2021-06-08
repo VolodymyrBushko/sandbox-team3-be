@@ -21,7 +21,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public CategoryResponseVO findById(@PathVariable long id) {
+    public CategoryResponseVO findById(@PathVariable Long id) {
         return categoryService.findById(id);
     }
 
@@ -31,12 +31,12 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public CategoryResponseVO update(@PathVariable long id, @RequestBody CategoryRequestVO request) {
+    public CategoryResponseVO update(@PathVariable Long id, @RequestBody CategoryRequestVO request) {
         return categoryService.update(id, request);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable long id) {
+    public void deleteById(@PathVariable Long id) {
         categoryService.deleteById(id);
     }
 }

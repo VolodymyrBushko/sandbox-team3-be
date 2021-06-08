@@ -45,7 +45,7 @@ public class Discount {
     private String imageUrl;
 
     @Column(name = "dis_percentage", nullable = false)
-    private int percentage;
+    private BigDecimal percentage;
 
     @Column(name = "dis_flat_amount", nullable = false)
     private BigDecimal flatAmount;
@@ -91,7 +91,7 @@ public class Discount {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany
     @JoinTable(
             name = "location_discount",
             joinColumns = @JoinColumn(name = "dis_id"),
