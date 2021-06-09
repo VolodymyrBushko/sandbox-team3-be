@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts =
         "classpath:cleanup.sql")
-@SpringBootTest(classes = DiscountWebApplication.class)
+@SpringBootTest()
 public class RoleServiceIntegrationTest {
 
     @Autowired
