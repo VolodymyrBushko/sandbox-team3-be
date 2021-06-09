@@ -7,17 +7,25 @@ import com.exadel.discountwebapp.discount.vo.DiscountRequestVO;
 import com.exadel.discountwebapp.discount.vo.DiscountResponseVO;
 import com.exadel.discountwebapp.vendor.entity.Vendor;
 import com.exadel.discountwebapp.vendor.repository.VendorRepository;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
+import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class DiscountMapper {
 
-    private final ModelMapper modelMapper;
     private final VendorRepository vendorRepository;
     private final CategoryRepository categoryRepository;
+    private final ModelMapper modelMapper = new ModelMapper();
+
+    @Autowired
+    public DiscountMapper(VendorRepository vendorRepository, CategoryRepository categoryRepository) {
+        this.vendorRepository = vendorRepository;
+        this.categoryRepository = categoryRepository;
+        configureModelMapper(modelMapper);
+    }
 
     public DiscountResponseVO toVO(Discount discount) {
         DiscountResponseVO response = modelMapper.map(discount, DiscountResponseVO.class);
@@ -42,5 +50,20 @@ public class DiscountMapper {
         Category category = categoryRepository.findById(request.getCategoryId()).orElse(null);
         discount.setVendor(vendor);
         discount.setCategory(category);
+    }
+
+    private void configureModelMapper(ModelMapper modelMapper) {
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        modelMapper.addMappings(createSkipPropertyMap());
+    }
+
+    private PropertyMap<DiscountRequestVO, Discount> createSkipPropertyMap() {
+        return new PropertyMap<>() {
+            @Override
+            protected void configure() {
+                skip().setVendor(null);
+                skip().setCategory(null);
+            }
+        };
     }
 }

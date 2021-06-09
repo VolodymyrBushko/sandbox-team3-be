@@ -3,15 +3,18 @@ package com.exadel.discountwebapp.category.mapper;
 import com.exadel.discountwebapp.category.entity.Category;
 import com.exadel.discountwebapp.category.vo.CategoryRequestVO;
 import com.exadel.discountwebapp.category.vo.CategoryResponseVO;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class CategoryMapper {
 
-    private final ModelMapper modelMapper;
+    private final ModelMapper modelMapper = new ModelMapper();
+
+    public CategoryMapper() {
+        configureModelMapper(modelMapper);
+    }
 
     public CategoryResponseVO toVO(Category category) {
         return modelMapper.map(category, CategoryResponseVO.class);
@@ -23,5 +26,9 @@ public class CategoryMapper {
 
     public void updateEntity(CategoryRequestVO request, Category category) {
         modelMapper.map(request, category);
+    }
+
+    private void configureModelMapper(ModelMapper modelMapper) {
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
     }
 }
