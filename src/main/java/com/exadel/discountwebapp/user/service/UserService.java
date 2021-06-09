@@ -22,7 +22,7 @@ public class UserService {
     private final UserMapper mapper;
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    public UserResponseVO findById(long id) {
+    public UserResponseVO findById(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("No user found with id = %d\", id)"));
         return mapper.toVO(user);
     }
