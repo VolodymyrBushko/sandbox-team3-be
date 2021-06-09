@@ -1,6 +1,5 @@
 package com.exadel.discountwebapp.role;
 
-import com.exadel.discountwebapp.DiscountWebApplication;
 import com.exadel.discountwebapp.role.entity.Role;
 import com.exadel.discountwebapp.role.mapper.RoleMapper;
 import com.exadel.discountwebapp.role.repository.RoleRepository;
@@ -12,12 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.support.TransactionTemplate;
+
 import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts =
-        "classpath:cleanup.sql")
-@SpringBootTest()
+@Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:sql/cleanup.sql")
+@SpringBootTest
 public class RoleServiceIntegrationTest {
 
     @Autowired
@@ -27,26 +27,25 @@ public class RoleServiceIntegrationTest {
     @Autowired
     private RoleService roleService;
     @Autowired
-    private TransactionTemplate transactiontemplate;
+    private TransactionTemplate transactionTemplate;
 
     private Role roleUser;
     private Role roleAdmin;
 
     @BeforeEach
     void setUp() {
-        transactiontemplate.execute(status -> {
-            roleUser = Role.builder()
-                    .id(1L)
-                    .name("USER")
-                    .build();
+        roleUser = Role.builder()
+                .id(1L)
+                .name("USER")
+                .build();
 
-            roleAdmin = Role.builder()
-                    .id(2L)
-                    .name("ADMIN")
-                    .build();
+        roleAdmin = Role.builder()
+                .id(2L)
+                .name("ADMIN")
+                .build();
 
-            roleRepository.saveAll(List.of(roleUser, roleAdmin));
-            return "";
+        transactionTemplate.execute(status -> {
+            return roleRepository.saveAll(List.of(roleUser, roleAdmin));
         });
     }
 
