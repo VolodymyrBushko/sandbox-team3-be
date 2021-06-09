@@ -13,5 +13,5 @@ import java.io.Serializable;
 public abstract class RoleBaseVO implements Serializable {
 
     @NotNull(message = "Name cannot be null")
-    protected String name;
+    private String name;
 }
