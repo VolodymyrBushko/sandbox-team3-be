@@ -15,23 +15,24 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class DiscountMapper {
 
+    private final ModelMapper modelMapper;
     private final VendorRepository vendorRepository;
     private final CategoryRepository categoryRepository;
-    private final ModelMapper modelMapper = new ModelMapper();
 
     public DiscountResponseVO toVO(Discount discount) {
-        return modelMapper.map(discount, DiscountResponseVO.class);
+        DiscountResponseVO response = modelMapper.map(discount, DiscountResponseVO.class);
+        response.setCategoryId(discount.getCategory().getId());
+        response.setVendorId(discount.getVendor().getId());
+        return response;
     }
 
     public Discount toEntity(DiscountRequestVO request) {
-        modelMapper.getConfiguration().setAmbiguityIgnored(true);
         Discount discount = modelMapper.map(request, Discount.class);
         provideDiscountDependencies(request, discount);
         return discount;
     }
 
     public void updateEntity(DiscountRequestVO request, Discount discount) {
-        modelMapper.getConfiguration().setAmbiguityIgnored(true);
         provideDiscountDependencies(request, discount);
         modelMapper.map(request, discount);
     }
