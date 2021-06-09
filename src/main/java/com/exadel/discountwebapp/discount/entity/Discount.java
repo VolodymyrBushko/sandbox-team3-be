@@ -29,11 +29,11 @@ public class Discount {
     @Column(name = "dis_id")
     private Long id;
 
-    @Column(name = "dis_title", length = 25, nullable = false)
+    @Column(name = "dis_title", length = 100, nullable = false)
     private String title;
 
     @EqualsAndHashCode.Exclude
-    @Column(name = "dis_short_description", length = 50, nullable = false)
+    @Column(name = "dis_short_description", length = 255, nullable = false)
     private String shortDescription;
 
     @EqualsAndHashCode.Exclude
