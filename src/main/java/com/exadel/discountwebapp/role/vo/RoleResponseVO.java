@@ -9,5 +9,5 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 public class RoleResponseVO extends RoleBaseVO {
 
-    private long id;
+    private Long id;
 }
