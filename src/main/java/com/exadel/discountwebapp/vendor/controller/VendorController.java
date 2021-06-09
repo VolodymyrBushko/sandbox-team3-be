@@ -4,17 +4,15 @@ import com.exadel.discountwebapp.vendor.service.VendorService;
 import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
 import com.exadel.discountwebapp.vendor.vo.VendorResponseVO;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/vendor")
+@RequestMapping("/api/vendors")
 @AllArgsConstructor
 public class VendorController {
-    VendorService vendorService;
+    private VendorService vendorService;
 
     @GetMapping
     public List<VendorResponseVO> findAllVendors() {
@@ -26,14 +24,13 @@ public class VendorController {
         return vendorService.findById(id);
     }
 
-    @GetMapping("/title/{title}")
-    public VendorResponseVO findByTitle(@PathVariable String title) {
+    @GetMapping("/title")
+    public VendorResponseVO findByTitle(@RequestParam(name="title") String title) {
         return vendorService.findByTitle(title);
     }
 
     @PostMapping
     public VendorResponseVO save(@RequestBody VendorRequestVO request) {
-        System.out.println("SAVE in Controller" + vendorService);
         return vendorService.create(request);
     }
 

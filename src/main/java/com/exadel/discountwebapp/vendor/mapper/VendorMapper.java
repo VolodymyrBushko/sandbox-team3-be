@@ -1,13 +1,11 @@
 package com.exadel.discountwebapp.vendor.mapper;
 
 import com.exadel.discountwebapp.location.entity.Location;
-import com.exadel.discountwebapp.location.repository.LocationRepository;
 import com.exadel.discountwebapp.location.service.LocationService;
 import com.exadel.discountwebapp.vendor.entity.Vendor;
 import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
 import com.exadel.discountwebapp.vendor.vo.VendorResponseVO;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -39,7 +37,7 @@ public class VendorMapper {
                 .build();
     }
 
-    public Vendor updateVO(Vendor vendor, VendorRequestVO request){
+    public Vendor updateVO(Vendor vendor, VendorRequestVO request) {
         Location location = locationService.findEntityById(request.getLocationId());
 
         vendor.setTitle((request.getTitle()));

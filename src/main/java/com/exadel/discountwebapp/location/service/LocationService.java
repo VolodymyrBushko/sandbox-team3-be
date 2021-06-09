@@ -1,48 +1,71 @@
 package com.exadel.discountwebapp.location.service;
 
 import com.exadel.discountwebapp.location.entity.Location;
+import com.exadel.discountwebapp.location.mapper.LocationMapper;
 import com.exadel.discountwebapp.location.repository.LocationRepository;
+import com.exadel.discountwebapp.location.vo.LocationRequestVO;
+import com.exadel.discountwebapp.location.vo.LocationResponseVO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 public class LocationService {
-    LocationRepository locationRepository;
+    private final LocationRepository locationRepository;
+    private final LocationMapper locationMapper;
 
-    public List<Location> findAll() {
-        return (List<Location>) locationRepository.findAll();
+    @Transactional(readOnly = true)
+    public List<LocationResponseVO> findAll() {
+        List<LocationResponseVO> response = new ArrayList<>();
+        locationRepository.findAll().forEach(en -> response.add(locationMapper.toResponseVO(en)));
+        return response;
     }
 
-    public Location findById(Long id) {
-        return locationRepository.findById(id).orElse(null);
+    @Transactional(readOnly = true)
+    public LocationResponseVO findById(Long id) {
+        Location location = locationRepository.findById(id).orElse(null);
+        return location != null ? locationMapper.toResponseVO(location) : null;
     }
 
+    @Transactional(readOnly = true)
     public Location findEntityById(Long id) {
         return locationRepository.findById(id).orElse(null);
     }
 
-
-
-    public List<Location> findAllByCounty(String country) {
-        return locationRepository.findAllByCountry(country);
+    @Transactional(readOnly = true)
+    public List<LocationResponseVO> findAllByCounty(String country) {
+        List<LocationResponseVO> response = new ArrayList<>();
+        List<Location> allByCountry = locationRepository.findAllByCountry(country);
+        allByCountry.forEach(en -> response.add(locationMapper.toResponseVO(en)));
+        return response;
     }
 
-    public List<Location> findAllByCity(String city) {
-        return locationRepository.findAllByCity(city);
+    @Transactional(readOnly = true)
+    public List<LocationResponseVO> findAllByCity(String city) {
+        List<LocationResponseVO> response = new ArrayList<>();
+        List<Location> allByCountry = locationRepository.findAllByCity(city);
+        allByCountry.forEach(en -> response.add(locationMapper.toResponseVO(en)));
+        return response;
     }
 
-    public Location create(Location location) {
-        return locationRepository.save(location);
+    @Transactional(propagation = Propagation.REQUIRED)
+    public LocationResponseVO create(LocationRequestVO request) {
+        return locationMapper.toResponseVO(locationRepository.save(locationMapper.toEntity(request)));
     }
 
-    public Location update(Location location) {
-        return locationRepository.save(location);
+    @Transactional(propagation = Propagation.REQUIRED)
+    public LocationResponseVO update(Long id, LocationRequestVO request) {
+        Location location = locationRepository.findById(id).orElse(null);
+        Location updatedLocation = locationMapper.updateVO(location, request);
+        return locationMapper.toResponseVO(locationRepository.save(updatedLocation));
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public void deleteById(Long id) {
         locationRepository.deleteById(id);
     }

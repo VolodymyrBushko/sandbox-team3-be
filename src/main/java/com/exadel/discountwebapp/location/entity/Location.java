@@ -42,6 +42,7 @@ public class Location {
     @Column(name = "loc_modified", nullable = false)
     private LocalDateTime modified;
 
+    @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "location")
     private List<Vendor> vendors = new ArrayList<>();

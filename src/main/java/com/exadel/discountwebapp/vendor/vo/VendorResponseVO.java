@@ -13,5 +13,4 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 public class VendorResponseVO extends VendorBaseVO {
     private Long id;
-    private Long locationId;
 }

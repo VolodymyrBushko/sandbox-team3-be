@@ -1,48 +1,53 @@
 package com.exadel.discountwebapp.location.controller;
 
-import com.exadel.discountwebapp.location.entity.Location;
 import com.exadel.discountwebapp.location.service.LocationService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import com.exadel.discountwebapp.location.vo.LocationRequestVO;
+import com.exadel.discountwebapp.location.vo.LocationResponseVO;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/location")
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequestMapping("/api/locations")
+@AllArgsConstructor
 public class LocationController {
-    LocationService locationService;
+    private LocationService locationService;
 
-    @GetMapping("/")
-    private List<Location> getAllLocations() {
+    @GetMapping
+    public List<LocationResponseVO> getAllLocations() {
         return locationService.findAll();
     }
 
-    @GetMapping("/{county}")
-    private List<Location> getALlLocationByCounty(@PathVariable String county) {
+    @GetMapping("/{id}")
+    public LocationResponseVO getLocationById(@PathVariable Long id) {
+        return locationService.findById(id);
+    }
+
+    @GetMapping("/country")
+    @ResponseBody
+    public List<LocationResponseVO> getAllLocationsByCounty(@RequestParam(name="country") String county) {
         return locationService.findAllByCounty(county);
     }
 
-    @GetMapping("/{city}")
-    private List<Location> getAllLocationByCity(@PathVariable String city) {
+    @GetMapping("/city")
+    @ResponseBody
+    public List<LocationResponseVO> getAllLocationsByCity(@RequestParam(name="city") String city) {
         return locationService.findAllByCity(city);
     }
 
     @PostMapping
-    private Location save(@RequestBody Location location) {
-        return locationService.create(location);
+    public LocationResponseVO save(@RequestBody LocationRequestVO request) {
+        return locationService.create(request);
     }
 
-    @PostMapping("{/id}")
-    private Location update(@PathVariable Long id, @RequestBody Location location) {
-        locationService.update(location);
-        return locationService.findById(id);
+    @PostMapping("/{id}")
+    public LocationResponseVO update(@PathVariable Long id, @RequestBody LocationRequestVO request) {
+        return locationService.update(id, request);
     }
 
-    @DeleteMapping("/{/id}")
-    void delete(@PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
         locationService.deleteById(id);
     }
 }

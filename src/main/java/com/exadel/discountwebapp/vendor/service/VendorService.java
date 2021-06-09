@@ -5,20 +5,21 @@ import com.exadel.discountwebapp.vendor.mapper.VendorMapper;
 import com.exadel.discountwebapp.vendor.repository.VendorRepository;
 import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
 import com.exadel.discountwebapp.vendor.vo.VendorResponseVO;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class VendorService {
 
-    VendorMapper vendorMapper;
-    VendorRepository vendorRepository;
+    private final VendorMapper vendorMapper;
+    private final VendorRepository vendorRepository;
 
     @Transactional(readOnly = true)
     public List<VendorResponseVO> findAll() {
@@ -35,8 +36,8 @@ public class VendorService {
 
     @Transactional(readOnly = true)
     public VendorResponseVO findByTitle(String title) {
-        Vendor vendor = vendorRepository.findByTitle(title);
-        return vendor != null ? vendorMapper.toResponseVO(vendor) : null;
+        Optional<Vendor> vendor = vendorRepository.findByTitle(title);
+        return vendor.map(vendorMapper::toResponseVO).orElse(null);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

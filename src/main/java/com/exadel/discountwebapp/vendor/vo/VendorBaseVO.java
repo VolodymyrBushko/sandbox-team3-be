@@ -14,10 +14,9 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class VendorBaseVO implements Serializable {
-
-    protected String title;
-    protected String description;
-    protected String imageUrl;
-    protected String email;
-    protected Long locationId;
+    private String title;
+    private String description;
+    private String imageUrl;
+    private String email;
+    private Long locationId;
 }
