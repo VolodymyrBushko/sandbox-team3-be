@@ -45,11 +45,13 @@ public class User {
     @Column(name = "usr_password", length = 510)
     private String password;
 
+    @NotNull
     @ManyToOne
     @EqualsAndHashCode.Exclude
     @JoinColumn(name = "loc_id")
     private Location location;
 
+    @NotNull
     @ManyToOne
     @EqualsAndHashCode.Exclude
     @JoinColumn(name = "rol_id")
