@@ -21,20 +21,20 @@ public class VendorService {
     private final VendorMapper vendorMapper;
     private final VendorRepository vendorRepository;
 
-    @Transactional(readOnly = true)
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public List<VendorResponseVO> findAll() {
         List<VendorResponseVO> response = new ArrayList<>();
         vendorRepository.findAll().forEach(en -> response.add(vendorMapper.toResponseVO(en)));
         return response;
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public VendorResponseVO findById(Long id) {
-        Vendor vendor = vendorRepository.findById(id).orElse(null);
-        return vendor != null ? vendorMapper.toResponseVO(vendor) : null;
+        Optional<Vendor> vendor = vendorRepository.findById(id);
+        return vendor.map(vendorMapper::toResponseVO).orElse(null);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public VendorResponseVO findByTitle(String title) {
         Optional<Vendor> vendor = vendorRepository.findByTitle(title);
         return vendor.map(vendorMapper::toResponseVO).orElse(null);

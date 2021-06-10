@@ -25,8 +25,8 @@ public class LocationMapper {
                 .build();
     }
 
-    public Location updateVO(Location location, LocationRequestVO request) {
-        location.setCountry((request.getCountry()));
+    public Location update(Location location, LocationRequestVO request) {
+        location.setCountry(request.getCountry());
         location.setCity(request.getCity());
         return location;
     }

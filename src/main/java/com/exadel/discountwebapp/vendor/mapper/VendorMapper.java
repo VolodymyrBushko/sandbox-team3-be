@@ -40,7 +40,7 @@ public class VendorMapper {
     public Vendor updateVO(Vendor vendor, VendorRequestVO request) {
         Location location = locationService.findEntityById(request.getLocationId());
 
-        vendor.setTitle((request.getTitle()));
+        vendor.setTitle(request.getTitle());
         vendor.setDescription(request.getDescription());
         vendor.setImageUrl(request.getImageUrl());
         vendor.setEmail(request.getEmail());

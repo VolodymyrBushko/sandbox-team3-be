@@ -38,7 +38,7 @@ public class LocationService {
     }
 
     @Transactional(readOnly = true)
-    public List<LocationResponseVO> findAllByCounty(String country) {
+    public List<LocationResponseVO> findAllByCountry(String country) {
         List<LocationResponseVO> response = new ArrayList<>();
         List<Location> allByCountry = locationRepository.findAllByCountry(country);
         allByCountry.forEach(en -> response.add(locationMapper.toResponseVO(en)));
@@ -61,7 +61,7 @@ public class LocationService {
     @Transactional(propagation = Propagation.REQUIRED)
     public LocationResponseVO update(Long id, LocationRequestVO request) {
         Location location = locationRepository.findById(id).orElse(null);
-        Location updatedLocation = locationMapper.updateVO(location, request);
+        Location updatedLocation = locationMapper.update(location, request);
         return locationMapper.toResponseVO(locationRepository.save(updatedLocation));
     }
 

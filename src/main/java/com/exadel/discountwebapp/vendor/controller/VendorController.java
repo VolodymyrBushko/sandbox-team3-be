@@ -25,7 +25,7 @@ public class VendorController {
     }
 
     @GetMapping("/title")
-    public VendorResponseVO findByTitle(@RequestParam(name="title") String title) {
+    public VendorResponseVO findByTitle(@RequestParam(name = "title") String title) {
         return vendorService.findByTitle(title);
     }
 

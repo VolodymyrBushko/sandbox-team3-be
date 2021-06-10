@@ -4,15 +4,16 @@ import com.exadel.discountwebapp.location.service.LocationService;
 import com.exadel.discountwebapp.location.vo.LocationRequestVO;
 import com.exadel.discountwebapp.location.vo.LocationResponseVO;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/locations")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class LocationController {
-    private LocationService locationService;
+    private final LocationService locationService;
 
     @GetMapping
     public List<LocationResponseVO> getAllLocations() {
@@ -25,13 +26,11 @@ public class LocationController {
     }
 
     @GetMapping("/country")
-    @ResponseBody
-    public List<LocationResponseVO> getAllLocationsByCounty(@RequestParam(name="country") String county) {
-        return locationService.findAllByCounty(county);
+    public List<LocationResponseVO> getAllLocationsByCountry(@RequestParam(name="country") String country) {
+        return locationService.findAllByCountry(country);
     }
 
     @GetMapping("/city")
-    @ResponseBody
     public List<LocationResponseVO> getAllLocationsByCity(@RequestParam(name="city") String city) {
         return locationService.findAllByCity(city);
     }
