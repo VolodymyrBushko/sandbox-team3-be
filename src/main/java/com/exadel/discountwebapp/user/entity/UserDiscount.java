@@ -1,7 +1,6 @@
 package com.exadel.discountwebapp.user.entity;
 
 import com.exadel.discountwebapp.discount.entity.Discount;
-import com.exadel.discountwebapp.user.entity.User;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -37,7 +36,7 @@ public class UserDiscount {
     private Discount discount;
 
     @Column(name = "ud_discount_quantity", nullable = false)
-    private int discountQuantity;
+    private Integer discountQuantity;
 
     @CreatedDate
     @EqualsAndHashCode.Exclude

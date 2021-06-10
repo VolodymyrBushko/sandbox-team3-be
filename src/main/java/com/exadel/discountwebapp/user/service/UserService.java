@@ -7,6 +7,8 @@ import com.exadel.discountwebapp.user.repository.UserRepository;
 import com.exadel.discountwebapp.user.vo.UserResponseVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,14 +19,18 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserResponseVO findById(long id) {
+    private final UserMapper mapper;
+
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    public UserResponseVO findById(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("No user found with id = %d\", id)"));
-        return UserMapper.toVO(user);
+        return mapper.toVO(user);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public List<UserResponseVO> findAll() {
         List<UserResponseVO> response = new ArrayList<>();
-        userRepository.findAll().forEach(user -> response.add(UserMapper.toVO(user)));
+        userRepository.findAll().forEach(user -> response.add(mapper.toVO(user)));
         return response;
     }
 }

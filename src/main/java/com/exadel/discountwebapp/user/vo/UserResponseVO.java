@@ -14,5 +14,5 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 public class UserResponseVO extends UserBaseVO {
 
-    private long id;
+    private Long id;
 }

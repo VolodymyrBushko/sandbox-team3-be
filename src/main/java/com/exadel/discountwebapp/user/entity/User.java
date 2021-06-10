@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Data
 @Entity
@@ -28,23 +29,29 @@ public class User {
     @Column(name = "usr_id")
     private Long id;
 
-    @Column(name = "usr_first_name", length = 50, nullable = false)
+    @NotNull
+    @Column(name = "usr_first_name", length = 50)
     private String firstName;
 
-    @Column(name = "usr_last_name", length = 50, nullable = false)
+    @NotNull
+    @Column(name = "usr_last_name", length = 50)
     private String lastName;
 
-    @Column(name = "usr_email", length = 255, unique = true, nullable = false)
+    @NotNull
+    @Column(name = "usr_email", length = 255, unique = true)
     private String email;
 
-    @Column(name = "usr_password", length = 510, nullable = false)
+    @NotNull
+    @Column(name = "usr_password", length = 510)
     private String password;
 
+    @NotNull
     @ManyToOne
     @EqualsAndHashCode.Exclude
     @JoinColumn(name = "loc_id")
     private Location location;
 
+    @NotNull
     @ManyToOne
     @EqualsAndHashCode.Exclude
     @JoinColumn(name = "rol_id")
