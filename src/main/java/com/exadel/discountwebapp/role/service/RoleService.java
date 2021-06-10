@@ -30,8 +30,8 @@ public class RoleService {
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public List<RoleResponseVO> getAllRoles() {
-        List<RoleResponseVO> listRoles = new ArrayList<>();
-        roleRepository.findAll().forEach(r -> listRoles.add(roleMapper.toVO(r)));
-        return listRoles;
+        List<RoleResponseVO> roles = new ArrayList<>();
+        roleRepository.findAll().forEach(r -> roles.add(roleMapper.toVO(r)));
+        return roles;
     }
 }

@@ -12,7 +12,7 @@ public class RoleMapper {
     private final ModelMapper modelMapper = new ModelMapper();
 
     public RoleMapper() {
-        configureModelMapper(modelMapper);
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
     }
 
     public RoleResponseVO toVO(Role entity) {
@@ -21,9 +21,5 @@ public class RoleMapper {
 
     public Role toEntity(RoleRequestVO requestVO) {
         return modelMapper.map(requestVO, Role.class);
-    }
-
-    private void configureModelMapper(ModelMapper modelMapper) {
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
     }
 }
