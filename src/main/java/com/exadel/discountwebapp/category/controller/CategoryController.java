@@ -13,7 +13,7 @@ import javax.validation.constraints.Positive;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/category")
+@RequestMapping("/api/categories")
 @RequiredArgsConstructor
 @Validated
 public class CategoryController {
@@ -26,7 +26,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public CategoryResponseVO findById(@NotNull(message = "Id should not be null") @Positive(message = "Id must be a positive number") @PathVariable Long id) {
+    public CategoryResponseVO findById(@NotNull @Positive @PathVariable Long id) {
         return categoryService.findById(id);
     }
 
@@ -36,14 +36,13 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public CategoryResponseVO update(
-            @NotNull(message = "Id should not be null") @Positive(message = "Id must be a positive number") @PathVariable Long id,
-            @Valid @RequestBody CategoryRequestVO request) {
+    public CategoryResponseVO update(@NotNull @Positive @PathVariable Long id,
+                                     @Valid @RequestBody CategoryRequestVO request) {
         return categoryService.update(id, request);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteById(@NotNull(message = "Id should not be null") @Positive(message = "Id must be a positive number") @PathVariable Long id) {
+    public void deleteById(@NotNull @Positive @PathVariable Long id) {
         categoryService.deleteById(id);
     }
 }

@@ -13,7 +13,7 @@ import javax.validation.constraints.Positive;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/discount")
+@RequestMapping("/api/discounts")
 @RequiredArgsConstructor
 @Validated
 public class DiscountController {
@@ -26,7 +26,7 @@ public class DiscountController {
     }
 
     @GetMapping("/{id}")
-    public DiscountResponseVO findById(@NotNull(message = "Id should not be null") @Positive(message = "Id must be a positive number") @PathVariable Long id) {
+    public DiscountResponseVO findById(@NotNull @Positive @PathVariable Long id) {
         return discountService.findById(id);
     }
 
@@ -36,14 +36,13 @@ public class DiscountController {
     }
 
     @PutMapping("/{id}")
-    public DiscountResponseVO update(
-            @NotNull(message = "Id should not be null") @Positive(message = "Id must be a positive number") @PathVariable Long id,
-            @Valid @RequestBody DiscountRequestVO request) {
+    public DiscountResponseVO update(@NotNull @Positive @PathVariable Long id,
+                                     @Valid @RequestBody DiscountRequestVO request) {
         return discountService.update(id, request);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteById(@NotNull(message = "Id should not be null") @Positive(message = "Id must be a positive number") @PathVariable Long id) {
+    public void deleteById(@NotNull @Positive @PathVariable Long id) {
         discountService.deleteById(id);
     }
 }

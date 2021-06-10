@@ -13,7 +13,7 @@ public class CategoryMapper {
     private final ModelMapper modelMapper = new ModelMapper();
 
     public CategoryMapper() {
-        configureModelMapper(modelMapper);
+        configureModelMapper();
     }
 
     public CategoryResponseVO toVO(Category category) {
@@ -28,7 +28,7 @@ public class CategoryMapper {
         modelMapper.map(request, category);
     }
 
-    private void configureModelMapper(ModelMapper modelMapper) {
+    private void configureModelMapper() {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
     }
 }
