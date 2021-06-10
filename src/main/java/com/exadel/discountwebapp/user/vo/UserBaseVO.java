@@ -4,7 +4,8 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Data
@@ -13,15 +14,19 @@ import java.io.Serializable;
 @AllArgsConstructor
 public abstract class UserBaseVO implements Serializable {
 
-    @NotNull(message = "Name cannot be null")
+    @NotBlank
+    @Size(max = 50)
     private String firstName;
 
-    @NotNull(message = "Name cannot be null")
+    @NotBlank
+    @Size(max = 50)
     private String lastName;
 
-    @Email(message = "Email should be valid")
+    @Email
+    @Size(max = 255)
     private String email;
 
-    @NotNull(message = "Password cannot be null")
+    @NotBlank
+    @Size(max = 510)
     private String password;
 }
