@@ -1,7 +1,6 @@
 package com.exadel.discountwebapp.role;
 
 import com.exadel.discountwebapp.role.entity.Role;
-import com.exadel.discountwebapp.role.mapper.RoleMapper;
 import com.exadel.discountwebapp.role.repository.RoleRepository;
 import com.exadel.discountwebapp.role.service.RoleService;
 import com.exadel.discountwebapp.role.vo.RoleResponseVO;
@@ -20,8 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 public class RoleServiceIntegrationTest {
 
-    @Autowired
-    private RoleMapper roleMapper;
     @Autowired
     private RoleRepository roleRepository;
     @Autowired
@@ -51,16 +48,19 @@ public class RoleServiceIntegrationTest {
 
     @Test
     void shouldGetAllRoles() {
-        List<RoleResponseVO> expected = List.of(roleMapper.toVO(roleUser), roleMapper.toVO(roleAdmin));
         List<RoleResponseVO> actual = roleService.getAllRoles();
-        assertEquals(expected, actual);
+        assertEquals(roleUser.getId(), actual.get(0).getId());
+        assertEquals(roleUser.getName(), actual.get(0).getName());
+        assertEquals(roleAdmin.getId(), actual.get(1).getId());
+        assertEquals(roleAdmin.getName(), actual.get(1).getName());
+        assertEquals(2, actual.size());
     }
 
     @Test
     void shouldGetRoleById() {
-        var expected = roleMapper.toVO(roleAdmin);
         var id = roleAdmin.getId();
         var actual = roleService.getRoleById(id);
-        assertEquals(expected, actual);
+        assertEquals(roleAdmin.getId(), actual.getId());
+        assertEquals(roleAdmin.getName(), actual.getName());
     }
 }
