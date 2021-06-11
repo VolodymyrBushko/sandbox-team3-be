@@ -38,7 +38,8 @@ public class CategoryService {
     @Transactional(propagation = Propagation.REQUIRED)
     public CategoryResponseVO create(CategoryRequestVO request) {
         Category category = categoryMapper.toEntity(request);
-        return categoryMapper.toVO(categoryRepository.save(category));
+        categoryRepository.save(category);
+        return categoryMapper.toVO(category);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -46,7 +47,8 @@ public class CategoryService {
         Category category = categoryRepository.findById(id).
                 orElseThrow(() -> new EntityNotFoundException("Could not find category with id: " + id));
         categoryMapper.updateEntity(request, category);
-        return categoryMapper.toVO(categoryRepository.save(category));
+        categoryRepository.save(category);
+        return categoryMapper.toVO(category);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

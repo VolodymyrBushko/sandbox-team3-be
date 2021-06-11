@@ -26,7 +26,6 @@ public abstract class DiscountBaseVO implements Serializable {
     private String description;
 
     @Size(max = 510)
-    @Pattern(regexp = "^(http:\\/\\/|https:\\/\\/)?(www.)?([a-zA-Z0-9]+).[a-zA-Z0-9]*.[a-z]{3}.?([a-z]+)?$")
     private String imageUrl;
 
     @NotNull

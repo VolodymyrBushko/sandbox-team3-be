@@ -38,7 +38,8 @@ public class DiscountService {
     @Transactional(propagation = Propagation.REQUIRED)
     public DiscountResponseVO create(DiscountRequestVO request) {
         Discount discount = discountMapper.toEntity(request);
-        return discountMapper.toVO(discountRepository.save(discount));
+        discountRepository.save(discount);
+        return discountMapper.toVO(discount);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -46,7 +47,8 @@ public class DiscountService {
         Discount discount = discountRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Could not find discount with id: " + id));
         discountMapper.updateEntity(request, discount);
-        return discountMapper.toVO(discountRepository.save(discount));
+        discountRepository.save(discount);
+        return discountMapper.toVO(discount);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
