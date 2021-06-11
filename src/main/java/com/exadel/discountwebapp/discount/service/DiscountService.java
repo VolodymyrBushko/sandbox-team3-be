@@ -5,6 +5,7 @@ import com.exadel.discountwebapp.discount.mapper.DiscountMapper;
 import com.exadel.discountwebapp.discount.repository.DiscountRepository;
 import com.exadel.discountwebapp.discount.vo.DiscountRequestVO;
 import com.exadel.discountwebapp.discount.vo.DiscountResponseVO;
+import com.exadel.discountwebapp.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -29,24 +30,25 @@ public class DiscountService {
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public DiscountResponseVO findById(Long id) {
-        Discount discount = discountRepository.findById(id).orElse(null);
-        return discount != null ? discountMapper.toVO(discount) : null;
+        Discount discount = discountRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Could not find discount with id: " + id));
+        return discountMapper.toVO(discount);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public DiscountResponseVO create(DiscountRequestVO request) {
         Discount discount = discountMapper.toEntity(request);
-        return discountMapper.toVO(discountRepository.save(discount));
+        discountRepository.save(discount);
+        return discountMapper.toVO(discount);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public DiscountResponseVO update(Long id, DiscountRequestVO request) {
-        Discount discount = discountRepository.findById(id).orElse(null);
-        if (discount != null) {
-            discountMapper.updateEntity(request, discount);
-            return discountMapper.toVO(discountRepository.save(discount));
-        }
-        return null;
+        Discount discount = discountRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Could not find discount with id: " + id));
+        discountMapper.updateEntity(request, discount);
+        discountRepository.save(discount);
+        return discountMapper.toVO(discount);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

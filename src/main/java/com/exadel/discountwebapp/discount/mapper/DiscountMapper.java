@@ -24,7 +24,7 @@ public class DiscountMapper {
     public DiscountMapper(VendorRepository vendorRepository, CategoryRepository categoryRepository) {
         this.vendorRepository = vendorRepository;
         this.categoryRepository = categoryRepository;
-        configureModelMapper(modelMapper);
+        configureModelMapper();
     }
 
     public DiscountResponseVO toVO(Discount discount) {
@@ -52,7 +52,7 @@ public class DiscountMapper {
         discount.setCategory(category);
     }
 
-    private void configureModelMapper(ModelMapper modelMapper) {
+    private void configureModelMapper() {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         modelMapper.addMappings(createSkipPropertyMap());
     }

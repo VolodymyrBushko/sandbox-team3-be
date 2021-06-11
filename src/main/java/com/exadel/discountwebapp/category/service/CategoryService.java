@@ -5,6 +5,7 @@ import com.exadel.discountwebapp.category.mapper.CategoryMapper;
 import com.exadel.discountwebapp.category.repository.CategoryRepository;
 import com.exadel.discountwebapp.category.vo.CategoryRequestVO;
 import com.exadel.discountwebapp.category.vo.CategoryResponseVO;
+import com.exadel.discountwebapp.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -29,24 +30,25 @@ public class CategoryService {
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public CategoryResponseVO findById(Long id) {
-        Category category = categoryRepository.findById(id).orElse(null);
-        return category != null ? categoryMapper.toVO(category) : null;
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Could not find category with id: " + id));
+        return categoryMapper.toVO(category);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public CategoryResponseVO create(CategoryRequestVO request) {
         Category category = categoryMapper.toEntity(request);
-        return categoryMapper.toVO(categoryRepository.save(category));
+        categoryRepository.save(category);
+        return categoryMapper.toVO(category);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public CategoryResponseVO update(Long id, CategoryRequestVO request) {
-        Category category = categoryRepository.findById(id).orElse(null);
-        if (category != null) {
-            categoryMapper.updateEntity(request, category);
-            return categoryMapper.toVO(categoryRepository.save(category));
-        }
-        return null;
+        Category category = categoryRepository.findById(id).
+                orElseThrow(() -> new EntityNotFoundException("Could not find category with id: " + id));
+        categoryMapper.updateEntity(request, category);
+        categoryRepository.save(category);
+        return categoryMapper.toVO(category);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
