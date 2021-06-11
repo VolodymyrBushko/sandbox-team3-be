@@ -5,13 +5,13 @@ import com.exadel.discountwebapp.location.service.LocationService;
 import com.exadel.discountwebapp.vendor.entity.Vendor;
 import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
 import com.exadel.discountwebapp.vendor.vo.VendorResponseVO;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class VendorMapper {
-    private LocationService locationService;
+    private final LocationService locationService;
 
     public Vendor toEntity(VendorRequestVO request) {
 
@@ -26,7 +26,7 @@ public class VendorMapper {
                 .build();
     }
 
-    public VendorResponseVO toResponseVO(Vendor vendor) {
+    public VendorResponseVO toVO(Vendor vendor) {
         return VendorResponseVO.builder()
                 .id(vendor.getId())
                 .title(vendor.getTitle())

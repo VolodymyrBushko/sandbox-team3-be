@@ -24,32 +24,32 @@ public class VendorService {
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public List<VendorResponseVO> findAll() {
         List<VendorResponseVO> response = new ArrayList<>();
-        vendorRepository.findAll().forEach(en -> response.add(vendorMapper.toResponseVO(en)));
+        vendorRepository.findAll().forEach(en -> response.add(vendorMapper.toVO(en)));
         return response;
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public VendorResponseVO findById(Long id) {
         Optional<Vendor> vendor = vendorRepository.findById(id);
-        return vendor.map(vendorMapper::toResponseVO).orElse(null);
+        return vendor.map(vendorMapper::toVO).orElse(null);
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public VendorResponseVO findByTitle(String title) {
         Optional<Vendor> vendor = vendorRepository.findByTitle(title);
-        return vendor.map(vendorMapper::toResponseVO).orElse(null);
+        return vendor.map(vendorMapper::toVO).orElse(null);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public VendorResponseVO create(VendorRequestVO request) {
-        return vendorMapper.toResponseVO(vendorRepository.save(vendorMapper.toEntity(request)));
+        return vendorMapper.toVO(vendorRepository.save(vendorMapper.toEntity(request)));
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public VendorResponseVO update(Long id, VendorRequestVO request) {
         Vendor vendor = vendorRepository.findById(id).orElse(null);
         Vendor updatedVendor = vendorMapper.updateVO(vendor, request);
-        return vendorMapper.toResponseVO(vendorRepository.save(updatedVendor));
+        return vendorMapper.toVO(vendorRepository.save(updatedVendor));
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

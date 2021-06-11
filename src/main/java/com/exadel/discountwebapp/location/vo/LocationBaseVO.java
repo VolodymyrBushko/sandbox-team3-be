@@ -1,15 +1,14 @@
 package com.exadel.discountwebapp.location.vo;
 
-import com.exadel.discountwebapp.vendor.entity.Vendor;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
-import java.util.List;
 
 
-@Getter
-@Setter
+@Data
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor

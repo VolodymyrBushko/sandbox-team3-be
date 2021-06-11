@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,53 +20,53 @@ public class LocationService {
     private final LocationRepository locationRepository;
     private final LocationMapper locationMapper;
 
-    @Transactional(readOnly = true)
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public List<LocationResponseVO> findAll() {
         List<LocationResponseVO> response = new ArrayList<>();
         locationRepository.findAll().forEach(en -> response.add(locationMapper.toResponseVO(en)));
         return response;
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public LocationResponseVO findById(Long id) {
-        Location location = locationRepository.findById(id).orElse(null);
-        return location != null ? locationMapper.toResponseVO(location) : null;
+        Optional<Location> location = locationRepository.findById(id);
+        return location.map(locationMapper::toResponseVO).orElse(null);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public Location findEntityById(Long id) {
         return locationRepository.findById(id).orElse(null);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public List<LocationResponseVO> findAllByCountry(String country) {
         List<LocationResponseVO> response = new ArrayList<>();
-        List<Location> allByCountry = locationRepository.findAllByCountry(country);
-        allByCountry.forEach(en -> response.add(locationMapper.toResponseVO(en)));
+        List<Location> locations = locationRepository.findAllByCountry(country);
+        locations.forEach(entity -> response.add(locationMapper.toResponseVO(entity)));
         return response;
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public List<LocationResponseVO> findAllByCity(String city) {
         List<LocationResponseVO> response = new ArrayList<>();
         List<Location> allByCountry = locationRepository.findAllByCity(city);
-        allByCountry.forEach(en -> response.add(locationMapper.toResponseVO(en)));
+        allByCountry.forEach(entity -> response.add(locationMapper.toResponseVO(entity)));
         return response;
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public LocationResponseVO create(LocationRequestVO request) {
         return locationMapper.toResponseVO(locationRepository.save(locationMapper.toEntity(request)));
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public LocationResponseVO update(Long id, LocationRequestVO request) {
         Location location = locationRepository.findById(id).orElse(null);
         Location updatedLocation = locationMapper.update(location, request);
         return locationMapper.toResponseVO(locationRepository.save(updatedLocation));
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public void deleteById(Long id) {
         locationRepository.deleteById(id);
     }

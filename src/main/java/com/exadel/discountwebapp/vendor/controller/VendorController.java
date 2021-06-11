@@ -4,15 +4,16 @@ import com.exadel.discountwebapp.vendor.service.VendorService;
 import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
 import com.exadel.discountwebapp.vendor.vo.VendorResponseVO;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/vendors")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class VendorController {
-    private VendorService vendorService;
+    private final VendorService vendorService;
 
     @GetMapping
     public List<VendorResponseVO> findAllVendors() {
@@ -30,7 +31,7 @@ public class VendorController {
     }
 
     @PostMapping
-    public VendorResponseVO save(@RequestBody VendorRequestVO request) {
+    public VendorResponseVO create(@RequestBody VendorRequestVO request) {
         return vendorService.create(request);
     }
 

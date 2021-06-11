@@ -3,8 +3,8 @@ package com.exadel.discountwebapp.location.vo;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-@Getter
-@Setter
+@EqualsAndHashCode(callSuper = true)
+@Data
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor

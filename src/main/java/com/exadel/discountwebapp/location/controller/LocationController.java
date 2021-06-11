@@ -36,7 +36,7 @@ public class LocationController {
     }
 
     @PostMapping
-    public LocationResponseVO save(@RequestBody LocationRequestVO request) {
+    public LocationResponseVO create(@RequestBody LocationRequestVO request) {
         return locationService.create(request);
     }
 
