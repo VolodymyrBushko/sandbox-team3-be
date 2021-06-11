@@ -5,10 +5,16 @@ import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
 import com.exadel.discountwebapp.vendor.vo.VendorResponseVO;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.util.List;
 
+@Validated
 @RestController
 @RequestMapping("/api/vendors")
 @RequiredArgsConstructor
@@ -21,12 +27,12 @@ public class VendorController {
     }
 
     @GetMapping("/{id}")
-    public VendorResponseVO findById(@PathVariable Long id) {
+    public VendorResponseVO findById(@NotNull @Positive @PathVariable Long id) {
         return vendorService.findById(id);
     }
 
     @GetMapping("/title")
-    public VendorResponseVO findByTitle(@RequestParam(name = "title") String title) {
+    public VendorResponseVO findByTitle(@NotBlank @Valid @RequestParam(name = "title") String title) {
         return vendorService.findByTitle(title);
     }
 
@@ -36,12 +42,12 @@ public class VendorController {
     }
 
     @PutMapping("/{id}")
-    public VendorResponseVO update(@PathVariable Long id, @RequestBody VendorRequestVO request) {
+    public VendorResponseVO update(@NotNull @Positive @PathVariable Long id, @NotBlank @Valid @RequestBody VendorRequestVO request) {
         return vendorService.update(id, request);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public void delete(@NotNull @Positive @PathVariable Long id) {
         vendorService.deleteById(id);
     }
 }
