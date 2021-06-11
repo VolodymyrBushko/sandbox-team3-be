@@ -1,6 +1,7 @@
 package com.exadel.discountwebapp.location.service;
 
 import com.exadel.discountwebapp.location.entity.Location;
+import com.exadel.discountwebapp.location.exception.LocationNotFoundException;
 import com.exadel.discountwebapp.location.mapper.LocationMapper;
 import com.exadel.discountwebapp.location.repository.LocationRepository;
 import com.exadel.discountwebapp.location.vo.LocationRequestVO;
@@ -29,7 +30,8 @@ public class LocationService {
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public LocationResponseVO findById(Long id) {
-        Optional<Location> location = locationRepository.findById(id);
+        Optional<Location> location = Optional.ofNullable(locationRepository.findById(id)
+                .orElseThrow(() -> new LocationNotFoundException("Could not find location with id: " + id)));
         return location.map(locationMapper::toResponseVO).orElse(null);
     }
 
@@ -61,7 +63,8 @@ public class LocationService {
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public LocationResponseVO update(Long id, LocationRequestVO request) {
-        Location location = locationRepository.findById(id).orElse(null);
+        Location location = locationRepository.findById(id)
+                .orElseThrow(() -> new LocationNotFoundException("Could not find location with id: " + id));
         Location updatedLocation = locationMapper.update(location, request);
         return locationMapper.toResponseVO(locationRepository.save(updatedLocation));
     }
