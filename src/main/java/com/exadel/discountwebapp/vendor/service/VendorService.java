@@ -52,8 +52,9 @@ public class VendorService {
     public VendorResponseVO update(Long id, VendorRequestVO request) {
         Vendor vendor = vendorRepository.findById(id)
                 .orElseThrow(() -> new VendorNotFoundException("Could not find vendor with id: " + id));
-        Vendor updatedVendor = vendorMapper.updateVO(vendor, request);
-        return vendorMapper.toVO(vendorRepository.save(updatedVendor));
+        vendorMapper.updateVO(vendor, request);
+        vendorRepository.save(vendor);
+        return vendorMapper.toVO(vendor);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

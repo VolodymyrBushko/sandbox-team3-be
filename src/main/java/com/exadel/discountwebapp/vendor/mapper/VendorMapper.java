@@ -5,46 +5,52 @@ import com.exadel.discountwebapp.location.service.LocationService;
 import com.exadel.discountwebapp.vendor.entity.Vendor;
 import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
 import com.exadel.discountwebapp.vendor.vo.VendorResponseVO;
-import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
+import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class VendorMapper {
     private final LocationService locationService;
+    private final ModelMapper modelMapper = new ModelMapper();
 
-    public Vendor toEntity(VendorRequestVO request) {
-
-        Location location = locationService.findEntityById(request.getLocationId());
-
-        return Vendor.builder()
-                .title(request.getTitle())
-                .description(request.getDescription())
-                .imageUrl(request.getImageUrl())
-                .email(request.getEmail())
-                .location(location)
-                .build();
+    @Autowired
+    public VendorMapper(LocationService locationService) {
+        this.locationService = locationService;
+        configureModelMapper();
     }
 
     public VendorResponseVO toVO(Vendor vendor) {
-        return VendorResponseVO.builder()
-                .id(vendor.getId())
-                .title(vendor.getTitle())
-                .description(vendor.getDescription())
-                .imageUrl(vendor.getImageUrl())
-                .email(vendor.getEmail())
-                .locationId(vendor.getLocation().getId())
-                .build();
+        return modelMapper.map(vendor, VendorResponseVO.class);
     }
 
-    public Vendor updateVO(Vendor vendor, VendorRequestVO request) {
-        Location location = locationService.findEntityById(request.getLocationId());
+    public Vendor toEntity(VendorRequestVO request) {
+        return modelMapper.map(request, Vendor.class);
+    }
 
-        vendor.setTitle(request.getTitle());
-        vendor.setDescription(request.getDescription());
-        vendor.setImageUrl(request.getImageUrl());
-        vendor.setEmail(request.getEmail());
+    public void updateVO(Vendor vendor, VendorRequestVO request) {
+        provideLocationDependencies(request, vendor);
+        modelMapper.map(request, vendor);
+    }
+
+    private void provideLocationDependencies(VendorRequestVO request, Vendor vendor) {
+        Location location = locationService.findEntityById(request.getLocationId());
         vendor.setLocation(location);
-        return vendor;
+    }
+
+    private void configureModelMapper() {
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        modelMapper.addMappings(createSkipPropertyMap());
+    }
+
+    private PropertyMap<VendorRequestVO, Vendor> createSkipPropertyMap() {
+        return new PropertyMap<>() {
+            @Override
+            protected void configure() {
+                skip().setLocation(null);
+            }
+        };
     }
 }
