@@ -19,14 +19,6 @@ public class WebExceptionHandler {
         return String.format("%s.%s.%s", field.getObjectName(), field.getField(), field.getDefaultMessage());
     }
 
-    @ExceptionHandler(ConstraintViolationException.class)
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public String constraintViolationException(ConstraintViolationException ex) {
-        String message = ex.getMessage();
-        int startSubstring = message.indexOf('.') + 1;
-        return message.substring(startSubstring);
-    }
-
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public String entityNotFoundException(EntityNotFoundException ex) {
