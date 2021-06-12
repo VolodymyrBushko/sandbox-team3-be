@@ -10,6 +10,6 @@ public class HelloWorldController
     @GetMapping( "/{name}" )
     public String hello( @PathVariable( "name" ) String name )
     {
-        return "Hello world! This is " + name;
+        return "Hello world! " + name;
     }
 }
