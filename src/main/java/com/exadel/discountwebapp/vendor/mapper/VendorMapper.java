@@ -9,21 +9,24 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class VendorMapper {
-    private LocationService locationService;
-    private ModelMapper modelMapper = new ModelMapper();
+    private final LocationService locationService;
+    private final ModelMapper modelMapper = new ModelMapper();
 
+    @Autowired
     public VendorMapper(LocationService locationService) {
         this.locationService = locationService;
         configureModelMapper();
     }
 
     public VendorResponseVO toVO(Vendor vendor) {
-        return modelMapper.map(vendor, VendorResponseVO.class);
+        VendorResponseVO response = modelMapper.map(vendor, VendorResponseVO.class);
+        response.setLocationId(vendor.getLocation().getId());
+        return response;
     }
 
     public Vendor toEntity(VendorRequestVO request) {
