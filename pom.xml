@@ -19,8 +19,6 @@
 
     <properties>
         <java.version>11</java.version>
-        <modelmapper.version>2.4.2</modelmapper.version>
-        <maven.version>2.5.0</maven.version>
     </properties>
 
     <dependencies>
@@ -33,18 +31,9 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-validation</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.modelmapper</groupId>
-            <artifactId>modelmapper</artifactId>
-            <version>${modelmapper.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <scope>runtime</scope>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.2.21</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -63,8 +52,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${maven.version}</version>
-
                 <configuration>
                     <excludes>
                         <exclude>
