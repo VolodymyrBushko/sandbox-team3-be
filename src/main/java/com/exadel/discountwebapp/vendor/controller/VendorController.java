@@ -3,7 +3,6 @@ package com.exadel.discountwebapp.vendor.controller;
 import com.exadel.discountwebapp.vendor.service.VendorService;
 import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
 import com.exadel.discountwebapp.vendor.vo.VendorResponseVO;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +41,7 @@ public class VendorController {
     }
 
     @PutMapping("/{id}")
-    public VendorResponseVO update(@NotNull @Positive @PathVariable Long id, @NotBlank @Valid @RequestBody VendorRequestVO request) {
+    public VendorResponseVO update(@NotNull @Positive @PathVariable Long id, @Valid @RequestBody VendorRequestVO request) {
         return vendorService.update(id, request);
     }
 

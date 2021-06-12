@@ -2,7 +2,6 @@ package com.exadel.discountwebapp.vendor.entity;
 
 import com.exadel.discountwebapp.location.entity.Location;
 import lombok.*;
-import org.hibernate.annotations.Cascade;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;

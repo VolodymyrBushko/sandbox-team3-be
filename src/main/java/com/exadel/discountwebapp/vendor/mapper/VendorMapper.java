@@ -5,18 +5,18 @@ import com.exadel.discountwebapp.location.service.LocationService;
 import com.exadel.discountwebapp.vendor.entity.Vendor;
 import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
 import com.exadel.discountwebapp.vendor.vo.VendorResponseVO;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class VendorMapper {
-    private final LocationService locationService;
-    private final ModelMapper modelMapper = new ModelMapper();
+    private LocationService locationService;
+    private ModelMapper modelMapper = new ModelMapper();
 
-    @Autowired
     public VendorMapper(LocationService locationService) {
         this.locationService = locationService;
         configureModelMapper();
@@ -27,10 +27,12 @@ public class VendorMapper {
     }
 
     public Vendor toEntity(VendorRequestVO request) {
-        return modelMapper.map(request, Vendor.class);
+        Vendor vendor = modelMapper.map(request, Vendor.class);
+        provideLocationDependencies(request, vendor);
+        return vendor;
     }
 
-    public void updateVO(Vendor vendor, VendorRequestVO request) {
+    public void update(Vendor vendor, VendorRequestVO request) {
         provideLocationDependencies(request, vendor);
         modelMapper.map(request, vendor);
     }

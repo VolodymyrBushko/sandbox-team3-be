@@ -31,9 +31,9 @@ public class VendorService {
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public VendorResponseVO findById(Long id) {
-        Optional<Vendor> vendor = Optional.ofNullable(vendorRepository.findById(id)
-                .orElseThrow(() -> new VendorNotFoundException("Could not find vendor with id: " + id)));
-        return vendor.map(vendorMapper::toVO).orElse(null);
+        Vendor vendor = vendorRepository.findById(id)
+                .orElseThrow(() -> new VendorNotFoundException("Could not find vendor with id: " + id));
+        return vendorMapper.toVO(vendor);
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
@@ -52,7 +52,7 @@ public class VendorService {
     public VendorResponseVO update(Long id, VendorRequestVO request) {
         Vendor vendor = vendorRepository.findById(id)
                 .orElseThrow(() -> new VendorNotFoundException("Could not find vendor with id: " + id));
-        vendorMapper.updateVO(vendor, request);
+        vendorMapper.update(vendor, request);
         vendorRepository.save(vendor);
         return vendorMapper.toVO(vendor);
     }

@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,9 +29,9 @@ public class LocationService {
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public LocationResponseVO findById(Long id) {
-        Optional<Location> location = Optional.ofNullable(locationRepository.findById(id)
-                .orElseThrow(() -> new LocationNotFoundException("Could not find location with id: " + id)));
-        return location.map(locationMapper::toVO).orElse(null);
+        Location location = locationRepository.findById(id)
+                .orElseThrow(() -> new LocationNotFoundException("Could not find location with id: " + id));
+        return locationMapper.toVO(location);
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
@@ -56,21 +55,21 @@ public class LocationService {
         return response;
     }
 
-    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    @Transactional(propagation = Propagation.REQUIRED)
     public LocationResponseVO create(LocationRequestVO request) {
         return locationMapper.toVO(locationRepository.save(locationMapper.toEntity(request)));
     }
 
-    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    @Transactional(propagation = Propagation.REQUIRED)
     public LocationResponseVO update(Long id, LocationRequestVO request) {
         Location location = locationRepository.findById(id)
                 .orElseThrow(() -> new LocationNotFoundException("Could not find location with id: " + id));
-        locationMapper.updateVO(location, request);
+        locationMapper.update(location, request);
         locationRepository.save(location);
         return locationMapper.toVO(location);
     }
 
-    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    @Transactional(propagation = Propagation.REQUIRED)
     public void deleteById(Long id) {
         locationRepository.deleteById(id);
     }

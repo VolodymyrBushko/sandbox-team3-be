@@ -27,7 +27,7 @@ public class LocationMapper {
         return modelMapper.map(request, Location.class);
     }
 
-    public void updateVO(Location location, LocationRequestVO request) {
+    public void update(Location location, LocationRequestVO request) {
         modelMapper.map(request, location);
     }
 
