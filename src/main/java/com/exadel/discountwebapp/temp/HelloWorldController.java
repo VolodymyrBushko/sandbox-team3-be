@@ -9,7 +9,7 @@ import java.util.Optional;
 @RestController
 public class HelloWorldController
 {
-    @GetMapping( "/{name}" )
+    @GetMapping( { "/", "/{name}" } )
     public String hello( @PathVariable( value = "name", required = false ) String name )
     {
         return "Hello world!! " + Optional.ofNullable( name ).orElse( "" );
