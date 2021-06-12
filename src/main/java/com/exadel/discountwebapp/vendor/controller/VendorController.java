@@ -26,27 +26,27 @@ public class VendorController {
     }
 
     @GetMapping("/{id}")
-    public VendorResponseVO findById(@NotNull @Positive @PathVariable Long id) {
+    public VendorResponseVO findById( @PathVariable Long id) {
         return vendorService.findById(id);
     }
 
     @GetMapping("/title")
-    public VendorResponseVO findByTitle(@NotBlank @Valid @RequestParam(name = "title") String title) {
+    public VendorResponseVO findByTitle( @Valid @RequestParam(name = "title") String title) {
         return vendorService.findByTitle(title);
     }
 
     @PostMapping
-    public VendorResponseVO create(@RequestBody VendorRequestVO request) {
+    public VendorResponseVO create(@Valid @RequestBody VendorRequestVO request) {
         return vendorService.create(request);
     }
 
     @PutMapping("/{id}")
-    public VendorResponseVO update(@NotNull @Positive @PathVariable Long id, @Valid @RequestBody VendorRequestVO request) {
+    public VendorResponseVO update(@PathVariable Long id, @Valid @RequestBody VendorRequestVO request) {
         return vendorService.update(id, request);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@NotNull @Positive @PathVariable Long id) {
+    public void delete(@PathVariable Long id) {
         vendorService.deleteById(id);
     }
 }
