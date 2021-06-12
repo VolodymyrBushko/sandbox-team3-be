@@ -21,7 +21,7 @@ public class LocationController {
     }
 
     @GetMapping("/{id}")
-    public LocationResponseVO getLocationById(@Valid @PathVariable Long id) {
+    public LocationResponseVO getLocationById( @PathVariable Long id) {
         return locationService.findById(id);
     }
 
@@ -32,7 +32,7 @@ public class LocationController {
     }
 
     @GetMapping("/city")
-    public List<LocationResponseVO> getAllLocationsByCity(@RequestParam(name = "city") String city) {
+    public List<LocationResponseVO> getAllLocationsByCity(@Valid @RequestParam(name = "city") String city) {
         return locationService.findAllByCity(city);
     }
 
@@ -42,12 +42,12 @@ public class LocationController {
     }
 
     @PutMapping("/{id}")
-    public LocationResponseVO update(@Valid @PathVariable Long id, @Valid @RequestBody LocationRequestVO request) {
+    public LocationResponseVO update(@PathVariable Long id, @Valid @RequestBody LocationRequestVO request) {
         return locationService.update(id, request);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@Valid @PathVariable Long id) {
+    public void delete( @PathVariable Long id) {
         locationService.deleteById(id);
     }
 }

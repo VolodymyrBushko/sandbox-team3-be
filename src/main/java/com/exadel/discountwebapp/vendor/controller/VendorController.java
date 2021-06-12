@@ -4,16 +4,11 @@ import com.exadel.discountwebapp.vendor.service.VendorService;
 import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
 import com.exadel.discountwebapp.vendor.vo.VendorResponseVO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 import java.util.List;
 
-@Validated
 @RestController
 @RequestMapping("/api/vendors")
 @RequiredArgsConstructor
@@ -26,12 +21,12 @@ public class VendorController {
     }
 
     @GetMapping("/{id}")
-    public VendorResponseVO findById( @PathVariable Long id) {
+    public VendorResponseVO findById(@PathVariable Long id) {
         return vendorService.findById(id);
     }
 
     @GetMapping("/title")
-    public VendorResponseVO findByTitle( @Valid @RequestParam(name = "title") String title) {
+    public VendorResponseVO findByTitle(@Valid @RequestParam(name = "title") String title) {
         return vendorService.findByTitle(title);
     }
 
