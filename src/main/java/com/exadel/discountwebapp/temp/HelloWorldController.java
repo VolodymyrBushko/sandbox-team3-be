@@ -12,6 +12,6 @@ public class HelloWorldController
     @GetMapping( { "/", "/{name}" } )
     public String hello( @PathVariable( value = "name", required = false ) String name )
     {
-        return "Hello world! " + Optional.ofNullable( name ).orElse( "" );
+        return "Hello world!! " + Optional.ofNullable( name ).orElse( "" );
     }
 }
