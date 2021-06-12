@@ -1,7 +1,7 @@
 package com.exadel.discountwebapp.location.service;
 
 import com.exadel.discountwebapp.location.entity.Location;
-import com.exadel.discountwebapp.location.exception.LocationNotFoundException;
+import com.exadel.discountwebapp.exception.EntityNotFoundException;
 import com.exadel.discountwebapp.location.mapper.LocationMapper;
 import com.exadel.discountwebapp.location.repository.LocationRepository;
 import com.exadel.discountwebapp.location.vo.LocationRequestVO;
@@ -30,7 +30,7 @@ public class LocationService {
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public LocationResponseVO findById(Long id) {
         Location location = locationRepository.findById(id)
-                .orElseThrow(() -> new LocationNotFoundException("Could not find location with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Could not find location with id: " + id));
         return locationMapper.toVO(location);
     }
 
@@ -63,7 +63,7 @@ public class LocationService {
     @Transactional(propagation = Propagation.REQUIRED)
     public LocationResponseVO update(Long id, LocationRequestVO request) {
         Location location = locationRepository.findById(id)
-                .orElseThrow(() -> new LocationNotFoundException("Could not find location with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Could not find location with id: " + id));
         locationMapper.update(location, request);
         locationRepository.save(location);
         return locationMapper.toVO(location);
