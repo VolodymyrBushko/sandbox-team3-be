@@ -50,8 +50,8 @@ public class LocationService {
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public List<LocationResponseVO> findAllByCity(String city) {
         List<LocationResponseVO> response = new ArrayList<>();
-        List<Location> allByCountry = locationRepository.findAllByCity(city);
-        allByCountry.forEach(entity -> response.add(locationMapper.toVO(entity)));
+        List<Location> locations = locationRepository.findAllByCity(city);
+        locations.forEach(entity -> response.add(locationMapper.toVO(entity)));
         return response;
     }
 
