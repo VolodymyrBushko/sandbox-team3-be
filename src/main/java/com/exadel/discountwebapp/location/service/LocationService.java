@@ -1,7 +1,7 @@
 package com.exadel.discountwebapp.location.service;
 
-import com.exadel.discountwebapp.location.entity.Location;
 import com.exadel.discountwebapp.exception.EntityNotFoundException;
+import com.exadel.discountwebapp.location.entity.Location;
 import com.exadel.discountwebapp.location.mapper.LocationMapper;
 import com.exadel.discountwebapp.location.repository.LocationRepository;
 import com.exadel.discountwebapp.location.vo.LocationRequestVO;
@@ -23,36 +23,31 @@ public class LocationService {
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public List<LocationResponseVO> findAll() {
         List<LocationResponseVO> response = new ArrayList<>();
-        locationRepository.findAll().forEach(en -> response.add(locationMapper.toVO(en)));
+        locationRepository.findAll().forEach(entity -> response.add(locationMapper.toVO(entity)));
         return response;
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public LocationResponseVO findById(Long id) {
-        Location location = locationRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Could not find location with id: " + id));
+        Location location = getLocationById(id);
         return locationMapper.toVO(location);
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public Location findEntityById(Long id) {
-        return locationRepository.findById(id).orElse(null);
+        return getLocationById(id);
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public List<LocationResponseVO> findAllByCountry(String country) {
-        List<LocationResponseVO> response = new ArrayList<>();
         List<Location> locations = locationRepository.findAllByCountry(country);
-        locations.forEach(entity -> response.add(locationMapper.toVO(entity)));
-        return response;
+        return getLocationResponseVO(locations);
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public List<LocationResponseVO> findAllByCity(String city) {
-        List<LocationResponseVO> response = new ArrayList<>();
         List<Location> locations = locationRepository.findAllByCity(city);
-        locations.forEach(entity -> response.add(locationMapper.toVO(entity)));
-        return response;
+        return getLocationResponseVO(locations);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -62,8 +57,7 @@ public class LocationService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public LocationResponseVO update(Long id, LocationRequestVO request) {
-        Location location = locationRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Could not find location with id: " + id));
+        Location location = getLocationById(id);
         locationMapper.update(location, request);
         locationRepository.save(location);
         return locationMapper.toVO(location);
@@ -72,5 +66,17 @@ public class LocationService {
     @Transactional(propagation = Propagation.REQUIRED)
     public void deleteById(Long id) {
         locationRepository.deleteById(id);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Location getLocationById(Long id) {
+        return locationRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Could not find location with id: " + id));
+    }
+
+    private List<LocationResponseVO> getLocationResponseVO(List<Location> locations) {
+        List<LocationResponseVO> response = new ArrayList<>();
+        locations.forEach(entity -> response.add(locationMapper.toVO(entity)));
+        return response;
     }
 }
