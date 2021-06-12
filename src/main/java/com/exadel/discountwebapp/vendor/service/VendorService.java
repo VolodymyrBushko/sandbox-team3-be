@@ -25,15 +25,13 @@ public class VendorService {
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public List<VendorResponseVO> findAll() {
         List<VendorResponseVO> response = new ArrayList<>();
-        vendorRepository.findAll().forEach(en -> response.add(vendorMapper.toVO(en)));
+        vendorRepository.findAll().forEach(entity -> response.add(vendorMapper.toVO(entity)));
         return response;
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public VendorResponseVO findById(Long id) {
-        Vendor vendor = vendorRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Could not find vendor with id: " + id));
-        return vendorMapper.toVO(vendor);
+        return vendorMapper.toVO(getVendorById(id));
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
@@ -50,8 +48,7 @@ public class VendorService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public VendorResponseVO update(Long id, VendorRequestVO request) {
-        Vendor vendor = vendorRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Could not find vendor with id: " + id));
+        Vendor vendor = getVendorById(id);
         vendorMapper.update(vendor, request);
         vendorRepository.save(vendor);
         return vendorMapper.toVO(vendor);
@@ -60,5 +57,10 @@ public class VendorService {
     @Transactional(propagation = Propagation.REQUIRED)
     public void deleteById(Long id) {
         vendorRepository.deleteById(id);
+    }
+
+    private Vendor getVendorById(Long id) {
+        return vendorRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Could not find vendor with id: " + id));
     }
 }

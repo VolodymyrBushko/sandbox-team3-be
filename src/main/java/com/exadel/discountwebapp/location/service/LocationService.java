@@ -77,5 +77,4 @@ public class LocationService {
         locations.forEach(entity -> response.add(locationMapper.toVO(entity)));
         return response;
     }
-
 }
