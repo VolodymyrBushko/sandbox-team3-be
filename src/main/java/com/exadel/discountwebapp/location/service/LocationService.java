@@ -22,15 +22,13 @@ public class LocationService {
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public List<LocationResponseVO> findAll() {
-        List<LocationResponseVO> response = new ArrayList<>();
-        locationRepository.findAll().forEach(entity -> response.add(locationMapper.toVO(entity)));
-        return response;
+        List<Location> locations = (List<Location>) locationRepository.findAll();
+        return getLocationResponseVO(locations);
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public LocationResponseVO findById(Long id) {
-        Location location = getLocationById(id);
-        return locationMapper.toVO(location);
+        return locationMapper.toVO(getLocationById(id));
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
@@ -79,4 +77,5 @@ public class LocationService {
         locations.forEach(entity -> response.add(locationMapper.toVO(entity)));
         return response;
     }
+
 }
