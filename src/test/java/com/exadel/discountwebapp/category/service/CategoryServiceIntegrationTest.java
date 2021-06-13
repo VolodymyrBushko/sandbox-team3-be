@@ -1,21 +1,23 @@
-package com.exadel.discountwebapp.category;
+package com.exadel.discountwebapp.category.service;
 
 import com.exadel.discountwebapp.category.entity.Category;
 import com.exadel.discountwebapp.category.repository.CategoryRepository;
-import com.exadel.discountwebapp.category.service.CategoryService;
 import com.exadel.discountwebapp.category.vo.CategoryRequestVO;
 import com.exadel.discountwebapp.category.vo.CategoryResponseVO;
 import com.exadel.discountwebapp.exception.EntityNotFoundException;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@RunWith(SpringRunner.class)
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/category-init.sql")
 @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:sql/clean-up.sql")
 class CategoryServiceIntegrationTest {
@@ -28,7 +30,7 @@ class CategoryServiceIntegrationTest {
     @Test
     void shouldGetCategoryById() {
         var id = 1L;
-        var expected = categoryRepository.findById(id).get();
+        var expected = categoryRepository.findById(1L).get();
         var actual = categoryService.findById(id);
 
         matchOne(expected, actual);
