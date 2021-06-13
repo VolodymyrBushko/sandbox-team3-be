@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @Entity
 @Builder
-@Table(name = "user")
+@Table(name = "`user`")
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
