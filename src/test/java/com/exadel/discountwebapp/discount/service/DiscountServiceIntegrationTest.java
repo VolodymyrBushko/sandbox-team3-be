@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -48,7 +49,8 @@ class DiscountServiceIntegrationTest {
 
     @Test
     void shouldFindAllDiscounts() {
-        var expected = (List<Discount>) discountRepository.findAll();
+        var expectedIter = discountRepository.findAll();
+        var expected = iterableToList(expectedIter);
         var actual = discountService.findAll();
 
         matchAll(expected, actual);
@@ -150,5 +152,11 @@ class DiscountServiceIntegrationTest {
         for (int i = 0; i < expected.size(); i++) {
             matchOne(expected.get(i), actual.get(i));
         }
+    }
+
+    private <T> List<T> iterableToList(Iterable<T> iterable) {
+        List<T> list = new ArrayList<>();
+        iterable.forEach(list::add);
+        return list;
     }
 }

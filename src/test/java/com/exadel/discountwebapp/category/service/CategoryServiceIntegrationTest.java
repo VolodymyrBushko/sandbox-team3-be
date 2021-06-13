@@ -12,6 +12,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -46,52 +47,40 @@ class CategoryServiceIntegrationTest {
 
     @Test
     void shouldGetAllCategories() {
-        var actual = (List<Category>) categoryRepository.findAll();
-        var expected = categoryService.findAll();
+        var expectedIter = categoryRepository.findAll();
+        var expected = iterableToList(expectedIter);
+        var actual = categoryService.findAll();
 
-        matchAll(actual, expected);
+        matchAll(expected, actual);
     }
 
     @Test
     void shouldCreateCategory() {
-        var title = "test";
-        var imageUrl = "http://localhost/images/image.png";
-
-        var categoryRequest = createCategoryRequest(title, imageUrl);
+        var categoryRequest = createCategoryRequest();
         var categoryResponse = categoryService.create(categoryRequest);
 
         assertNotNull(categoryResponse);
         assertNotNull(categoryResponse.getId());
-        assertEquals(categoryResponse.getTitle(), categoryRequest.getTitle());
-        assertEquals(categoryResponse.getImageUrl(), categoryRequest.getImageUrl());
+
+        matchOne(categoryRequest, categoryResponse);
     }
 
     @Test
     void shouldCategoryUpdateById() {
         var id = 1L;
-        var title = "test";
-        var imageUrl = "http://localhost/images/image.png";
-
-        var categoryRequest = createCategoryRequest(title, imageUrl);
+        var categoryRequest = createCategoryRequest();
         var categoryResponse = categoryService.update(id, categoryRequest);
 
         assertNotNull(categoryResponse);
         assertEquals(categoryResponse.getId(), id);
-        assertEquals(categoryResponse.getTitle(), categoryRequest.getTitle());
-        assertEquals(categoryResponse.getImageUrl(), categoryRequest.getImageUrl());
+
+        matchOne(categoryRequest, categoryResponse);
     }
 
-    @Test
-    void shouldCategoryDeleteById() {
-        var id = 1L;
-        var beforeDelete = categoryRepository.findById(id).orElse(null);
-        assertNotNull(beforeDelete);
-        categoryService.deleteById(id);
-        var afterDelete = categoryRepository.findById(id).orElse(null);
-        assertNull(afterDelete);
-    }
+    private CategoryRequestVO createCategoryRequest() {
+        var title = "title";
+        var imageUrl = "http://localhost/images/img.png";
 
-    private CategoryRequestVO createCategoryRequest(String title, String imageUrl) {
         return CategoryRequestVO.builder()
                 .title(title)
                 .imageUrl(imageUrl)
@@ -105,6 +94,11 @@ class CategoryServiceIntegrationTest {
         assertEquals(expected.getImageUrl(), actual.getImageUrl());
     }
 
+    private void matchOne(CategoryRequestVO expected, CategoryResponseVO actual) {
+        assertEquals(expected.getTitle(), actual.getTitle());
+        assertEquals(expected.getImageUrl(), actual.getImageUrl());
+    }
+
     private void matchAll(List<Category> expected, List<CategoryResponseVO> actual) {
         assertNotNull(actual);
         assertEquals(expected.size(), actual.size());
@@ -112,5 +106,11 @@ class CategoryServiceIntegrationTest {
         for (int i = 0; i < expected.size(); i++) {
             matchOne(expected.get(i), actual.get(i));
         }
+    }
+
+    private <T> List<T> iterableToList(Iterable<T> iterable) {
+        List<T> list = new ArrayList<>();
+        iterable.forEach(list::add);
+        return list;
     }
 }
