@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:discount_web_app;DB_CLOSE_DELAY=-1;
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 2
