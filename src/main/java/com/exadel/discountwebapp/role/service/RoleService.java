@@ -1,7 +1,7 @@
 package com.exadel.discountwebapp.role.service;
 
+import com.exadel.discountwebapp.exception.EntityNotFoundException;
 import com.exadel.discountwebapp.role.entity.Role;
-import com.exadel.discountwebapp.role.exception.RoleNotFoundException;
 import com.exadel.discountwebapp.role.mapper.RoleMapper;
 import com.exadel.discountwebapp.role.repository.RoleRepository;
 import com.exadel.discountwebapp.role.vo.RoleResponseVO;
@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,8 +23,8 @@ public class RoleService {
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public RoleResponseVO getRoleById(Long id) {
-        Optional<Role> role = roleRepository.findById(id);
-        return roleMapper.toVO(role.orElseThrow(() -> new RoleNotFoundException(String.format("No role exist with given id = %d", id))));
+        Role role = roleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException((String.format("No role exist with given id = %d", id))));
+        return roleMapper.toVO(role);
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
