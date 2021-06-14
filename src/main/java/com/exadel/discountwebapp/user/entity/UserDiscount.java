@@ -1,7 +1,6 @@
 package com.exadel.discountwebapp.user.entity;
 
 import com.exadel.discountwebapp.discount.entity.Discount;
-import com.exadel.discountwebapp.user.entity.User;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -37,7 +36,7 @@ public class UserDiscount {
     private Discount discount;
 
     @Column(name = "ud_discount_quantity", nullable = false)
-    private int discountQuantity;
+    private Integer discountQuantity;
 
     @CreatedDate
     @EqualsAndHashCode.Exclude
@@ -55,10 +54,10 @@ public class UserDiscount {
     @AllArgsConstructor
     public static class UserDiscountId implements Serializable {
 
-        @Column(name="usr_id")
+        @Column(name = "usr_id")
         private Long userId;
 
-        @Column(name="dis_id")
+        @Column(name = "dis_id")
         private Long discountId;
     }
 }

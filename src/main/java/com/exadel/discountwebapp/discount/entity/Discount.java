@@ -29,11 +29,11 @@ public class Discount {
     @Column(name = "dis_id")
     private Long id;
 
-    @Column(name = "dis_title", length = 25, nullable = false)
+    @Column(name = "dis_title", length = 100, nullable = false)
     private String title;
 
     @EqualsAndHashCode.Exclude
-    @Column(name = "dis_short_description", length = 50, nullable = false)
+    @Column(name = "dis_short_description", length = 255, nullable = false)
     private String shortDescription;
 
     @EqualsAndHashCode.Exclude
@@ -45,7 +45,7 @@ public class Discount {
     private String imageUrl;
 
     @Column(name = "dis_percentage", nullable = false)
-    private int percentage;
+    private BigDecimal percentage;
 
     @Column(name = "dis_flat_amount", nullable = false)
     private BigDecimal flatAmount;
@@ -91,7 +91,7 @@ public class Discount {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany
     @JoinTable(
             name = "location_discount",
             joinColumns = @JoinColumn(name = "dis_id"),
