@@ -91,8 +91,8 @@ class DiscountServiceIntegrationTest {
         var expirationDate = startDate.plusDays(1);
         var quantity = 10;
         var perUser = 1;
-        var categoryId = 1L;
-        var vendorId = 1L;
+        var categoryId = 10L;
+        var vendorId = 10L;
 
         return DiscountRequestVO.builder()
                 .title(title)
