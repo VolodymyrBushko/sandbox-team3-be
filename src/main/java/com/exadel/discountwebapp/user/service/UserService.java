@@ -1,7 +1,7 @@
 package com.exadel.discountwebapp.user.service;
 
+import com.exadel.discountwebapp.exception.EntityNotFoundException;
 import com.exadel.discountwebapp.user.entity.User;
-import com.exadel.discountwebapp.user.exception.UserNotFoundException;
 import com.exadel.discountwebapp.user.mapper.UserMapper;
 import com.exadel.discountwebapp.user.repository.UserRepository;
 import com.exadel.discountwebapp.user.vo.UserResponseVO;
@@ -23,7 +23,8 @@ public class UserService {
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public UserResponseVO findById(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("No user found with id = %d\", id)"));
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Could not find user with id: " + id));
         return mapper.toVO(user);
     }
 
