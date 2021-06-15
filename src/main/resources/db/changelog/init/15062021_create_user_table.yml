@@ -1,0 +1,60 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1234567890-6
+      author: tesliuk.ua@gmail.com
+      changes:
+        - createTable:
+            schemaName: public
+            tableName: user
+            columns:
+              - column:
+                  name: usr_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_user
+              - column:
+                  name: usr_first_name
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: usr_last_name
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: usr_email
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: usr_password
+                  type: VARCHAR(510)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: usr_created
+                  type: TIMESTAMP WITHOUT TIME ZONE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: usr_modified
+                  type: TIMESTAMP WITHOUT TIME ZONE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: loc_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_usr_location
+                    references: location(loc_id)
+              - column:
+                  name: rol_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_usr_role
+                    references: role(rol_id)

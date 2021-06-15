@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1234567890-8
+      author: tesliuk.ua@gmail.com
+      changes:
+        - createTable:
+            schemaName: public
+            tableName: location_discount
+            columns:
+              - column:
+                  name: loc_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_ld_loc_id
+                    foreignKeyName: fk_ld_location
+                    references: location(loc_id)
+              - column:
+                  name: dis_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_ld_dis_id
+                    foreignKeyName: fk_ld_discount
+                    references: discount(dis_id)
