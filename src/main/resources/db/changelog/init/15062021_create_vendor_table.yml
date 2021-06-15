@@ -1,0 +1,54 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1234567890-4
+      author: bozhokmaria@gmail.com
+      changes:
+        - createTable:
+            schemaName: public
+            tableName: vendor
+            columns:
+              - column:
+                  name: vn_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_vendor
+              - column:
+                  name: vn_title
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: vn_description
+                  type: VARCHAR(510)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: vn_image_url
+                  type: VARCHAR(510)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: vn_email
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: loc_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_vn_location
+                    references: location(loc_id)
+              - column:
+                  name: vn_created
+                  type: TIMESTAMP WITHOUT TIME ZONE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: vn_modified
+                  type: TIMESTAMP WITHOUT TIME ZONE
+                  constraints:
+                    nullable: false

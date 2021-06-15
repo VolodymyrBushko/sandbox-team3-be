@@ -8,3 +8,10 @@ databaseChangeLog:
   - include:
       file: init/15062021_create_category_table.yml
       relativeToChangelogFile: true
+  - include:
+      file: init/15062021_create_vendor_table.yml
+      relativeToChangelogFile: true
+  - include:
+      file: init/15062021_create_discount_table.yml
+      relativeToChangelogFile: true
+
