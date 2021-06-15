@@ -1,0 +1,94 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1234567890-5
+      author: bozhokmaria@gmail.com
+      changes:
+        - createTable:
+            schemaName: public
+            tableName: discount
+            columns:
+              - column:
+                  name: dis_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_discount
+                    nullable: false
+              - column:
+                  name: dis_title
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: dis_short_description
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: dis_description
+                  type: VARCHAR(510)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: dis_image_url
+                  type: VARCHAR(510)
+              - column:
+                  name: dis_percentage
+                  type: numeric(19, 2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: dis_flat_amount
+                  type: numeric(19, 2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: dis_quantity
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: dis_per_user
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: dis_price
+                  type: numeric(19, 2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: dis_start_date
+                  type: TIMESTAMP WITHOUT TIME ZONE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: dis_expiration_date
+                  type: TIMESTAMP WITHOUT TIME ZONE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: vn_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_dis_vendor
+                    references: vendor(vn_id)
+                    nullable: false
+              - column:
+                  name: cat_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_dis_category
+                    references: category(cat_id)
+                    nullable: false
+              - column:
+                  name: dis_created
+                  type: TIMESTAMP WITHOUT TIME ZONE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: dis_modified
+                  type: TIMESTAMP WITHOUT TIME ZONE
+                  constraints:
+                    nullable: false
