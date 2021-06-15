@@ -63,7 +63,6 @@ public class VendorServiceIntegrationTest {
         });
     }
 
-
     @Test
     public void shouldFindAllVendors() {
         var expectedIter = vendorRepository.findAll();
@@ -85,7 +84,7 @@ public class VendorServiceIntegrationTest {
     }
 
     @Test
-    public void shouldVendorUpdateById() {
+    public void shouldUpdateVendorById() {
         var id = 1L;
         var expected = createVendorRequest();
         var actual = vendorService.update(id, expected);
