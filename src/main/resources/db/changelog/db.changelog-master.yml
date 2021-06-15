@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - include:
+      file: init/15062021_create_role_table.yml
+      relativeToChangelogFile: true
+  - include:
+      file: init/15062021_create_location_table.yml
+      relativeToChangelogFile: true
+  - include:
+      file: init/15062021_create_category_table.yml
+      relativeToChangelogFile: true
