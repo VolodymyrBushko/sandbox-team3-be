@@ -5,12 +5,10 @@ import com.exadel.discountwebapp.vendor.entity.Vendor;
 import com.exadel.discountwebapp.vendor.repository.VendorRepository;
 import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
 import com.exadel.discountwebapp.vendor.vo.VendorResponseVO;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +16,9 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@RunWith(SpringRunner.class)
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/vendor-init.sql")
 @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:sql/clean-up.sql")
-public class VendorServiceIntegrationTest {
+class VendorServiceIntegrationTest {
 
     @Autowired
     private VendorService vendorService;
@@ -30,7 +27,7 @@ public class VendorServiceIntegrationTest {
     private VendorRepository vendorRepository;
 
     @Test
-    public void shouldFindVendorById() {
+    void shouldFindVendorById() {
         var id = 1L;
         var expected = vendorRepository.findById(id).get();
         var actual = vendorService.findById(id);
@@ -39,7 +36,7 @@ public class VendorServiceIntegrationTest {
     }
 
     @Test
-    public void shouldThrowExceptionIfNoVendorFoundById() {
+    void shouldThrowExceptionIfNoVendorFoundById() {
         var id = 345345L;
         assertThrows(EntityNotFoundException.class, () -> {
             vendorService.findById(id);
@@ -47,7 +44,7 @@ public class VendorServiceIntegrationTest {
     }
 
     @Test
-    public void shouldFindVendorByTitle() {
+    void shouldFindVendorByTitle() {
         var title = "Sport Life";
         var expected = vendorRepository.findByTitle(title).get();
         var actual = vendorService.findByTitle(title);
@@ -56,7 +53,7 @@ public class VendorServiceIntegrationTest {
     }
 
     @Test
-    public void shouldThrowExceptionIfNoVendorFoundByTitle() {
+    void shouldThrowExceptionIfNoVendorFoundByTitle() {
         var title = "Test wrong title";
         assertThrows(EntityNotFoundException.class, () -> {
             vendorService.findByTitle(title);
@@ -64,7 +61,7 @@ public class VendorServiceIntegrationTest {
     }
 
     @Test
-    public void shouldFindAllVendors() {
+    void shouldFindAllVendors() {
         var expectedIter = vendorRepository.findAll();
         var expected = iterableToList(expectedIter);
         var actual = vendorService.findAll();
@@ -73,7 +70,7 @@ public class VendorServiceIntegrationTest {
     }
 
     @Test
-    public void shouldCreateVendor() {
+    void shouldCreateVendor() {
         var expected = createVendorRequest();
         var actual = vendorService.create(expected);
 
@@ -84,7 +81,7 @@ public class VendorServiceIntegrationTest {
     }
 
     @Test
-    public void shouldUpdateVendorById() {
+    void shouldUpdateVendorById() {
         var id = 1L;
         var expected = createVendorRequest();
         var actual = vendorService.update(id, expected);

@@ -6,11 +6,9 @@ import com.exadel.discountwebapp.discount.vo.DiscountRequestVO;
 import com.exadel.discountwebapp.discount.vo.DiscountResponseVO;
 import com.exadel.discountwebapp.exception.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -20,7 +18,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@RunWith(SpringRunner.class)
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/discount-init.sql")
 @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:sql/clean-up.sql")
 class DiscountServiceIntegrationTest {

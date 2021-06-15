@@ -5,12 +5,10 @@ import com.exadel.discountwebapp.location.entity.Location;
 import com.exadel.discountwebapp.location.repository.LocationRepository;
 import com.exadel.discountwebapp.location.vo.LocationRequestVO;
 import com.exadel.discountwebapp.location.vo.LocationResponseVO;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +16,9 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@RunWith(SpringRunner.class)
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/location-init.sql")
 @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:sql/clean-up.sql")
-public class LocationIntegrationTest {
+class LocationIntegrationTest {
 
     @Autowired
     private LocationService locationService;
@@ -30,7 +27,7 @@ public class LocationIntegrationTest {
     private LocationRepository locationRepository;
 
     @Test
-    public void shouldFindLocationById() {
+    void shouldFindLocationById() {
         var id = 1L;
         var expected = locationRepository.findById(id).get();
         var actual = locationService.findById(id);
@@ -39,7 +36,7 @@ public class LocationIntegrationTest {
     }
 
     @Test
-    public void shouldThrowExceptionIfNoLocationFoundById() {
+    void shouldThrowExceptionIfNoLocationFoundById() {
         var id = 345345L;
         assertThrows(EntityNotFoundException.class, () -> {
             locationService.findById(id);
@@ -47,7 +44,7 @@ public class LocationIntegrationTest {
     }
 
     @Test
-    public void shouldFindAllLocations() {
+    void shouldFindAllLocations() {
         var expectedIter = locationRepository.findAll();
         var expected = iterableToList(expectedIter);
         var actual = locationService.findAll();
@@ -56,7 +53,7 @@ public class LocationIntegrationTest {
     }
 
     @Test
-    public void shouldFindAllLocationsByCountry() {
+    void shouldFindAllLocationsByCountry() {
         var country = "Ukraine";
         var expectedIter = locationRepository.findAllByCountry(country);
         var expected = iterableToList(expectedIter);
@@ -66,7 +63,7 @@ public class LocationIntegrationTest {
     }
 
     @Test
-    public void shouldFindAllLocationsByCity() {
+    void shouldFindAllLocationsByCity() {
         var city = "Kyiv";
         var expectedIter = locationRepository.findAllByCity(city);
         var expected = iterableToList(expectedIter);
@@ -76,7 +73,7 @@ public class LocationIntegrationTest {
     }
 
     @Test
-    public void shouldCreateLocation() {
+    void shouldCreateLocation() {
         var expected = createLocationRequest();
         var actual = locationService.create(expected);
 
@@ -98,7 +95,7 @@ public class LocationIntegrationTest {
     }
 
     @Test
-    public void shouldUpdateLocationById() {
+    void shouldUpdateLocationById() {
         var id = 1L;
         var expected = createLocationRequest();
         var actual = locationService.update(id, expected);
