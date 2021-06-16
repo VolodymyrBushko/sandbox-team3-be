@@ -23,10 +23,5 @@ databaseChangeLog:
   - include:
       file: init/15062021_create_location_discount_table.yml
       relativeToChangelogFile: true
-  - include:
-      file: init/15062021_add_composite_pk_user_discount_table.yml
-      relativeToChangelogFile: true
-  - include:
-      file: init/15062021_add_composite_pk_location_discount_table.yml
-      relativeToChangelogFile: true
+
 
