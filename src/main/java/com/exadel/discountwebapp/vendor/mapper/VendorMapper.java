@@ -2,6 +2,7 @@ package com.exadel.discountwebapp.vendor.mapper;
 
 import com.exadel.discountwebapp.location.entity.Location;
 import com.exadel.discountwebapp.location.service.LocationService;
+import com.exadel.discountwebapp.location.vo.LocationResponseVO;
 import com.exadel.discountwebapp.vendor.entity.Vendor;
 import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
 import com.exadel.discountwebapp.vendor.vo.VendorResponseVO;
@@ -25,7 +26,7 @@ public class VendorMapper {
 
     public VendorResponseVO toVO(Vendor vendor) {
         VendorResponseVO response = modelMapper.map(vendor, VendorResponseVO.class);
-        response.setLocationId(vendor.getLocation().getId());
+        response.setLocationResponseVO(modelMapper.map(vendor.getLocation(), LocationResponseVO.class));
         return response;
     }
 
@@ -47,15 +48,5 @@ public class VendorMapper {
 
     private void configureModelMapper() {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        modelMapper.addMappings(createSkipPropertyMap());
-    }
-
-    private PropertyMap<VendorRequestVO, Vendor> createSkipPropertyMap() {
-        return new PropertyMap<>() {
-            @Override
-            protected void configure() {
-                skip().setLocation(null);
-            }
-        };
     }
 }
