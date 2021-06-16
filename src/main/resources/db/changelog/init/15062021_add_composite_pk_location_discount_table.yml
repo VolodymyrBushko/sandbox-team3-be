@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: "15062021_add_composite_pk_location_discount_table"
+      author: tesliuk.ua@gmail.com
+      changes:
+        - addPrimaryKey:
+            catalogName: discount_web_app
+            clustered: true
+            columnNames: loc_id, dis_id
+            constraintName: pk_location_discount
+            schemaName: public
+            tableName: location_discount
+            validate: true
+            column:
+              name: id_location_discount_created
+              type: TIMESTAMP
+              defaultValueComputed: CURRENT_TIMESTAMP
+              constraints:
+              nullable: false

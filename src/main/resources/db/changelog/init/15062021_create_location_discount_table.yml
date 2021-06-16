@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 1234567890-8
+      id: "15062021_create_location_discount_table"
       author: tesliuk.ua@gmail.com
       changes:
         - createTable:
@@ -11,17 +11,11 @@ databaseChangeLog:
                   name: loc_id
                   type: BIGINT
                   constraints:
-                    nullable: false
-                    primaryKey: true
-                    primaryKeyName: pk_ld_loc_id
-                    foreignKeyName: fk_ld_location
+                    foreignKeyName: fk_location_discount_location
                     references: location(loc_id)
               - column:
                   name: dis_id
                   type: BIGINT
                   constraints:
-                    nullable: false
-                    primaryKey: true
-                    primaryKeyName: pk_ld_dis_id
-                    foreignKeyName: fk_ld_discount
+                    foreignKeyName: fk_location_discount_discount
                     references: discount(dis_id)

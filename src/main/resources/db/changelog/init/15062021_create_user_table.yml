@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 1234567890-6
+      id: "15062021_create_user_table"
       author: tesliuk.ua@gmail.com
       changes:
         - createTable:
@@ -50,11 +50,11 @@ databaseChangeLog:
                   name: loc_id
                   type: BIGINT
                   constraints:
-                    foreignKeyName: fk_usr_location
+                    foreignKeyName: fk_user_location
                     references: location(loc_id)
               - column:
                   name: rol_id
                   type: BIGINT
                   constraints:
-                    foreignKeyName: fk_usr_role
+                    foreignKeyName: fk_user_role
                     references: role(rol_id)
