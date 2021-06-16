@@ -20,7 +20,7 @@ databaseChangeLog:
                     foreignKeyName: fk_location_discount_discount
                     references: discount(dis_id)
               - column:
-                  name: id_location_discount_created
+                  name: ld_created
                   type: TIMESTAMP
                   defaultValueComputed: CURRENT_TIMESTAMP
                   constraints:
