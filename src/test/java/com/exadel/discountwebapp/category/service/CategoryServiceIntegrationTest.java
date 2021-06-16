@@ -5,12 +5,12 @@ import com.exadel.discountwebapp.category.repository.CategoryRepository;
 import com.exadel.discountwebapp.category.vo.CategoryRequestVO;
 import com.exadel.discountwebapp.category.vo.CategoryResponseVO;
 import com.exadel.discountwebapp.exception.EntityNotFoundException;
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -45,7 +45,7 @@ class CategoryServiceIntegrationTest {
     @Test
     void shouldGetAllCategories() {
         var expectedIter = categoryRepository.findAll();
-        var expected = iterableToList(expectedIter);
+        var expected = Lists.newArrayList(expectedIter);
         var actual = categoryService.findAll();
 
         matchAll(expected, actual);
@@ -103,11 +103,5 @@ class CategoryServiceIntegrationTest {
         for (int i = 0; i < expected.size(); i++) {
             matchOne(expected.get(i), actual.get(i));
         }
-    }
-
-    private <T> List<T> iterableToList(Iterable<T> iterable) {
-        List<T> list = new ArrayList<>();
-        iterable.forEach(list::add);
-        return list;
     }
 }

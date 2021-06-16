@@ -5,12 +5,12 @@ import com.exadel.discountwebapp.vendor.entity.Vendor;
 import com.exadel.discountwebapp.vendor.repository.VendorRepository;
 import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
 import com.exadel.discountwebapp.vendor.vo.VendorResponseVO;
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -63,7 +63,7 @@ class VendorServiceIntegrationTest {
     @Test
     void shouldFindAllVendors() {
         var expectedIter = vendorRepository.findAll();
-        var expected = iterableToList(expectedIter);
+        var expected = Lists.newArrayList(expectedIter);
         var actual = vendorService.findAll();
 
         matchAll(expected, actual);
@@ -106,12 +106,6 @@ class VendorServiceIntegrationTest {
                 .email(email)
                 .locationId(locationId)
                 .build();
-    }
-
-    private <T> List<T> iterableToList(Iterable<T> iterable) {
-        List<T> list = new ArrayList<>();
-        iterable.forEach(list::add);
-        return list;
     }
 
     private void matchAll(List<Vendor> expected, List<VendorResponseVO> actual) {

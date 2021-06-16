@@ -5,12 +5,12 @@ import com.exadel.discountwebapp.location.entity.Location;
 import com.exadel.discountwebapp.location.repository.LocationRepository;
 import com.exadel.discountwebapp.location.vo.LocationRequestVO;
 import com.exadel.discountwebapp.location.vo.LocationResponseVO;
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -46,7 +46,7 @@ class LocationIntegrationTest {
     @Test
     void shouldFindAllLocations() {
         var expectedIter = locationRepository.findAll();
-        var expected = iterableToList(expectedIter);
+        var expected = Lists.newArrayList(expectedIter);
         var actual = locationService.findAll();
 
         matchAll(expected, actual);
@@ -56,7 +56,7 @@ class LocationIntegrationTest {
     void shouldFindAllLocationsByCountry() {
         var country = "Ukraine";
         var expectedIter = locationRepository.findAllByCountry(country);
-        var expected = iterableToList(expectedIter);
+        var expected = Lists.newArrayList(expectedIter);
         var actual = locationService.findAllByCountry(country);
 
         matchAll(expected, actual);
@@ -66,7 +66,7 @@ class LocationIntegrationTest {
     void shouldFindAllLocationsByCity() {
         var city = "Kyiv";
         var expectedIter = locationRepository.findAllByCity(city);
-        var expected = iterableToList(expectedIter);
+        var expected = Lists.newArrayList(expectedIter);
         var actual = locationService.findAllByCity(city);
 
         matchAll(expected, actual);
@@ -86,7 +86,6 @@ class LocationIntegrationTest {
     private LocationRequestVO createLocationRequest() {
         var country = "Belarus";
         var city = "Minsk";
-        var vendorId = 1L;
 
         return LocationRequestVO.builder()
                 .country(country)
@@ -104,13 +103,6 @@ class LocationIntegrationTest {
         assertEquals(actual.getId(), id);
 
         matchOne(expected, actual);
-    }
-
-
-    private <T> List<T> iterableToList(Iterable<T> iterable) {
-        List<T> list = new ArrayList<>();
-        iterable.forEach(list::add);
-        return list;
     }
 
     private void matchAll(List<Location> expected, List<LocationResponseVO> actual) {

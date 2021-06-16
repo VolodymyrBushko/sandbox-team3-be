@@ -5,6 +5,7 @@ import com.exadel.discountwebapp.discount.repository.DiscountRepository;
 import com.exadel.discountwebapp.discount.vo.DiscountRequestVO;
 import com.exadel.discountwebapp.discount.vo.DiscountResponseVO;
 import com.exadel.discountwebapp.exception.EntityNotFoundException;
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,7 +13,6 @@ import org.springframework.test.context.jdbc.Sql;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -47,7 +47,7 @@ class DiscountServiceIntegrationTest {
     @Test
     void shouldFindAllDiscounts() {
         var expectedIter = discountRepository.findAll();
-        var expected = iterableToList(expectedIter);
+        var expected = Lists.newArrayList(expectedIter);
         var actual = discountService.findAll();
 
         matchAll(expected, actual);
@@ -149,11 +149,5 @@ class DiscountServiceIntegrationTest {
         for (int i = 0; i < expected.size(); i++) {
             matchOne(expected.get(i), actual.get(i));
         }
-    }
-
-    private <T> List<T> iterableToList(Iterable<T> iterable) {
-        List<T> list = new ArrayList<>();
-        iterable.forEach(list::add);
-        return list;
     }
 }

@@ -1,20 +1,18 @@
 package com.exadel.discountwebapp.role.service;
 
 import com.exadel.discountwebapp.role.repository.RoleRepository;
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/role-init.sql")
 @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:sql/clean-up.sql")
-public class RoleServiceIntegrationTest {
+class RoleServiceIntegrationTest {
 
     @Autowired
     private RoleService roleService;
@@ -24,7 +22,7 @@ public class RoleServiceIntegrationTest {
     @Test
     void shouldGetAllRoles() {
         var expectedItr = roleRepository.findAll();
-        var expected = iterableToList(expectedItr);
+        var expected = Lists.newArrayList(expectedItr);
         var actual = roleService.getAllRoles();
 
         assertEquals(2, actual.size());
@@ -42,11 +40,5 @@ public class RoleServiceIntegrationTest {
         var actual = roleService.getRoleById(id);
         assertEquals(expected.getId(), actual.getId());
         assertEquals(expected.getName(), actual.getName());
-    }
-
-    private <T> List<T> iterableToList(Iterable<T> iterable) {
-        List<T> list = new ArrayList<>();
-        iterable.forEach(list::add);
-        return list;
     }
 }
