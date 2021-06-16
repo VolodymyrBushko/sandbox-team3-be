@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 1234567890-5
+      id: 15062021_create_discount_table
       author: bozhokmaria@gmail.com
       changes:
         - createTable:
@@ -72,14 +72,14 @@ databaseChangeLog:
                   name: vn_id
                   type: BIGINT
                   constraints:
-                    foreignKeyName: fk_dis_vendor
+                    foreignKeyName: fk_discount_vendor
                     references: vendor(vn_id)
                     nullable: false
               - column:
                   name: cat_id
                   type: BIGINT
                   constraints:
-                    foreignKeyName: fk_dis_category
+                    foreignKeyName: fk_discount_category
                     references: category(cat_id)
                     nullable: false
               - column:

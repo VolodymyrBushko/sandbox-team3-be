@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 1234567890-2
+      id: 15062021_create_location_table
       author: volodymyr.bushko@gmail.com
       changes:
         - createTable:

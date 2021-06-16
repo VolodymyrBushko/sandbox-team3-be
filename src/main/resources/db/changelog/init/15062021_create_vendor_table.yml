@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 1234567890-4
+      id: 15062021_create_vendor_table
       author: bozhokmaria@gmail.com
       changes:
         - createTable:
@@ -40,7 +40,7 @@ databaseChangeLog:
                   name: loc_id
                   type: BIGINT
                   constraints:
-                    foreignKeyName: fk_vn_location
+                    foreignKeyName: fk_vendor_location
                     references: location(loc_id)
               - column:
                   name: vn_created
