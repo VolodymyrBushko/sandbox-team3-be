@@ -1,0 +1,516 @@
+databaseChangeLog:
+  - changeSet:
+      id: 16062021_insert_data_into_tables-9
+      author: hreshchuk@gmail.com
+      changes:
+
+        - insert:
+            tableName: role
+            columns:
+              - column:
+                  name: rol_id
+                  value: '1'
+              - column:
+                  name: rol_name
+                  value: USER
+              - column:
+                  name: rol_created
+                  value: 2021-06-04 17:22:21
+              - column:
+                  name: rol_modified
+                  value: 2021-06-04 17:22:21
+
+        - insert:
+            tableName: role
+            columns:
+              - column:
+                  name: rol_id
+                  value: '2'
+              - column:
+                  name: rol_name
+                  value: ADMIN
+              - column:
+                  name: rol_created
+                  value: 2021-06-04 17:22:21
+              - column:
+                  name: rol_modified
+                  value: 2021-06-04 17:22:21
+
+        - insert:
+            tableName: location
+            columns:
+              - column:
+                  name: loc_id
+                  value: '1'
+              - column:
+                  name: loc_country
+                  value: Ukraine
+              - column:
+                  name: loc_city
+                  value: Kyiv
+              - column:
+                  name: loc_created
+                  value: 2021-06-06 17:22:21
+              - column:
+                  name: loc_modified
+                  value: 2021-06-06 17:22:21
+
+        - insert:
+            tableName: location
+            columns:
+              - column:
+                  name: loc_id
+                  value: '2'
+              - column:
+                  name: loc_country
+                  value: Ukraine
+              - column:
+                  name: loc_city
+                  value: Lviv
+              - column:
+                  name: loc_created
+                  value: 2021-06-06 17:22:21
+              - column:
+                  name: loc_modified
+                  value: 2021-06-06 17:22:21
+
+        - insert:
+            tableName: location
+            columns:
+              - column:
+                  name: loc_id
+                  value: '3'
+              - column:
+                  name: loc_country
+                  value: Ukraine
+              - column:
+                  name: loc_city
+                  value: Kharkiv
+              - column:
+                  name: loc_created
+                  value: 2021-06-06 17:22:21
+              - column:
+                  name: loc_modified
+                  value: 2021-06-06 17:22:21
+
+        - insert:
+            tableName: location
+            columns:
+              - column:
+                  name: loc_id
+                  value: '4'
+              - column:
+                  name: loc_country
+                  value: Ukraine
+              - column:
+                  name: loc_city
+                  value: Dnipro
+              - column:
+                  name: loc_created
+                  value: 2021-06-06 17:22:21
+              - column:
+                  name: loc_modified
+                  value: 2021-06-06 17:22:21
+
+
+
+        - insert:
+            tableName: category
+            columns:
+              - column:
+                  name: cat_id
+                  value: '1'
+              - column:
+                  name: cat_title
+                  value: Sport and fitness
+              - column:
+                  name: cat_image_url
+                  value: sport_image.jpeg
+              - column:
+                  name: cat_created
+                  value: 2021-06-06 17:22:21
+              - column:
+                  name: cat_modified
+                  value: 2021-06-06 17:22:21
+
+        - insert:
+            tableName: category
+            columns:
+              - column:
+                  name: cat_id
+                  value: '2'
+              - column:
+                  name: cat_title
+                  value: Food and entertainment
+              - column:
+                  name: cat_image_url
+                  value: food_and_entertainment.jpeg
+              - column:
+                  name: cat_created
+                  value: 2021-06-06 17:22:21
+              - column:
+                  name: cat_modified
+                  value: 2021-06-06 17:22:21
+
+        - insert:
+            tableName: category
+            columns:
+              - column:
+                  name: cat_id
+                  value: '3'
+              - column:
+                  name: cat_title
+                  value: Tourism and rest
+              - column:
+                  name: cat_image_url
+                  value: tourism_and_rest.jpeg
+              - column:
+                  name: cat_created
+                  value: 2021-06-06 17:22:21
+              - column:
+                  name: cat_modified
+                  value: 2021-06-06 17:22:21
+
+
+        - insert:
+            tableName: user
+            columns:
+              - column:
+                  name: usr_id
+                  value: '1'
+              - column:
+                  name: usr_first_name
+                  value: Ivan
+              - column:
+                  name: usr_last_name
+                  value: Ivanov
+              - column:
+                  name: usr_email
+                  value: ivan_ivanov@gmail.com
+              - column:
+                  name: usr_password
+                  value: '1111'
+              - column:
+                  name: usr_created
+                  value: 2021-06-06 17:22:21
+              - column:
+                  name: usr_modified
+                  value: 2021-06-06 17:22:21
+              - column:
+                  name: loc_id
+                  value: '1'
+              - column:
+                  name: rol_id
+                  value: '1'
+
+        - insert:
+            tableName: user
+            columns:
+              - column:
+                  name: usr_id
+                  value: '2'
+              - column:
+                  name: usr_first_name
+                  value: Petro
+              - column:
+                  name: usr_last_name
+                  value: Petrenko
+              - column:
+                  name: usr_email
+                  value: petro_petrenko@gmail.com
+              - column:
+                  name: usr_password
+                  value: '1111'
+              - column:
+                  name: usr_created
+                  value: 2021-06-06 17:22:21
+              - column:
+                  name: usr_modified
+                  value: 2021-06-06 17:22:21
+              - column:
+                  name: loc_id
+                  value: '1'
+              - column:
+                  name: rol_id
+                  value: '1'
+
+        - insert:
+            tableName: user
+            columns:
+              - column:
+                  name: usr_id
+                  value: '3'
+              - column:
+                  name: usr_first_name
+                  value: Admin
+              - column:
+                  name: usr_last_name
+                  value: Admin
+              - column:
+                  name: usr_email
+                  value: admin@gmail.com
+              - column:
+                  name: usr_password
+                  value: admin
+              - column:
+                  name: usr_created
+                  value: 2021-06-06 17:22:21
+              - column:
+                  name: usr_modified
+                  value: 2021-06-06 17:22:21
+              - column:
+                  name: loc_id
+                  value: '3'
+              - column:
+                  name: rol_id
+                  value: '2'
+
+        - insert:
+            tableName: vendor
+            columns:
+              - column:
+                  name: vn_id
+                  value: '1'
+              - column:
+                  name: vn_title
+                  value: Sport Life
+              - column:
+                  name: vn_description
+                  value: Sport Life - a chain of casual fitness centers
+              - column:
+                  name: vn_image_url
+                  value: Sport_Life.jpeg
+              - column:
+                  name: vn_email
+                  value: Sport_Life@email.com
+              - column:
+                  name: loc_id
+                  value: '1'
+              - column:
+                  name: vn_created
+                  value: 2021-06-06 17:22:21
+              - column:
+                  name: vn_modified
+                  value: 2021-06-06 17:22:21
+
+        - insert:
+            tableName: vendor
+            columns:
+              - column:
+                  name: vn_id
+                  value: '2'
+              - column:
+                  name: vn_title
+                  value: Domino`s Pizza
+              - column:
+                  name: vn_description
+                  value: Domino`s Pizza - an American multinational pizza restaurant chain founded in 1960
+              - column:
+                  name: vn_image_url
+                  value: Dominos_Pizza.jpeg
+              - column:
+                  name: vn_email
+                  value: Dominos_Pizza@email.com
+              - column:
+                  name: loc_id
+                  value: '1'
+              - column:
+                  name: vn_created
+                  value: 2021-06-06 17:22:21
+              - column:
+                  name: vn_modified
+                  value: 2021-06-06 17:22:21
+
+        - insert:
+            tableName: vendor
+            columns:
+              - column:
+                  name: vn_id
+                  value: '3'
+              - column:
+                  name: vn_title
+                  value: TUI AG
+              - column:
+                  name: vn_description
+                  value: TUI AG - travel and tourism company
+              - column:
+                  name: vn_image_url
+                  value: TUI_AG.jpeg
+              - column:
+                  name: vn_email
+                  value: TUI_AG@email.com
+              - column:
+                  name: loc_id
+                  value: '1'
+              - column:
+                  name: vn_created
+                  value: 2021-06-06 17:22:21
+              - column:
+                  name: vn_modified
+                  value: 2021-06-06 17:22:21
+
+
+        - insert:
+            tableName: discount
+            columns:
+              - column:
+                  name: dis_id
+                  value: '1'
+              - column:
+                  name: dis_title
+                  value: 38% discount
+              - column:
+                  name: dis_short_description
+                  value: an unlimited annual subscription
+              - column:
+                  name: dis_description
+                  value: 38% discount on the purchase of an unlimited annual subscription to the fitness club "Sport Life"
+              - column:
+                  name: dis_image_url
+                  value: discount_image.jpeg
+              - column:
+                  name: dis_percentage
+                  value: '38'
+              - column:
+                  name: dis_flat_amount
+                  value: '62'
+              - column:
+                  name: dis_quantity
+                  value: '50'
+              - column:
+                  name: dis_per_user
+                  value: '1'
+              - column:
+                  name: dis_price
+                  value: '100'
+              - column:
+                  name: dis_start_date
+                  value: 2021-12-06 17:22:21
+              - column:
+                  name: dis_expiration_date
+                  value: 2021-12-06 17:22:21
+              - column:
+                  name: vn_id
+                  value: '1'
+              - column:
+                  name: cat_id
+                  value: '1'
+              - column:
+                  name: dis_created
+                  value: 2021-12-06 17:22:21
+              - column:
+                  name: dis_modified
+                  value: 2021-12-06 17:22:21
+
+        - insert:
+            tableName: discount
+            columns:
+              - column:
+                  name: dis_id
+                  value: '2'
+              - column:
+                  name: dis_title
+                  value: 50% discount
+              - column:
+                  name: dis_short_description
+                  value: 50% discount on all pizza menus
+              - column:
+                  name: dis_description
+                  value: 50% discount on all pizza menus from the pizzeria "Domino`s Pizza"
+              - column:
+                  name: dis_image_url
+                  value: discount_image.jpeg
+              - column:
+                  name: dis_percentage
+                  value: '50'
+              - column:
+                  name: dis_flat_amount
+                  value: '50'
+              - column:
+                  name: dis_quantity
+                  value: '50'
+              - column:
+                  name: dis_per_user
+                  value: '1'
+              - column:
+                  name: dis_price
+                  value: '100'
+              - column:
+                  name: dis_start_date
+                  value: 2021-12-06 17:22:21
+              - column:
+                  name: dis_expiration_date
+                  value: 2021-12-06 17:22:21
+              - column:
+                  name: vn_id
+                  value: '2'
+              - column:
+                  name: cat_id
+                  value: '2'
+              - column:
+                  name: dis_created
+                  value: 2021-12-06 17:22:21
+              - column:
+                  name: dis_modified
+                  value: 2021-12-06 17:22:21
+
+
+        - insert:
+            tableName: location_discount
+            columns:
+              - column:
+                  name: loc_id
+                  value: '1'
+              - column:
+                  name: dis_id
+                  value: '1'
+
+        - insert:
+            tableName: location_discount
+            columns:
+              - column:
+                  name: loc_id
+                  value: '2'
+              - column:
+                  name: dis_id
+                  value: '1'
+
+
+        - insert:
+            tableName: user_discount
+            columns:
+              - column:
+                  name: usr_id
+                  value: '1'
+              - column:
+                  name: dis_id
+                  value: '1'
+              - column:
+                  name: ud_discount_quantity
+                  value: '1'
+              - column:
+                  name: ud_created
+                  value: 2021-06-06 17:22:21
+              - column:
+                  name: ud_modified
+                  value: 2021-06-06 17:22:21
+
+        - insert:
+            tableName: user_discount
+            columns:
+              - column:
+                  name: usr_id
+                  value: '2'
+              - column:
+                  name: dis_id
+                  value: '1'
+              - column:
+                  name: ud_discount_quantity
+                  value: '1'
+              - column:
+                  name: ud_created
+                  value: 2021-06-06 17:22:21
+              - column:
+                  name: ud_modified
+                  value: 2021-06-06 17:22:21
+
