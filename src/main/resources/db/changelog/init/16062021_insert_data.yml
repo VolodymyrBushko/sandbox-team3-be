@@ -112,7 +112,119 @@ databaseChangeLog:
                   name: loc_modified
                   value: 2021-06-06 17:22:21
 
+        - insert:
+            tableName: location
+            columns:
+              - column:
+                  name: loc_id
+                  value: '5'
+              - column:
+                  name: loc_country
+                  value: Ukraine
+              - column:
+                  name: loc_city
+                  value: Chernigov
+              - column:
+                  name: loc_created
+                  value: 2021-06-06 17:22:21
+              - column:
+                  name: loc_modified
+                  value: 2021-06-06 17:22:21
 
+        - insert:
+            tableName: location
+            columns:
+              - column:
+                  name: loc_id
+                  value: '6'
+              - column:
+                  name: loc_country
+                  value: Belarus
+              - column:
+                  name: loc_city
+                  value: Minsk
+              - column:
+                  name: loc_created
+                  value: 2021-06-06 17:22:21
+              - column:
+                  name: loc_modified
+                  value: 2021-06-06 17:22:21
+
+        - insert:
+            tableName: location
+            columns:
+              - column:
+                  name: loc_id
+                  value: '7'
+              - column:
+                  name: loc_country
+                  value: Belarus
+              - column:
+                  name: loc_city
+                  value: Grodno
+              - column:
+                  name: loc_created
+                  value: 2021-06-06 17:22:21
+              - column:
+                  name: loc_modified
+                  value: 2021-06-06 17:22:21
+
+        - insert:
+            tableName: location
+            columns:
+              - column:
+                  name: loc_id
+                  value: '8'
+              - column:
+                  name: loc_country
+                  value: Belarus
+              - column:
+                  name: loc_city
+                  value: Gomel
+              - column:
+                  name: loc_created
+                  value: 2021-06-06 17:22:21
+              - column:
+                  name: loc_modified
+                  value: 2021-06-06 17:22:21
+
+        - insert:
+            tableName: location
+            columns:
+              - column:
+                  name: loc_id
+                  value: '9'
+              - column:
+                  name: loc_country
+                  value: Belarus
+              - column:
+                  name: loc_city
+                  value: Berestia
+              - column:
+                  name: loc_created
+                  value: 2021-06-06 17:22:21
+              - column:
+                  name: loc_modified
+                  value: 2021-06-06 17:22:21
+
+        - insert:
+            tableName: location
+            columns:
+              - column:
+                  name: loc_id
+                  value: '10'
+              - column:
+                  name: loc_country
+                  value: Belarus
+              - column:
+                  name: loc_city
+                  value: Mohyliov
+              - column:
+                  name: loc_created
+                  value: 2021-06-06 17:22:21
+              - column:
+                  name: loc_modified
+                  value: 2021-06-06 17:22:21
 
         - insert:
             tableName: category
