@@ -125,7 +125,7 @@ databaseChangeLog:
                   value: Sport and fitness
               - column:
                   name: cat_image_url
-                  value: sport_image.jpeg
+                  value: http://localhost/images/sport_image.jpeg
               - column:
                   name: cat_created
                   value: 2021-06-06 17:22:21
@@ -144,7 +144,7 @@ databaseChangeLog:
                   value: Food and entertainment
               - column:
                   name: cat_image_url
-                  value: food_and_entertainment.jpeg
+                  value: http://localhost/images/food_and_entertainment.jpeg
               - column:
                   name: cat_created
                   value: 2021-06-06 17:22:21
@@ -163,14 +163,13 @@ databaseChangeLog:
                   value: Tourism and rest
               - column:
                   name: cat_image_url
-                  value: tourism_and_rest.jpeg
+                  value: http://localhost/images/tourism_and_rest.jpeg
               - column:
                   name: cat_created
                   value: 2021-06-06 17:22:21
               - column:
                   name: cat_modified
                   value: 2021-06-06 17:22:21
-
 
         - insert:
             tableName: user
@@ -279,7 +278,7 @@ databaseChangeLog:
                   value: Sport Life - a chain of casual fitness centers
               - column:
                   name: vn_image_url
-                  value: Sport_Life.jpeg
+                  value: http://localhost/images/sport_life.jpeg
               - column:
                   name: vn_email
                   value: Sport_Life@email.com
@@ -307,7 +306,7 @@ databaseChangeLog:
                   value: Domino`s Pizza - an American multinational pizza restaurant chain founded in 1960
               - column:
                   name: vn_image_url
-                  value: Dominos_Pizza.jpeg
+                  value: http://localhost/images/dominos_pizza.jpeg
               - column:
                   name: vn_email
                   value: Dominos_Pizza@email.com
@@ -335,7 +334,7 @@ databaseChangeLog:
                   value: TUI AG - travel and tourism company
               - column:
                   name: vn_image_url
-                  value: TUI_AG.jpeg
+                  value: http://localhost/images/TUI_AG.jpeg
               - column:
                   name: vn_email
                   value: TUI_AG@email.com
@@ -348,7 +347,6 @@ databaseChangeLog:
               - column:
                   name: vn_modified
                   value: 2021-06-06 17:22:21
-
 
         - insert:
             tableName: discount
@@ -367,7 +365,7 @@ databaseChangeLog:
                   value: 38% discount on the purchase of an unlimited annual subscription to the fitness club "Sport Life"
               - column:
                   name: dis_image_url
-                  value: discount_image.jpeg
+                  value: http://localhost/images/discount_image.jpeg
               - column:
                   name: dis_percentage
                   value: '38'
@@ -419,7 +417,7 @@ databaseChangeLog:
                   value: 50% discount on all pizza menus from the pizzeria "Domino`s Pizza"
               - column:
                   name: dis_image_url
-                  value: discount_image.jpeg
+                  value: http://localhost/images/discount_image.jpeg
               - column:
                   name: dis_percentage
                   value: '50'
@@ -453,7 +451,6 @@ databaseChangeLog:
               - column:
                   name: dis_modified
                   value: 2021-12-06 17:22:21
-
 
         - insert:
             tableName: location_discount
