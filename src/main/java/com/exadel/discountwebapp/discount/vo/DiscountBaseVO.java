@@ -57,12 +57,4 @@ public abstract class DiscountBaseVO implements Serializable {
     @NotNull
     @Positive
     private Integer perUser;
-
-    @NotNull
-    @Positive
-    private Long categoryId;
-
-    @NotNull
-    @Positive
-    private Long vendorId;
 }

@@ -122,8 +122,11 @@ class DiscountServiceIntegrationTest {
         assertEquals(expected.getExpirationDate(), actual.getExpirationDate());
         assertEquals(expected.getQuantity(), actual.getQuantity());
         assertEquals(expected.getPerUser(), actual.getPerUser());
-        assertEquals(expected.getCategory().getId(), actual.getCategoryId());
-        assertEquals(expected.getVendor().getId(), actual.getVendorId());
+
+        assertNotNull(actual.getCategory());
+        assertNotNull(actual.getVendor());
+        assertEquals(expected.getCategory().getId(), actual.getCategory().getId());
+        assertEquals(expected.getVendor().getId(), actual.getVendor().getId());
     }
 
     private void matchOne(DiscountRequestVO expected, DiscountResponseVO actual) {
@@ -138,8 +141,11 @@ class DiscountServiceIntegrationTest {
         assertEquals(expected.getExpirationDate(), actual.getExpirationDate());
         assertEquals(expected.getQuantity(), actual.getQuantity());
         assertEquals(expected.getPerUser(), actual.getPerUser());
-        assertEquals(expected.getCategoryId(), actual.getCategoryId());
-        assertEquals(expected.getVendorId(), actual.getVendorId());
+
+        assertNotNull(actual.getCategory());
+        assertNotNull(actual.getVendor());
+        assertEquals(expected.getCategoryId(), actual.getCategory().getId());
+        assertEquals(expected.getVendorId(), actual.getVendor().getId());
     }
 
     private void matchAll(List<Discount> expected, List<DiscountResponseVO> actual) {
