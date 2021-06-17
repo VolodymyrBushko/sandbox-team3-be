@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: "15062021_create_user_discount_table"
+      id: 15062021_create_user_discount_table
       author: tesliuk.ua@gmail.com
       changes:
         - createTable:
@@ -13,12 +13,14 @@ databaseChangeLog:
                   constraints:
                     foreignKeyName: fk_user_discount_user
                     references: user(usr_id)
+                    nullable: false
               - column:
                   name: dis_id
                   type: BIGINT
                   constraints:
                     foreignKeyName: fk_user_discount_discount
                     references: discount(dis_id)
+                    nullable: false
               - column:
                   name: ud_discount_quantity
                   type: INTEGER
@@ -34,14 +36,8 @@ databaseChangeLog:
                   type: TIMESTAMP WITHOUT TIME ZONE
                   constraints:
                     nullable: false
-              - column:
-                  name: ud_created
-                  type: TIMESTAMP
-                  defaultValueComputed: CURRENT_TIMESTAMP
-                  constraints:
-                    nullable: false
   - changeSet:
-      id: "15062021_add_composite_pk_user_discount_table"
+      id: 15062021_add_composite_pk_user_discount_table
       author: tesliuk.ua@gmail.com
       changes:
         - addPrimaryKey:
@@ -51,6 +47,3 @@ databaseChangeLog:
             schemaName: public
             tableName: user_discount
             validate: true
-
-
-
