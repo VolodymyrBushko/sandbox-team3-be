@@ -3,20 +3,19 @@ package com.exadel.discountwebapp.user.service;
 import com.exadel.discountwebapp.exception.EntityNotFoundException;
 import com.exadel.discountwebapp.user.repository.UserRepository;
 import com.exadel.discountwebapp.user.vo.UserResponseVO;
+import com.google.common.collect.Lists;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
-
-import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/user-init.sql")
 @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:sql/clean-up.sql")
-public class UserServiceIntegrationTest {
+class UserServiceIntegrationTest {
 
     @Autowired
     UserRepository userRepository;
@@ -28,7 +27,7 @@ public class UserServiceIntegrationTest {
     void shouldGetAllUsers() {
 
         var expectedItr = userRepository.findAll();
-        var expected = iterableToList(expectedItr);
+        var expected = Lists.newArrayList(expectedItr);
         var actual = userService.findAll();
 
         Assertions.assertEquals(2, actual.size());
@@ -66,11 +65,5 @@ public class UserServiceIntegrationTest {
         Assertions.assertNotEquals(3L, users.size());
 
         Assertions.assertThrows(EntityNotFoundException.class, () -> userService.findById(3L));
-    }
-
-    private <T> List<T> iterableToList(Iterable<T> iterable) {
-        List<T> list = new ArrayList<>();
-        iterable.forEach(list::add);
-        return list;
     }
 }
