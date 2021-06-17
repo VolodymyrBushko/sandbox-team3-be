@@ -1,9 +1,14 @@
 package com.exadel.discountwebapp.discount.vo;
 
+import com.exadel.discountwebapp.category.vo.CategoryResponseVO;
+import com.exadel.discountwebapp.vendor.vo.VendorResponseVO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 @Data
 @SuperBuilder
@@ -11,5 +16,13 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 public class DiscountResponseVO extends DiscountBaseVO {
 
+    @NotNull
+    @Positive
     private Long id;
+
+    @NotNull
+    private CategoryResponseVO category;
+
+    @NotNull
+    private VendorResponseVO vendor;
 }
