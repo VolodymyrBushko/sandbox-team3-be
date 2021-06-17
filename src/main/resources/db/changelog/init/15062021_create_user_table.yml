@@ -14,7 +14,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     primaryKey: true
-                    primaryKeyName: pk_user
+                    primaryKeyName: pk_usr_id
               - column:
                   name: usr_first_name
                   type: VARCHAR(50)
