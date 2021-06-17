@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 
 @Data
 @SuperBuilder
@@ -17,7 +16,6 @@ import javax.validation.constraints.Positive;
 public class DiscountResponseVO extends DiscountBaseVO {
 
     @NotNull
-    @Positive
     private Long id;
 
     @NotNull
