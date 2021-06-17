@@ -27,3 +27,4 @@ databaseChangeLog:
       file: init/16062021_insert_data.yml
       relativeToChangelogFile: true
 
+
