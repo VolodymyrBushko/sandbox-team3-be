@@ -124,7 +124,7 @@ class VendorServiceIntegrationTest {
         assertEquals(expected.getDescription(), actual.getDescription());
         assertEquals(expected.getImageUrl(), actual.getImageUrl());
         assertEquals(expected.getEmail(), actual.getEmail());
-        assertEquals(expected.getLocation().getId(), actual.getLocationId());
+        assertEquals(expected.getLocation().getId(), actual.getLocation().getId());
     }
 
     private void matchOne(VendorRequestVO expected, VendorResponseVO actual) {
@@ -133,6 +133,6 @@ class VendorServiceIntegrationTest {
         assertEquals(expected.getDescription(), actual.getDescription());
         assertEquals(expected.getImageUrl(), actual.getImageUrl());
         assertEquals(expected.getEmail(), actual.getEmail());
-        assertEquals(expected.getLocationId(), actual.getLocationId());
+        assertEquals(expected.getLocationId(), actual.getLocation().getId());
     }
 }

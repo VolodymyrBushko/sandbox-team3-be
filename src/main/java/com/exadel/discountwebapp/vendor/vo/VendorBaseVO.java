@@ -25,7 +25,4 @@ public class VendorBaseVO implements Serializable {
     @NotBlank
     @Email
     private String email;
-    @NotNull
-    @Positive
-    private Long locationId;
 }
