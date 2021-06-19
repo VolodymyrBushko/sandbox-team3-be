@@ -14,6 +14,9 @@ INSERT INTO location (loc_id, loc_country, loc_city, loc_created, loc_modified)
 VALUES (3, 'Ukraine', 'Kharkiv', current_timestamp, current_timestamp);
 
 INSERT INTO location (loc_id, loc_country, loc_city, loc_created, loc_modified)
+VALUES (4, 'Ukraine', 'Rivne', current_timestamp, current_timestamp);
+
+INSERT INTO location (loc_id, loc_country, loc_city, loc_created, loc_modified)
 VALUES (5, 'Ukraine', 'Chernigov', current_timestamp, current_timestamp);
 
 INSERT INTO location (loc_id, loc_country, loc_city, loc_created, loc_modified)
