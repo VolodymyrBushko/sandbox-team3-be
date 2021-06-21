@@ -1,8 +1,7 @@
 package com.exadel.discountwebapp.vendor.service;
 
-import com.exadel.discountwebapp.exception.EntityAlreadyExistsException;
 import com.exadel.discountwebapp.exception.EntityNotFoundException;
-import com.exadel.discountwebapp.validation.VendorValidation;
+import com.exadel.discountwebapp.validation.VendorValidator;
 import com.exadel.discountwebapp.vendor.entity.Vendor;
 import com.exadel.discountwebapp.vendor.mapper.VendorMapper;
 import com.exadel.discountwebapp.vendor.repository.VendorRepository;
@@ -23,7 +22,7 @@ public class VendorService {
 
     private final VendorMapper vendorMapper;
     private final VendorRepository vendorRepository;
-    private final VendorValidation vendorValidation;
+    private final VendorValidator vendorValidator;
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public List<VendorResponseVO> findAll() {
@@ -46,13 +45,8 @@ public class VendorService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public VendorResponseVO create(VendorRequestVO request) {
-        boolean emailExist = vendorValidation.checkDuplicateEmail(request);
-
-        if (emailExist) {
-            throw new EntityAlreadyExistsException("Email already exist");
-        } else {
-            return vendorMapper.toVO(vendorRepository.save(vendorMapper.toEntity(request)));
-        }
+        vendorValidator.validate(request);
+        return vendorMapper.toVO(vendorRepository.save(vendorMapper.toEntity(request)));
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
