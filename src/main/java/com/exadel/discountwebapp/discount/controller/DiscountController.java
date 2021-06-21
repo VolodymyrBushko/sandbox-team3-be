@@ -65,7 +65,7 @@ public class DiscountController {
             return null;
         }
 
-        String regexp = "([a-zA-Z]+)(:|<|>)([^(;).]+);";
+        String regexp = "(\\w+\\.?\\w+)(:|<|>)(.+?);";
         Pattern pattern = Pattern.compile(regexp);
         Matcher matcher = pattern.matcher(query.trim() + ";");
         DiscountSpecificationBuilder specificationBuilder = new DiscountSpecificationBuilder();

@@ -4,10 +4,7 @@ import com.exadel.discountwebapp.discount.entity.Discount;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import javax.validation.constraints.NotNull;
 
 @RequiredArgsConstructor
@@ -24,21 +21,31 @@ public class DiscountSpecification implements Specification<Discount> {
         String operation = criteria.getOperation();
 
         Predicate predicate = null;
+        Path<?> path = createPath(key, root);
 
         switch (operation) {
             case ":":
-                predicate = root.get(key).getJavaType() == String.class
-                        ? builder.like(root.get(key), value)
-                        : builder.equal(root.get(key), value);
+                predicate = builder.equal(path, value);
                 break;
-            case "<":
-                predicate = builder.lessThan(root.get(key), value);
+            case "*:":
+                predicate = builder.equal(path, "%" + value);
                 break;
-            case ">":
-                predicate = builder.greaterThan(root.get(key), value);
+            case ":*":
+                predicate = builder.equal(path, value + "%");
+                break;
+            case "*:*":
+                predicate = builder.equal(path, "%" + value + "%");
                 break;
         }
 
         return predicate;
+    }
+
+    private <Y> Path<?> createPath(String key, Root<Y> root) {
+        if (key.contains(".")) {
+            String[] pairs = key.split("\\.");
+            return root.join(pairs[0]).get(pairs[1]);
+        }
+        return root.get(key);
     }
 }
