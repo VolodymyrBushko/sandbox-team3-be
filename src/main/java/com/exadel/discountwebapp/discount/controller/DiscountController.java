@@ -65,13 +65,15 @@ public class DiscountController {
             return null;
         }
 
-        String regexp = "(\\w+\\.?\\w+)(:|<|>)(.+?);";
+        String regexp = "(\\w+\\.?\\w+)(:|<|>|\\*:|:\\*|\\*:\\*)(\\w+?);";
         Pattern pattern = Pattern.compile(regexp);
         Matcher matcher = pattern.matcher(query.trim() + ";");
         DiscountSpecificationBuilder specificationBuilder = new DiscountSpecificationBuilder();
 
         while (matcher.find()) {
             specificationBuilder.with(matcher.group(1), matcher.group(2), matcher.group(3));
+            System.out.println(String.format("group_1: %s, group_2: %s, group_3: %s,",
+                    matcher.group(1), matcher.group(2), matcher.group(3)));
         }
 
         return specificationBuilder.build();
