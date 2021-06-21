@@ -7,6 +7,8 @@ import com.exadel.discountwebapp.discount.vo.DiscountRequestVO;
 import com.exadel.discountwebapp.discount.vo.DiscountResponseVO;
 import com.exadel.discountwebapp.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,9 +24,14 @@ public class DiscountService {
     private final DiscountRepository discountRepository;
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    public List<DiscountResponseVO> findAll() {
-        List<DiscountResponseVO> response = new ArrayList<>();
-        discountRepository.findAll().forEach(e -> response.add(discountMapper.toVO(e)));
+    public List<DiscountResponseVO> findAll(Specification<Discount> specification, Pageable pageable) {
+        List<Discount> discounts = pageable == null
+                ? discountRepository.findAll(specification)
+                : discountRepository.findAll(specification, pageable).getContent();
+
+        List<DiscountResponseVO> response = new ArrayList<>(discounts.size());
+        discounts.forEach(e -> response.add(discountMapper.toVO(e)));
+
         return response;
     }
 

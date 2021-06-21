@@ -11,7 +11,7 @@ public class DiscountSpecificationBuilder {
 
     private final List<SearchCriteria> criteria = new ArrayList<>();
 
-    public DiscountSpecificationBuilder builder(String key, String operation, String value) {
+    public DiscountSpecificationBuilder with(String key, String operation, String value) {
         SearchCriteria newCriteria = SearchCriteria.builder()
                 .key(key)
                 .operation(operation)
@@ -32,7 +32,7 @@ public class DiscountSpecificationBuilder {
 
         Specification<Discount> result = specifications.get(0);
 
-        for (int i = 0; i < criteria.size(); i++) {
+        for (int i = 1; i < criteria.size(); i++) {
             result = Specification.where(result).and(specifications.get(i));
         }
 

@@ -1,9 +1,16 @@
 package com.exadel.discountwebapp.discount.controller;
 
+import com.exadel.discountwebapp.discount.entity.Discount;
+import com.exadel.discountwebapp.discount.filter.DiscountSpecificationBuilder;
 import com.exadel.discountwebapp.discount.service.DiscountService;
 import com.exadel.discountwebapp.discount.vo.DiscountRequestVO;
 import com.exadel.discountwebapp.discount.vo.DiscountResponseVO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -19,20 +26,18 @@ public class DiscountController {
     private final DiscountService discountService;
 
     @GetMapping
-    public List<DiscountResponseVO> findAll(@RequestParam(value = "query", required = false) String query) {
-        if (query != null && query.trim().length() > 0) {
+    public List<DiscountResponseVO> findAll(
+            @RequestParam(value = "query", required = false, defaultValue = "") String query,
+            @RequestParam(value = "sortField", required = false, defaultValue = "") String sortField,
+            @RequestParam(value = "sortDirection", required = false, defaultValue = "ASC") String sortDirection,
+            @RequestParam(value = "page", required = false, defaultValue = "0") String page,
+            @RequestParam(value = "pageSize", required = false, defaultValue = "10") String pageSize) {
 
-            String regexp = "([a-zA-Z]+)(:|<|>)(%?\\w+%?|\\d{4}-\\d{2}-\\d{2}),";
-            Pattern pattern = Pattern.compile(regexp);
-            Matcher matcher = pattern.matcher(query.trim() + ",");
+        Sort sort = createSort(sortField, sortDirection);
+        Pageable pageable = createPageable(parseInt(page), parseInt(pageSize), sort);
+        Specification<Discount> specification = createSpecification(query);
 
-            while (matcher.find()) {
-                System.out.println("1: " + matcher.group(1));
-                System.out.println("2: " + matcher.group(2));
-                System.out.println("3: " + matcher.group(3));
-            }
-        }
-        return discountService.findAll();
+        return discountService.findAll(specification, pageable);
     }
 
     @GetMapping("/{id}")
@@ -53,5 +58,44 @@ public class DiscountController {
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id) {
         discountService.deleteById(id);
+    }
+
+    private Specification<Discount> createSpecification(String query) {
+        if (query == null || query.trim().length() == 0) {
+            return null;
+        }
+
+        String regexp = "([a-zA-Z]+)(:|<|>)([^(;).]+);";
+        Pattern pattern = Pattern.compile(regexp);
+        Matcher matcher = pattern.matcher(query.trim() + ";");
+        DiscountSpecificationBuilder specificationBuilder = new DiscountSpecificationBuilder();
+
+        while (matcher.find()) {
+            specificationBuilder.with(matcher.group(1), matcher.group(2), matcher.group(3));
+        }
+
+        return specificationBuilder.build();
+    }
+
+    private Sort createSort(String sortField, String sortDirection) {
+        Direction direction = sortDirection.equalsIgnoreCase("DESC")
+                ? Direction.DESC
+                : Direction.ASC;
+
+        return (sortField == null || sortField.trim().length() == 0)
+                ? null
+                : Sort.by(direction, sortField);
+    }
+
+    private Pageable createPageable(int page, int pageSize, Sort sort) {
+        return sort != null
+                ? PageRequest.of(page, pageSize, sort)
+                : PageRequest.of(page, pageSize);
+    }
+
+    public int parseInt(String s) {
+        return s.matches("-?\\d+")
+                ? Integer.parseInt(s)
+                : 0;
     }
 }
