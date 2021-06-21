@@ -12,9 +12,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-@Table(name = "vendor", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "vn_email")
-})
+@Table(name = "vendor")
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode

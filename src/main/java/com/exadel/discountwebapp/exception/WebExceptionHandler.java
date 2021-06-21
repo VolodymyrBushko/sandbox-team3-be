@@ -26,7 +26,7 @@ public class WebExceptionHandler {
     }
 
     @ExceptionHandler(EntityAlreadyExistsException.class)
-    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    @ResponseStatus(value = HttpStatus.CONFLICT)
     public String entityAlreadyExistsException(EntityAlreadyExistsException ex) {
         return ex.getMessage();
     }
