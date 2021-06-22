@@ -6,6 +6,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 public class DiscountSpecification implements Specification<Discount> {
@@ -20,34 +21,33 @@ public class DiscountSpecification implements Specification<Discount> {
         String value = criteria.getValue();
         String operation = criteria.getOperation();
 
-        Predicate predicate = null;
-        Path<String> path = createPath(key, root);
+        Path<Object> path = createPath(key, root);
 
         switch (operation) {
             case ":":
-                predicate = builder.equal(path, value);
-                break;
-            case "*:":
-                predicate = builder.like(path, "%" + value);
-                break;
-            case ":*":
-                predicate = builder.like(path, value + "%");
-                break;
-            case "*:*":
-                predicate = builder.like(path, "%" + value + "%");
-                break;
+                return path.getJavaType() == LocalDateTime.class
+                        ? builder.equal(path.as(LocalDateTime.class), LocalDateTime.parse(value))
+                        : builder.equal(path.as(String.class), value);
             case "<":
-                predicate = builder.lessThan(path, value);
-                break;
+                return path.getJavaType() == LocalDateTime.class
+                        ? builder.lessThan(path.as(LocalDateTime.class), LocalDateTime.parse(value))
+                        : builder.lessThan(path.as(String.class), value);
             case ">":
-                predicate = builder.greaterThan(path, value);
-                break;
+                return path.getJavaType() == LocalDateTime.class
+                        ? builder.greaterThan(path.as(LocalDateTime.class), LocalDateTime.parse(value))
+                        : builder.greaterThan(path.as(String.class), value);
+            case "*:":
+                return builder.like(path.as(String.class), "%" + value);
+            case ":*":
+                return builder.like(path.as(String.class), value + "%");
+            case "*:*":
+                return builder.like(path.as(String.class), "%" + value + "%");
+            default:
+                return null;
         }
-
-        return predicate;
     }
 
-    private <Y> Path<String> createPath(String key, Root<Y> root) {
+    private <X, Y> Path<X> createPath(String key, Root<Y> root) {
         if (key.contains(".")) {
             String[] pairs = key.split("\\.");
             return root.join(pairs[0]).get(pairs[1]);

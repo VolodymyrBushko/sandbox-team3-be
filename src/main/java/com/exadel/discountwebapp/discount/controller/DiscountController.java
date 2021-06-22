@@ -26,17 +26,8 @@ public class DiscountController {
     private final DiscountService discountService;
 
     @GetMapping
-    public List<DiscountResponseVO> findAll(
-            @RequestParam(value = "query", required = false, defaultValue = "") String query,
-            @RequestParam(value = "sortField", required = false, defaultValue = "") String sortField,
-            @RequestParam(value = "sortDirection", required = false, defaultValue = "ASC") String sortDirection,
-            @RequestParam(value = "page", required = false, defaultValue = "0") String page,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "10") String pageSize) {
-
-        Sort sort = createSort(sortField, sortDirection);
-        Pageable pageable = createPageable(parseInt(page), parseInt(pageSize), sort);
+    public List<DiscountResponseVO> findAll(@RequestParam(value = "query", defaultValue = "", required = false) String query, Pageable pageable) {
         Specification<Discount> specification = createSpecification(query);
-
         return discountService.findAll(specification, pageable);
     }
 
@@ -65,37 +56,17 @@ public class DiscountController {
             return null;
         }
 
-        String regexp = "(\\w+\\.?\\w+)(:|<|>|\\*:|:\\*|\\*:\\*)([\\w%@]+?);";
+        String regexp = "(\\w+\\.?\\w+)(:|<|>|\\*:|:\\*|\\*:\\*)([\\w%@:\\-\\.]+?);";
         Pattern pattern = Pattern.compile(regexp);
         Matcher matcher = pattern.matcher(query.trim() + ";");
         DiscountSpecificationBuilder specificationBuilder = new DiscountSpecificationBuilder();
 
         while (matcher.find()) {
             specificationBuilder.with(matcher.group(1), matcher.group(2), matcher.group(3));
+            System.out.printf("group_1: %s, group_2: %s, group_3: %s",
+                    matcher.group(1), matcher.group(2), matcher.group(3));
         }
 
         return specificationBuilder.build();
-    }
-
-    private Sort createSort(String sortField, String sortDirection) {
-        Direction direction = sortDirection.equalsIgnoreCase("DESC")
-                ? Direction.DESC
-                : Direction.ASC;
-
-        return (sortField == null || sortField.trim().length() == 0)
-                ? null
-                : Sort.by(direction, sortField);
-    }
-
-    private Pageable createPageable(int page, int pageSize, Sort sort) {
-        return sort != null
-                ? PageRequest.of(page, pageSize, sort)
-                : PageRequest.of(page, pageSize);
-    }
-
-    public int parseInt(String s) {
-        return s.matches("-?\\d+")
-                ? Integer.parseInt(s)
-                : 0;
     }
 }
