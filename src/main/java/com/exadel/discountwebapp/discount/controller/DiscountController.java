@@ -1,7 +1,7 @@
 package com.exadel.discountwebapp.discount.controller;
 
 import com.exadel.discountwebapp.discount.entity.Discount;
-import com.exadel.discountwebapp.discount.filter.DiscountSpecificationBuilder;
+import com.exadel.discountwebapp.discount.filter.SpecificationBuilder;
 import com.exadel.discountwebapp.discount.service.DiscountService;
 import com.exadel.discountwebapp.discount.vo.DiscountRequestVO;
 import com.exadel.discountwebapp.discount.vo.DiscountResponseVO;
@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/api/discounts")
@@ -21,10 +19,11 @@ import java.util.regex.Pattern;
 public class DiscountController {
 
     private final DiscountService discountService;
+    private SpecificationBuilder<Discount> specificationBuilder = new SpecificationBuilder<>();
 
     @GetMapping
     public List<DiscountResponseVO> findAll(@RequestParam(value = "query", defaultValue = "", required = false) String query, Pageable pageable) {
-        Specification<Discount> specification = DiscountSpecificationBuilder.fromQuery(query);
+        Specification<Discount> specification = specificationBuilder.fromQuery(query);
         return discountService.findAll(specification, pageable);
     }
 

@@ -1,6 +1,5 @@
 package com.exadel.discountwebapp.discount.filter;
 
-import com.exadel.discountwebapp.discount.entity.Discount;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -9,13 +8,13 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
-public class DiscountSpecification implements Specification<Discount> {
+public class CustomSpecification<T> implements Specification<T> {
 
     @NotNull
     private final SearchCriteria criteria;
 
     @Override
-    public Predicate toPredicate(Root<Discount> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
+    public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
 
         String key = criteria.getKey();
         String value = criteria.getValue();
