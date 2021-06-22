@@ -6,10 +6,7 @@ import com.exadel.discountwebapp.discount.service.DiscountService;
 import com.exadel.discountwebapp.discount.vo.DiscountRequestVO;
 import com.exadel.discountwebapp.discount.vo.DiscountResponseVO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 
@@ -63,8 +60,6 @@ public class DiscountController {
 
         while (matcher.find()) {
             specificationBuilder.with(matcher.group(1), matcher.group(2), matcher.group(3));
-            System.out.printf("group_1: %s, group_2: %s, group_3: %s",
-                    matcher.group(1), matcher.group(2), matcher.group(3));
         }
 
         return specificationBuilder.build();

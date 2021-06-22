@@ -14,7 +14,7 @@ public class DiscountSpecificationBuilder {
     public DiscountSpecificationBuilder with(String key, String operation, String value) {
         SearchCriteria newCriteria = SearchCriteria.builder()
                 .key(key)
-                .operation(operation)
+                .operation(SearchOperation.getOperation(operation))
                 .value(value)
                 .build();
         criteria.add(newCriteria);

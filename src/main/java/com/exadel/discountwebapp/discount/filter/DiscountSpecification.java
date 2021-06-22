@@ -19,28 +19,28 @@ public class DiscountSpecification implements Specification<Discount> {
 
         String key = criteria.getKey();
         String value = criteria.getValue();
-        String operation = criteria.getOperation();
+        SearchOperation operation = criteria.getOperation();
 
         Path<Object> path = createPath(key, root);
 
         switch (operation) {
-            case ":":
+            case EQUALITY:
                 return path.getJavaType() == LocalDateTime.class
                         ? builder.equal(path.as(LocalDateTime.class), LocalDateTime.parse(value))
                         : builder.equal(path.as(String.class), value);
-            case "<":
+            case LESS_THAN:
                 return path.getJavaType() == LocalDateTime.class
                         ? builder.lessThan(path.as(LocalDateTime.class), LocalDateTime.parse(value))
                         : builder.lessThan(path.as(String.class), value);
-            case ">":
+            case GREATER_THAN:
                 return path.getJavaType() == LocalDateTime.class
                         ? builder.greaterThan(path.as(LocalDateTime.class), LocalDateTime.parse(value))
                         : builder.greaterThan(path.as(String.class), value);
-            case "*:":
-                return builder.like(path.as(String.class), "%" + value);
-            case ":*":
+            case STARTS_WITH:
                 return builder.like(path.as(String.class), value + "%");
-            case "*:*":
+            case ENDS_WITH:
+                return builder.like(path.as(String.class), "%" + value);
+            case CONTAINS:
                 return builder.like(path.as(String.class), "%" + value + "%");
             default:
                 return null;

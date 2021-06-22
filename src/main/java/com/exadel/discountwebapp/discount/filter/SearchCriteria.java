@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 public class SearchCriteria {
     private String key;
     private String value;
-    private String operation;
+    private SearchOperation operation;
 }
