@@ -1,4 +1,4 @@
-package com.exadel.discountwebapp.discount.filter;
+package com.exadel.discountwebapp.filter;
 
 import java.util.List;
 

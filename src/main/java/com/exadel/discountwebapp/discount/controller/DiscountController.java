@@ -1,7 +1,7 @@
 package com.exadel.discountwebapp.discount.controller;
 
 import com.exadel.discountwebapp.discount.entity.Discount;
-import com.exadel.discountwebapp.discount.filter.SpecificationBuilder;
+import com.exadel.discountwebapp.filter.SpecificationBuilder;
 import com.exadel.discountwebapp.discount.service.DiscountService;
 import com.exadel.discountwebapp.discount.vo.DiscountRequestVO;
 import com.exadel.discountwebapp.discount.vo.DiscountResponseVO;

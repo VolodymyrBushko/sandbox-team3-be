@@ -1,4 +1,4 @@
-package com.exadel.discountwebapp.discount.filter;
+package com.exadel.discountwebapp.filter;
 
 import org.springframework.data.jpa.domain.Specification;
 
@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class SpecificationBuilder<T> {
 
-    private static final List<SearchCriteria> criteria = new ArrayList<>();
+    private final List<SearchCriteria> criteria = new ArrayList<>();
 
     public Specification<T> fromQuery(String query) {
         if (query == null || query.trim().length() == 0) {

@@ -1,4 +1,4 @@
-package com.exadel.discountwebapp.discount.filter;
+package com.exadel.discountwebapp.filter;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
