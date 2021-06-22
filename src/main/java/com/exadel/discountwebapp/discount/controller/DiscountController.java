@@ -24,7 +24,7 @@ public class DiscountController {
 
     @GetMapping
     public List<DiscountResponseVO> findAll(@RequestParam(value = "query", defaultValue = "", required = false) String query, Pageable pageable) {
-        Specification<Discount> specification = createSpecification(query);
+        Specification<Discount> specification = DiscountSpecificationBuilder.fromQuery(query);
         return discountService.findAll(specification, pageable);
     }
 
@@ -46,22 +46,5 @@ public class DiscountController {
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id) {
         discountService.deleteById(id);
-    }
-
-    private Specification<Discount> createSpecification(String query) {
-        if (query == null || query.trim().length() == 0) {
-            return null;
-        }
-
-        String regexp = "(\\w+\\.?\\w+)(:|<|>|\\*:|:\\*|\\*:\\*)([\\w%@:\\-\\.]+?);";
-        Pattern pattern = Pattern.compile(regexp);
-        Matcher matcher = pattern.matcher(query.trim() + ";");
-        DiscountSpecificationBuilder specificationBuilder = new DiscountSpecificationBuilder();
-
-        while (matcher.find()) {
-            specificationBuilder.with(matcher.group(1), matcher.group(2), matcher.group(3));
-        }
-
-        return specificationBuilder.build();
     }
 }
