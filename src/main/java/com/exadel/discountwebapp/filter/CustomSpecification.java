@@ -48,8 +48,8 @@ public class CustomSpecification<T> implements Specification<T> {
 
     private <X, Y> Path<X> createPath(String key, Root<Y> root) {
         if (key.contains(".")) {
-            String[] pairs = key.split("\\.");
-            return root.join(pairs[0]).get(pairs[1]);
+            String[] pair = key.split("\\.");
+            return root.join(pair[0]).get(pair[1]);
         }
         return root.get(key);
     }

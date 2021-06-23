@@ -19,10 +19,10 @@ import java.util.List;
 public class DiscountController {
 
     private final DiscountService discountService;
-    private SpecificationBuilder<Discount> specificationBuilder = new SpecificationBuilder<>();
 
     @GetMapping
     public List<DiscountResponseVO> findAll(@RequestParam(value = "query", defaultValue = "", required = false) String query, Pageable pageable) {
+        SpecificationBuilder<Discount> specificationBuilder = new SpecificationBuilder<>();
         Specification<Discount> specification = specificationBuilder.fromQuery(query);
         return discountService.findAll(specification, pageable);
     }

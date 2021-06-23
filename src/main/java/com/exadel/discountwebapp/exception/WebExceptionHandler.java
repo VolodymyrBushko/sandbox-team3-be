@@ -1,5 +1,6 @@
 package com.exadel.discountwebapp.exception;
 
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -7,7 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.validation.ConstraintViolationException;
+import java.time.format.DateTimeParseException;
 
 @RestControllerAdvice
 public class WebExceptionHandler {
@@ -25,9 +26,34 @@ public class WebExceptionHandler {
         return ex.getMessage();
     }
 
+    @ExceptionHandler(InvalidDataAccessApiUsageException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public String badRequestException(Exception ex) {
+        switch (ex.getClass().getSimpleName()) {
+            case "InvalidDataAccessApiUsageException":
+                int index = ex.getMessage().indexOf("]") + 1;
+                return ex.getMessage().substring(0, index);
+            default:
+                return "Bad request";
+        }
+    }
+
+    @ExceptionHandler(DateTimeParseException.class)
+    @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)
+    public String userInputParseException(Exception ex) {
+        switch (ex.getClass().getSimpleName()) {
+            case "DateTimeParseException":
+                String parsedString = ((DateTimeParseException) ex).getParsedString();
+                return String.format("Could not parse [%s] in DateTime format", parsedString);
+            default:
+                return "Bad input";
+        }
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    public String globalException() {
+    public String globalException(Exception ex) {
+        System.out.println(ex.getClass());
         return "Something is wrong";
     }
 }
