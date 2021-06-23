@@ -51,6 +51,7 @@ public class VendorService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public VendorResponseVO update(Long id, VendorRequestVO request) {
+        vendorValidator.validate(request);
         Vendor vendor = getVendorById(id);
         vendorMapper.update(vendor, request);
         vendorRepository.save(vendor);
