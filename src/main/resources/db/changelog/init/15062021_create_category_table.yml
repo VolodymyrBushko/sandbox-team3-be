@@ -1,0 +1,38 @@
+databaseChangeLog:
+  - changeSet:
+      id: 15062021_create_category_table
+      author: volodymyr.bushko@gmail.com
+      changes:
+        - createTable:
+            schemaName: public
+            tableName: category
+            columns:
+              - column:
+                  name: cat_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_category
+                    nullable: false
+              - column:
+                  name: cat_title
+                  type: VARCHAR(25)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: cat_image_url
+                  type: VARCHAR(510)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: cat_created
+                  type: TIMESTAMP WITHOUT TIME ZONE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: cat_modified
+                  type: TIMESTAMP WITHOUT TIME ZONE
+                  constraints:
+                    nullable: false

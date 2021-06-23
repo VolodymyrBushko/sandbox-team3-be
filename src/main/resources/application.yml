@@ -6,5 +6,7 @@ spring:
     password: postgres
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: true
+  liquibase:
+    change-log: db/changelog/db.changelog-master.yml
