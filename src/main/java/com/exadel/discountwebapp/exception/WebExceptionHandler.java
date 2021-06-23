@@ -52,8 +52,7 @@ public class WebExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    public String globalException(Exception ex) {
-        System.out.println(ex.getClass());
+    public String globalException() {
         return "Something is wrong";
     }
 }
