@@ -1,0 +1,40 @@
+databaseChangeLog:
+  - changeSet:
+      id: 23062021_create_tag_table
+      author: bozhokmaria@gmail.com
+      changes:
+        - createTable:
+            schemaName: public
+            tableName: tag
+            columns:
+              - column:
+                  name: tag_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_tag
+                    nullable: false
+              - column:
+                  name: tag_name
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: tag_created
+                  type: TIMESTAMP WITHOUT TIME ZONE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: tag_modified
+                  type: TIMESTAMP WITHOUT TIME ZONE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: cat_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_tag_category
+                    references: category(cat_id)
+                    nullable: false

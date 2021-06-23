@@ -1,0 +1,44 @@
+databaseChangeLog:
+  - changeSet:
+      id: 23062021_create_tag_discount_table
+      author: bozhokmaria@gmail.com
+      changes:
+        - createTable:
+            schemaName: public
+            tableName: tag_discount
+            columns:
+              - column:
+                  name: tag_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_tag_discount_tag
+                    references: tag(tag_id)
+                    nullable: false
+              - column:
+                  name: dis_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_tag_discount_discount
+                    references: discount(dis_id)
+                    nullable: false
+              - column:
+                  name: td_created
+                  type: TIMESTAMP WITHOUT TIME ZONE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: td_modified
+                  type: TIMESTAMP WITHOUT TIME ZONE
+                  constraints:
+                    nullable: false
+        - changeSet:
+            id: 23062021_add_composite_pk_tag_discount_table
+            author: bozhokmaria@gmail.com
+            changes:
+              - addPrimaryKey:
+                  clustered: true
+                  columnNames: tag_id, dis_id
+                  constraintName: pk_tag_id_dis_id
+                  schemaName: public
+                  tableName: tag_discount
+                  validate: true
