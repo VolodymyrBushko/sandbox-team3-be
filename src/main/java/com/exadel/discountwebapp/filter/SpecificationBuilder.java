@@ -17,7 +17,7 @@ public class SpecificationBuilder<T> {
             return null;
         }
 
-        String regexp = "(\\w+\\.?\\w+)(:|<|>|\\*:|:\\*|\\*:\\*)([\\w%@:\\-\\.]+?);";
+        String regexp = "(\\w+\\.?\\w+)(:|<|>|\\*:|:\\*|\\*:\\*)([^(\\*).]+?);";
         Pattern pattern = Pattern.compile(regexp);
         Matcher matcher = pattern.matcher(query.trim() + ";");
 
@@ -52,6 +52,7 @@ public class SpecificationBuilder<T> {
             result = Specification.where(result).and(specifications.get(i));
         }
 
+        criteria.clear();
         return result;
     }
 }
