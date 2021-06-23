@@ -17,9 +17,9 @@ public class CategoryValidator {
 
     public void checkDuplicateTitle(CategoryRequestVO request) {
         categoryRepository.findByTitle(request.getTitle())
-                .ifPresent(title -> {
+                .ifPresent(category -> {
                     throw new EntityAlreadyExistsException(
-                            String.format("Category with title \"%s\" already exist", title.getTitle()));
+                            String.format("Category with title \"%s\" already exist", category.getTitle()));
                 });
     }
 }
