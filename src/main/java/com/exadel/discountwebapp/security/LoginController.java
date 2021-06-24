@@ -16,12 +16,12 @@ public class LoginController {
 
     @PostMapping("/signin")
     public TokenResponse signIn(
-            @RequestParam(value = "login", required = true)
-                    String login,
+            @RequestParam(value = "email", required = true)
+                    String email,
             @RequestParam(value = "password", required = true)
                     String password) {
 
-        UserResponseVO userResponse = userService.findByLoginAndPassword(login, password);
+        UserResponseVO userResponse = userService.findByLoginAndPassword(email, password);
         return new TokenResponse(jwtProvider.generateToken(userResponse.getEmail()));
     }
 }

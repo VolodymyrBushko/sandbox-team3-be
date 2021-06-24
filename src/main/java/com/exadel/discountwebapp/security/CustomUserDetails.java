@@ -10,14 +10,14 @@ import java.util.Collections;
 import java.util.Date;
 
 public class CustomUserDetails implements UserDetails {
-    private String login;
+    private String email;
     private String password;
     private Collection<? extends GrantedAuthority> grantedAuthorities;
     private Date expirationDate;
 
     public static CustomUserDetails fromUserEntityToCustomUserDetails(UserResponseVO user) {
         CustomUserDetails customUserDetails = new CustomUserDetails();
-        customUserDetails.login = user.getEmail();
+        customUserDetails.email = user.getEmail();
         customUserDetails.password = user.getPassword();
         customUserDetails.grantedAuthorities = Collections
                 .singletonList(new SimpleGrantedAuthority(user.getRole().getName()));
@@ -36,7 +36,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return login;
+        return email;
     }
 
     @Override

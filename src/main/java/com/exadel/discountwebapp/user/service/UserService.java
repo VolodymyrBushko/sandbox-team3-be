@@ -54,9 +54,9 @@ public class UserService {
     @Transactional(propagation = Propagation.REQUIRED)
     public UserResponseVO findByLoginAndPassword(String email, String password) {
         User user = userRepository.findUserByEmail(email)
-                .orElseThrow(() -> new EntityNotFoundException("Email is wrong. Try again!"));
+                .orElseThrow(() -> new EntityNotFoundException("The email was not found"));
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new EntityNotFoundException("Password is wrong. Try again!");
+            throw new EntityNotFoundException("Password does not match");
         }
         return new UserResponseVO().builder()
                 .email(email)
