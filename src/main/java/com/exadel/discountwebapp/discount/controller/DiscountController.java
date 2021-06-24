@@ -22,9 +22,7 @@ public class DiscountController {
 
     @GetMapping
     public List<DiscountResponseVO> findAll(@RequestParam(value = "query", defaultValue = "", required = false) String query, Pageable pageable) {
-        SpecificationBuilder<Discount> specificationBuilder = new SpecificationBuilder<>();
-        Specification<Discount> specification = specificationBuilder.fromQuery(query);
-        return discountService.findAll(specification, pageable);
+        return discountService.findAll(query, pageable);
     }
 
     @GetMapping("/{id}")

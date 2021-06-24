@@ -12,13 +12,14 @@ public class SpecificationBuilder<T> {
 
     private final List<SearchCriteria> criteria = new ArrayList<>();
 
+    private static final String regexp = "(\\w+\\.?\\w+)(:|<|>|\\*:|:\\*|\\*:\\*)([^(\\*).]+?);";
+    private static final Pattern pattern = Pattern.compile(regexp);
+
     public Specification<T> fromQuery(String query) {
         if (query == null || query.trim().length() == 0) {
             return null;
         }
 
-        String regexp = "(\\w+\\.?\\w+)(:|<|>|\\*:|:\\*|\\*:\\*)([^(\\*).]+?);";
-        Pattern pattern = Pattern.compile(regexp);
         Matcher matcher = pattern.matcher(query.trim() + ";");
 
         while (matcher.find()) {
@@ -38,7 +39,7 @@ public class SpecificationBuilder<T> {
     }
 
     private Specification<T> build() {
-        if (criteria.size() == 0) {
+        if (criteria.isEmpty()) {
             return null;
         }
 
@@ -52,7 +53,6 @@ public class SpecificationBuilder<T> {
             result = Specification.where(result).and(specifications.get(i));
         }
 
-        criteria.clear();
         return result;
     }
 }

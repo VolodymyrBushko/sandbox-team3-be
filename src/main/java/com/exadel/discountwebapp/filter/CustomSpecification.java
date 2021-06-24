@@ -4,13 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.*;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 public class CustomSpecification<T> implements Specification<T> {
 
-    @NotNull
     private final SearchCriteria criteria;
 
     @Override
