@@ -6,8 +6,11 @@ import com.exadel.discountwebapp.discount.service.DiscountService;
 import com.exadel.discountwebapp.discount.vo.DiscountRequestVO;
 import com.exadel.discountwebapp.discount.vo.DiscountResponseVO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,7 +24,8 @@ public class DiscountController {
     private final DiscountService discountService;
 
     @GetMapping
-    public List<DiscountResponseVO> findAll(@RequestParam(value = "query", defaultValue = "", required = false) String query, Pageable pageable) {
+    public Page<DiscountResponseVO> findAll(@RequestParam(value = "query", defaultValue = "", required = false) String query,
+                                            @PageableDefault(sort = {"expirationDate"}, direction = Sort.Direction.ASC) Pageable pageable) {
         return discountService.findAll(query, pageable);
     }
 

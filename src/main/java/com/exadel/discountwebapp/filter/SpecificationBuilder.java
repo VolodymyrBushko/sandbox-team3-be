@@ -16,7 +16,7 @@ public class SpecificationBuilder<T> {
     private static final Pattern pattern = Pattern.compile(regexp);
 
     public Specification<T> fromQuery(String query) {
-        if (query == null || query.trim().length() == 0) {
+        if (query == null || query.trim().isEmpty()) {
             return null;
         }
 

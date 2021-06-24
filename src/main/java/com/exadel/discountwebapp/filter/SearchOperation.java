@@ -1,16 +1,27 @@
 package com.exadel.discountwebapp.filter;
 
-import java.util.List;
+import com.exadel.discountwebapp.exception.NotAllowedOperationException;
+
+import java.util.Arrays;
 
 public enum SearchOperation {
-    EQUALITY, STARTS_WITH, ENDS_WITH, CONTAINS, LESS_THAN, GREATER_THAN;
+    EQUALITY(":"),
+    STARTS_WITH(":*"),
+    ENDS_WITH("*:"),
+    CONTAINS("*:*"),
+    LESS_THAN("<"),
+    GREATER_THAN(">");
 
-    private static final List<String> OPERATIONS = List.of(":", ":*", "*:", "*:*", "<", ">");
+    private final String operation;
+
+    SearchOperation(String operation) {
+        this.operation = operation;
+    }
 
     public static SearchOperation getOperation(String input) {
-        int index = OPERATIONS.indexOf(input);
-        return index != -1
-                ? SearchOperation.values()[index]
-                : null;
+        return Arrays.stream(values())
+                .filter(e -> e.operation.equals(input))
+                .findFirst()
+                .orElseThrow(() -> new NotAllowedOperationException(String.format("Operation [%s] is not allowed", input)));
     }
 }

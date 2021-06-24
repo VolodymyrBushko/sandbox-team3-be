@@ -22,7 +22,7 @@ public class VendorMapperTest {
     private VendorRepository vendorRepository;
 
     @Test
-    public void ShouldMapEntityToVO(){
+    public void shouldMapEntityToVO(){
         var id = 1L;
         var actual = vendorRepository.findById(id).get();
 
@@ -40,7 +40,7 @@ public class VendorMapperTest {
     }
 
     @Test
-    public void ShouldMapVOToEntity(){
+    public void shouldMapVOToEntity(){
         var actual = new  VendorRequestVO();
         actual.setTitle("title");
         actual.setDescription("description");

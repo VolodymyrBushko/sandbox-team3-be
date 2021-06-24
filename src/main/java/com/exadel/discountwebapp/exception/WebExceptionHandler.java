@@ -26,13 +26,18 @@ public class WebExceptionHandler {
         return ex.getMessage();
     }
 
-    @ExceptionHandler(InvalidDataAccessApiUsageException.class)
+    @ExceptionHandler(value = {
+            InvalidDataAccessApiUsageException.class,
+            NotAllowedOperationException.class
+    })
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public String badRequestException(Exception ex) {
         switch (ex.getClass().getSimpleName()) {
             case "InvalidDataAccessApiUsageException":
                 int index = ex.getMessage().indexOf("]") + 1;
                 return ex.getMessage().substring(0, index);
+            case "NotAllowedOperationException":
+                return ex.getMessage();
             default:
                 return "Bad request";
         }

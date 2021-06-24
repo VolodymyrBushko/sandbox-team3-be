@@ -53,13 +53,11 @@ class DiscountServiceIntegrationTest {
     @Test
     void shouldFindAllDiscounts() {
         var query = "title:38% discount;";
-        var specificationBuilder = new SpecificationBuilder<Discount>();
-        var specification = specificationBuilder.fromQuery(query);
         var pageable = createPageable(0, 1, null);
 
         var expectedIter = discountRepository.findAll();
         var expected = Lists.newArrayList(expectedIter).stream().filter(e -> e.getTitle().equals("38% discount")).collect(Collectors.toList());
-        var actual = discountService.findAll(specification, pageable);
+        var actual = discountService.findAll(query, pageable).getContent();
 
         matchAll(expected, actual);
     }
