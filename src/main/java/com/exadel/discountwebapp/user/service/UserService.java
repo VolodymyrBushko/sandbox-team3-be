@@ -3,6 +3,7 @@ package com.exadel.discountwebapp.user.service;
 import com.exadel.discountwebapp.exception.EntityNotFoundException;
 import com.exadel.discountwebapp.role.mapper.RoleMapper;
 import com.exadel.discountwebapp.security.CustomUserDetails;
+import com.exadel.discountwebapp.security.SigninVO;
 import com.exadel.discountwebapp.user.entity.User;
 import com.exadel.discountwebapp.user.mapper.UserMapper;
 import com.exadel.discountwebapp.user.repository.UserRepository;
@@ -52,7 +53,9 @@ public class UserService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public UserResponseVO findByLoginAndPassword(String email, String password) {
+    public UserResponseVO findByLoginAndPassword(SigninVO signinVO) {
+        String email = signinVO.getEmail();
+        String password = signinVO.getPassword();
         User user = userRepository.findUserByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("The email was not found, email=" + email));
         if (!passwordEncoder.matches(password, user.getPassword())) {
