@@ -20,7 +20,6 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -44,6 +43,7 @@ public class UserService {
         userRepository.findAll().forEach(user -> response.add(mapper.toVO(user)));
         return response;
     }
+
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public UserResponseVO findByEmail(String email) {
         User user = userRepository.findUserByEmail(email)
@@ -53,15 +53,16 @@ public class UserService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public UserResponseVO findByLoginAndPassword(String email, String password) {
-        UserResponseVO result = null;
-        Optional<User> user = userRepository.findUserByEmail(email);
-        if ((user != null) && (passwordEncoder.matches(password, user.get().getPassword()))) {
-            result = new UserResponseVO();
-            result.setEmail(email);
-            result.setPassword(password);
-            result.setRole(roleMapper.toVO(user.get().getRole()));
+        User user = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Email is wrong. Try again!"));
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new EntityNotFoundException("Password is wrong. Try again!");
         }
-        return result;
+        return new UserResponseVO().builder()
+                .email(email)
+                .password(password)
+                .role(roleMapper.toVO(user.getRole()))
+                .build();
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
