@@ -9,9 +9,13 @@ import com.google.common.collect.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -62,9 +66,12 @@ class VendorServiceIntegrationTest {
 
     @Test
     void shouldFindAllVendors() {
+        var query = "title:Sport Life;";
+        var pageable = createPageable(0, 1, null);
+
         var expectedIter = vendorRepository.findAll();
-        var expected = Lists.newArrayList(expectedIter);
-        var actual = vendorService.findAll();
+        var expected = Lists.newArrayList(expectedIter).stream().filter(e -> e.getTitle().equals("Sport Life")).collect(Collectors.toList());
+        var actual = vendorService.findAll(query, pageable).getContent();
 
         matchAll(expected, actual);
     }
@@ -134,5 +141,18 @@ class VendorServiceIntegrationTest {
         assertEquals(expected.getImageUrl(), actual.getImageUrl());
         assertEquals(expected.getEmail(), actual.getEmail());
         assertEquals(expected.getLocationId(), actual.getLocation().getId());
+    }
+
+    private Pageable createPageable(int page, int size, String sortRule) {
+        Sort sort = null;
+        if (sortRule != null && !sortRule.isEmpty()) {
+            Sort.Direction sortDirection = sortRule.toLowerCase().contains("desc")
+                    ? Sort.Direction.DESC
+                    : Sort.Direction.ASC;
+            sort = Sort.by(sortDirection, sortRule);
+        }
+        return sort != null
+                ? PageRequest.of(page, size, sort)
+                : PageRequest.of(page, size);
     }
 }
