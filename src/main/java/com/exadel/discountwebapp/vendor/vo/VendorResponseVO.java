@@ -1,5 +1,6 @@
 package com.exadel.discountwebapp.vendor.vo;
 
+import com.exadel.discountwebapp.location.vo.LocationResponseVO;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -10,4 +11,6 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 public class VendorResponseVO extends VendorBaseVO {
     private Long id;
+
+    private LocationResponseVO location;
 }

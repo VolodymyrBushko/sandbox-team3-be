@@ -1,11 +1,11 @@
 package com.exadel.discountwebapp.vendor.mapper;
 
 import com.exadel.discountwebapp.location.entity.Location;
+import com.exadel.discountwebapp.location.mapper.LocationMapper;
 import com.exadel.discountwebapp.location.service.LocationService;
 import com.exadel.discountwebapp.vendor.entity.Vendor;
 import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
 import com.exadel.discountwebapp.vendor.vo.VendorResponseVO;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.modelmapper.convention.MatchingStrategies;
@@ -15,17 +15,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class VendorMapper {
     private final LocationService locationService;
+    private final LocationMapper locationMapper;
     private final ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
-    public VendorMapper(LocationService locationService) {
+    public VendorMapper(LocationService locationService, LocationMapper locationMapper) {
         this.locationService = locationService;
+        this.locationMapper = locationMapper;
         configureModelMapper();
     }
 
     public VendorResponseVO toVO(Vendor vendor) {
         VendorResponseVO response = modelMapper.map(vendor, VendorResponseVO.class);
-        response.setLocationId(vendor.getLocation().getId());
+        response.setLocation(locationMapper.toVO(vendor.getLocation()));
         return response;
     }
 

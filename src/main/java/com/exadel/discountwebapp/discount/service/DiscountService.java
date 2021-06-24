@@ -6,7 +6,11 @@ import com.exadel.discountwebapp.discount.repository.DiscountRepository;
 import com.exadel.discountwebapp.discount.vo.DiscountRequestVO;
 import com.exadel.discountwebapp.discount.vo.DiscountResponseVO;
 import com.exadel.discountwebapp.exception.EntityNotFoundException;
+import com.exadel.discountwebapp.filter.SpecificationBuilder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,10 +26,12 @@ public class DiscountService {
     private final DiscountRepository discountRepository;
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    public List<DiscountResponseVO> findAll() {
-        List<DiscountResponseVO> response = new ArrayList<>();
-        discountRepository.findAll().forEach(e -> response.add(discountMapper.toVO(e)));
-        return response;
+    public Page<DiscountResponseVO> findAll(String query, Pageable pageable) {
+        SpecificationBuilder<Discount> specificationBuilder = new SpecificationBuilder<>();
+        Specification<Discount> specification = specificationBuilder.fromQuery(query);
+
+        Page<Discount> page = discountRepository.findAll(specification, pageable);
+        return page.map(discountMapper::toVO);
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
