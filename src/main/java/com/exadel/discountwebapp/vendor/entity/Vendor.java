@@ -7,6 +7,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.time.LocalDateTime;
 
 @Entity
@@ -35,6 +36,7 @@ public class Vendor {
     @Column(name = "vn_image_url", length = 510, nullable = false)
     private String imageUrl;
 
+    @Email
     @Column(name = "vn_email", length = 255, nullable = false, unique = true)
     private String email;
 

@@ -25,6 +25,12 @@ public class WebExceptionHandler {
         return ex.getMessage();
     }
 
+    @ExceptionHandler(EntityAlreadyExistsException.class)
+    @ResponseStatus(value = HttpStatus.CONFLICT)
+    public String entityAlreadyExistsException(EntityAlreadyExistsException ex) {
+        return ex.getMessage();
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public String globalException() {

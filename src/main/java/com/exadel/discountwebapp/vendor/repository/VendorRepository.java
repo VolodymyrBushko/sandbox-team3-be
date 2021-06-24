@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface VendorRepository extends CrudRepository<Vendor, Long> {
     Optional<Vendor> findByTitle(String title);
+
+    Optional<Vendor> findByEmail(String email);
 }
