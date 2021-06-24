@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Data
 @SuperBuilder
@@ -18,4 +19,7 @@ public class DiscountRequestVO extends DiscountBaseVO {
 
     @NotNull
     private Long vendorId;
+
+    @NotNull
+    private List<Long> locationIds;
 }

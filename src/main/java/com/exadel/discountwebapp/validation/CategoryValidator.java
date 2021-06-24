@@ -5,6 +5,8 @@ import com.exadel.discountwebapp.category.vo.CategoryRequestVO;
 import com.exadel.discountwebapp.exception.EntityAlreadyExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -15,6 +17,7 @@ public class CategoryValidator {
         checkDuplicateTitle(request);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public void checkDuplicateTitle(CategoryRequestVO request) {
         categoryRepository.findByTitle(request.getTitle())
                 .ifPresent(category -> {

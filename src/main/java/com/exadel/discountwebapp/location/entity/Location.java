@@ -1,5 +1,6 @@
 package com.exadel.discountwebapp.location.entity;
 
+import com.exadel.discountwebapp.discount.entity.Discount;
 import com.exadel.discountwebapp.vendor.entity.Vendor;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -46,4 +47,9 @@ public class Location {
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "location")
     private List<Vendor> vendors = new ArrayList<>();
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @ManyToMany(mappedBy = "locations")
+    private List<Discount> discounts = new ArrayList<>();
 }
