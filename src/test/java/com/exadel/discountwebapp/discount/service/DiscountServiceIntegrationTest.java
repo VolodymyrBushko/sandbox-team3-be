@@ -5,15 +5,21 @@ import com.exadel.discountwebapp.discount.repository.DiscountRepository;
 import com.exadel.discountwebapp.discount.vo.DiscountRequestVO;
 import com.exadel.discountwebapp.discount.vo.DiscountResponseVO;
 import com.exadel.discountwebapp.exception.EntityNotFoundException;
+import com.exadel.discountwebapp.filter.SpecificationBuilder;
 import com.google.common.collect.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -46,9 +52,12 @@ class DiscountServiceIntegrationTest {
 
     @Test
     void shouldFindAllDiscounts() {
+        var query = "title:38% discount;";
+        var pageable = createPageable(0, 1, null);
+
         var expectedIter = discountRepository.findAll();
-        var expected = Lists.newArrayList(expectedIter);
-        var actual = discountService.findAll();
+        var expected = Lists.newArrayList(expectedIter).stream().filter(e -> e.getTitle().equals("38% discount")).collect(Collectors.toList());
+        var actual = discountService.findAll(query, pageable).getContent();
 
         matchAll(expected, actual);
     }
@@ -155,5 +164,18 @@ class DiscountServiceIntegrationTest {
         for (int i = 0; i < expected.size(); i++) {
             matchOne(expected.get(i), actual.get(i));
         }
+    }
+
+    private Pageable createPageable(int page, int size, String sortRule) {
+        Sort sort = null;
+        if (sortRule != null && !sortRule.isEmpty()) {
+            Direction sortDirection = sortRule.toLowerCase().contains("desc")
+                    ? Direction.DESC
+                    : Direction.ASC;
+            sort = Sort.by(sortDirection, sortRule);
+        }
+        return sort != null
+                ? PageRequest.of(page, size, sort)
+                : PageRequest.of(page, size);
     }
 }

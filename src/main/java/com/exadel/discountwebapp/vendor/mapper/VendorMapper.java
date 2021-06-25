@@ -15,12 +15,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class VendorMapper {
     private final LocationService locationService;
+    private final LocationMapper locationMapper;
     private final ModelMapper modelMapper = new ModelMapper();
-    private final LocationMapper locationMapper = new LocationMapper();
 
     @Autowired
-    public VendorMapper(LocationService locationService) {
+    public VendorMapper(LocationService locationService, LocationMapper locationMapper) {
         this.locationService = locationService;
+        this.locationMapper = locationMapper;
         configureModelMapper();
     }
 

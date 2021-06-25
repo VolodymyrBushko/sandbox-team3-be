@@ -1,18 +1,21 @@
 package com.exadel.discountwebapp.vendor.service;
 
 import com.exadel.discountwebapp.exception.EntityNotFoundException;
+import com.exadel.discountwebapp.validation.VendorValidator;
+import com.exadel.discountwebapp.filter.SpecificationBuilder;
 import com.exadel.discountwebapp.vendor.entity.Vendor;
 import com.exadel.discountwebapp.vendor.mapper.VendorMapper;
 import com.exadel.discountwebapp.vendor.repository.VendorRepository;
 import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
 import com.exadel.discountwebapp.vendor.vo.VendorResponseVO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,10 +26,12 @@ public class VendorService {
     private final VendorRepository vendorRepository;
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    public List<VendorResponseVO> findAll() {
-        List<VendorResponseVO> response = new ArrayList<>();
-        vendorRepository.findAll().forEach(entity -> response.add(vendorMapper.toVO(entity)));
-        return response;
+    public Page<VendorResponseVO> findAll(String query, Pageable pageable) {
+        SpecificationBuilder<Vendor> specificationBuilder = new SpecificationBuilder<>();
+        Specification<Vendor> specification = specificationBuilder.fromQuery(query);
+
+        Page<Vendor> page = vendorRepository.findAll(specification, pageable);
+        return page.map(vendorMapper::toVO);
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
