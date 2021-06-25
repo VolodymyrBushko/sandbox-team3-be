@@ -26,19 +26,14 @@ databaseChangeLog:
                   type: TIMESTAMP WITHOUT TIME ZONE
                   constraints:
                     nullable: false
-              - column:
-                  name: td_modified
-                  type: TIMESTAMP WITHOUT TIME ZONE
-                  constraints:
-                    nullable: false
-        - changeSet:
-            id: 23062021_add_composite_pk_tag_discount_table
-            author: bozhokmaria@gmail.com
-            changes:
-              - addPrimaryKey:
-                  clustered: true
-                  columnNames: tag_id, dis_id
-                  constraintName: pk_tag_id_dis_id
-                  schemaName: public
-                  tableName: tag_discount
-                  validate: true
+  - changeSet:
+      id: 23062021_add_composite_pk_tag_discount_table
+      author: bozhokmaria@gmail.com
+      changes:
+        - addPrimaryKey:
+            clustered: true
+            columnNames: tag_id, dis_id
+            constraintName: pk_tag_id_dis_id
+            schemaName: public
+            tableName: tag_discount
+            validate: true
