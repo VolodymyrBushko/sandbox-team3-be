@@ -12,7 +12,7 @@ public class SpecificationBuilder<T> {
 
     private final List<SearchCriteria> criteria = new ArrayList<>();
 
-    private static final String regexp = "(\\w+\\.?\\w+)(:|<|>|\\*:|:\\*|\\*:\\*)([^(\\*).]+?);";
+    private static final String regexp = "(\\w+\\.?\\w+)(:|<|>|\\*:|:\\*|\\*:\\*)([^(\\*)]+?);";
     private static final Pattern pattern = Pattern.compile(regexp);
 
     public Specification<T> fromQuery(String query) {

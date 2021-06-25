@@ -4,10 +4,13 @@ import com.exadel.discountwebapp.vendor.service.VendorService;
 import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
 import com.exadel.discountwebapp.vendor.vo.VendorResponseVO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/vendors")
@@ -16,8 +19,9 @@ public class VendorController {
     private final VendorService vendorService;
 
     @GetMapping
-    public List<VendorResponseVO> findAllVendors() {
-        return vendorService.findAll();
+    public Page<VendorResponseVO> findAllVendors(@RequestParam(value = "query", defaultValue = "", required = false) String query,
+                                                 @PageableDefault(sort = {"title"}, direction = Sort.Direction.ASC) Pageable pageable) {
+        return vendorService.findAll(query, pageable);
     }
 
     @GetMapping("/{id}")
