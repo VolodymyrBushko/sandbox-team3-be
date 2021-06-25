@@ -5,6 +5,7 @@ import com.exadel.discountwebapp.category.repository.CategoryRepository;
 import com.exadel.discountwebapp.discount.entity.Discount;
 import com.exadel.discountwebapp.discount.vo.DiscountRequestVO;
 import com.exadel.discountwebapp.discount.vo.DiscountResponseVO;
+import com.exadel.discountwebapp.exception.EntityNotFoundException;
 import com.exadel.discountwebapp.location.entity.Location;
 import com.exadel.discountwebapp.location.mapper.LocationMapper;
 import com.exadel.discountwebapp.location.repository.LocationRepository;
@@ -79,8 +80,10 @@ public class DiscountMapper {
     }
 
     private void provideDiscountDependencies(DiscountRequestVO request, Discount discount) {
-        var vendor = vendorRepository.findById(request.getVendorId()).orElse(null);
-        var category = categoryRepository.findById(request.getCategoryId()).orElse(null);
+        var vendor = vendorRepository.findById(request.getVendorId())
+                .orElseThrow(() -> new EntityNotFoundException("Vendor not found"));
+        var category = categoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new EntityNotFoundException("Category not found"));
 
         List<Location> locations = request.getLocationIds().stream()
                 .map(locationId -> locationRepository.findById(locationId).get())
