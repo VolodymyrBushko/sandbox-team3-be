@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id:  16062021_insert_data_into_tables
+      id:  16062021_insert_data_into_tables-9
       author:  hreshchuk@gmail.com
       changes:
         -  sqlFile:
