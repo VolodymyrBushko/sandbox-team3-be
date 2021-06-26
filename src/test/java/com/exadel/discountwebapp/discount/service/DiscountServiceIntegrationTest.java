@@ -99,6 +99,7 @@ class DiscountServiceIntegrationTest {
         var perUser = 1;
         var categoryId = 10L;
         var vendorId = 10L;
+        var tags = List.of(1L, 2L);
 
         return DiscountRequestVO.builder()
                 .title(title)
@@ -114,6 +115,7 @@ class DiscountServiceIntegrationTest {
                 .perUser(perUser)
                 .categoryId(categoryId)
                 .vendorId(vendorId)
+                .tags(tags)
                 .build();
     }
 
