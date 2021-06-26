@@ -17,12 +17,9 @@ public class CategoryValidator {
         checkDuplicateTitle(request);
     }
 
-    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public void checkDuplicateTitle(CategoryRequestVO request) {
-        categoryRepository.findByTitle(request.getTitle())
-                .ifPresent(category -> {
-                    throw new EntityAlreadyExistsException(
-                            String.format("Category with title \"%s\" already exist", category.getTitle()));
-                });
+        if (categoryRepository.existsByTitle(request.getTitle()))
+            throw new EntityAlreadyExistsException(
+                    String.format("Category with title \"%s\" already exist", request.getTitle()));
     }
 }
