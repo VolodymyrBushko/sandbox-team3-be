@@ -1,5 +1,6 @@
 package com.exadel.discountwebapp.tag.service;
 
+import com.exadel.discountwebapp.exception.EntityAlreadyExistsException;
 import com.exadel.discountwebapp.exception.EntityNotFoundException;
 import com.exadel.discountwebapp.tag.entity.Tag;
 import com.exadel.discountwebapp.tag.mapper.TagMapper;
@@ -38,14 +39,18 @@ public class TagService {
     @Transactional(propagation = Propagation.REQUIRED)
     public TagResponseVO create(TagRequestVO request) {
         Tag tag = tagMapper.toEntity(request);
-        tagRepository.save(tag);
-        return tagMapper.toVO(tag);
+        if (tagRepository.existsByCategoryAndName(tag.getCategory(), tag.getName())) {
+            throw new EntityAlreadyExistsException("Such tag already exists");
+        } else {
+            tagRepository.save(tag);
+            return tagMapper.toVO(tag);
+        }
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public TagResponseVO update(Long id, TagRequestVO request) {
         Tag tag = tagRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Could not find tag with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException(("Could not find tag with id " + id)));
         tagMapper.updateEntity(request, tag);
         tagRepository.save(tag);
         return tagMapper.toVO(tag);
@@ -53,10 +58,10 @@ public class TagService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public void deleteById(Long id) {
-        if (tagRepository.existsById(id)) {
+       if (tagRepository.existsById(id)) {
             tagRepository.deleteById(id);
         } else {
-            throw new EntityNotFoundException("Could not find tag with id: " + id);
+            throw new EntityNotFoundException("Could not find tag with id " + id);
         }
     }
 
@@ -67,7 +72,7 @@ public class TagService {
         if(!response.isEmpty()) {
             return response;
         } else {
-            throw new EntityNotFoundException(("Could not find category with id: " + categoryId));
+            throw new EntityNotFoundException(("Could not find tags for category with id: " + categoryId));
         }
     }
 }

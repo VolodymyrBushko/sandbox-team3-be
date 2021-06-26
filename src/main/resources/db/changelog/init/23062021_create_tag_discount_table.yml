@@ -8,6 +8,13 @@ databaseChangeLog:
             tableName: tag_discount
             columns:
               - column:
+                  name: dis_id
+                  type: BIGINT
+                  constraints:
+                     foreignKeyName: fk_tag_discount_discount
+                     references: discount(dis_id)
+                     nullable: false
+              - column:
                   name: tag_id
                   type: BIGINT
                   constraints:
@@ -15,15 +22,9 @@ databaseChangeLog:
                     references: tag(tag_id)
                     nullable: false
               - column:
-                  name: dis_id
-                  type: BIGINT
-                  constraints:
-                    foreignKeyName: fk_tag_discount_discount
-                    references: discount(dis_id)
-                    nullable: false
-              - column:
                   name: td_created
-                  type: TIMESTAMP WITHOUT TIME ZONE
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
                   constraints:
                     nullable: false
   - changeSet:
@@ -32,7 +33,7 @@ databaseChangeLog:
       changes:
         - addPrimaryKey:
             clustered: true
-            columnNames: tag_id, dis_id
+            columnNames: dis_id, tag_id
             constraintName: pk_tag_id_dis_id
             schemaName: public
             tableName: tag_discount
