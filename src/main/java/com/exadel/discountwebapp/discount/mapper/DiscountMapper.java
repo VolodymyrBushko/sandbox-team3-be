@@ -86,7 +86,8 @@ public class DiscountMapper {
                 .orElseThrow(() -> new EntityNotFoundException("Category not found"));
 
         List<Location> locations = request.getLocationIds().stream()
-                .map(locationId -> locationRepository.findById(locationId).get())
+                .map(locationId -> locationRepository.findById(locationId)
+                .orElseThrow(() -> new EntityNotFoundException("Location not found")))
                 .collect(Collectors.toList());
 
         discount.setLocations(locations);
