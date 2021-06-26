@@ -5,8 +5,6 @@ import com.exadel.discountwebapp.vendor.repository.VendorRepository;
 import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -17,12 +15,9 @@ public class VendorValidator {
         checkDuplicateEmail(request);
     }
 
-    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public void checkDuplicateEmail(VendorRequestVO request) {
-        vendorRepository.findByEmail(request.getEmail())
-                .ifPresent(vendor -> {
-                    throw new EntityAlreadyExistsException(
-                            String.format("Vendor with email \"%s\" already exist", vendor.getEmail()));
-                });
+        if (vendorRepository.existsByEmail(request.getEmail()))
+            throw new EntityAlreadyExistsException(
+                    String.format("Vendor with email \"%s\" already exist", request.getEmail()));
     }
 }
