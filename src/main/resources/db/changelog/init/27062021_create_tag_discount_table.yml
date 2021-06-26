@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 23062021_create_tag_discount_table
+      id: 27062021_create_tag_discount_table
       author: bozhokmaria@gmail.com
       changes:
         - createTable:
@@ -28,7 +28,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
   - changeSet:
-      id: 23062021_add_composite_pk_tag_discount_table
+      id: 27062021_add_composite_pk_tag_discount_table
       author: bozhokmaria@gmail.com
       changes:
         - addPrimaryKey:

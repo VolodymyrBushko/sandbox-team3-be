@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 23062021_create_tag_table
+      id: 27062021_create_tag_table
       author: bozhokmaria@gmail.com
       changes:
         - createTable:
@@ -38,7 +38,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
   - changeSet:
-      id: 24062021_add_uk_tag_table
+      id: 27062021_add_uk_tag_table
       author: bozhokmaria@gmail.com
       changes:
       - addUniqueConstraint:
