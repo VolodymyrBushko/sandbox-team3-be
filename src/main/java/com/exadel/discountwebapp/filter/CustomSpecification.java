@@ -19,6 +19,7 @@ public class CustomSpecification<T> implements Specification<T> {
         SearchOperation operation = criteria.getOperation();
 
         Path<Object> path = createPath(key, root);
+        query.distinct(true);
 
         switch (operation) {
             case EQUALITY:
@@ -46,8 +47,15 @@ public class CustomSpecification<T> implements Specification<T> {
 
     private <X, Y> Path<X> createPath(String key, Root<Y> root) {
         if (key.contains(".")) {
-            String[] pair = key.split("\\.");
-            return root.join(pair[0]).get(pair[1]);
+            String[] split = key.split("\\.");
+            String field = split[split.length - 1];
+            Join<Object, Object> join = root.join(split[0], JoinType.LEFT);
+
+            for (int i = 1; i < split.length - 1; i++) {
+                join = join.join(split[i], JoinType.LEFT);
+            }
+
+            return join.get(field);
         }
         return root.get(key);
     }
