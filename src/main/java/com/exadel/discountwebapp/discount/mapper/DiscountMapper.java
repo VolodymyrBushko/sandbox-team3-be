@@ -6,12 +6,12 @@ import com.exadel.discountwebapp.discount.entity.Discount;
 import com.exadel.discountwebapp.discount.vo.DiscountRequestVO;
 import com.exadel.discountwebapp.discount.vo.DiscountResponseVO;
 import com.exadel.discountwebapp.exception.EntityNotFoundException;
-import com.exadel.discountwebapp.location.entity.Location;
 import com.exadel.discountwebapp.location.mapper.LocationMapper;
 import com.exadel.discountwebapp.location.repository.LocationRepository;
 import com.exadel.discountwebapp.location.vo.LocationResponseVO;
 import com.exadel.discountwebapp.vendor.mapper.VendorMapper;
 import com.exadel.discountwebapp.vendor.repository.VendorRepository;
+import com.google.common.collect.Lists;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.modelmapper.convention.MatchingStrategies;
@@ -85,10 +85,12 @@ public class DiscountMapper {
         var category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new EntityNotFoundException("Category not found"));
 
-        List<Location> locations = request.getLocationIds().stream()
-                .map(locationId -> locationRepository.findById(locationId)
-                .orElseThrow(() -> new EntityNotFoundException("Location not found")))
-                .collect(Collectors.toList());
+        var locations = Lists.newArrayList(locationRepository.findAllById(request.getLocationIds()));
+
+        locations.forEach(el -> {
+            if (request.getLocationIds().size() != locations.size())
+                throw new EntityNotFoundException("Location not found");
+        });
 
         discount.setLocations(locations);
         discount.setVendor(vendor);
