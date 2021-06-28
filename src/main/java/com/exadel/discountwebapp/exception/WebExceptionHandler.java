@@ -5,6 +5,7 @@ import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundExcept
 import com.exadel.discountwebapp.exception.exception.client.IncorrectFilterInputException;
 import com.exadel.discountwebapp.exception.exception.client.ParseException;
 import com.exadel.discountwebapp.exception.response.ExceptionResponse;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -16,6 +17,7 @@ import static org.springframework.http.HttpStatus.*;
 @RestControllerAdvice
 public class WebExceptionHandler {
 
+    private static final String AUTHORIZED_EXCEPTION_CODE = "UNAUTHORIZED";
     private static final String GLOBAL_EXCEPTION_CODE = "INTERNAL_SERVER_ERROR";
     private static final String GLOBAL_EXCEPTION_MESSAGE = "Something is wrong";
 
@@ -55,6 +57,12 @@ public class WebExceptionHandler {
     public ExceptionResponse entityAlreadyExistsException(EntityAlreadyExistsException ex) {
         String code = String.format(RESPONSE_CODE_PATTERN, ex.getClassName(), ex.getFieldName(), UNPROCESSABLE_ENTITY.value());
         return new ExceptionResponse(code, ex.getMessage());
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseStatus(value = UNAUTHORIZED)
+    public ExceptionResponse badCredentialsException(BadCredentialsException ex) {
+        return new ExceptionResponse(AUTHORIZED_EXCEPTION_CODE, ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)

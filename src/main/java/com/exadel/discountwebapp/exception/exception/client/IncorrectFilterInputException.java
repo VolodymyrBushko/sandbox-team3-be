@@ -1,10 +1,10 @@
 package com.exadel.discountwebapp.exception.exception.client;
 
-import com.exadel.discountwebapp.exception.exception.base.ClientInputBaseException;
+import com.exadel.discountwebapp.exception.exception.base.ClientBaseException;
 import lombok.Getter;
 
 @Getter
-public class IncorrectFilterInputException extends ClientInputBaseException {
+public class IncorrectFilterInputException extends ClientBaseException {
 
     private static final String MESSAGE_PATTERN = "Could not find in class %s field %s";
 

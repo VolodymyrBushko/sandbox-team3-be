@@ -9,6 +9,7 @@ import com.exadel.discountwebapp.user.mapper.UserMapper;
 import com.exadel.discountwebapp.user.repository.UserRepository;
 import com.exadel.discountwebapp.user.vo.UserResponseVO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -56,9 +57,9 @@ public class UserService {
         String email = signinVO.getEmail();
         String password = signinVO.getPassword();
         User user = userRepository.findUserByEmail(email)
-                .orElseThrow(() -> new EntityNotFoundException("User", "email", email));
+                .orElseThrow(() -> new BadCredentialsException("Wrong email or password"));
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new EntityNotFoundException("User", "password", password);
+            throw new BadCredentialsException("Wrong email or password");
         }
         return new UserResponseVO().builder()
                 .email(email)
