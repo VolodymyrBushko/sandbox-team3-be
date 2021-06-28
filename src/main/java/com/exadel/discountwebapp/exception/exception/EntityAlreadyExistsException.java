@@ -1,4 +1,4 @@
-package com.exadel.discountwebapp.exception;
+package com.exadel.discountwebapp.exception.exception;
 
 public class EntityAlreadyExistsException extends RuntimeException {
 

@@ -5,7 +5,7 @@ import com.exadel.discountwebapp.category.mapper.CategoryMapper;
 import com.exadel.discountwebapp.category.repository.CategoryRepository;
 import com.exadel.discountwebapp.category.vo.CategoryRequestVO;
 import com.exadel.discountwebapp.category.vo.CategoryResponseVO;
-import com.exadel.discountwebapp.exception.EntityNotFoundException;
+import com.exadel.discountwebapp.exception.exception.EntityNotFoundException;
 import com.exadel.discountwebapp.validation.CategoryValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,7 @@ public class CategoryService {
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public CategoryResponseVO findById(Long id) {
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Could not find category with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Category", "id", id));
         return categoryMapper.toVO(category);
     }
 
@@ -49,7 +49,7 @@ public class CategoryService {
     public CategoryResponseVO update(Long id, CategoryRequestVO request) {
         categoryValidator.validate(request);
         Category category = categoryRepository.findById(id).
-                orElseThrow(() -> new EntityNotFoundException("Could not find category with id: " + id));
+                orElseThrow(() -> new EntityNotFoundException("Category", "id", id));
         categoryMapper.updateEntity(request, category);
         categoryRepository.save(category);
         return categoryMapper.toVO(category);

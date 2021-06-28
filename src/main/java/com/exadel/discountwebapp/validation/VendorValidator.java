@@ -1,6 +1,6 @@
 package com.exadel.discountwebapp.validation;
 
-import com.exadel.discountwebapp.exception.EntityAlreadyExistsException;
+import com.exadel.discountwebapp.exception.exception.EntityAlreadyExistsException;
 import com.exadel.discountwebapp.vendor.repository.VendorRepository;
 import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,6 @@
 package com.exadel.discountwebapp.user.service;
 
-import com.exadel.discountwebapp.exception.EntityNotFoundException;
+import com.exadel.discountwebapp.exception.exception.EntityNotFoundException;
 import com.exadel.discountwebapp.role.mapper.RoleMapper;
 import com.exadel.discountwebapp.security.CustomUserDetails;
 import com.exadel.discountwebapp.security.SigninVO;
@@ -9,7 +9,6 @@ import com.exadel.discountwebapp.user.mapper.UserMapper;
 import com.exadel.discountwebapp.user.repository.UserRepository;
 import com.exadel.discountwebapp.user.vo.UserResponseVO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,8 +24,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+
+    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final RoleMapper roleMapper;
     private final UserMapper mapper;
@@ -34,7 +33,7 @@ public class UserService {
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public UserResponseVO findById(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Could not find user with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("User", "id", id));
         return mapper.toVO(user);
     }
 
@@ -48,7 +47,7 @@ public class UserService {
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public UserResponseVO findByEmail(String email) {
         User user = userRepository.findUserByEmail(email)
-                .orElseThrow(() -> new EntityNotFoundException("Could not find user by email: " + email));
+                .orElseThrow(() -> new EntityNotFoundException("User", "email", email));
         return mapper.toVO(user);
     }
 
@@ -57,9 +56,9 @@ public class UserService {
         String email = signinVO.getEmail();
         String password = signinVO.getPassword();
         User user = userRepository.findUserByEmail(email)
-                .orElseThrow(() -> new EntityNotFoundException("The email was not found, email=" + email));
+                .orElseThrow(() -> new EntityNotFoundException("User", "email", email));
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new EntityNotFoundException("Password does not match");
+            throw new EntityNotFoundException("User", "password", password);
         }
         return new UserResponseVO().builder()
                 .email(email)

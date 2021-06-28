@@ -1,6 +1,6 @@
 package com.exadel.discountwebapp.security;
 
-import com.exadel.discountwebapp.exception.EntityNotFoundException;
+import com.exadel.discountwebapp.exception.exception.EntityNotFoundException;
 import com.exadel.discountwebapp.user.service.UserService;
 import com.exadel.discountwebapp.user.vo.UserResponseVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class LoginController {
         try {
             userResponse = userService.findByLoginAndPassword(signinVO);
         } catch (EntityNotFoundException e) {
-            throw new EntityNotFoundException("Login or Password is wrong! Try again!");
+            // throw new EntityNotFoundException("Login or Password is wrong! Try again!");
         }
         return new TokenResponse(jwtProvider.generateToken(userResponse.getEmail()));
     }

@@ -1,6 +1,6 @@
 package com.exadel.discountwebapp.role.service;
 
-import com.exadel.discountwebapp.exception.EntityNotFoundException;
+import com.exadel.discountwebapp.exception.exception.EntityNotFoundException;
 import com.exadel.discountwebapp.role.entity.Role;
 import com.exadel.discountwebapp.role.mapper.RoleMapper;
 import com.exadel.discountwebapp.role.repository.RoleRepository;
@@ -23,7 +23,8 @@ public class RoleService {
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public RoleResponseVO getRoleById(Long id) {
-        Role role = roleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException((String.format("No role exist with given id = %d", id))));
+        Role role = roleRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Role", "id", id));
         return roleMapper.toVO(role);
     }
 

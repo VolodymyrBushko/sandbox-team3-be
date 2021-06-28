@@ -1,5 +1,9 @@
 package com.exadel.discountwebapp.exception;
 
+import com.exadel.discountwebapp.exception.exception.EntityAlreadyExistsException;
+import com.exadel.discountwebapp.exception.exception.EntityBaseException;
+import com.exadel.discountwebapp.exception.exception.EntityNotFoundException;
+import com.exadel.discountwebapp.exception.exception.NotAllowedOperationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
@@ -15,15 +19,14 @@ public class WebExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)
-    public String methodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        FieldError field = ex.getBindingResult().getFieldError();
-        return String.format("%s.%s.%s", field.getObjectName(), field.getField(), field.getDefaultMessage());
+    public ExceptionResponse methodArgumentNotValidException(MethodArgumentNotValidException ex) {
+        return createResponse(ex, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    public String entityNotFoundException(EntityNotFoundException ex) {
-        return ex.getMessage();
+    public ExceptionResponse entityNotFoundException(EntityNotFoundException ex) {
+        return createResponse(ex, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = {
@@ -65,5 +68,24 @@ public class WebExceptionHandler {
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public String globalException() {
         return "Something is wrong";
+    }
+
+    private ExceptionResponse createResponse(Exception ex, HttpStatus httpStatus) {
+        String code = "INTERNAL_SERVER_ERROR";
+        String message = "Something is wrong";
+        int httpStatusCode = httpStatus.value();
+
+        if (ex instanceof MethodArgumentNotValidException) {
+            MethodArgumentNotValidException specificEx = ((MethodArgumentNotValidException) ex);
+            FieldError field = specificEx.getBindingResult().getFieldError();
+            code = String.format("%s.%s.%s", field.getObjectName(), field.getField(), httpStatusCode);
+            message = field.getDefaultMessage();
+        } else if (ex instanceof EntityBaseException) {
+            EntityBaseException specificEx = ((EntityBaseException) ex);
+            code = String.format("%s.%s.%s", specificEx.getClassName(), specificEx.getFieldName(), httpStatusCode);
+            message = specificEx.getMessage();
+        }
+
+        return new ExceptionResponse(code, message);
     }
 }

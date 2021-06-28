@@ -1,6 +1,6 @@
 package com.exadel.discountwebapp.filter;
 
-import com.exadel.discountwebapp.exception.NotAllowedOperationException;
+import com.exadel.discountwebapp.exception.exception.NotAllowedOperationException;
 
 import java.util.Arrays;
 

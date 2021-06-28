@@ -2,7 +2,7 @@ package com.exadel.discountwebapp.validation;
 
 import com.exadel.discountwebapp.category.repository.CategoryRepository;
 import com.exadel.discountwebapp.category.vo.CategoryRequestVO;
-import com.exadel.discountwebapp.exception.EntityAlreadyExistsException;
+import com.exadel.discountwebapp.exception.exception.EntityAlreadyExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
