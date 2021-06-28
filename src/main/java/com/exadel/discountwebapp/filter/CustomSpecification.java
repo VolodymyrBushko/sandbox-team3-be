@@ -1,10 +1,13 @@
 package com.exadel.discountwebapp.filter;
 
+import com.exadel.discountwebapp.exception.exception.IncorrectFilterInputException;
+import com.exadel.discountwebapp.exception.exception.ParseException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 
 @RequiredArgsConstructor
 public class CustomSpecification<T> implements Specification<T> {
@@ -13,26 +16,33 @@ public class CustomSpecification<T> implements Specification<T> {
 
     @Override
     public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
+        Path<Object> path = null;
+        String className = root.getJavaType().getSimpleName();
 
         String key = criteria.getKey();
         String value = criteria.getValue();
         SearchOperation operation = criteria.getOperation();
 
-        Path<Object> path = createPath(key, root);
+        try {
+            path = createPath(key, root);
+        } catch (IllegalArgumentException ex) {
+            throw new IncorrectFilterInputException(className, key, value);
+        }
+
         query.distinct(true);
 
         switch (operation) {
             case EQUALITY:
                 return path.getJavaType() == LocalDateTime.class
-                        ? builder.equal(path.as(LocalDateTime.class), LocalDateTime.parse(value))
+                        ? builder.equal(path.as(LocalDateTime.class), parseLocalDateTime(className, key, value))
                         : builder.equal(path.as(String.class), value);
             case LESS_THAN:
                 return path.getJavaType() == LocalDateTime.class
-                        ? builder.lessThan(path.as(LocalDateTime.class), LocalDateTime.parse(value))
+                        ? builder.lessThan(path.as(LocalDateTime.class), parseLocalDateTime(className, key, value))
                         : builder.lessThan(path.as(String.class), value);
             case GREATER_THAN:
                 return path.getJavaType() == LocalDateTime.class
-                        ? builder.greaterThan(path.as(LocalDateTime.class), LocalDateTime.parse(value))
+                        ? builder.greaterThan(path.as(LocalDateTime.class), parseLocalDateTime(className, key, value))
                         : builder.greaterThan(path.as(String.class), value);
             case STARTS_WITH:
                 return builder.like(path.as(String.class), value + "%");
@@ -58,5 +68,13 @@ public class CustomSpecification<T> implements Specification<T> {
             return join.get(field);
         }
         return root.get(key);
+    }
+
+    private LocalDateTime parseLocalDateTime(String className, String fieldName, String value) {
+        try {
+            return LocalDateTime.parse(value);
+        } catch (DateTimeParseException ex) {
+            throw new ParseException(className, fieldName, value);
+        }
     }
 }

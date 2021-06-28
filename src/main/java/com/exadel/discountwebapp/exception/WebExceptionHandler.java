@@ -1,10 +1,9 @@
 package com.exadel.discountwebapp.exception;
 
 import com.exadel.discountwebapp.exception.exception.EntityAlreadyExistsException;
-import com.exadel.discountwebapp.exception.exception.EntityBaseException;
 import com.exadel.discountwebapp.exception.exception.EntityNotFoundException;
-import com.exadel.discountwebapp.exception.exception.NotAllowedOperationException;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
+import com.exadel.discountwebapp.exception.exception.IncorrectFilterInputException;
+import com.exadel.discountwebapp.exception.exception.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -12,50 +11,40 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.time.format.DateTimeParseException;
+import static org.springframework.http.HttpStatus.*;
 
 @RestControllerAdvice
 public class WebExceptionHandler {
 
+    private static final String RESPONSE_CODE_PATTERN = "%s.%s.%s";
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)
-    public ExceptionResponse methodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        return createResponse(ex, HttpStatus.UNPROCESSABLE_ENTITY);
+    @ResponseStatus(value = UNPROCESSABLE_ENTITY)
+    public ExceptionResponse unprocessableEntityException(MethodArgumentNotValidException ex) {
+        FieldError field = ex.getBindingResult().getFieldError();
+        String code = String.format(RESPONSE_CODE_PATTERN, field.getObjectName(), field.getField(), UNPROCESSABLE_ENTITY.value());
+        return new ExceptionResponse(code, field.getDefaultMessage());
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    public ExceptionResponse entityNotFoundException(EntityNotFoundException ex) {
-        return createResponse(ex, HttpStatus.NOT_FOUND);
+    @ResponseStatus(value = NOT_FOUND)
+    public ExceptionResponse notFoundException(EntityNotFoundException ex) {
+        String code = String.format(RESPONSE_CODE_PATTERN, ex.getClassName(), ex.getFieldName(), NOT_FOUND.value());
+        return new ExceptionResponse(code, ex.getMessage());
     }
 
-    @ExceptionHandler(value = {
-            InvalidDataAccessApiUsageException.class,
-            NotAllowedOperationException.class
-    })
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public String badRequestException(Exception ex) {
-        switch (ex.getClass().getSimpleName()) {
-            case "InvalidDataAccessApiUsageException":
-                int index = ex.getMessage().indexOf("]") + 1;
-                return ex.getMessage().substring(0, index);
-            case "NotAllowedOperationException":
-                return ex.getMessage();
-            default:
-                return "Bad request";
-        }
+    @ExceptionHandler(value = IncorrectFilterInputException.class)
+    @ResponseStatus(value = BAD_REQUEST)
+    public ExceptionResponse badRequestException(IncorrectFilterInputException ex) {
+        String code = String.format(RESPONSE_CODE_PATTERN, ex.getClassName(), ex.getFieldName(), BAD_REQUEST.value());
+        return new ExceptionResponse(code, ex.getMessage());
     }
 
-    @ExceptionHandler(DateTimeParseException.class)
-    @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)
-    public String userInputParseException(Exception ex) {
-        switch (ex.getClass().getSimpleName()) {
-            case "DateTimeParseException":
-                String parsedString = ((DateTimeParseException) ex).getParsedString();
-                return String.format("Could not parse [%s] in DateTime format", parsedString);
-            default:
-                return "Bad input";
-        }
+    @ExceptionHandler(ParseException.class)
+    @ResponseStatus(value = UNPROCESSABLE_ENTITY)
+    public ExceptionResponse unprocessableEntityParseException(ParseException ex) {
+        String code = String.format(RESPONSE_CODE_PATTERN, ex.getClassName(), ex.getFieldName(), UNPROCESSABLE_ENTITY.value());
+        return new ExceptionResponse(code, ex.getMessage());
     }
 
     @ExceptionHandler(EntityAlreadyExistsException.class)
@@ -68,24 +57,5 @@ public class WebExceptionHandler {
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public String globalException() {
         return "Something is wrong";
-    }
-
-    private ExceptionResponse createResponse(Exception ex, HttpStatus httpStatus) {
-        String code = "INTERNAL_SERVER_ERROR";
-        String message = "Something is wrong";
-        int httpStatusCode = httpStatus.value();
-
-        if (ex instanceof MethodArgumentNotValidException) {
-            MethodArgumentNotValidException specificEx = ((MethodArgumentNotValidException) ex);
-            FieldError field = specificEx.getBindingResult().getFieldError();
-            code = String.format("%s.%s.%s", field.getObjectName(), field.getField(), httpStatusCode);
-            message = field.getDefaultMessage();
-        } else if (ex instanceof EntityBaseException) {
-            EntityBaseException specificEx = ((EntityBaseException) ex);
-            code = String.format("%s.%s.%s", specificEx.getClassName(), specificEx.getFieldName(), httpStatusCode);
-            message = specificEx.getMessage();
-        }
-
-        return new ExceptionResponse(code, message);
     }
 }
