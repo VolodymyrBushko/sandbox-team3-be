@@ -16,10 +16,8 @@ public class VendorValidator {
     }
 
     public void checkDuplicateEmail(VendorRequestVO request) {
-        vendorRepository.findByEmail(request.getEmail())
-                .ifPresent(vendor -> {
-                    throw new EntityAlreadyExistsException(
-                            String.format("Vendor with email \"%s\" already exist", vendor.getEmail()));
-                });
+        if (vendorRepository.existsByEmail(request.getEmail()))
+            throw new EntityAlreadyExistsException(
+                    String.format("Vendor with email \"%s\" already exist", request.getEmail()));
     }
 }
