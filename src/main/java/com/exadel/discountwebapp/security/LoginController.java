@@ -1,6 +1,6 @@
 package com.exadel.discountwebapp.security;
 
-import com.exadel.discountwebapp.exception.exception.EntityNotFoundException;
+import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.user.service.UserService;
 import com.exadel.discountwebapp.user.vo.UserResponseVO;
 import org.springframework.beans.factory.annotation.Autowired;

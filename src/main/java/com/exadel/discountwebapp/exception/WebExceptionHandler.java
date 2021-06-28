@@ -1,10 +1,10 @@
 package com.exadel.discountwebapp.exception;
 
-import com.exadel.discountwebapp.exception.exception.EntityAlreadyExistsException;
-import com.exadel.discountwebapp.exception.exception.EntityNotFoundException;
-import com.exadel.discountwebapp.exception.exception.IncorrectFilterInputException;
-import com.exadel.discountwebapp.exception.exception.ParseException;
-import org.springframework.http.HttpStatus;
+import com.exadel.discountwebapp.exception.exception.client.EntityAlreadyExistsException;
+import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
+import com.exadel.discountwebapp.exception.exception.client.IncorrectFilterInputException;
+import com.exadel.discountwebapp.exception.exception.client.ParseException;
+import com.exadel.discountwebapp.exception.response.ExceptionResponse;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,6 +15,9 @@ import static org.springframework.http.HttpStatus.*;
 
 @RestControllerAdvice
 public class WebExceptionHandler {
+
+    private static final String GLOBAL_EXCEPTION_CODE = "INTERNAL_SERVER_ERROR";
+    private static final String GLOBAL_EXCEPTION_MESSAGE = "Something is wrong";
 
     private static final String RESPONSE_CODE_PATTERN = "%s.%s.%s";
 
@@ -48,14 +51,15 @@ public class WebExceptionHandler {
     }
 
     @ExceptionHandler(EntityAlreadyExistsException.class)
-    @ResponseStatus(value = HttpStatus.CONFLICT)
-    public String entityAlreadyExistsException(EntityAlreadyExistsException ex) {
-        return ex.getMessage();
+    @ResponseStatus(value = CONFLICT)
+    public ExceptionResponse entityAlreadyExistsException(EntityAlreadyExistsException ex) {
+        String code = String.format(RESPONSE_CODE_PATTERN, ex.getClassName(), ex.getFieldName(), UNPROCESSABLE_ENTITY.value());
+        return new ExceptionResponse(code, ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    public String globalException() {
-        return "Something is wrong";
+    @ResponseStatus(value = INTERNAL_SERVER_ERROR)
+    public ExceptionResponse globalException() {
+        return new ExceptionResponse(GLOBAL_EXCEPTION_CODE, GLOBAL_EXCEPTION_MESSAGE);
     }
 }

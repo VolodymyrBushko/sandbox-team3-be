@@ -1,7 +1,7 @@
 package com.exadel.discountwebapp.filter;
 
-import com.exadel.discountwebapp.exception.exception.IncorrectFilterInputException;
-import com.exadel.discountwebapp.exception.exception.ParseException;
+import com.exadel.discountwebapp.exception.exception.client.IncorrectFilterInputException;
+import com.exadel.discountwebapp.exception.exception.client.ParseException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 

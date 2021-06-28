@@ -1,4 +1,4 @@
-package com.exadel.discountwebapp.exception.exception;
+package com.exadel.discountwebapp.exception.exception.base;
 
 import lombok.Getter;
 

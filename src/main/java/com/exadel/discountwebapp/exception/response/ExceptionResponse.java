@@ -1,4 +1,4 @@
-package com.exadel.discountwebapp.exception;
+package com.exadel.discountwebapp.exception.response;
 
 import lombok.*;
 

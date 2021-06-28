@@ -1,7 +1,5 @@
 package com.exadel.discountwebapp.filter;
 
-import com.exadel.discountwebapp.exception.exception.NotAllowedOperationException;
-
 import java.util.Arrays;
 
 public enum SearchOperation {
@@ -22,6 +20,6 @@ public enum SearchOperation {
         return Arrays.stream(values())
                 .filter(e -> e.operation.equals(input))
                 .findFirst()
-                .orElseThrow(() -> new NotAllowedOperationException(String.format("Operation [%s] is not allowed", input)));
+                .orElse(EQUALITY);
     }
 }
