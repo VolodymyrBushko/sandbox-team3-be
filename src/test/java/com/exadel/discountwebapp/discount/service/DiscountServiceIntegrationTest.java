@@ -52,7 +52,6 @@ class DiscountServiceIntegrationTest {
         });
     }
 
-    @WithMockUser
     @Test
     void shouldFindAllDiscounts() {
         var query = "title:38% discount;";
