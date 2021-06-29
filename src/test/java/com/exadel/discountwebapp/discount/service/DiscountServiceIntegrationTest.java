@@ -34,7 +34,6 @@ class DiscountServiceIntegrationTest {
     @Autowired
     private DiscountRepository discountRepository;
 
-    @WithMockUser
     @Test
     void shouldFindDiscountById() {
         var id = 1L;
