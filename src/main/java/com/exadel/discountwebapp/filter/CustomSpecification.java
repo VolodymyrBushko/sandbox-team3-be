@@ -17,7 +17,7 @@ public class CustomSpecification<T> implements Specification<T> {
     @Override
     public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
         Path<Object> path = null;
-        String className = root.getJavaType().getSimpleName();
+        Class clazz = root.getJavaType();
 
         String key = criteria.getKey();
         String value = criteria.getValue();
@@ -26,7 +26,7 @@ public class CustomSpecification<T> implements Specification<T> {
         try {
             path = createPath(key, root);
         } catch (IllegalArgumentException ex) {
-            throw new IncorrectFilterInputException(className, key, value);
+            throw new IncorrectFilterInputException(clazz, key, value);
         }
 
         query.distinct(true);
@@ -34,15 +34,15 @@ public class CustomSpecification<T> implements Specification<T> {
         switch (operation) {
             case EQUALITY:
                 return path.getJavaType() == LocalDateTime.class
-                        ? builder.equal(path.as(LocalDateTime.class), parseLocalDateTime(className, key, value))
+                        ? builder.equal(path.as(LocalDateTime.class), parseLocalDateTime(clazz, key, value))
                         : builder.equal(path.as(String.class), value);
             case LESS_THAN:
                 return path.getJavaType() == LocalDateTime.class
-                        ? builder.lessThan(path.as(LocalDateTime.class), parseLocalDateTime(className, key, value))
+                        ? builder.lessThan(path.as(LocalDateTime.class), parseLocalDateTime(clazz, key, value))
                         : builder.lessThan(path.as(String.class), value);
             case GREATER_THAN:
                 return path.getJavaType() == LocalDateTime.class
-                        ? builder.greaterThan(path.as(LocalDateTime.class), parseLocalDateTime(className, key, value))
+                        ? builder.greaterThan(path.as(LocalDateTime.class), parseLocalDateTime(clazz, key, value))
                         : builder.greaterThan(path.as(String.class), value);
             case STARTS_WITH:
                 return builder.like(path.as(String.class), value + "%");
@@ -70,11 +70,11 @@ public class CustomSpecification<T> implements Specification<T> {
         return root.get(key);
     }
 
-    private LocalDateTime parseLocalDateTime(String className, String fieldName, String value) {
+    private LocalDateTime parseLocalDateTime(Class clazz, String fieldName, String value) {
         try {
             return LocalDateTime.parse(value);
         } catch (DateTimeParseException ex) {
-            throw new ParseException(className, fieldName, value);
+            throw new ParseException(clazz, fieldName, value);
         }
     }
 }

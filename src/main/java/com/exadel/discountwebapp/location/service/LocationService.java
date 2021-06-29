@@ -69,7 +69,7 @@ public class LocationService {
     @Transactional(propagation = Propagation.REQUIRED)
     public Location getLocationById(Long id) {
         return locationRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Location", "id", id));
+                .orElseThrow(() -> new EntityNotFoundException(Location.class, "id", id));
     }
 
     private List<LocationResponseVO> getLocationResponseVO(List<Location> locations) {

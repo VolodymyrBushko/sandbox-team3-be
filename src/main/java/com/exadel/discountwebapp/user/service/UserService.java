@@ -34,7 +34,7 @@ public class UserService {
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public UserResponseVO findById(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User", "id", id));
+                .orElseThrow(() -> new EntityNotFoundException(User.class, "id", id));
         return mapper.toVO(user);
     }
 
@@ -48,7 +48,7 @@ public class UserService {
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public UserResponseVO findByEmail(String email) {
         User user = userRepository.findUserByEmail(email)
-                .orElseThrow(() -> new EntityNotFoundException("User", "email", email));
+                .orElseThrow(() -> new EntityNotFoundException(User.class, "email", email));
         return mapper.toVO(user);
     }
 

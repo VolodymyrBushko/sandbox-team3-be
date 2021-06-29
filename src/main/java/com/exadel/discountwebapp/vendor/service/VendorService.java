@@ -41,7 +41,7 @@ public class VendorService {
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public VendorResponseVO findByTitle(String title) {
         Optional<Vendor> vendor = Optional.ofNullable(vendorRepository.findByTitle(title)
-                .orElseThrow(() -> new EntityNotFoundException("Vendor", "title", title)));
+                .orElseThrow(() -> new EntityNotFoundException(Vendor.class, "title", title)));
         return vendor.map(vendorMapper::toVO).orElse(null);
     }
 
@@ -65,6 +65,6 @@ public class VendorService {
 
     private Vendor getVendorById(Long id) {
         return vendorRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Vendor", "id", id));
+                .orElseThrow(() -> new EntityNotFoundException(Vendor.class, "id", id));
     }
 }

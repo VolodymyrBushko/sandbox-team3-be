@@ -1,7 +1,11 @@
 package com.exadel.discountwebapp.filter;
 
+import com.exadel.discountwebapp.exception.exception.client.NotAllowedOperationException;
+import lombok.Getter;
+
 import java.util.Arrays;
 
+@Getter
 public enum SearchOperation {
     EQUALITY(":"),
     STARTS_WITH(":*"),
@@ -20,6 +24,6 @@ public enum SearchOperation {
         return Arrays.stream(values())
                 .filter(e -> e.operation.equals(input))
                 .findFirst()
-                .orElse(EQUALITY);
+                .orElseThrow(() -> new NotAllowedOperationException(input));
     }
 }

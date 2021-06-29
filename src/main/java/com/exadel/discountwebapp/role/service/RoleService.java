@@ -24,7 +24,7 @@ public class RoleService {
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public RoleResponseVO getRoleById(Long id) {
         Role role = roleRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Role", "id", id));
+                .orElseThrow(() -> new EntityNotFoundException(Role.class, "id", id));
         return roleMapper.toVO(role);
     }
 

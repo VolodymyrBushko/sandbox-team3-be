@@ -1,5 +1,6 @@
 package com.exadel.discountwebapp.validation;
 
+import com.exadel.discountwebapp.category.entity.Category;
 import com.exadel.discountwebapp.category.repository.CategoryRepository;
 import com.exadel.discountwebapp.category.vo.CategoryRequestVO;
 import com.exadel.discountwebapp.exception.exception.client.EntityAlreadyExistsException;
@@ -19,7 +20,7 @@ public class CategoryValidator {
     public void checkDuplicateTitle(CategoryRequestVO request) {
         categoryRepository.findByTitle(request.getTitle())
                 .ifPresent(category -> {
-                    throw new EntityAlreadyExistsException("Category", "title", category.getTitle());
+                    throw new EntityAlreadyExistsException(Category.class, "title", category.getTitle());
                 });
     }
 }

@@ -8,7 +8,7 @@ public class EntityAlreadyExistsException extends ClientBaseException {
 
     private static final String MESSAGE_PATTERN = "%s already exists with %s: %s";
 
-    public EntityAlreadyExistsException(String className, String fieldName, Object value) {
-        super(className, fieldName, value, MESSAGE_PATTERN);
+    public EntityAlreadyExistsException(Class clazz, String fieldName, Object value) {
+        super(clazz, fieldName, value, MESSAGE_PATTERN);
     }
 }

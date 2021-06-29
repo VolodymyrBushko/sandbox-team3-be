@@ -1,6 +1,7 @@
 package com.exadel.discountwebapp.validation;
 
 import com.exadel.discountwebapp.exception.exception.client.EntityAlreadyExistsException;
+import com.exadel.discountwebapp.vendor.entity.Vendor;
 import com.exadel.discountwebapp.vendor.repository.VendorRepository;
 import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class VendorValidator {
     public void checkDuplicateEmail(VendorRequestVO request) {
         vendorRepository.findByEmail(request.getEmail())
                 .ifPresent(vendor -> {
-                    throw new EntityAlreadyExistsException("Vendor", "email", vendor.getEmail());
+                    throw new EntityAlreadyExistsException(Vendor.class, "email", vendor.getEmail());
                 });
     }
 }

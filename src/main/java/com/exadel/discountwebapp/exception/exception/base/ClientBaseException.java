@@ -5,13 +5,13 @@ import lombok.Getter;
 @Getter
 public abstract class ClientBaseException extends RuntimeException {
 
-    private final String className;
+    private final Class clazz;
     private final String fieldName;
 
-    protected ClientBaseException(String className, String fieldName, Object value, String messagePattern) {
-        super(String.format(messagePattern, className, fieldName, value));
+    protected ClientBaseException(Class clazz, String fieldName, Object value, String messagePattern) {
+        super(String.format(messagePattern, clazz.getSimpleName(), fieldName, value));
 
-        this.className = className;
+        this.clazz = clazz;
         this.fieldName = fieldName;
     }
 }

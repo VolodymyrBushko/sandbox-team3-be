@@ -33,7 +33,7 @@ public class CategoryService {
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public CategoryResponseVO findById(Long id) {
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Category", "id", id));
+                .orElseThrow(() -> new EntityNotFoundException(Category.class, "id", id));
         return categoryMapper.toVO(category);
     }
 
@@ -49,7 +49,7 @@ public class CategoryService {
     public CategoryResponseVO update(Long id, CategoryRequestVO request) {
         categoryValidator.validate(request);
         Category category = categoryRepository.findById(id).
-                orElseThrow(() -> new EntityNotFoundException("Category", "id", id));
+                orElseThrow(() -> new EntityNotFoundException(Category.class, "id", id));
         categoryMapper.updateEntity(request, category);
         categoryRepository.save(category);
         return categoryMapper.toVO(category);
