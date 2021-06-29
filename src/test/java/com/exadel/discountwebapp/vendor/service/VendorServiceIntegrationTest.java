@@ -1,6 +1,6 @@
 package com.exadel.discountwebapp.vendor.service;
 
-import com.exadel.discountwebapp.exception.EntityNotFoundException;
+import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.vendor.entity.Vendor;
 import com.exadel.discountwebapp.vendor.repository.VendorRepository;
 import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;

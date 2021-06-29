@@ -1,6 +1,6 @@
 package com.exadel.discountwebapp.location.service;
 
-import com.exadel.discountwebapp.exception.EntityNotFoundException;
+import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.location.entity.Location;
 import com.exadel.discountwebapp.location.repository.LocationRepository;
 import com.exadel.discountwebapp.location.vo.LocationRequestVO;
