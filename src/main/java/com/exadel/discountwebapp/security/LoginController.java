@@ -1,10 +1,8 @@
 package com.exadel.discountwebapp.security;
 
-import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.user.service.UserService;
 import com.exadel.discountwebapp.user.vo.UserResponseVO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;

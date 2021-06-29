@@ -1,11 +1,13 @@
 package com.exadel.discountwebapp.discount.mapper;
 
+import com.exadel.discountwebapp.category.entity.Category;
 import com.exadel.discountwebapp.category.mapper.CategoryMapper;
 import com.exadel.discountwebapp.category.repository.CategoryRepository;
 import com.exadel.discountwebapp.discount.entity.Discount;
 import com.exadel.discountwebapp.discount.vo.DiscountRequestVO;
 import com.exadel.discountwebapp.discount.vo.DiscountResponseVO;
-import com.exadel.discountwebapp.exception.EntityNotFoundException;
+import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
+import com.exadel.discountwebapp.location.entity.Location;
 import com.exadel.discountwebapp.location.mapper.LocationMapper;
 import com.exadel.discountwebapp.location.repository.LocationRepository;
 import com.exadel.discountwebapp.location.vo.LocationResponseVO;
@@ -17,6 +19,7 @@ import org.modelmapper.PropertyMap;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import com.exadel.discountwebapp.vendor.entity.Vendor;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -81,16 +84,14 @@ public class DiscountMapper {
 
     private void provideDiscountDependencies(DiscountRequestVO request, Discount discount) {
         var vendor = vendorRepository.findById(request.getVendorId())
-                .orElseThrow(() -> new EntityNotFoundException("Vendor not found"));
+                .orElseThrow(() -> new EntityNotFoundException(Vendor.class, "id", request.getVendorId()));
         var category = categoryRepository.findById(request.getCategoryId())
-                .orElseThrow(() -> new EntityNotFoundException("Category not found"));
+                .orElseThrow(() -> new EntityNotFoundException(Category.class, "id", request.getCategoryId()));
 
         var locations = Lists.newArrayList(locationRepository.findAllById(request.getLocationIds()));
 
-        locations.forEach(el -> {
-            if (request.getLocationIds().size() != locations.size())
-                throw new EntityNotFoundException("Location not found");
-        });
+        if (request.getLocationIds().size() != locations.size())
+            throw new EntityNotFoundException(Location.class, "id", "...");
 
         discount.setLocations(locations);
         discount.setVendor(vendor);
