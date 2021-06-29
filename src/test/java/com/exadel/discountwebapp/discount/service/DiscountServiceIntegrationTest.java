@@ -14,7 +14,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.math.BigDecimal;
@@ -34,7 +33,6 @@ class DiscountServiceIntegrationTest {
     @Autowired
     private DiscountRepository discountRepository;
 
-    @WithMockUser
     @Test
     void shouldFindDiscountById() {
         var id = 1L;
