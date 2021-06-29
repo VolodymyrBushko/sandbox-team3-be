@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.math.BigDecimal;
@@ -33,6 +34,7 @@ class DiscountServiceIntegrationTest {
     @Autowired
     private DiscountRepository discountRepository;
 
+    @WithMockUser
     @Test
     void shouldFindDiscountById() {
         var id = 1L;
@@ -50,6 +52,7 @@ class DiscountServiceIntegrationTest {
         });
     }
 
+    @WithMockUser
     @Test
     void shouldFindAllDiscounts() {
         var query = "title:38% discount;";
@@ -99,7 +102,8 @@ class DiscountServiceIntegrationTest {
         var perUser = 1;
         var categoryId = 10L;
         var vendorId = 10L;
-        var tags = List.of(1L, 2L);
+        var tagIds = List.of(1L, 2L);
+        var locationIds = List.of(10L, 20L);
 
         return DiscountRequestVO.builder()
                 .title(title)
@@ -115,7 +119,8 @@ class DiscountServiceIntegrationTest {
                 .perUser(perUser)
                 .categoryId(categoryId)
                 .vendorId(vendorId)
-                .tags(tags)
+                .tagIds(tagIds)
+                .locationIds(locationIds)
                 .build();
     }
 
@@ -157,6 +162,8 @@ class DiscountServiceIntegrationTest {
         assertNotNull(actual.getVendor());
         assertEquals(expected.getCategoryId(), actual.getCategory().getId());
         assertEquals(expected.getVendorId(), actual.getVendor().getId());
+        assertEquals(expected.getLocationIds().size(), actual.getLocations().size());
+        assertEquals(expected.getTagIds().size(), actual.getTags().size());
     }
 
     private void matchAll(List<Discount> expected, List<DiscountResponseVO> actual) {

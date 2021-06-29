@@ -47,7 +47,6 @@ public class TagServiceIntegrationTest {
         var id = 1L;
         var expected = tagRepository.findById(id).get();
         var actual = tagService.findById(id);
-        assertEquals(expected.getId(), actual.getId());
         assertEquals(expected.getName(), actual.getName());
     }
 
@@ -71,7 +70,7 @@ public class TagServiceIntegrationTest {
         var expected = TagRequestVO.builder().name("dogs").categoryId(20L).build();
         var updateTag = tagService.update(id, expected);
 
-        var actual = tagRepository.findById(updateTag.getId()).get();
+        var actual = tagRepository.findById(id).get();
 
         assertNotNull(actual);
         assertEquals(actual.getId(), id);

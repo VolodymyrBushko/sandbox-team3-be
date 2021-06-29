@@ -13,4 +13,6 @@ public interface VendorRepository
     Optional<Vendor> findByTitle(String title);
 
     Optional<Vendor> findByEmail(String email);
+
+    boolean existsByEmail(String email);
 }

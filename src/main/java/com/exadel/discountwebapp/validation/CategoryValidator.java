@@ -4,6 +4,7 @@ import com.exadel.discountwebapp.category.repository.CategoryRepository;
 import com.exadel.discountwebapp.category.vo.CategoryRequestVO;
 import com.exadel.discountwebapp.exception.EntityAlreadyExistsException;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,11 +16,9 @@ public class CategoryValidator {
         checkDuplicateTitle(request);
     }
 
-    public void checkDuplicateTitle(CategoryRequestVO request) {
-        categoryRepository.findByTitle(request.getTitle())
-                .ifPresent(category -> {
-                    throw new EntityAlreadyExistsException(
-                            String.format("Category with title \"%s\" already exist", category.getTitle()));
-                });
+    public void checkDuplicateTitle(@NotNull CategoryRequestVO request) {
+        if (categoryRepository.existsByTitle(request.getTitle()))
+            throw new EntityAlreadyExistsException(
+                    String.format("Category with title \"%s\" already exist", request.getTitle()));
     }
 }

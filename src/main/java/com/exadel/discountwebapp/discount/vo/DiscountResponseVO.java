@@ -1,6 +1,7 @@
 package com.exadel.discountwebapp.discount.vo;
 
 import com.exadel.discountwebapp.category.vo.CategoryResponseVO;
+import com.exadel.discountwebapp.location.vo.LocationResponseVO;
 import com.exadel.discountwebapp.tag.vo.TagResponseVO;
 import com.exadel.discountwebapp.vendor.vo.VendorResponseVO;
 import lombok.Data;
@@ -26,6 +27,9 @@ public class DiscountResponseVO extends DiscountBaseVO {
 
     @NotNull
     private VendorResponseVO vendor;
+
+    @NotEmpty
+    private List<LocationResponseVO> locations;
 
     @NotEmpty
     private List<TagResponseVO> tags;
