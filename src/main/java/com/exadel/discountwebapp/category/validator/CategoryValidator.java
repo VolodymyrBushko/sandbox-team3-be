@@ -1,4 +1,4 @@
-package com.exadel.discountwebapp.validation;
+package com.exadel.discountwebapp.category.validator;
 
 import com.exadel.discountwebapp.category.repository.CategoryRepository;
 import com.exadel.discountwebapp.category.vo.CategoryRequestVO;

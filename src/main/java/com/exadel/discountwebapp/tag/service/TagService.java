@@ -4,16 +4,15 @@ import com.exadel.discountwebapp.exception.EntityNotFoundException;
 import com.exadel.discountwebapp.tag.entity.Tag;
 import com.exadel.discountwebapp.tag.mapper.TagMapper;
 import com.exadel.discountwebapp.tag.repository.TagRepository;
+import com.exadel.discountwebapp.tag.validator.TagValidator;
 import com.exadel.discountwebapp.tag.vo.TagRequestVO;
 import com.exadel.discountwebapp.tag.vo.TagResponseVO;
-import com.exadel.discountwebapp.validation.TagValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -66,10 +65,6 @@ public class TagService {
     public List<TagResponseVO> findAllTagsByCategoryId(Long categoryId) {
         List<TagResponseVO> response = new ArrayList<>();
         tagRepository.findAllByCategory_Id(categoryId).forEach(tag -> response.add(tagMapper.toVO(tag)));
-        if(!response.isEmpty()) {
             return response;
-        } else {
-            return Collections.emptyList();
-        }
     }
 }
