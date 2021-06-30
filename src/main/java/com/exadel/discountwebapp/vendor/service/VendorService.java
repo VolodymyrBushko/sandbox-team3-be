@@ -1,7 +1,7 @@
 package com.exadel.discountwebapp.vendor.service;
 
 import com.exadel.discountwebapp.exception.EntityNotFoundException;
-import com.exadel.discountwebapp.validation.VendorValidator;
+import com.exadel.discountwebapp.vendor.validation.VendorValidator;
 import com.exadel.discountwebapp.filter.SpecificationBuilder;
 import com.exadel.discountwebapp.vendor.entity.Vendor;
 import com.exadel.discountwebapp.vendor.mapper.VendorMapper;
@@ -24,6 +24,7 @@ public class VendorService {
 
     private final VendorMapper vendorMapper;
     private final VendorRepository vendorRepository;
+    private final VendorValidator vendorValidator;
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public Page<VendorResponseVO> findAll(String query, Pageable pageable) {
@@ -48,11 +49,13 @@ public class VendorService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public VendorResponseVO create(VendorRequestVO request) {
+        vendorValidator.validate(request);
         return vendorMapper.toVO(vendorRepository.save(vendorMapper.toEntity(request)));
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public VendorResponseVO update(Long id, VendorRequestVO request) {
+        vendorValidator.validate(request);
         Vendor vendor = getVendorById(id);
         vendorMapper.update(vendor, request);
         vendorRepository.save(vendor);

@@ -6,7 +6,7 @@ import com.exadel.discountwebapp.category.repository.CategoryRepository;
 import com.exadel.discountwebapp.category.vo.CategoryRequestVO;
 import com.exadel.discountwebapp.category.vo.CategoryResponseVO;
 import com.exadel.discountwebapp.exception.EntityNotFoundException;
-import com.exadel.discountwebapp.validation.CategoryValidator;
+import com.exadel.discountwebapp.category.validation.CategoryValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
