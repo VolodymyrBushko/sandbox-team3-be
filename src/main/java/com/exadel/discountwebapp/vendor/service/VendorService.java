@@ -1,6 +1,6 @@
 package com.exadel.discountwebapp.vendor.service;
 
-import com.exadel.discountwebapp.exception.EntityNotFoundException;
+import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.filter.SpecificationBuilder;
 import com.exadel.discountwebapp.vendor.entity.Vendor;
 import com.exadel.discountwebapp.vendor.mapper.VendorMapper;
@@ -15,8 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -43,7 +41,7 @@ public class VendorService {
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public VendorResponseVO findByTitle(String title) {
         Optional<Vendor> vendor = Optional.ofNullable(vendorRepository.findByTitle(title)
-                .orElseThrow(() -> new EntityNotFoundException("Could not find vendor with title: " + title)));
+                .orElseThrow(() -> new EntityNotFoundException(Vendor.class, "title", title)));
         return vendor.map(vendorMapper::toVO).orElse(null);
     }
 
@@ -67,6 +65,6 @@ public class VendorService {
 
     private Vendor getVendorById(Long id) {
         return vendorRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Could not find vendor with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException(Vendor.class, "id", id));
     }
 }

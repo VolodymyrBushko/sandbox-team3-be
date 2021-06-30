@@ -1,6 +1,6 @@
 package com.exadel.discountwebapp.user.service;
 
-import com.exadel.discountwebapp.exception.EntityNotFoundException;
+import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.user.repository.UserRepository;
 import com.exadel.discountwebapp.user.vo.UserResponseVO;
 import com.google.common.collect.Lists;
@@ -11,6 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/user-init.sql")
@@ -37,12 +39,16 @@ class UserServiceIntegrationTest {
         Assertions.assertEquals(expected.get(0).getLastName(), actual.get(0).getLastName());
         Assertions.assertEquals(expected.get(0).getPassword(), actual.get(0).getPassword());
         Assertions.assertEquals(expected.get(0).getEmail(), actual.get(0).getEmail());
+        Assertions.assertEquals(expected.get(0).getLocation().getId(), actual.get(0).getLocation().getId());
+        Assertions.assertEquals(expected.get(0).getRole().getId(), actual.get(0).getRole().getId());
 
         Assertions.assertEquals(expected.get(1).getId(), actual.get(1).getId());
         Assertions.assertEquals(expected.get(1).getFirstName(), actual.get(1).getFirstName());
         Assertions.assertEquals(expected.get(1).getLastName(), actual.get(1).getLastName());
         Assertions.assertEquals(expected.get(1).getPassword(), actual.get(1).getPassword());
         Assertions.assertEquals(expected.get(1).getEmail(), actual.get(1).getEmail());
+        Assertions.assertEquals(expected.get(1).getLocation().getId(), actual.get(1).getLocation().getId());
+        Assertions.assertEquals(expected.get(1).getRole().getId(), actual.get(1).getRole().getId());
     }
 
     @Test
@@ -51,11 +57,15 @@ class UserServiceIntegrationTest {
         var expected = userRepository.findById(id).get();
         var actual = userService.findById(id);
 
-        Assertions.assertEquals(expected.getId(), actual.getId());//
+        Assertions.assertEquals(expected.getId(), actual.getId());
         Assertions.assertEquals(expected.getFirstName(), actual.getFirstName());
         Assertions.assertEquals(expected.getLastName(), actual.getLastName());
         Assertions.assertEquals(expected.getPassword(), actual.getPassword());
         Assertions.assertEquals(expected.getEmail(), actual.getEmail());
+        assertNotNull(actual.getLocation());
+        assertNotNull(actual.getRole());
+        Assertions.assertEquals(expected.getLocation().getId(), actual.getLocation().getId());
+        Assertions.assertEquals(expected.getRole().getId(), actual.getRole().getId());
     }
 
     @Test

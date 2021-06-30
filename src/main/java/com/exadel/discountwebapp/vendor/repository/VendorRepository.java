@@ -11,4 +11,8 @@ import java.util.Optional;
 public interface VendorRepository
         extends CrudRepository<Vendor, Long>, JpaSpecificationExecutor<Vendor> {
     Optional<Vendor> findByTitle(String title);
+
+    Optional<Vendor> findByEmail(String email);
+
+    boolean existsByEmail(String email);
 }

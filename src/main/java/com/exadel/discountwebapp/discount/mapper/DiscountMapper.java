@@ -3,50 +3,68 @@ package com.exadel.discountwebapp.discount.mapper;
 import com.exadel.discountwebapp.category.entity.Category;
 import com.exadel.discountwebapp.category.mapper.CategoryMapper;
 import com.exadel.discountwebapp.category.repository.CategoryRepository;
-import com.exadel.discountwebapp.category.vo.CategoryResponseVO;
 import com.exadel.discountwebapp.discount.entity.Discount;
 import com.exadel.discountwebapp.discount.vo.DiscountRequestVO;
 import com.exadel.discountwebapp.discount.vo.DiscountResponseVO;
-import com.exadel.discountwebapp.vendor.entity.Vendor;
+import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
+import com.exadel.discountwebapp.location.entity.Location;
+import com.exadel.discountwebapp.location.mapper.LocationMapper;
+import com.exadel.discountwebapp.location.repository.LocationRepository;
+import com.exadel.discountwebapp.location.vo.LocationResponseVO;
 import com.exadel.discountwebapp.vendor.mapper.VendorMapper;
 import com.exadel.discountwebapp.vendor.repository.VendorRepository;
-import com.exadel.discountwebapp.vendor.vo.VendorResponseVO;
+import com.google.common.collect.Lists;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import com.exadel.discountwebapp.vendor.entity.Vendor;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class DiscountMapper {
 
     private final VendorRepository vendorRepository;
     private final CategoryRepository categoryRepository;
+    private final LocationRepository locationRepository;
 
     private final VendorMapper vendorMapper;
     private final CategoryMapper categoryMapper;
+    private final LocationMapper locationMapper;
 
     private final ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
     public DiscountMapper(VendorRepository vendorRepository,
                           CategoryRepository categoryRepository,
+                          LocationRepository locationRepository,
                           VendorMapper vendorMapper,
-                          CategoryMapper categoryMapper) {
+                          CategoryMapper categoryMapper,
+                          LocationMapper locationMapper) {
 
         this.vendorRepository = vendorRepository;
         this.categoryRepository = categoryRepository;
+        this.locationRepository = locationRepository;
         this.vendorMapper = vendorMapper;
         this.categoryMapper = categoryMapper;
+        this.locationMapper = locationMapper;
 
         configureModelMapper();
     }
 
     public DiscountResponseVO toVO(Discount discount) {
-        DiscountResponseVO response = modelMapper.map(discount, DiscountResponseVO.class);
-        CategoryResponseVO category = categoryMapper.toVO(discount.getCategory());
-        VendorResponseVO vendor = vendorMapper.toVO(discount.getVendor());
+        var response = modelMapper.map(discount, DiscountResponseVO.class);
+        var category = categoryMapper.toVO(discount.getCategory());
+        var vendor = vendorMapper.toVO(discount.getVendor());
 
+        List<LocationResponseVO> locations = discount.getLocations()
+                .stream().map(locationMapper::toVO)
+                .collect(Collectors.toList());
+
+        response.setLocations(locations);
         response.setCategory(category);
         response.setVendor(vendor);
 
@@ -54,7 +72,7 @@ public class DiscountMapper {
     }
 
     public Discount toEntity(DiscountRequestVO request) {
-        Discount discount = modelMapper.map(request, Discount.class);
+        var discount = modelMapper.map(request, Discount.class);
         provideDiscountDependencies(request, discount);
         return discount;
     }
@@ -65,9 +83,17 @@ public class DiscountMapper {
     }
 
     private void provideDiscountDependencies(DiscountRequestVO request, Discount discount) {
-        Vendor vendor = vendorRepository.findById(request.getVendorId()).orElse(null);
-        Category category = categoryRepository.findById(request.getCategoryId()).orElse(null);
+        var vendor = vendorRepository.findById(request.getVendorId())
+                .orElseThrow(() -> new EntityNotFoundException(Vendor.class, "id", request.getVendorId()));
+        var category = categoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new EntityNotFoundException(Category.class, "id", request.getCategoryId()));
 
+        var locations = Lists.newArrayList(locationRepository.findAllById(request.getLocationIds()));
+
+        if (request.getLocationIds().size() != locations.size())
+            throw new EntityNotFoundException(Location.class, "id", "...");
+
+        discount.setLocations(locations);
         discount.setVendor(vendor);
         discount.setCategory(category);
     }

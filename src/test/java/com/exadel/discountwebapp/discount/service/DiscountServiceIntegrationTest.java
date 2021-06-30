@@ -4,8 +4,7 @@ import com.exadel.discountwebapp.discount.entity.Discount;
 import com.exadel.discountwebapp.discount.repository.DiscountRepository;
 import com.exadel.discountwebapp.discount.vo.DiscountRequestVO;
 import com.exadel.discountwebapp.discount.vo.DiscountResponseVO;
-import com.exadel.discountwebapp.exception.EntityNotFoundException;
-import com.exadel.discountwebapp.filter.SpecificationBuilder;
+import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.google.common.collect.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,6 +98,7 @@ class DiscountServiceIntegrationTest {
         var perUser = 1;
         var categoryId = 10L;
         var vendorId = 10L;
+        var locationIds = List.of(10L, 20L);
 
         return DiscountRequestVO.builder()
                 .title(title)
@@ -114,6 +114,7 @@ class DiscountServiceIntegrationTest {
                 .perUser(perUser)
                 .categoryId(categoryId)
                 .vendorId(vendorId)
+                .locationIds(locationIds)
                 .build();
     }
 
@@ -134,6 +135,8 @@ class DiscountServiceIntegrationTest {
 
         assertNotNull(actual.getCategory());
         assertNotNull(actual.getVendor());
+        assertNotNull(actual.getLocations());
+
         assertEquals(expected.getCategory().getId(), actual.getCategory().getId());
         assertEquals(expected.getVendor().getId(), actual.getVendor().getId());
     }
@@ -153,6 +156,8 @@ class DiscountServiceIntegrationTest {
 
         assertNotNull(actual.getCategory());
         assertNotNull(actual.getVendor());
+        assertNotNull(actual.getLocations());
+
         assertEquals(expected.getCategoryId(), actual.getCategory().getId());
         assertEquals(expected.getVendorId(), actual.getVendor().getId());
     }
