@@ -41,19 +41,19 @@ public class LocationController {
         return locationService.findAllByCity(city);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public LocationResponseVO create(@Valid @RequestBody LocationRequestVO request) {
         return locationService.create(request);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
     public LocationResponseVO update(@PathVariable Long id, @Valid @RequestBody LocationRequestVO request) {
         return locationService.update(id, request);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         locationService.deleteById(id);

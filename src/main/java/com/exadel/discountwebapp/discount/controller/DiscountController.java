@@ -33,19 +33,19 @@ public class DiscountController {
         return discountService.findById(id);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public DiscountResponseVO create(@Valid @RequestBody DiscountRequestVO request) {
         return discountService.create(request);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
     public DiscountResponseVO update(@PathVariable Long id, @Valid @RequestBody DiscountRequestVO request) {
         return discountService.update(id, request);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id) {
         discountService.deleteById(id);

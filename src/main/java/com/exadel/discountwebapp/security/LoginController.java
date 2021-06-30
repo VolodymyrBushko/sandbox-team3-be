@@ -1,5 +1,6 @@
 package com.exadel.discountwebapp.security;
 
+import com.exadel.discountwebapp.exception.AuthenticationException;
 import com.exadel.discountwebapp.exception.EntityNotFoundException;
 import com.exadel.discountwebapp.user.service.UserService;
 import com.exadel.discountwebapp.user.vo.UserResponseVO;
@@ -21,7 +22,7 @@ public class LoginController {
         try {
             userResponse = userService.findByLoginAndPassword(signinVO);
         } catch (EntityNotFoundException e) {
-            throw new EntityNotFoundException("Login or Password is wrong! Try again!");
+            throw new AuthenticationException("Login or Password is wrong! Try again!");
         }
         return new TokenResponse(jwtProvider.generateToken(userResponse.getEmail()));
     }

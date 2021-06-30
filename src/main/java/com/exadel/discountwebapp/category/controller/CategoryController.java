@@ -29,13 +29,13 @@ public class CategoryController {
         return categoryService.findById(id);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public CategoryResponseVO create(@Valid @RequestBody CategoryRequestVO request) {
         return categoryService.create(request);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
     public CategoryResponseVO update(@PathVariable Long id, @Valid @RequestBody CategoryRequestVO request) {
         return categoryService.update(id, request);

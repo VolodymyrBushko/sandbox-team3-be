@@ -5,4 +5,6 @@ TRUNCATE TABLE category;
 TRUNCATE TABLE discount;
 TRUNCATE TABLE role;
 TRUNCATE TABLE "user";
+TRUNCATE TABLE location_discount;
+TRUNCATE TABLE user_discount;
 SET FOREIGN_KEY_CHECKS = 1;

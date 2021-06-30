@@ -38,19 +38,19 @@ public class VendorController {
         return vendorService.findByTitle(title);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public VendorResponseVO create(@Valid @RequestBody VendorRequestVO request) {
         return vendorService.create(request);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
     public VendorResponseVO update(@PathVariable Long id, @Valid @RequestBody VendorRequestVO request) {
         return vendorService.update(id, request);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         vendorService.deleteById(id);

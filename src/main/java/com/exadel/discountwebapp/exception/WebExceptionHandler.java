@@ -61,9 +61,16 @@ public class WebExceptionHandler {
         return ex.getMessage();
     }
 
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    public String globalException() {
-        return "Something is wrong";
+
+    @ExceptionHandler(AuthenticationException.class)
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+    public String unauthorizedException(AuthenticationException ex) {
+        return ex.getMessage();
     }
+
+//    @ExceptionHandler(Exception.class)
+//    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+//    public String globalException() {
+//        return "Something is wrong";
+//    }
 }
