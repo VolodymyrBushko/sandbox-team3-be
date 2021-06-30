@@ -1,6 +1,6 @@
 package com.exadel.discountwebapp.tag.service;
 
-import com.exadel.discountwebapp.exception.EntityNotFoundException;
+import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.tag.entity.Tag;
 import com.exadel.discountwebapp.tag.mapper.TagMapper;
 import com.exadel.discountwebapp.tag.repository.TagRepository;
@@ -25,7 +25,7 @@ public class TagService {
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public TagResponseVO findById(Long id) {
         Tag tag = tagRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Could not find tag with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException(Tag.class, "id", id));
         TagResponseVO response = tagMapper.toVO(tag);
         return response;
     }
@@ -49,7 +49,7 @@ public class TagService {
     @Transactional(propagation = Propagation.REQUIRED)
     public TagResponseVO update(Long id, TagRequestVO request) {
         Tag tag = tagRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(("Could not find tag with id " + id)));
+                .orElseThrow(() -> new EntityNotFoundException(Tag.class, "id", id));
         tagMapper.updateEntity(request, tag);
         tagRepository.save(tag);
         return tagMapper.toVO(tag);

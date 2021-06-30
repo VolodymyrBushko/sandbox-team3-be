@@ -2,7 +2,7 @@ package com.exadel.discountwebapp.tag.mapper;
 
 import com.exadel.discountwebapp.category.entity.Category;
 import com.exadel.discountwebapp.category.repository.CategoryRepository;
-import com.exadel.discountwebapp.exception.EntityNotFoundException;
+import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.tag.entity.Tag;
 import com.exadel.discountwebapp.tag.vo.TagRequestVO;
 import com.exadel.discountwebapp.tag.vo.TagResponseVO;
@@ -45,7 +45,7 @@ public class TagMapper {
 
     private void provideTagDependencies(TagRequestVO request, Tag tag) {
         Category category = categoryRepository.findById(request.getCategoryId())
-                .orElseThrow(() -> new EntityNotFoundException("Could not find category with id: " + request.getCategoryId()));
+                .orElseThrow(() ->new EntityNotFoundException(Category.class, "id", request.getCategoryId()));
 
         tag.setCategory(category);
     }

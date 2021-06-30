@@ -1,69 +1,73 @@
 package com.exadel.discountwebapp.exception;
 
-import org.springframework.dao.InvalidDataAccessApiUsageException;
-import org.springframework.http.HttpStatus;
+import com.exadel.discountwebapp.exception.exception.client.EntityAlreadyExistsException;
+import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
+import com.exadel.discountwebapp.exception.exception.client.IncorrectFilterInputException;
+import com.exadel.discountwebapp.exception.exception.client.ParseException;
+import com.exadel.discountwebapp.exception.response.ExceptionResponse;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.time.format.DateTimeParseException;
+import static org.springframework.http.HttpStatus.*;
 
 @RestControllerAdvice
 public class WebExceptionHandler {
 
+    private static final String AUTHORIZED_EXCEPTION_CODE = "UNAUTHORIZED";
+    private static final String GLOBAL_EXCEPTION_CODE = "INTERNAL_SERVER_ERROR";
+    private static final String GLOBAL_EXCEPTION_MESSAGE = "Something is wrong";
+
+    private static final String RESPONSE_CODE_PATTERN = "%s.%s.%s";
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)
-    public String methodArgumentNotValidException(MethodArgumentNotValidException ex) {
+    @ResponseStatus(value = UNPROCESSABLE_ENTITY)
+    public ExceptionResponse unprocessableEntityException(MethodArgumentNotValidException ex) {
         FieldError field = ex.getBindingResult().getFieldError();
-        return String.format("%s.%s.%s", field.getObjectName(), field.getField(), field.getDefaultMessage());
+        String code = String.format(RESPONSE_CODE_PATTERN, field.getObjectName(), field.getField(), UNPROCESSABLE_ENTITY.value());
+        return new ExceptionResponse(code, field.getDefaultMessage());
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    public String entityNotFoundException(EntityNotFoundException ex) {
-        return ex.getMessage();
+    @ResponseStatus(value = NOT_FOUND)
+    public ExceptionResponse notFoundException(EntityNotFoundException ex) {
+        String code = String.format(RESPONSE_CODE_PATTERN, ex.getClazz().getSimpleName(), ex.getFieldName(), NOT_FOUND.value());
+        return new ExceptionResponse(code, ex.getMessage());
     }
 
-    @ExceptionHandler(value = {
-            InvalidDataAccessApiUsageException.class,
-            NotAllowedOperationException.class
-    })
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public String badRequestException(Exception ex) {
-        switch (ex.getClass().getSimpleName()) {
-            case "InvalidDataAccessApiUsageException":
-                int index = ex.getMessage().indexOf("]") + 1;
-                return ex.getMessage().substring(0, index);
-            case "NotAllowedOperationException":
-                return ex.getMessage();
-            default:
-                return "Bad request";
-        }
+    @ExceptionHandler(value = IncorrectFilterInputException.class)
+    @ResponseStatus(value = BAD_REQUEST)
+    public ExceptionResponse badRequestException(IncorrectFilterInputException ex) {
+        String code = String.format(RESPONSE_CODE_PATTERN, ex.getClazz().getSimpleName(), ex.getFieldName(), BAD_REQUEST.value());
+        return new ExceptionResponse(code, ex.getMessage());
     }
 
-    @ExceptionHandler(DateTimeParseException.class)
-    @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)
-    public String userInputParseException(Exception ex) {
-        switch (ex.getClass().getSimpleName()) {
-            case "DateTimeParseException":
-                String parsedString = ((DateTimeParseException) ex).getParsedString();
-                return String.format("Could not parse [%s] in DateTime format", parsedString);
-            default:
-                return "Bad input";
-        }
+    @ExceptionHandler(ParseException.class)
+    @ResponseStatus(value = UNPROCESSABLE_ENTITY)
+    public ExceptionResponse unprocessableEntityParseException(ParseException ex) {
+        String code = String.format(RESPONSE_CODE_PATTERN, ex.getClazz().getSimpleName(), ex.getFieldName(), UNPROCESSABLE_ENTITY.value());
+        return new ExceptionResponse(code, ex.getMessage());
     }
 
     @ExceptionHandler(EntityAlreadyExistsException.class)
-    @ResponseStatus(value = HttpStatus.CONFLICT)
-    public String entityAlreadyExistsException(EntityAlreadyExistsException ex) {
-        return ex.getMessage();
+    @ResponseStatus(value = CONFLICT)
+    public ExceptionResponse entityAlreadyExistsException(EntityAlreadyExistsException ex) {
+        String code = String.format(RESPONSE_CODE_PATTERN, ex.getClazz().getSimpleName(), ex.getFieldName(), UNPROCESSABLE_ENTITY.value());
+        return new ExceptionResponse(code, ex.getMessage());
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseStatus(value = UNAUTHORIZED)
+    public ExceptionResponse badCredentialsException(BadCredentialsException ex) {
+        return new ExceptionResponse(AUTHORIZED_EXCEPTION_CODE, ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    public String globalException() {
-        return "Something is wrong";
+    @ResponseStatus(value = INTERNAL_SERVER_ERROR)
+    public ExceptionResponse globalException() {
+        return new ExceptionResponse(GLOBAL_EXCEPTION_CODE, GLOBAL_EXCEPTION_MESSAGE);
     }
 }
