@@ -23,4 +23,7 @@ public class DiscountRequestVO extends DiscountBaseVO {
 
     @NotEmpty
     private List<Long> locationIds;
+
+    @NotEmpty
+    private List <Long> tagIds;
 }

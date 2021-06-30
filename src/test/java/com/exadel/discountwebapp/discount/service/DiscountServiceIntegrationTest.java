@@ -99,6 +99,7 @@ class DiscountServiceIntegrationTest {
         var categoryId = 10L;
         var vendorId = 10L;
         var locationIds = List.of(10L, 20L);
+        var tagIds = List.of(1L, 2L);
 
         return DiscountRequestVO.builder()
                 .title(title)
@@ -114,6 +115,7 @@ class DiscountServiceIntegrationTest {
                 .perUser(perUser)
                 .categoryId(categoryId)
                 .vendorId(vendorId)
+                .tagIds(tagIds)
                 .locationIds(locationIds)
                 .build();
     }
@@ -160,6 +162,8 @@ class DiscountServiceIntegrationTest {
 
         assertEquals(expected.getCategoryId(), actual.getCategory().getId());
         assertEquals(expected.getVendorId(), actual.getVendor().getId());
+        assertEquals(expected.getLocationIds().size(), actual.getLocations().size());
+        assertEquals(expected.getTagIds().size(), actual.getTags().size());
     }
 
     private void matchAll(List<Discount> expected, List<DiscountResponseVO> actual) {
