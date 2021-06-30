@@ -9,6 +9,13 @@ public class WebConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedMethods("*");
+        registry
+                .addMapping("/**")
+                .allowedOrigins(
+                        "http://localhost:3000",
+                        "https://discount-system-team3.herokuapp.com"
+                )
+                .allowedMethods("*")
+                .allowCredentials(true);
     }
 }
