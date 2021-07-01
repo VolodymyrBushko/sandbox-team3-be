@@ -6,7 +6,7 @@ import lombok.Getter;
 public abstract class ClientBaseException extends RuntimeException {
 
     private Class clazz;
-    private final String fieldName;
+    private String fieldName;
 
     protected ClientBaseException(Class clazz, String fieldName, Object value, String messagePattern) {
         super(String.format(messagePattern, clazz.getSimpleName(), fieldName, value));
