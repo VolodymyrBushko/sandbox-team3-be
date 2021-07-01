@@ -41,7 +41,7 @@ public class CategoryController {
         return categoryService.update(id, request);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id) {
         categoryService.deleteById(id);
