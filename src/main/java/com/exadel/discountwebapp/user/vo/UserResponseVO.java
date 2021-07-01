@@ -1,6 +1,6 @@
 package com.exadel.discountwebapp.user.vo;
 
-import com.exadel.discountwebapp.location.vo.LocationResponseVO;
+import com.exadel.discountwebapp.location.vo.location.LocationResponseVO;
 import com.exadel.discountwebapp.role.vo.RoleResponseVO;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -30,9 +30,6 @@ public class Location {
     @Column(name = "loc_city", length = 50, nullable = true)
     private String city;
 
-//    @OneToMany(mappedBy = "location")
-//    private List<Country> countries;
-
     @ManyToOne
     @JoinColumn(name = "locations")
     private Country country;

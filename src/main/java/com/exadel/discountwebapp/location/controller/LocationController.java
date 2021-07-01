@@ -1,8 +1,10 @@
 package com.exadel.discountwebapp.location.controller;
 
+import com.exadel.discountwebapp.location.service.CountryService;
 import com.exadel.discountwebapp.location.service.LocationService;
-import com.exadel.discountwebapp.location.vo.LocationRequestVO;
-import com.exadel.discountwebapp.location.vo.LocationResponseVO;
+import com.exadel.discountwebapp.location.vo.country.CountryResponseVO;
+import com.exadel.discountwebapp.location.vo.location.LocationRequestVO;
+import com.exadel.discountwebapp.location.vo.location.LocationResponseVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LocationController {
     private final LocationService locationService;
+    private final CountryService countryService;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping
@@ -33,6 +36,12 @@ public class LocationController {
     public List<LocationResponseVO> getAllLocationsByCountry(
             @RequestParam(name = "country") String country) {
         return locationService.findAllByCountry(country);
+    }
+// TODO: move to CountryController
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/countries")
+    public List<CountryResponseVO> getAllCountries() {
+        return countryService.findAllCountries();
     }
 
     @PreAuthorize("isAuthenticated()")

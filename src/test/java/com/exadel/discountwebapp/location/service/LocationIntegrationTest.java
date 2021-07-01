@@ -3,8 +3,8 @@
 //import com.exadel.discountwebapp.exception.EntityNotFoundException;
 //import com.exadel.discountwebapp.location.entity.Location;
 //import com.exadel.discountwebapp.location.repository.LocationRepository;
-//import com.exadel.discountwebapp.location.vo.LocationRequestVO;
-//import com.exadel.discountwebapp.location.vo.LocationResponseVO;
+//import com.exadel.discountwebapp.location.vo.location.LocationRequestVO;
+//import com.exadel.discountwebapp.location.vo.location.LocationResponseVO;
 //import com.google.common.collect.Lists;
 //import org.junit.jupiter.api.Test;
 //import org.springframework.beans.factory.annotation.Autowired;

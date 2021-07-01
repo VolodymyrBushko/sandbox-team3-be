@@ -1,7 +1,7 @@
 package com.exadel.discountwebapp.user.mapper;
 
 import com.exadel.discountwebapp.location.mapper.LocationMapper;
-import com.exadel.discountwebapp.location.vo.LocationResponseVO;
+import com.exadel.discountwebapp.location.vo.location.LocationResponseVO;
 import com.exadel.discountwebapp.role.mapper.RoleMapper;
 import com.exadel.discountwebapp.role.vo.RoleResponseVO;
 import com.exadel.discountwebapp.user.entity.User;

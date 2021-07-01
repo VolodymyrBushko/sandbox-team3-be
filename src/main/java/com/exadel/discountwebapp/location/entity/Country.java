@@ -22,10 +22,6 @@ public class Country {
     @Column(name = "country_full_name", length = 255, nullable = false, unique = true)
     String countryFullName;
 
-//    @ManyToOne
-//    @JoinColumn(name = "loc_id")
-//    private Location location;
-
     @OneToMany(mappedBy = "country")
     private List<Location> locations;
 }

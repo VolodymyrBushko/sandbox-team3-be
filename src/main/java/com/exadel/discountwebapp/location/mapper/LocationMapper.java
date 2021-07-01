@@ -1,8 +1,8 @@
 package com.exadel.discountwebapp.location.mapper;
 
 import com.exadel.discountwebapp.location.entity.Location;
-import com.exadel.discountwebapp.location.vo.LocationRequestVO;
-import com.exadel.discountwebapp.location.vo.LocationResponseVO;
+import com.exadel.discountwebapp.location.vo.location.LocationRequestVO;
+import com.exadel.discountwebapp.location.vo.location.LocationResponseVO;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.modelmapper.convention.MatchingStrategies;

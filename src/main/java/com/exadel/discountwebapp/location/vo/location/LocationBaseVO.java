@@ -1,4 +1,4 @@
-package com.exadel.discountwebapp.location.vo;
+package com.exadel.discountwebapp.location.vo.location;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
