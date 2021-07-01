@@ -14,28 +14,25 @@ import java.util.List;
 @RequestMapping("/api/locations")
 @RequiredArgsConstructor
 public class LocationController {
+
     private final LocationService locationService;
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping
     public List<LocationResponseVO> getAllLocations() {
         return locationService.findAll();
     }
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
     public LocationResponseVO getLocationById(@PathVariable Long id) {
         return locationService.findById(id);
     }
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/country")
     public List<LocationResponseVO> getAllLocationsByCountry(
             @RequestParam(name = "country") String country) {
         return locationService.findAllByCountry(country);
     }
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/city")
     public List<LocationResponseVO> getAllLocationsByCity(@Valid @RequestParam(name = "city") String city) {
         return locationService.findAllByCity(city);

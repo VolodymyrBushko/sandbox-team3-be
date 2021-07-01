@@ -20,7 +20,7 @@ public class TagValidator {
     }
 
     public void checkIfTagIsPresentById(Long id) {
-        if (tagRepository.existsById(id)) {
+        if (!tagRepository.existsById(id)) {
             throw new EntityNotFoundException(Tag.class, "id", id);
         }
     }

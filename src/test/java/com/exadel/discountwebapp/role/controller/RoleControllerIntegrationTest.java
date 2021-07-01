@@ -1,14 +1,11 @@
 package com.exadel.discountwebapp.role.controller;
 
 import com.exadel.discountwebapp.role.service.RoleService;
-import com.exadel.discountwebapp.role.vo.RoleRequestVO;
 import com.exadel.discountwebapp.role.vo.RoleResponseVO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -22,12 +19,12 @@ import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
+@SpringBootTest
 @AutoConfigureMockMvc
-@EnableAutoConfiguration(exclude = SecurityAutoConfiguration.class)
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/role-init.sql")
 @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:sql/clean-up.sql")
 public class RoleControllerIntegrationTest {
+
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -85,14 +82,6 @@ public class RoleControllerIntegrationTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/locations/{id}", "2"))
                 .andExpect(MockMvcResultMatchers.status().reason("Access Denied"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
-    }
-
-    private String getRoleRequestVO() throws JsonProcessingException {
-        RoleRequestVO requestVO = new RoleRequestVO().builder()
-                .name("GUEST")
-                .build();
-
-        return mapper.writeValueAsString(requestVO);
     }
 
     private String getAllRolesResponseVO() throws JsonProcessingException {

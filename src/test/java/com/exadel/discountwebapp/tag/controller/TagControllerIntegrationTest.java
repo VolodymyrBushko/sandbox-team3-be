@@ -1,10 +1,12 @@
-package com.exadel.discountwebapp.vendor.controller;
+package com.exadel.discountwebapp.tag.controller;
 
-import com.exadel.discountwebapp.vendor.repository.VendorRepository;
-import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
+import com.exadel.discountwebapp.tag.mapper.TagMapper;
+import com.exadel.discountwebapp.tag.repository.TagRepository;
+import com.exadel.discountwebapp.tag.service.TagService;
+import com.exadel.discountwebapp.tag.vo.TagRequestVO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Assertions;
+import com.google.common.collect.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -16,179 +18,186 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.stream.Collectors;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/vendor-init.sql")
+@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/tag-init.sql")
 @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:sql/clean-up.sql")
-public class VendorControllerIntegrationTest {
+public class TagControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
     @Autowired
+    private TagRepository repository;
+    @Autowired
     private ObjectMapper mapper;
     @Autowired
-    private VendorRepository repository;
+    private TagMapper tagMapper;
+    @Autowired
+    private TagService service;
 
     @Test
     @WithMockUser(roles = "USER")
-    public void shouldGetAllVendorWithRoleUser() throws Exception {
-        var actual = mockMvc.perform(MockMvcRequestBuilders.get("/api/vendors")
+    public void shouldGetAllTagsWithRoleUser() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/tags")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().contentType("application/json"))
-                .andExpect(status().isOk());
-
-        Assertions.assertNotNull(actual);
-    }
-
-    @Test
-    @WithMockUser(roles = "ADMIN")
-    public void shouldGetAllVendorsWithRoleAdmin() throws Exception {
-        var actual = mockMvc.perform(MockMvcRequestBuilders.get("/api/vendors")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-
-        Assertions.assertNotNull(actual);
-    }
-
-    @Test
-    @WithMockUser(roles = "USER")
-    public void shouldGetVendorByIdWithRoleUser() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/vendors/{id}", "1"))
-                .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.id").value("1"))
-                .andExpect(jsonPath("$.title").value("Sport Life"))
-                .andExpect(jsonPath("$.description").value("Sport Life - a chain of casual fitness centers"))
+                .andExpect(MockMvcResultMatchers.content().json(getAllTagsAsJsonData()))
                 .andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldGetVendorByIdWithRoleAdmin() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/vendors/{id}", "2"))
+    public void shouldGetAllTagsWithRoleAdmin() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/tags")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.content().json(getAllTagsAsJsonData()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
+    public void shouldGetTagByIdWithRoleUser() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/tags/{id}", 2))
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.id").value("2"))
-                .andExpect(jsonPath("$.title").value("Domino`s Pizza"))
-                .andExpect(jsonPath("$.description").value("Domino`s Pizza - an American multinational pizza restaurant chain founded in 1960"))
+                .andExpect(jsonPath("$.name").value("wear"))
                 .andExpect(status().isOk());
-    }
-
-    @Test
-    @WithMockUser(roles = "USER")
-    public void shouldGetVendorByTitleWithRoleUser() throws Exception {
-        var actual =   mockMvc.perform(MockMvcRequestBuilders.get("/api/vendors?title=title*.*Sport"))
-                .andExpect(content().contentType("application/json"))
-                .andExpect(status().isOk());
-
-        Assertions.assertNotNull(actual);
     }
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldGetVendorByTitleWithRoleAdmin() throws Exception {
-        var actual =   mockMvc.perform(MockMvcRequestBuilders.get("/api/vendors?title=title*.*Sport"))
+    public void shouldGetTagByIdWithRoleAdmin() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/tags/{id}", 4))
                 .andExpect(content().contentType("application/json"))
-                .andExpect(status().isOk());
-
-        Assertions.assertNotNull(actual);
-    }
-
-    @Test
-    @WithMockUser(authorities = "ADMIN")
-    public void shouldCreateVendorByAdmin() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/vendors")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(getVendorRequestVOAsJson()))
                 .andExpect(jsonPath("$.id").value("4"))
-                .andExpect(jsonPath("$.title").value("title3"))
-                .andExpect(jsonPath("$.imageUrl").value("http://localhost/images/img3.png"))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                .andExpect(jsonPath("$.name").value("food"))
+                .andExpect(status().isOk());
     }
 
+    @Test
+    @WithMockUser(roles = "USER")
+    public void shouldFindAllTagsByCategoryIdWithRoleUser() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/tags/category/{categoryId}", 10))
+                .andExpect(content().contentType("application/json"))
+                .andExpect(MockMvcResultMatchers.content().json(getTagsByCategoryId(10L)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void shouldFindAllTagsByCategoryIdWithRoleAdmin() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/tags/category/{categoryId}", 20))
+                .andExpect(content().contentType("application/json"))
+                .andExpect(MockMvcResultMatchers.content().json(getTagsByCategoryId(20L)))
+                .andExpect(status().isOk());
+    }
 
     @Test
     @WithMockUser(authorities = "ADMIN")
-    public void shouldUpdateVendorByAdmin() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/vendors/{id}", "2")
+    public void shouldCreateTagByAdmin() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/tags")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getVendorRequestVOAsJson()))
-                .andExpect(jsonPath("$.id").value("2"))
-                .andExpect(jsonPath("$.title").value("title3"))
-                .andExpect(jsonPath("$.imageUrl").value("http://localhost/images/img3.png"))
+                .content(getTagRequestVO()))
+                .andExpect(jsonPath("$.id").value("5"))
+                .andExpect(jsonPath("$.name").value("pizza"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
     @WithMockUser(authorities = "ADMIN")
-    public void shouldDeleteVendorByAdmin() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/vendors/{id}", "1"))
+    public void shouldUpdateTagByAdmin() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/tags/{id}", "2")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(getTagRequestVO()))
+                .andExpect(jsonPath("$.id").value("2"))
+                .andExpect(jsonPath("$.name").value("pizza"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
-        assertThat(repository.existsById(1L)).isFalse();
+    }
+
+    @Test
+    @WithMockUser(authorities = "ADMIN")
+    public void shouldDeleteTagByAdmin() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/tags/{id}", "3"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+        assertThat(repository.existsById(3L)).isFalse();
     }
 
     @Test
     @WithMockUser(authorities = "USER")
     public void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToCreateResource() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/vendors")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/tags")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getVendorRequestVOAsJson()))
+                .content(getTagRequestVO()))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
     @WithMockUser(authorities = "USER")
     public void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToUpdateResource() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/vendors/{id}", "2")
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/tags/{id}", "2")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getVendorRequestVOAsJson()))
+                .content(getTagRequestVO()))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
     @WithMockUser(authorities = "USER")
     public void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToDeleteResource() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/vendors/{id}", "2"))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/tags/{id}", "2"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
     public void shouldGet403ErrorWhenNotAuthorizedUserTryToUseGetResource() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/vendors"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/tags"))
                 .andExpect(MockMvcResultMatchers.status().reason("Access Denied"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
     public void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseCreateResource() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/vendors"))
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/tags"))
                 .andExpect(MockMvcResultMatchers.status().reason("Access Denied"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
     public void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseUpdateResource() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/vendors/{id}", "2"))
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/tags/{id}", "2"))
                 .andExpect(MockMvcResultMatchers.status().reason("Access Denied"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
     public void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseDeleteResource() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/vendors/{id}", "2"))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/tags/{id}", "2"))
                 .andExpect(MockMvcResultMatchers.status().reason("Access Denied"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
-    private String getVendorRequestVOAsJson() throws JsonProcessingException {
-        var requestVO = VendorRequestVO.builder()
-                .title("title3")
-                .description("description3")
-                .imageUrl("http://localhost/images/img3.png")
-                .email("testemail3@gmail.com")
-                .locationId(1L)
+    private String getAllTagsAsJsonData() throws JsonProcessingException {
+        var responseVO = service.findAll();
+        return mapper.writeValueAsString(responseVO);
+    }
+
+    private String getTagsByCategoryId(Long id) throws JsonProcessingException {
+        var tags = Lists.newArrayList(repository.findAll());
+        var result = tags.stream()
+                .filter(e -> e.getCategory().getId() == id)
+                .map(e -> tagMapper.toVO(e))
+                .collect(Collectors.toList());
+        return mapper.writeValueAsString(result);
+    }
+
+    private String getTagRequestVO() throws JsonProcessingException {
+        var requestVO = TagRequestVO.builder()
+                .name("pizza")
+                .categoryId(10L)
                 .build();
 
         return mapper.writeValueAsString(requestVO);

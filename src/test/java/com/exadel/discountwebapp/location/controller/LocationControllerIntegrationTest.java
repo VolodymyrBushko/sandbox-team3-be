@@ -8,8 +8,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -25,12 +23,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
+@SpringBootTest
 @AutoConfigureMockMvc
-@EnableAutoConfiguration(exclude = SecurityAutoConfiguration.class)
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/location2-init.sql")
 @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:sql/clean-up.sql")
 public class LocationControllerIntegrationTest {
+
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -118,7 +116,6 @@ public class LocationControllerIntegrationTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/locations")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getLocationRequestVO()))
-                .andExpect(MockMvcResultMatchers.status().reason("Forbidden"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
@@ -128,7 +125,6 @@ public class LocationControllerIntegrationTest {
         mockMvc.perform(MockMvcRequestBuilders.put("/api/locations/{id}", "2")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getLocationRequestVO()))
-                .andExpect(MockMvcResultMatchers.status().reason("Forbidden"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
@@ -136,7 +132,6 @@ public class LocationControllerIntegrationTest {
     @WithMockUser(authorities = "USER")
     public void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToDeleteResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/locations/{id}", "2"))
-                .andExpect(MockMvcResultMatchers.status().reason("Forbidden"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
@@ -175,7 +170,7 @@ public class LocationControllerIntegrationTest {
     }
 
     private String getLocationRequestVO() throws JsonProcessingException {
-        LocationRequestVO requestVO = new LocationRequestVO().builder()
+        var requestVO = new LocationRequestVO().builder()
                 .country("Belarus")
                 .city("Minsk")
                 .build();

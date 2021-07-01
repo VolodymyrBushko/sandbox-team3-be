@@ -5,6 +5,7 @@ import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundExcept
 import com.exadel.discountwebapp.exception.exception.client.IncorrectFilterInputException;
 import com.exadel.discountwebapp.exception.exception.client.ParseException;
 import com.exadel.discountwebapp.exception.response.ExceptionResponse;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -20,6 +21,7 @@ public class WebExceptionHandler {
     private static final String AUTHORIZED_EXCEPTION_CODE = "UNAUTHORIZED";
     private static final String GLOBAL_EXCEPTION_CODE = "INTERNAL_SERVER_ERROR";
     private static final String GLOBAL_EXCEPTION_MESSAGE = "Something is wrong";
+    private static final String FORBIDDEN_CODE = "FORBIDDEN";
 
     private static final String RESPONSE_CODE_PATTERN = "%s.%s.%s";
 
@@ -63,6 +65,12 @@ public class WebExceptionHandler {
     @ResponseStatus(value = UNAUTHORIZED)
     public ExceptionResponse badCredentialsException(BadCredentialsException ex) {
         return new ExceptionResponse(AUTHORIZED_EXCEPTION_CODE, ex.getMessage());
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(value = FORBIDDEN)
+    public ExceptionResponse forbiddenException(AccessDeniedException ex) {
+        return new ExceptionResponse(FORBIDDEN_CODE, ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)

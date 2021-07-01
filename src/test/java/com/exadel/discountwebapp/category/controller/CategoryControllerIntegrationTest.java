@@ -8,8 +8,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -22,12 +20,11 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
+@SpringBootTest
 @AutoConfigureMockMvc
-@EnableAutoConfiguration(exclude = SecurityAutoConfiguration.class)
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/category-init.sql")
 @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:sql/clean-up.sql")
-public class CategoryControllerIIntegrationTest {
+public class CategoryControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -38,13 +35,12 @@ public class CategoryControllerIIntegrationTest {
     @Autowired
     private CategoryService service;
 
-
     @Test
     @WithMockUser(roles = "USER")
     public void shouldGetAllCategoriesWithRoleUser() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/categories")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.content().json(getAllUsersAsJsonData()))
+                .andExpect(MockMvcResultMatchers.content().json(getAllCategoriesAsJsonData()))
                 .andExpect(status().isOk());
     }
 
@@ -64,7 +60,7 @@ public class CategoryControllerIIntegrationTest {
     public void shouldGetAllCategoriesWithRoleAdmin() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/categories")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.content().json(getAllUsersAsJsonData()))
+                .andExpect(MockMvcResultMatchers.content().json(getAllCategoriesAsJsonData()))
                 .andExpect(status().isOk());
     }
 
@@ -128,7 +124,6 @@ public class CategoryControllerIIntegrationTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/categories")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getRequestVO()))
-                .andExpect(MockMvcResultMatchers.status().reason("Forbidden"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
@@ -138,7 +133,6 @@ public class CategoryControllerIIntegrationTest {
         mockMvc.perform(MockMvcRequestBuilders.put("/api/categories/{id}", "2")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getRequestVO()))
-                .andExpect(MockMvcResultMatchers.status().reason("Forbidden"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
@@ -146,7 +140,6 @@ public class CategoryControllerIIntegrationTest {
     @WithMockUser(authorities = "USER")
     public void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToDeleteResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/categories/{id}", "2"))
-                .andExpect(MockMvcResultMatchers.status().reason("Forbidden"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
@@ -178,7 +171,7 @@ public class CategoryControllerIIntegrationTest {
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
-    private String getAllUsersAsJsonData() throws JsonProcessingException {
+    private String getAllCategoriesAsJsonData() throws JsonProcessingException {
         var responseVO = service.findAll();
         return mapper.writeValueAsString(responseVO);
     }

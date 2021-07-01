@@ -17,22 +17,20 @@ import javax.validation.Valid;
 @RequestMapping("/api/vendors")
 @RequiredArgsConstructor
 public class VendorController {
+
     private final VendorService vendorService;
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping
     public Page<VendorResponseVO> findAllVendors(@RequestParam(value = "query", defaultValue = "", required = false) String query,
                                                  @PageableDefault(sort = {"title"}, direction = Sort.Direction.ASC) Pageable pageable) {
         return vendorService.findAll(query, pageable);
     }
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
     public VendorResponseVO findById(@PathVariable Long id) {
         return vendorService.findById(id);
     }
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/title")
     public VendorResponseVO findByTitle(@Valid @RequestParam(name = "title") String title) {
         return vendorService.findByTitle(title);

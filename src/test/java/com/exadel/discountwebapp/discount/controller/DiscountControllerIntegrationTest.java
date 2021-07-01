@@ -1,8 +1,6 @@
 package com.exadel.discountwebapp.discount.controller;
 
-import com.exadel.discountwebapp.discount.mapper.DiscountMapper;
 import com.exadel.discountwebapp.discount.repository.DiscountRepository;
-import com.exadel.discountwebapp.discount.service.DiscountService;
 import com.exadel.discountwebapp.discount.vo.DiscountRequestVO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,8 +9,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -24,25 +20,22 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
+@SpringBootTest
 @AutoConfigureMockMvc
-@EnableAutoConfiguration(exclude = SecurityAutoConfiguration.class)
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/database-init.sql")
 @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:sql/clean-up.sql")
 public class DiscountControllerIntegrationTest {
+
     @Autowired
     private MockMvc mockMvc;
     @Autowired
     private DiscountRepository repository;
-    @Autowired
-    DiscountMapper discountMapper;
-    @Autowired
-    DiscountService service;
 
     @Test
     @WithMockUser(roles = "USER")
@@ -97,7 +90,6 @@ public class DiscountControllerIntegrationTest {
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
-
     @Test
     @WithMockUser(authorities = "ADMIN")
     public void shouldUpdateDiscountByAdmin() throws Exception {
@@ -124,7 +116,6 @@ public class DiscountControllerIntegrationTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/discounts")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getDiscountRequestVOAsJson()))
-                .andExpect(MockMvcResultMatchers.status().reason("Forbidden"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
@@ -134,7 +125,6 @@ public class DiscountControllerIntegrationTest {
         mockMvc.perform(MockMvcRequestBuilders.put("/api/discounts/{id}", "2")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getDiscountRequestVOAsJson()))
-                .andExpect(MockMvcResultMatchers.status().reason("Forbidden"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
@@ -142,7 +132,6 @@ public class DiscountControllerIntegrationTest {
     @WithMockUser(authorities = "USER")
     public void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToDeleteResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/discounts/{id}", "2"))
-                .andExpect(MockMvcResultMatchers.status().reason("Forbidden"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
@@ -191,6 +180,8 @@ public class DiscountControllerIntegrationTest {
                 .perUser(1)
                 .categoryId(1L)
                 .vendorId(1L)
+                .locationIds(List.of(1L))
+                .tagIds(List.of(1L))
                 .build();
 
         ObjectMapper mapper = new ObjectMapper();

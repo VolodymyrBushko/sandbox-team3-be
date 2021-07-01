@@ -17,13 +17,11 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping
     public List<CategoryResponseVO> findAll() {
         return categoryService.findAll();
     }
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
     public CategoryResponseVO findById(@PathVariable Long id) {
         return categoryService.findById(id);

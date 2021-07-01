@@ -20,14 +20,12 @@ public class DiscountController {
 
     private final DiscountService discountService;
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping
     public Page<DiscountResponseVO> findAll(@RequestParam(value = "query", defaultValue = "", required = false) String query,
                                             @PageableDefault(sort = {"expirationDate"}, direction = Sort.Direction.ASC) Pageable pageable) {
         return discountService.findAll(query, pageable);
     }
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
     public DiscountResponseVO findById(@PathVariable Long id) {
         return discountService.findById(id);
