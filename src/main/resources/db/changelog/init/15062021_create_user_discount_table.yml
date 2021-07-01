@@ -22,18 +22,9 @@ databaseChangeLog:
                     references: discount(dis_id)
                     nullable: false
               - column:
-                  name: ud_discount_quantity
-                  type: INTEGER
-                  constraints:
-                    nullable: false
-              - column:
                   name: ud_created
-                  type: TIMESTAMP WITHOUT TIME ZONE
-                  constraints:
-                    nullable: false
-              - column:
-                  name: ud_modified
-                  type: TIMESTAMP WITHOUT TIME ZONE
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
                   constraints:
                     nullable: false
   - changeSet:
