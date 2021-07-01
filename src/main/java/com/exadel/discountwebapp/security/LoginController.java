@@ -4,17 +4,17 @@ import com.exadel.discountwebapp.exception.AuthenticationException;
 import com.exadel.discountwebapp.exception.EntityNotFoundException;
 import com.exadel.discountwebapp.user.service.UserService;
 import com.exadel.discountwebapp.user.vo.UserResponseVO;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 public class LoginController {
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private JwtProvider jwtProvider;
+
+    private final UserService userService;
+    private final JwtProvider jwtProvider;
 
     @PostMapping("/signin")
     public TokenResponse signIn(@RequestBody SigninVO signinVO) {

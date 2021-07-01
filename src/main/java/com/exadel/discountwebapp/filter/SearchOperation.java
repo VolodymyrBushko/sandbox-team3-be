@@ -1,9 +1,11 @@
 package com.exadel.discountwebapp.filter;
 
-import com.exadel.discountwebapp.exception.NotAllowedOperationException;
+import com.exadel.discountwebapp.exception.exception.client.NotAllowedOperationException;
+import lombok.Getter;
 
 import java.util.Arrays;
 
+@Getter
 public enum SearchOperation {
     EQUALITY(":"),
     STARTS_WITH(":*"),
@@ -22,6 +24,6 @@ public enum SearchOperation {
         return Arrays.stream(values())
                 .filter(e -> e.operation.equals(input))
                 .findFirst()
-                .orElseThrow(() -> new NotAllowedOperationException(String.format("Operation [%s] is not allowed", input)));
+                .orElseThrow(() -> new NotAllowedOperationException(input));
     }
 }

@@ -1,6 +1,6 @@
 package com.exadel.discountwebapp.user.service;
 
-import com.exadel.discountwebapp.exception.EntityNotFoundException;
+import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.user.repository.UserRepository;
 import com.exadel.discountwebapp.user.vo.UserResponseVO;
 import com.google.common.collect.Lists;
