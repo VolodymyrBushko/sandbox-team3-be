@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: 15062021_create_location_table
-      author: volodymyr.bushko@gmail.com
+      author: volodymyr.bushko@gmail.com & hreshchuk@gmail.com
       changes:
         - createTable:
             schemaName: public
@@ -15,16 +15,30 @@ databaseChangeLog:
                     primaryKey: true
                     primaryKeyName: pk_location
                     nullable: false
+#              - column:
+#                  name: country_short_name
+#                  type: VARCHAR(50)
+#                  constraints:
+#                    foreignKeyName: fk_location_country
+#                    references: country(country_short_name)
+#                    nullable: false
               - column:
-                  name: loc_country
-                  type: VARCHAR(50)
+                  name: country
+                  type: VARCHAR(255)
                   constraints:
+                    foreignKeyName: fk_location_country
+                    references: country(country_short_name)
                     nullable: false
               - column:
                   name: loc_city
                   type: VARCHAR(50)
                   constraints:
                     nullable: false
+              - column:
+                  name: loc_address_line
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
               - column:
                   name: loc_created
                   type: TIMESTAMP WITHOUT TIME ZONE

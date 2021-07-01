@@ -3,6 +3,9 @@ databaseChangeLog:
       file: init/15062021_create_role_table.yml
       relativeToChangelogFile: true
   - include:
+     file: init/01072021_create_country_table.yml
+     relativeToChangelogFile: true
+  - include:
       file: init/15062021_create_location_table.yml
       relativeToChangelogFile: true
   - include:
@@ -26,5 +29,4 @@ databaseChangeLog:
   - include:
       file: init/16062021_insert_data.yml
       relativeToChangelogFile: true
-
 

@@ -1,5 +1,6 @@
 package com.exadel.discountwebapp.location.entity;
 
+
 import com.exadel.discountwebapp.vendor.entity.Vendor;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -26,11 +27,18 @@ public class Location {
     @Column(name = "loc_id")
     private Long id;
 
-    @Column(name = "loc_country", length = 50, nullable = false)
-    private String country;
-
-    @Column(name = "loc_city", length = 50, nullable = false)
+    @Column(name = "loc_city", length = 50, nullable = true)
     private String city;
+
+//    @OneToMany(mappedBy = "location")
+//    private List<Country> countries;
+
+    @ManyToOne
+    @JoinColumn(name = "locations")
+    private Country country;
+
+    @Column(name = "loc_address_line", length = 255, nullable = true)
+    private String addressLine;
 
     @CreatedDate
     @EqualsAndHashCode.Exclude
