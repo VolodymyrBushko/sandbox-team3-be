@@ -16,37 +16,34 @@ import java.util.List;
 public class TagController {
     private final TagService tagService;
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping
     public List<TagResponseVO> findAll() {
         return tagService.findAll();
     }
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
     public TagResponseVO findById(@PathVariable Long id) {
         return tagService.findById(id);
     }
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/category/{categoryId}")
     public List<TagResponseVO> findAllTagsByCategoryId(@PathVariable Long categoryId) {
         return tagService.findAllTagsByCategoryId(categoryId);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public TagResponseVO create(@Valid @RequestBody TagRequestVO request) {
         return tagService.create(request);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
     public TagResponseVO update(@PathVariable Long id, @Valid @RequestBody TagRequestVO request) {
         return tagService.update(id, request);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id) {
         tagService.deleteById(id);
