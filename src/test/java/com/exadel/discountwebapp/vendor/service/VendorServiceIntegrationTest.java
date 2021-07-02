@@ -66,12 +66,52 @@ class VendorServiceIntegrationTest {
 
     @Test
     void shouldFindAllVendors() {
-        var query = "title:Sport Life;";
-        var pageable = createPageable(0, 1, null);
-
         var expectedIter = vendorRepository.findAll();
-        var expected = Lists.newArrayList(expectedIter).stream().filter(e -> e.getTitle().equals("Sport Life")).collect(Collectors.toList());
-        var actual = vendorService.findAll(query, pageable).getContent();
+        var expected = Lists.newArrayList(expectedIter);
+
+        var pageIndex = 0;
+        var pageSize = expected.size();
+        var pageable = PageRequest.of(pageIndex, pageSize);
+
+        var actual = vendorService.findAll(null, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllVendorsAndSortByTitleWithDirAsc() {
+        var expectedIter = vendorRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter);
+        expected.sort((a, b) -> a.getTitle().compareTo(b.getTitle()));
+
+        var sortField = "title";
+        var sortDir = Sort.Direction.ASC;
+        var sort = Sort.by(sortDir, sortField);
+
+        var pageIndex = 0;
+        var pageSize = expected.size();
+        var pageable = PageRequest.of(pageIndex, pageSize, sort);
+
+        var actual = vendorService.findAll(null, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllVendorsAndSortByTitleWithDirDesc() {
+        var expectedIter = vendorRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter);
+        expected.sort((a, b) -> b.getTitle().compareTo(a.getTitle()));
+
+        var sortField = "title";
+        var sortDir = Sort.Direction.DESC;
+        var sort = Sort.by(sortDir, sortField);
+
+        var pageIndex = 0;
+        var pageSize = expected.size();
+        var pageable = PageRequest.of(pageIndex, pageSize, sort);
+
+        var actual = vendorService.findAll(null, pageable).getContent();
 
         matchAll(expected, actual);
     }
@@ -141,18 +181,5 @@ class VendorServiceIntegrationTest {
         assertEquals(expected.getImageUrl(), actual.getImageUrl());
         assertEquals(expected.getEmail(), actual.getEmail());
         assertEquals(expected.getLocationId(), actual.getLocation().getId());
-    }
-
-    private Pageable createPageable(int page, int size, String sortRule) {
-        Sort sort = null;
-        if (sortRule != null && !sortRule.isEmpty()) {
-            Sort.Direction sortDirection = sortRule.toLowerCase().contains("desc")
-                    ? Sort.Direction.DESC
-                    : Sort.Direction.ASC;
-            sort = Sort.by(sortDirection, sortRule);
-        }
-        return sort != null
-                ? PageRequest.of(page, size, sort)
-                : PageRequest.of(page, size);
     }
 }
