@@ -28,9 +28,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/database-init.sql")
+@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/discount-init.sql")
 @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:sql/clean-up.sql")
-public class DiscountControllerIntegrationTest {
+class DiscountControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -39,7 +39,7 @@ public class DiscountControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    public void shouldGetAllDiscountsWithRoleUser() throws Exception {
+    void shouldGetAllDiscountsWithRoleUser() throws Exception {
         var actual = mockMvc.perform(MockMvcRequestBuilders.get("/api/discounts")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType("application/json"))
@@ -49,7 +49,7 @@ public class DiscountControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldGetAllDiscountsWithRoleAdmin() throws Exception {
+    void shouldGetAllDiscountsWithRoleAdmin() throws Exception {
         var actual = mockMvc.perform(MockMvcRequestBuilders.get("/api/discounts")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -58,7 +58,7 @@ public class DiscountControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    public void shouldGetDiscountByIdWithRoleUser() throws Exception {
+    void shouldGetDiscountByIdWithRoleUser() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/discounts/{id}", "1"))
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.title").value("38% discount"))
@@ -69,7 +69,7 @@ public class DiscountControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldGetDiscountByIdWithRoleAdmin() throws Exception {
+    void shouldGetDiscountByIdWithRoleAdmin() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/discounts/{id}", "2"))
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.title").value("50% discount"))
@@ -80,7 +80,7 @@ public class DiscountControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = "ADMIN")
-    public void shouldCreateDiscountByAdmin() throws Exception {
+    void shouldCreateDiscountByAdmin() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/discounts")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getDiscountRequestVOAsJson()))
@@ -92,7 +92,7 @@ public class DiscountControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = "ADMIN")
-    public void shouldUpdateDiscountByAdmin() throws Exception {
+    void shouldUpdateDiscountByAdmin() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.put("/api/discounts/{id}", "2")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getDiscountRequestVOAsJson()))
@@ -104,7 +104,7 @@ public class DiscountControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = "ADMIN")
-    public void shouldDeleteDiscountByAdmin() throws Exception {
+    void shouldDeleteDiscountByAdmin() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/discounts/{id}", "1"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
         assertThat(repository.existsById(1L)).isFalse();
@@ -112,7 +112,7 @@ public class DiscountControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = "USER")
-    public void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToCreateResource() throws Exception {
+    void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToCreateResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/discounts")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getDiscountRequestVOAsJson()))
@@ -121,7 +121,7 @@ public class DiscountControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = "USER")
-    public void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToUpdateResource() throws Exception {
+    void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToUpdateResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.put("/api/discounts/{id}", "2")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getDiscountRequestVOAsJson()))
@@ -130,34 +130,34 @@ public class DiscountControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = "USER")
-    public void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToDeleteResource() throws Exception {
+    void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToDeleteResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/discounts/{id}", "2"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
-    public void shouldGet403ErrorWhenNotAuthorizedUserTryToUseGetResource() throws Exception {
+    void shouldGet403ErrorWhenNotAuthorizedUserTryToUseGetResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/discounts"))
                 .andExpect(MockMvcResultMatchers.status().reason("Access Denied"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
-    public void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseCreateResource() throws Exception {
+    void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseCreateResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/discounts"))
                 .andExpect(MockMvcResultMatchers.status().reason("Access Denied"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
-    public void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseUpdateResource() throws Exception {
+    void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseUpdateResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.put("/api/discounts/{id}", "2"))
                 .andExpect(MockMvcResultMatchers.status().reason("Access Denied"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
-    public void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseDeleteResource() throws Exception {
+    void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseDeleteResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/discounts/{id}", "2"))
                 .andExpect(MockMvcResultMatchers.status().reason("Access Denied"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
@@ -172,15 +172,12 @@ public class DiscountControllerIntegrationTest {
                 .description("description3")
                 .imageUrl("http://localhost/images/img3.png")
                 .flatAmount(BigDecimal.valueOf(150.15))
-                .percentage(BigDecimal.valueOf(17.1))
                 .price(BigDecimal.valueOf(55.15))
                 .startDate(LocalDateTime.now())
                 .expirationDate(data.plusDays(1))
-                .quantity(10)
-                .perUser(1)
-                .categoryId(1L)
-                .vendorId(1L)
-                .locationIds(List.of(1L))
+                .categoryId(10L)
+                .vendorId(10L)
+                .locationIds(List.of(10L))
                 .tagIds(List.of(1L))
                 .build();
 

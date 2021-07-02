@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/location2-init.sql")
 @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:sql/clean-up.sql")
-public class LocationControllerIntegrationTest {
+class LocationControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -40,7 +40,7 @@ public class LocationControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    public void shouldGetAllLocationsWithRoleUser() throws Exception {
+    void shouldGetAllLocationsWithRoleUser() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/locations")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.content().json(getAllLocationResponseVO()))
@@ -49,7 +49,7 @@ public class LocationControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldGetAllLocationWithRoleAdmin() throws Exception {
+    void shouldGetAllLocationWithRoleAdmin() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/locations")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.content().json(getAllLocationResponseVO()))
@@ -58,7 +58,7 @@ public class LocationControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    public void shouldGetLocationByIdWithRoleUser() throws Exception {
+    void shouldGetLocationByIdWithRoleUser() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/locations/1"))
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.id").value("1"))
@@ -69,7 +69,7 @@ public class LocationControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldGetLocationByIdWithRoleADMIN() throws Exception {
+    void shouldGetLocationByIdWithRoleADMIN() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/locations/2"))
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.id").value("2"))
@@ -80,7 +80,7 @@ public class LocationControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = "ADMIN")
-    public void shouldCreateLocationByAdmin() throws Exception {
+    void shouldCreateLocationByAdmin() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/locations")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getLocationRequestVO()))
@@ -92,7 +92,7 @@ public class LocationControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = "ADMIN")
-    public void shouldUpdateLocationByAdmin() throws Exception {
+    void shouldUpdateLocationByAdmin() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.put("/api/locations/{id}", "1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getLocationRequestVO()))
@@ -104,7 +104,7 @@ public class LocationControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = "ADMIN")
-    public void shouldDeleteLocationByAdmin() throws Exception {
+    void shouldDeleteLocationByAdmin() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/locations/{id}", "1"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
         assertThat(repository.existsById(1L)).isFalse();
@@ -112,7 +112,7 @@ public class LocationControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = "USER")
-    public void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToCreateResource() throws Exception {
+    void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToCreateResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/locations")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getLocationRequestVO()))
@@ -121,7 +121,7 @@ public class LocationControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = "USER")
-    public void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToUpdateResource() throws Exception {
+    void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToUpdateResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.put("/api/locations/{id}", "2")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getLocationRequestVO()))
@@ -130,34 +130,34 @@ public class LocationControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = "USER")
-    public void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToDeleteResource() throws Exception {
+    void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToDeleteResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/locations/{id}", "2"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
-    public void shouldGet403ErrorWhenNotAuthorizedUserTryToUseGetResource() throws Exception {
+    void shouldGet403ErrorWhenNotAuthorizedUserTryToUseGetResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/locations"))
                 .andExpect(MockMvcResultMatchers.status().reason("Access Denied"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
-    public void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseCreateResource() throws Exception {
+    void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseCreateResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/locations"))
                 .andExpect(MockMvcResultMatchers.status().reason("Access Denied"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
-    public void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseUpdateResource() throws Exception {
+    void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseUpdateResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.put("/api/locations/{id}", "2"))
                 .andExpect(MockMvcResultMatchers.status().reason("Access Denied"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
-    public void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseDeleteResource() throws Exception {
+    void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseDeleteResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/locations/{id}", "2"))
                 .andExpect(MockMvcResultMatchers.status().reason("Access Denied"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());

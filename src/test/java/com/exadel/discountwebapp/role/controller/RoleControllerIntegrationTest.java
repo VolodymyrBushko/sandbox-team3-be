@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/role-init.sql")
 @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:sql/clean-up.sql")
-public class RoleControllerIntegrationTest {
+class RoleControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -34,7 +34,7 @@ public class RoleControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    public void shouldGetAllRolesWithRoleUser() throws Exception {
+    void shouldGetAllRolesWithRoleUser() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/roles")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.content().json(getAllRolesResponseVO()))
@@ -43,7 +43,7 @@ public class RoleControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldGetAllRolesWithRoleAdmin() throws Exception {
+    void shouldGetAllRolesWithRoleAdmin() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/roles")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.content().json(getAllRolesResponseVO()))
@@ -52,7 +52,7 @@ public class RoleControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    public void shouldGetRoleByIdWithRoleUser() throws Exception {
+    void shouldGetRoleByIdWithRoleUser() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/roles/1"))
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.id").value("1"))
@@ -62,7 +62,7 @@ public class RoleControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldGetRoleByIdWithRoleADMIN() throws Exception {
+    void shouldGetRoleByIdWithRoleADMIN() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/roles/2"))
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.id").value("2"))
@@ -71,14 +71,14 @@ public class RoleControllerIntegrationTest {
     }
 
     @Test
-    public void shouldGet403ErrorWhenNotAuthorizedUserTryToUseGetResource() throws Exception {
+    void shouldGet403ErrorWhenNotAuthorizedUserTryToUseGetResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/locations"))
                 .andExpect(MockMvcResultMatchers.status().reason("Access Denied"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
-    public void shouldGet403ErrorWhenNotAuthorizedUserTryToUseGetByIdRole() throws Exception {
+    void shouldGet403ErrorWhenNotAuthorizedUserTryToUseGetByIdRole() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/locations/{id}", "2"))
                 .andExpect(MockMvcResultMatchers.status().reason("Access Denied"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
