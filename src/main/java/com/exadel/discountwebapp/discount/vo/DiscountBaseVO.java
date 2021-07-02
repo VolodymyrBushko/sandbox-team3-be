@@ -1,5 +1,6 @@
 package com.exadel.discountwebapp.discount.vo;
 
+import com.exadel.discountwebapp.discount.validator.FlatAmountOrPercentageFieldsNotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @Data
 @SuperBuilder
 @NoArgsConstructor
+@FlatAmountOrPercentageFieldsNotNull
 public abstract class DiscountBaseVO implements Serializable {
 
     @NotBlank
@@ -28,12 +30,10 @@ public abstract class DiscountBaseVO implements Serializable {
     @Size(max = 510)
     private String imageUrl;
 
-    @NotNull
     @DecimalMin(value = "0.0")
     @Digits(integer = 8, fraction = 2)
     private BigDecimal flatAmount;
 
-    @NotNull
     @DecimalMin(value = "0.0")
     @Digits(integer = 3, fraction = 1)
     private BigDecimal percentage;
@@ -49,12 +49,4 @@ public abstract class DiscountBaseVO implements Serializable {
     @NotNull
     @Future
     private LocalDateTime expirationDate;
-
-    @NotNull
-    @Positive
-    private Integer quantity;
-
-    @NotNull
-    @Positive
-    private Integer perUser;
 }
