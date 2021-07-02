@@ -1,5 +1,6 @@
 package com.exadel.discountwebapp.vendor.entity;
 
+import com.exadel.discountwebapp.discount.entity.Discount;
 import com.exadel.discountwebapp.location.entity.Location;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -9,6 +10,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -54,4 +57,9 @@ public class Vendor {
     @ManyToOne
     @JoinColumn(name = "loc_id")
     private Location location;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "vendor")
+    private List<Discount> discounts = new ArrayList<>();
 }

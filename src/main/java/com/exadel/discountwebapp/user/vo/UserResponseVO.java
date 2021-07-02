@@ -10,7 +10,6 @@ import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.NotNull;
 
-
 @Data
 @SuperBuilder
 @NoArgsConstructor

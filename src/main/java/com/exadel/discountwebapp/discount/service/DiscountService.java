@@ -5,7 +5,7 @@ import com.exadel.discountwebapp.discount.mapper.DiscountMapper;
 import com.exadel.discountwebapp.discount.repository.DiscountRepository;
 import com.exadel.discountwebapp.discount.vo.DiscountRequestVO;
 import com.exadel.discountwebapp.discount.vo.DiscountResponseVO;
-import com.exadel.discountwebapp.exception.EntityNotFoundException;
+import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.filter.SpecificationBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,8 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +35,7 @@ public class DiscountService {
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public DiscountResponseVO findById(Long id) {
         Discount discount = discountRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Could not find discount with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException(Discount.class, "id", id));
         return discountMapper.toVO(discount);
     }
 
@@ -51,7 +49,7 @@ public class DiscountService {
     @Transactional(propagation = Propagation.REQUIRED)
     public DiscountResponseVO update(Long id, DiscountRequestVO request) {
         Discount discount = discountRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Could not find discount with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException(Discount.class, "id", id));
         discountMapper.updateEntity(request, discount);
         discountRepository.save(discount);
         return discountMapper.toVO(discount);

@@ -1,6 +1,7 @@
 package com.exadel.discountwebapp.category.entity;
 
 import com.exadel.discountwebapp.discount.entity.Discount;
+import com.exadel.discountwebapp.tag.entity.Tag;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -47,4 +48,9 @@ public class Category {
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "category")
     private List<Discount> discounts = new ArrayList<>();
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "category")
+    private List<Tag> tags = new ArrayList<>();
 }

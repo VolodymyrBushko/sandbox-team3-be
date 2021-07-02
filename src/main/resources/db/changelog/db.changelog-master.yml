@@ -29,4 +29,9 @@ databaseChangeLog:
   - include:
       file: init/16062021_insert_data.yml
       relativeToChangelogFile: true
-
+  - include:
+      file: init/27062021_create_tag_table.yml
+      relativeToChangelogFile: true
+  - include:
+      file: init/27062021_create_tag_discount_table.yml
+      relativeToChangelogFile: true
