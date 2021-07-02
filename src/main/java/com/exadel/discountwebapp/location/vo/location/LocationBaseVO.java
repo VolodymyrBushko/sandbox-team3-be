@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
 public class LocationBaseVO implements Serializable {
     @NotBlank
     @Size(min = 2, max = 50)
-    private String country;
+    private String countryCode;
     @NotBlank
     @Size(min = 2, max = 50)
     private String city;

@@ -8,18 +8,13 @@ databaseChangeLog:
             tableName: country
             columns:
               - column:
-                  name: country_short_name
+                  name: country_code
                   type: VARCHAR(50)
                   constraints:
                     primaryKey: true
-                    primaryKeyName: pk_country_short_name
+                    primaryKeyName: pk_country_code
                     nullable: false
                     unique: true
-              #              - column:
-              #                  name: loc_country
-              #                  type: VARCHAR(50)
-              #                  constraints:
-              #                    nullable: false
               - column:
                   name: country_full_name
                   type: VARCHAR(255)

@@ -15,19 +15,12 @@ databaseChangeLog:
                     primaryKey: true
                     primaryKeyName: pk_location
                     nullable: false
-#              - column:
-#                  name: country_short_name
-#                  type: VARCHAR(50)
-#                  constraints:
-#                    foreignKeyName: fk_location_country
-#                    references: country(country_short_name)
-#                    nullable: false
               - column:
-                  name: country
+                  name: country_code
                   type: VARCHAR(255)
                   constraints:
                     foreignKeyName: fk_location_country
-                    references: country(country_short_name)
+                    references: country(country_code)
                     nullable: false
               - column:
                   name: loc_city

@@ -4,19 +4,19 @@ VALUES (1, 'USER', current_timestamp, current_timestamp);
 INSERT INTO role (rol_id, rol_name, rol_created, rol_modified)
 VALUES (2, 'ADMIN', current_timestamp, current_timestamp);
 
-INSERT INTO country (country_short_name, country_full_name)
+INSERT INTO country (country_code, country_full_name)
 VALUES ('UA', 'Ukraine');
 
-INSERT INTO country (country_short_name, country_full_name)
+INSERT INTO country (country_code, country_full_name)
 VALUES ('BY', 'Belarus');
 
-INSERT INTO location (loc_id, country, loc_city, loc_address_line, loc_created, loc_modified)
+INSERT INTO location (loc_id, country_code, loc_city, loc_address_line, loc_created, loc_modified)
 VALUES (1, 'UA', 'Kyiv', 'Khreshchatyk, 38', current_timestamp, current_timestamp);
 
-INSERT INTO location (loc_id, country, loc_city, loc_address_line, loc_created, loc_modified)
+INSERT INTO location (loc_id, country_code, loc_city, loc_address_line, loc_created, loc_modified)
 VALUES (2, 'UA', 'Lviv', 'Sichovyh Strilciv, 54', current_timestamp, current_timestamp);
 
-INSERT INTO location (loc_id, country, loc_city, loc_address_line, loc_created, loc_modified)
+INSERT INTO location (loc_id, country_code, loc_city, loc_address_line, loc_created, loc_modified)
 VALUES (3, 'BY', 'Minsk', 'Independence Avenue, 1', current_timestamp, current_timestamp);
 
 -- INSERT INTO location (loc_id, loc_country, loc_city, loc_created, loc_modified)

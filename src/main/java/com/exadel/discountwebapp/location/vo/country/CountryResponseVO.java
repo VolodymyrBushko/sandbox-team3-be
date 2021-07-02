@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
 public class CountryResponseVO {
     @NotBlank
     @Size(min = 2, max = 50)
-    String countryShortName;
+    String countryCode;
 
     @NotBlank
     @Size(min = 2, max = 255)

@@ -16,12 +16,12 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 public class Country {
     @Id
-    @Column(name = "country_short_name", length = 50, nullable = false, unique = true)
-    String countryShortName;
+    @Column(name = "country_code", length = 50, nullable = false, unique = true)
+    String countryCode;
 
     @Column(name = "country_full_name", length = 255, nullable = false, unique = true)
     String countryFullName;
 
-    @OneToMany(mappedBy = "country")
+    @OneToMany(mappedBy = "countryCode")
     private List<Location> locations;
 }

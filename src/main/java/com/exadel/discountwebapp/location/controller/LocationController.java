@@ -34,8 +34,8 @@ public class LocationController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/country")
     public List<LocationResponseVO> getAllLocationsByCountry(
-            @RequestParam(name = "country") String country) {
-        return locationService.findAllByCountry(country);
+            @RequestParam(name = "countryCode") String countryCode) {
+        return locationService.findAllByCountryCode(countryCode);
     }
 // TODO: move to CountryController
     @PreAuthorize("isAuthenticated()")

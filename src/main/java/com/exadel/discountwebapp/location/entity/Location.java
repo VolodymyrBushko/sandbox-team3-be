@@ -32,7 +32,7 @@ public class Location {
 
     @ManyToOne
     @JoinColumn(name = "locations")
-    private Country country;
+    private Country countryCode;
 
     @Column(name = "loc_address_line", length = 255, nullable = true)
     private String addressLine;
