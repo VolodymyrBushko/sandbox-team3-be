@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/category-init.sql")
 @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:sql/clean-up.sql")
-public class CategoryControllerIntegrationTest {
+class CategoryControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -37,7 +37,7 @@ public class CategoryControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    public void shouldGetAllCategoriesWithRoleUser() throws Exception {
+    void shouldGetAllCategoriesWithRoleUser() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/categories")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.content().json(getAllCategoriesAsJsonData()))
@@ -46,7 +46,7 @@ public class CategoryControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    public void shouldGetCategoryByIdWithRoleUser() throws Exception {
+    void shouldGetCategoryByIdWithRoleUser() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/categories/1"))
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.title").value("category-1"))
@@ -57,7 +57,7 @@ public class CategoryControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldGetAllCategoriesWithRoleAdmin() throws Exception {
+    void shouldGetAllCategoriesWithRoleAdmin() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/categories")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.content().json(getAllCategoriesAsJsonData()))
@@ -66,7 +66,7 @@ public class CategoryControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldGetCategoryByIdWithRoleAdmin() throws Exception {
+    void shouldGetCategoryByIdWithRoleAdmin() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/categories/2"))
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.title").value("category-2"))
@@ -77,7 +77,7 @@ public class CategoryControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = "ADMIN")
-    public void shouldCreateCategoryByAdmin() throws Exception {
+    void shouldCreateCategoryByAdmin() throws Exception {
         CategoryRequestVO requestVO = new CategoryRequestVO().builder()
                 .title("category-3")
                 .imageUrl("http://localhost/images/img3.png")
@@ -101,7 +101,7 @@ public class CategoryControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = "ADMIN")
-    public void shouldUpdateCategoryByAdmin() throws Exception {
+    void shouldUpdateCategoryByAdmin() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.put("/api/categories/{id}", "2")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getRequestVO()))
@@ -112,7 +112,7 @@ public class CategoryControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = "ADMIN")
-    public void shouldDeleteCategoryByAdmin() throws Exception {
+    void shouldDeleteCategoryByAdmin() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/categories/{id}", "2"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
         assertThat(repository.existsById(2L)).isFalse();
@@ -120,7 +120,7 @@ public class CategoryControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = "USER")
-    public void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToCreateResource() throws Exception {
+    void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToCreateResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/categories")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getRequestVO()))
@@ -129,7 +129,7 @@ public class CategoryControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = "USER")
-    public void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToUpdateResource() throws Exception {
+    void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToUpdateResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.put("/api/categories/{id}", "2")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getRequestVO()))
@@ -138,34 +138,34 @@ public class CategoryControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = "USER")
-    public void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToDeleteResource() throws Exception {
+    void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToDeleteResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/categories/{id}", "2"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
-    public void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseGetResource() throws Exception {
+    void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseGetResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/categories"))
                 .andExpect(MockMvcResultMatchers.status().reason("Access Denied"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
-    public void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseCreateResource() throws Exception {
+    void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseCreateResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/categories"))
                 .andExpect(MockMvcResultMatchers.status().reason("Access Denied"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
-    public void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseUpdateResource() throws Exception {
+    void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseUpdateResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.put("/api/categories/{id}", "2"))
                 .andExpect(MockMvcResultMatchers.status().reason("Access Denied"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
-    public void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseDeleteResource() throws Exception {
+    void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseDeleteResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/categories/{id}", "2"))
                 .andExpect(MockMvcResultMatchers.status().reason("Access Denied"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());

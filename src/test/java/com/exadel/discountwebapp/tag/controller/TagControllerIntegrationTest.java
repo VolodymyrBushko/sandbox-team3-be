@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/tag-init.sql")
 @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:sql/clean-up.sql")
-public class TagControllerIntegrationTest {
+class TagControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -43,7 +43,7 @@ public class TagControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    public void shouldGetAllTagsWithRoleUser() throws Exception {
+    void shouldGetAllTagsWithRoleUser() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/tags")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.content().json(getAllTagsAsJsonData()))
@@ -52,7 +52,7 @@ public class TagControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldGetAllTagsWithRoleAdmin() throws Exception {
+    void shouldGetAllTagsWithRoleAdmin() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/tags")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.content().json(getAllTagsAsJsonData()))
@@ -61,7 +61,7 @@ public class TagControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    public void shouldGetTagByIdWithRoleUser() throws Exception {
+    void shouldGetTagByIdWithRoleUser() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/tags/{id}", 2))
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.id").value("2"))
@@ -71,7 +71,7 @@ public class TagControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldGetTagByIdWithRoleAdmin() throws Exception {
+    void shouldGetTagByIdWithRoleAdmin() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/tags/{id}", 4))
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.id").value("4"))
@@ -81,7 +81,7 @@ public class TagControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    public void shouldFindAllTagsByCategoryIdWithRoleUser() throws Exception {
+    void shouldFindAllTagsByCategoryIdWithRoleUser() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/tags/category/{categoryId}", 10))
                 .andExpect(content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.content().json(getTagsByCategoryId(10L)))
@@ -90,7 +90,7 @@ public class TagControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldFindAllTagsByCategoryIdWithRoleAdmin() throws Exception {
+    void shouldFindAllTagsByCategoryIdWithRoleAdmin() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/tags/category/{categoryId}", 20))
                 .andExpect(content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.content().json(getTagsByCategoryId(20L)))
@@ -99,7 +99,7 @@ public class TagControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = "ADMIN")
-    public void shouldCreateTagByAdmin() throws Exception {
+    void shouldCreateTagByAdmin() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/tags")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getTagRequestVO()))
@@ -110,7 +110,7 @@ public class TagControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = "ADMIN")
-    public void shouldUpdateTagByAdmin() throws Exception {
+    void shouldUpdateTagByAdmin() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.put("/api/tags/{id}", "2")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getTagRequestVO()))
@@ -121,7 +121,7 @@ public class TagControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = "ADMIN")
-    public void shouldDeleteTagByAdmin() throws Exception {
+    void shouldDeleteTagByAdmin() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/tags/{id}", "3"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
         assertThat(repository.existsById(3L)).isFalse();
@@ -129,7 +129,7 @@ public class TagControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = "USER")
-    public void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToCreateResource() throws Exception {
+    void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToCreateResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/tags")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getTagRequestVO()))
@@ -138,7 +138,7 @@ public class TagControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = "USER")
-    public void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToUpdateResource() throws Exception {
+    void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToUpdateResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.put("/api/tags/{id}", "2")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getTagRequestVO()))
@@ -147,34 +147,34 @@ public class TagControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = "USER")
-    public void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToDeleteResource() throws Exception {
+    void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToDeleteResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/tags/{id}", "2"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
-    public void shouldGet403ErrorWhenNotAuthorizedUserTryToUseGetResource() throws Exception {
+    void shouldGet403ErrorWhenNotAuthorizedUserTryToUseGetResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/tags"))
                 .andExpect(MockMvcResultMatchers.status().reason("Access Denied"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
-    public void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseCreateResource() throws Exception {
+    void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseCreateResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/tags"))
                 .andExpect(MockMvcResultMatchers.status().reason("Access Denied"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
-    public void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseUpdateResource() throws Exception {
+    void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseUpdateResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.put("/api/tags/{id}", "2"))
                 .andExpect(MockMvcResultMatchers.status().reason("Access Denied"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
-    public void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseDeleteResource() throws Exception {
+    void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseDeleteResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/tags/{id}", "2"))
                 .andExpect(MockMvcResultMatchers.status().reason("Access Denied"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());

@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/user-init.sql")
 @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:sql/clean-up.sql")
- class LoginControllerIntegrationTest {
+class LoginControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     private ObjectMapper mapper;
 
     @Test
-    public void shouldReturn200WithCorrectCredentials() throws Exception {
+    void shouldReturn200WithCorrectCredentials() throws Exception {
         SigninVO signinVO = new SigninVO("ivan_ivanov@gmail.com", "1111");
         String json = mapper.writeValueAsString(signinVO);
 
@@ -40,7 +40,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     }
 
     @Test
-    public void shouldReturn401WithWrongPassword() throws Exception {
+    void shouldReturn401WithWrongPassword() throws Exception {
         SigninVO signinVO = new SigninVO("ivan_ivanov@gmail.com", "111111");
         String json = mapper.writeValueAsString(signinVO);
 
@@ -51,7 +51,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     }
 
     @Test
-    public void shouldReturn401WithWrongEmail() throws Exception {
+    void shouldReturn401WithWrongEmail() throws Exception {
         SigninVO signinVO = new SigninVO("ivan@gmail.com", "1111");
         String json = mapper.writeValueAsString(signinVO);
 

@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/user-init.sql")
 @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:sql/clean-up.sql")
-public class UserControllerIntegrationTest {
+class UserControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -31,7 +31,7 @@ public class UserControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    public void shouldGetAllUsersWithRoleUser() throws Exception {
+    void shouldGetAllUsersWithRoleUser() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/users")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.content().json(getUsersResponseVo()))
@@ -40,7 +40,7 @@ public class UserControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    public void shouldGetUserByIdWithRoleUser() throws Exception {
+    void shouldGetUserByIdWithRoleUser() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/users/2"))
                 .andExpect(jsonPath("$.id").value("2"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value("Petro"))
@@ -51,7 +51,7 @@ public class UserControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldGetAllUsersWithRoleAdmin() throws Exception {
+    void shouldGetAllUsersWithRoleAdmin() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/users")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.content().json(getUsersResponseVo()))
@@ -60,7 +60,7 @@ public class UserControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldGetUserByIdWithRoleAdmin() throws Exception {
+    void shouldGetUserByIdWithRoleAdmin() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/users/1"))
                 .andExpect(jsonPath("$.id").value("1"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value("Ivan"))
@@ -70,14 +70,14 @@ public class UserControllerIntegrationTest {
     }
 
     @Test
-    public void shouldReturn403ErrorWhenNotAuthorizedUserTryGetUserById() throws Exception {
+    void shouldReturn403ErrorWhenNotAuthorizedUserTryGetUserById() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/users/1"))
                 .andExpect(MockMvcResultMatchers.status().reason("Access Denied"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
-    public void shouldReturn403ErrorWhenNotAuthorizedUserTryGetAllUsers() throws Exception {
+    void shouldReturn403ErrorWhenNotAuthorizedUserTryGetAllUsers() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/users"))
                 .andExpect(MockMvcResultMatchers.status().reason("Access Denied"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
@@ -85,14 +85,14 @@ public class UserControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    public void shouldReturn404ErrorIfAuthorizedUserEnteredWrongUrl() throws Exception {
+    void shouldReturn404ErrorIfAuthorizedUserEnteredWrongUrl() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/sdfdf/dsfdfd"))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
     @Test
     @WithMockUser(roles = "USER")
-    public void shouldReturn404ErrorIfAuthorizedUserTryGetUserByWrongId() throws Exception {
+    void shouldReturn404ErrorIfAuthorizedUserTryGetUserByWrongId() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/users/100"))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
