@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/vendor-init.sql")
 @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:sql/clean-up.sql")
-public class VendorControllerIntegrationTest {
+class VendorControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -35,7 +35,7 @@ public class VendorControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    public void shouldGetAllVendorWithRoleUser() throws Exception {
+    void shouldGetAllVendorWithRoleUser() throws Exception {
         var actual = mockMvc.perform(MockMvcRequestBuilders.get("/api/vendors")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType("application/json"))
@@ -46,7 +46,7 @@ public class VendorControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldGetAllVendorsWithRoleAdmin() throws Exception {
+    void shouldGetAllVendorsWithRoleAdmin() throws Exception {
         var actual = mockMvc.perform(MockMvcRequestBuilders.get("/api/vendors")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -56,7 +56,7 @@ public class VendorControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    public void shouldGetVendorByIdWithRoleUser() throws Exception {
+    void shouldGetVendorByIdWithRoleUser() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/vendors/{id}", "1"))
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.id").value("1"))
@@ -67,7 +67,7 @@ public class VendorControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldGetVendorByIdWithRoleAdmin() throws Exception {
+    void shouldGetVendorByIdWithRoleAdmin() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/vendors/{id}", "2"))
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.id").value("2"))
@@ -78,8 +78,8 @@ public class VendorControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    public void shouldGetVendorByTitleWithRoleUser() throws Exception {
-        var actual =   mockMvc.perform(MockMvcRequestBuilders.get("/api/vendors?title=title*.*Sport"))
+    void shouldGetVendorByTitleWithRoleUser() throws Exception {
+        var actual = mockMvc.perform(MockMvcRequestBuilders.get("/api/vendors?title=title*.*Sport"))
                 .andExpect(content().contentType("application/json"))
                 .andExpect(status().isOk());
 
@@ -88,8 +88,8 @@ public class VendorControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldGetVendorByTitleWithRoleAdmin() throws Exception {
-        var actual =   mockMvc.perform(MockMvcRequestBuilders.get("/api/vendors?title=title*.*Sport"))
+    void shouldGetVendorByTitleWithRoleAdmin() throws Exception {
+        var actual = mockMvc.perform(MockMvcRequestBuilders.get("/api/vendors?title=title*.*Sport"))
                 .andExpect(content().contentType("application/json"))
                 .andExpect(status().isOk());
 
@@ -98,7 +98,7 @@ public class VendorControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = "ADMIN")
-    public void shouldCreateVendorByAdmin() throws Exception {
+    void shouldCreateVendorByAdmin() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/vendors")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getVendorRequestVOAsJson()))
@@ -111,7 +111,7 @@ public class VendorControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = "ADMIN")
-    public void shouldUpdateVendorByAdmin() throws Exception {
+    void shouldUpdateVendorByAdmin() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.put("/api/vendors/{id}", "2")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getVendorRequestVOAsJson()))
@@ -123,7 +123,7 @@ public class VendorControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = "ADMIN")
-    public void shouldDeleteVendorByAdmin() throws Exception {
+    void shouldDeleteVendorByAdmin() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/vendors/{id}", "1"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
         assertThat(repository.existsById(1L)).isFalse();
@@ -131,7 +131,7 @@ public class VendorControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = "USER")
-    public void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToCreateResource() throws Exception {
+    void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToCreateResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/vendors")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getVendorRequestVOAsJson()))
@@ -140,7 +140,7 @@ public class VendorControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = "USER")
-    public void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToUpdateResource() throws Exception {
+    void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToUpdateResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.put("/api/vendors/{id}", "2")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getVendorRequestVOAsJson()))
@@ -149,34 +149,34 @@ public class VendorControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = "USER")
-    public void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToDeleteResource() throws Exception {
+    void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToDeleteResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/vendors/{id}", "2"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
-    public void shouldGet403ErrorWhenNotAuthorizedUserTryToUseGetResource() throws Exception {
+    void shouldGet403ErrorWhenNotAuthorizedUserTryToUseGetResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/vendors"))
                 .andExpect(MockMvcResultMatchers.status().reason("Access Denied"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
-    public void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseCreateResource() throws Exception {
+    void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseCreateResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/vendors"))
                 .andExpect(MockMvcResultMatchers.status().reason("Access Denied"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
-    public void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseUpdateResource() throws Exception {
+    void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseUpdateResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.put("/api/vendors/{id}", "2"))
                 .andExpect(MockMvcResultMatchers.status().reason("Access Denied"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
-    public void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseDeleteResource() throws Exception {
+    void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseDeleteResource() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/vendors/{id}", "2"))
                 .andExpect(MockMvcResultMatchers.status().reason("Access Denied"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
