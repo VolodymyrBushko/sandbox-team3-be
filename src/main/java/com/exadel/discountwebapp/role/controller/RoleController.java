@@ -22,13 +22,11 @@ public class RoleController {
 
     private final RoleService roleService;
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
     public RoleResponseVO findById(@NotNull @Positive @PathVariable Long id) {
         return roleService.getRoleById(id);
     }
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping()
     public List<RoleResponseVO> findAll() {
         return roleService.getAllRoles();

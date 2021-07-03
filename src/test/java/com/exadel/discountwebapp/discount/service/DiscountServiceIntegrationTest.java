@@ -90,12 +90,9 @@ class DiscountServiceIntegrationTest {
         var description = "description";
         var imageUrl = "http://localhost/images/img.png";
         var flatAmount = BigDecimal.valueOf(100.15);
-        var percentage = BigDecimal.valueOf(10.15);
         var price = BigDecimal.valueOf(50.15);
         var startDate = LocalDateTime.now();
         var expirationDate = startDate.plusDays(1);
-        var quantity = 10;
-        var perUser = 1;
         var categoryId = 10L;
         var vendorId = 10L;
         var locationIds = List.of(10L, 20L);
@@ -107,12 +104,9 @@ class DiscountServiceIntegrationTest {
                 .description(description)
                 .imageUrl(imageUrl)
                 .flatAmount(flatAmount)
-                .percentage(percentage)
                 .price(price)
                 .startDate(startDate)
                 .expirationDate(expirationDate)
-                .quantity(quantity)
-                .perUser(perUser)
                 .categoryId(categoryId)
                 .vendorId(vendorId)
                 .tagIds(tagIds)
@@ -132,8 +126,6 @@ class DiscountServiceIntegrationTest {
         assertEquals(expected.getPrice(), actual.getPrice());
         assertEquals(expected.getStartDate(), actual.getStartDate());
         assertEquals(expected.getExpirationDate(), actual.getExpirationDate());
-        assertEquals(expected.getQuantity(), actual.getQuantity());
-        assertEquals(expected.getPerUser(), actual.getPerUser());
 
         assertNotNull(actual.getCategory());
         assertNotNull(actual.getVendor());
@@ -153,8 +145,6 @@ class DiscountServiceIntegrationTest {
         assertEquals(expected.getPrice(), actual.getPrice());
         assertEquals(expected.getStartDate(), actual.getStartDate());
         assertEquals(expected.getExpirationDate(), actual.getExpirationDate());
-        assertEquals(expected.getQuantity(), actual.getQuantity());
-        assertEquals(expected.getPerUser(), actual.getPerUser());
 
         assertNotNull(actual.getCategory());
         assertNotNull(actual.getVendor());
