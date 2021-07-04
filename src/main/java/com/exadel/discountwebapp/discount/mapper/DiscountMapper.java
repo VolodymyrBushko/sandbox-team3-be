@@ -10,10 +10,11 @@ import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundExcept
 import com.exadel.discountwebapp.location.entity.Location;
 import com.exadel.discountwebapp.location.mapper.LocationMapper;
 import com.exadel.discountwebapp.location.repository.LocationRepository;
-import com.exadel.discountwebapp.location.vo.LocationResponseVO;
+import com.exadel.discountwebapp.location.vo.location.LocationResponseVO;
 import com.exadel.discountwebapp.tag.mapper.TagMapper;
 import com.exadel.discountwebapp.tag.repository.TagRepository;
 import com.exadel.discountwebapp.tag.vo.TagResponseVO;
+import com.exadel.discountwebapp.vendor.entity.Vendor;
 import com.exadel.discountwebapp.vendor.mapper.VendorMapper;
 import com.exadel.discountwebapp.vendor.repository.VendorRepository;
 import com.google.common.collect.Lists;
@@ -22,8 +23,8 @@ import org.modelmapper.PropertyMap;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import com.exadel.discountwebapp.vendor.entity.Vendor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -73,9 +74,11 @@ public class DiscountMapper {
                 .stream().map(tagMapper::toVO)
                 .collect(Collectors.toList());
 
-        List<LocationResponseVO> locations = discount.getLocations()
-                .stream().map(locationMapper::toVO)
-                .collect(Collectors.toList());
+        List<LocationResponseVO> locations = new ArrayList<>();
+        for (Location location : discount.getLocations()) {
+            LocationResponseVO locationResponseVO = locationMapper.toVO(location);
+            locations.add(locationResponseVO);
+        }
 
         response.setLocations(locations);
         response.setCategory(category);

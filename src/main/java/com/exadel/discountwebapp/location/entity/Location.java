@@ -14,11 +14,13 @@ import java.util.List;
 
 @Entity
 @Data
+//@Getter
+//@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
+//@EqualsAndHashCode
 @Table(name = "location")
-@Builder
+//@Builder
 @EntityListeners(AuditingEntityListener.class)
 public class Location {
     @EqualsAndHashCode.Exclude
@@ -30,8 +32,9 @@ public class Location {
     @Column(name = "loc_city", length = 50, nullable = true)
     private String city;
 
+    @ToString.Exclude
     @ManyToOne
-    @JoinColumn(name = "locations")
+    @JoinColumn(name = "country_code")
     private Country countryCode;
 
     @Column(name = "loc_address_line", length = 255, nullable = true)
