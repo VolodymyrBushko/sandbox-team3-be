@@ -55,7 +55,7 @@ public class LocationService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public LocationResponseVO update(Long id, LocationRequestVO request) {
-        Location location = getLocationById(id);
+        var location = getLocationById(id);
         locationMapper.update(location, request);
         locationRepository.save(location);
         return locationMapper.toVO(location);

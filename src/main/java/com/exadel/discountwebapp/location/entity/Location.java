@@ -14,13 +14,9 @@ import java.util.List;
 
 @Entity
 @Data
-//@Getter
-//@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-//@EqualsAndHashCode
 @Table(name = "location")
-//@Builder
 @EntityListeners(AuditingEntityListener.class)
 public class Location {
     @EqualsAndHashCode.Exclude

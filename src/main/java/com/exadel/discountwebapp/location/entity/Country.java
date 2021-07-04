@@ -1,6 +1,9 @@
 package com.exadel.discountwebapp.location.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringExclude;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -9,13 +12,9 @@ import java.util.List;
 
 @Entity
 @Data
-//@Getter
-//@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-//@EqualsAndHashCode
 @Table(name = "country")
-//@Builder
 @EntityListeners(AuditingEntityListener.class)
 public class Country {
     @EqualsAndHashCode.Exclude

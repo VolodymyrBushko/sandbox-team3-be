@@ -37,7 +37,8 @@ public class LocationController {
             @RequestParam(name = "countryCode") String countryCode) {
         return locationService.findAllByCountryCode(countryCode);
     }
-// TODO: move to CountryController
+
+    // TODO: tests for this controller
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/countries")
     public List<CountryResponseVO> getAllCountries() {

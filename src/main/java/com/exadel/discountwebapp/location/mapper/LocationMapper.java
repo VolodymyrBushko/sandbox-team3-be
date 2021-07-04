@@ -2,7 +2,6 @@ package com.exadel.discountwebapp.location.mapper;
 
 import com.exadel.discountwebapp.location.entity.Location;
 import com.exadel.discountwebapp.location.repository.CountryRepository;
-import com.exadel.discountwebapp.location.vo.country.CountryResponseVO;
 import com.exadel.discountwebapp.location.vo.location.LocationRequestVO;
 import com.exadel.discountwebapp.location.vo.location.LocationResponseVO;
 import org.modelmapper.ModelMapper;
