@@ -1,6 +1,7 @@
 package com.exadel.discountwebapp.vendor.service;
 
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
+import com.exadel.discountwebapp.exception.exception.client.IncorrectFilterInputException;
 import com.exadel.discountwebapp.vendor.entity.Vendor;
 import com.exadel.discountwebapp.vendor.repository.VendorRepository;
 import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
@@ -10,10 +11,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -69,10 +71,7 @@ class VendorServiceIntegrationTest {
         var expectedIter = vendorRepository.findAll();
         var expected = Lists.newArrayList(expectedIter);
 
-        var pageIndex = 0;
-        var pageSize = expected.size();
-        var pageable = PageRequest.of(pageIndex, pageSize);
-
+        var pageable = PageRequest.of(0, 20);
         var actual = vendorService.findAll(null, pageable).getContent();
 
         matchAll(expected, actual);
@@ -86,11 +85,9 @@ class VendorServiceIntegrationTest {
 
         var sortField = "title";
         var sortDir = Sort.Direction.ASC;
-        var sort = Sort.by(sortDir, sortField);
 
-        var pageIndex = 0;
-        var pageSize = expected.size();
-        var pageable = PageRequest.of(pageIndex, pageSize, sort);
+        var sort = Sort.by(sortDir, sortField);
+        var pageable = PageRequest.of(0, 20, sort);
 
         var actual = vendorService.findAll(null, pageable).getContent();
 
@@ -105,15 +102,169 @@ class VendorServiceIntegrationTest {
 
         var sortField = "title";
         var sortDir = Sort.Direction.DESC;
-        var sort = Sort.by(sortDir, sortField);
 
-        var pageIndex = 0;
-        var pageSize = expected.size();
-        var pageable = PageRequest.of(pageIndex, pageSize, sort);
+        var sort = Sort.by(sortDir, sortField);
+        var pageable = PageRequest.of(0, 20, sort);
 
         var actual = vendorService.findAll(null, pageable).getContent();
 
         matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllVendorsWhereIdLessThanTwo() {
+        var id = 2L;
+        var query = "id<" + id;
+
+        var expectedIter = vendorRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter)
+                .stream().filter(e -> e.getId() < id).collect(Collectors.toList());
+
+        var pageable = PageRequest.of(0, 20);
+        var actual = vendorService.findAll(query, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllVendorsWhereIdGreaterThanTwo() {
+        var id = 2L;
+        var query = "id>" + id;
+
+        var expectedIter = vendorRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter)
+                .stream().filter(e -> e.getId() > id).collect(Collectors.toList());
+
+        var pageable = PageRequest.of(0, 20);
+        var actual = vendorService.findAll(query, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllVendorsWhereCreatedDateBetweenTwoDates() {
+        var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        var firstDate = LocalDateTime.parse("2021-06-06 17:22:21", formatter);
+        var secondDate = LocalDateTime.parse("2023-06-06 17:22:21", formatter);
+        var query = String.format("created>%s;created<%s", firstDate, secondDate);
+
+        var expectedIter = vendorRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter)
+                .stream().filter(e -> e.getCreated().isAfter(firstDate) && e.getCreated().isBefore(secondDate)).collect(Collectors.toList());
+
+        var pageable = PageRequest.of(0, 20);
+        var actual = vendorService.findAll(query, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllVendorsWhereTitleEqualsSportLife() {
+        var title = "sport life";
+        var query = "title:" + title;
+
+        var expectedIter = vendorRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter)
+                .stream().filter(e -> e.getTitle().equalsIgnoreCase(title)).collect(Collectors.toList());
+
+        var pageable = PageRequest.of(0, 20);
+        var actual = vendorService.findAll(query, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllVendorsWhereTitleStartsWithSport() {
+        var title = "sport";
+        var query = "title:*" + title;
+
+        var expectedIter = vendorRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter)
+                .stream().filter(e -> e.getTitle().toLowerCase().startsWith(title)).collect(Collectors.toList());
+
+        var pageable = PageRequest.of(0, 20);
+        var actual = vendorService.findAll(query, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllVendorsWhereTitleEndsWithLife() {
+        var title = "life";
+        var query = "title*:" + title;
+
+        var expectedIter = vendorRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter)
+                .stream().filter(e -> e.getTitle().toLowerCase().endsWith(title)).collect(Collectors.toList());
+
+        var pageable = PageRequest.of(0, 20);
+        var actual = vendorService.findAll(query, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllVendorsWhereDescriptionContainsPizza() {
+        var description = "pizza";
+        var query = "description*:*" + description;
+
+        var expectedIter = vendorRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter)
+                .stream().filter(e -> e.getDescription().toLowerCase().contains(description)).collect(Collectors.toList());
+
+        var pageable = PageRequest.of(0, 20);
+        var actual = vendorService.findAll(query, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllVendorsWhereCityEqualsLviv() {
+        var city = "lviv";
+        var query = "location.city:" + city;
+
+        var expectedIter = vendorRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter)
+                .stream().filter(e -> e.getLocation().getCity().equalsIgnoreCase(city)).collect(Collectors.toList());
+
+        var pageable = PageRequest.of(0, 20);
+        var actual = vendorService.findAll(query, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllVendorsWhereTitleStartsWithSportAndDescriptionContainsCasualAndCityEqualsKyiv() {
+        var title = "sport";
+        var description = "casual";
+        var city = "kyiv";
+        var query = String.format("title:*%s;description*:*%s;location.city:%s", title, description, city);
+
+        var expectedIter = vendorRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter)
+                .stream()
+                .filter(e -> e.getTitle().toLowerCase().startsWith(title) &&
+                        e.getDescription().toLowerCase().contains(description) &&
+                        e.getLocation().getCity().equalsIgnoreCase(city))
+                .collect(Collectors.toList());
+
+        var pageable = PageRequest.of(0, 20);
+        var actual = vendorService.findAll(query, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldThrowExceptionIfFieldDoesNotExistInVendor() {
+        var field = "I don't exist";
+        var query = field + ":some value";
+
+        var pageable = PageRequest.of(0, 20);
+
+        assertThrows(IncorrectFilterInputException.class, () -> {
+            vendorService.findAll(query, pageable);
+        });
     }
 
     @Test
