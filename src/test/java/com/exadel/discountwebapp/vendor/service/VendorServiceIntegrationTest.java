@@ -71,7 +71,8 @@ class VendorServiceIntegrationTest {
         var expectedIter = vendorRepository.findAll();
         var expected = Lists.newArrayList(expectedIter);
 
-        var pageable = PageRequest.of(0, 20);
+        var vendorCount = (int) vendorRepository.count();
+        var pageable = PageRequest.of(0, vendorCount);
         var actual = vendorService.findAll(null, pageable).getContent();
 
         matchAll(expected, actual);
@@ -85,10 +86,10 @@ class VendorServiceIntegrationTest {
 
         var sortField = "title";
         var sortDir = Sort.Direction.ASC;
-
         var sort = Sort.by(sortDir, sortField);
-        var pageable = PageRequest.of(0, 20, sort);
 
+        var vendorCount = (int) vendorRepository.count();
+        var pageable = PageRequest.of(0, vendorCount, sort);
         var actual = vendorService.findAll(null, pageable).getContent();
 
         matchAll(expected, actual);
@@ -102,10 +103,10 @@ class VendorServiceIntegrationTest {
 
         var sortField = "title";
         var sortDir = Sort.Direction.DESC;
-
         var sort = Sort.by(sortDir, sortField);
-        var pageable = PageRequest.of(0, 20, sort);
 
+        var vendorCount = (int) vendorRepository.count();
+        var pageable = PageRequest.of(0, vendorCount, sort);
         var actual = vendorService.findAll(null, pageable).getContent();
 
         matchAll(expected, actual);
@@ -120,7 +121,8 @@ class VendorServiceIntegrationTest {
         var expected = Lists.newArrayList(expectedIter)
                 .stream().filter(e -> e.getId() < id).collect(Collectors.toList());
 
-        var pageable = PageRequest.of(0, 20);
+        var vendorCount = (int) vendorRepository.count();
+        var pageable = PageRequest.of(0, vendorCount);
         var actual = vendorService.findAll(query, pageable).getContent();
 
         matchAll(expected, actual);
@@ -135,7 +137,8 @@ class VendorServiceIntegrationTest {
         var expected = Lists.newArrayList(expectedIter)
                 .stream().filter(e -> e.getId() > id).collect(Collectors.toList());
 
-        var pageable = PageRequest.of(0, 20);
+        var vendorCount = (int) vendorRepository.count();
+        var pageable = PageRequest.of(0, vendorCount);
         var actual = vendorService.findAll(query, pageable).getContent();
 
         matchAll(expected, actual);
@@ -153,7 +156,8 @@ class VendorServiceIntegrationTest {
         var expected = Lists.newArrayList(expectedIter)
                 .stream().filter(e -> e.getCreated().isAfter(firstDate) && e.getCreated().isBefore(secondDate)).collect(Collectors.toList());
 
-        var pageable = PageRequest.of(0, 20);
+        var vendorCount = (int) vendorRepository.count();
+        var pageable = PageRequest.of(0, vendorCount);
         var actual = vendorService.findAll(query, pageable).getContent();
 
         matchAll(expected, actual);
@@ -168,7 +172,8 @@ class VendorServiceIntegrationTest {
         var expected = Lists.newArrayList(expectedIter)
                 .stream().filter(e -> e.getTitle().equalsIgnoreCase(title)).collect(Collectors.toList());
 
-        var pageable = PageRequest.of(0, 20);
+        var vendorCount = (int) vendorRepository.count();
+        var pageable = PageRequest.of(0, vendorCount);
         var actual = vendorService.findAll(query, pageable).getContent();
 
         matchAll(expected, actual);
@@ -183,7 +188,8 @@ class VendorServiceIntegrationTest {
         var expected = Lists.newArrayList(expectedIter)
                 .stream().filter(e -> e.getTitle().toLowerCase().startsWith(title)).collect(Collectors.toList());
 
-        var pageable = PageRequest.of(0, 20);
+        var vendorCount = (int) vendorRepository.count();
+        var pageable = PageRequest.of(0, vendorCount);
         var actual = vendorService.findAll(query, pageable).getContent();
 
         matchAll(expected, actual);
@@ -198,7 +204,8 @@ class VendorServiceIntegrationTest {
         var expected = Lists.newArrayList(expectedIter)
                 .stream().filter(e -> e.getTitle().toLowerCase().endsWith(title)).collect(Collectors.toList());
 
-        var pageable = PageRequest.of(0, 20);
+        var vendorCount = (int) vendorRepository.count();
+        var pageable = PageRequest.of(0, vendorCount);
         var actual = vendorService.findAll(query, pageable).getContent();
 
         matchAll(expected, actual);
@@ -213,7 +220,8 @@ class VendorServiceIntegrationTest {
         var expected = Lists.newArrayList(expectedIter)
                 .stream().filter(e -> e.getDescription().toLowerCase().contains(description)).collect(Collectors.toList());
 
-        var pageable = PageRequest.of(0, 20);
+        var vendorCount = (int) vendorRepository.count();
+        var pageable = PageRequest.of(0, vendorCount);
         var actual = vendorService.findAll(query, pageable).getContent();
 
         matchAll(expected, actual);
@@ -228,7 +236,8 @@ class VendorServiceIntegrationTest {
         var expected = Lists.newArrayList(expectedIter)
                 .stream().filter(e -> e.getLocation().getCity().equalsIgnoreCase(city)).collect(Collectors.toList());
 
-        var pageable = PageRequest.of(0, 20);
+        var vendorCount = (int) vendorRepository.count();
+        var pageable = PageRequest.of(0, vendorCount);
         var actual = vendorService.findAll(query, pageable).getContent();
 
         matchAll(expected, actual);
@@ -249,7 +258,8 @@ class VendorServiceIntegrationTest {
                         e.getLocation().getCity().equalsIgnoreCase(city))
                 .collect(Collectors.toList());
 
-        var pageable = PageRequest.of(0, 20);
+        var vendorCount = (int) vendorRepository.count();
+        var pageable = PageRequest.of(0, vendorCount);
         var actual = vendorService.findAll(query, pageable).getContent();
 
         matchAll(expected, actual);

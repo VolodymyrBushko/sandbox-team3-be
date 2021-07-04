@@ -56,7 +56,8 @@ class DiscountServiceIntegrationTest {
         var expectedIter = discountRepository.findAll();
         var expected = Lists.newArrayList(expectedIter);
 
-        var pageable = PageRequest.of(0, 20);
+        var discountCount = (int) discountRepository.count();
+        var pageable = PageRequest.of(0, discountCount);
         var actual = discountService.findAll(null, pageable).getContent();
 
         matchAll(expected, actual);
@@ -70,10 +71,10 @@ class DiscountServiceIntegrationTest {
 
         var sortField = "title";
         var sortDir = Sort.Direction.ASC;
-
         var sort = Sort.by(sortDir, sortField);
-        var pageable = PageRequest.of(0, 20, sort);
 
+        var discountCount = (int) discountRepository.count();
+        var pageable = PageRequest.of(0, discountCount, sort);
         var actual = discountService.findAll(null, pageable).getContent();
 
         matchAll(expected, actual);
@@ -87,10 +88,10 @@ class DiscountServiceIntegrationTest {
 
         var sortField = "title";
         var sortDir = Sort.Direction.DESC;
-
         var sort = Sort.by(sortDir, sortField);
-        var pageable = PageRequest.of(0, 20, sort);
 
+        var discountCount = (int) discountRepository.count();
+        var pageable = PageRequest.of(0, discountCount, sort);
         var actual = discountService.findAll(null, pageable).getContent();
 
         matchAll(expected, actual);
@@ -105,7 +106,8 @@ class DiscountServiceIntegrationTest {
         var expected = Lists.newArrayList(expectedIter)
                 .stream().filter(e -> e.getId() < id).collect(Collectors.toList());
 
-        var pageable = PageRequest.of(0, 20);
+        var discountCount = (int) discountRepository.count();
+        var pageable = PageRequest.of(0, discountCount);
         var actual = discountService.findAll(query, pageable).getContent();
 
         matchAll(expected, actual);
@@ -120,7 +122,8 @@ class DiscountServiceIntegrationTest {
         var expected = Lists.newArrayList(expectedIter)
                 .stream().filter(e -> e.getId() > id).collect(Collectors.toList());
 
-        var pageable = PageRequest.of(0, 20);
+        var discountCount = (int) discountRepository.count();
+        var pageable = PageRequest.of(0, discountCount);
         var actual = discountService.findAll(query, pageable).getContent();
 
         matchAll(expected, actual);
@@ -138,7 +141,8 @@ class DiscountServiceIntegrationTest {
         var expected = Lists.newArrayList(expectedIter)
                 .stream().filter(e -> e.getCreated().isAfter(firstDate) && e.getCreated().isBefore(secondDate)).collect(Collectors.toList());
 
-        var pageable = PageRequest.of(0, 20);
+        var discountCount = (int) discountRepository.count();
+        var pageable = PageRequest.of(0, discountCount);
         var actual = discountService.findAll(query, pageable).getContent();
 
         matchAll(expected, actual);
@@ -153,7 +157,8 @@ class DiscountServiceIntegrationTest {
         var expected = Lists.newArrayList(expectedIter)
                 .stream().filter(e -> e.getTitle().equalsIgnoreCase(title)).collect(Collectors.toList());
 
-        var pageable = PageRequest.of(0, 20);
+        var discountCount = (int) discountRepository.count();
+        var pageable = PageRequest.of(0, discountCount);
         var actual = discountService.findAll(query, pageable).getContent();
 
         matchAll(expected, actual);
@@ -168,7 +173,8 @@ class DiscountServiceIntegrationTest {
         var expected = Lists.newArrayList(expectedIter)
                 .stream().filter(e -> e.getTitle().toLowerCase().startsWith(title)).collect(Collectors.toList());
 
-        var pageable = PageRequest.of(0, 20);
+        var discountCount = (int) discountRepository.count();
+        var pageable = PageRequest.of(0, discountCount);
         var actual = discountService.findAll(query, pageable).getContent();
 
         matchAll(expected, actual);
@@ -183,7 +189,8 @@ class DiscountServiceIntegrationTest {
         var expected = Lists.newArrayList(expectedIter)
                 .stream().filter(e -> e.getTitle().toLowerCase().endsWith(title)).collect(Collectors.toList());
 
-        var pageable = PageRequest.of(0, 20);
+        var discountCount = (int) discountRepository.count();
+        var pageable = PageRequest.of(0, discountCount);
         var actual = discountService.findAll(query, pageable).getContent();
 
         matchAll(expected, actual);
@@ -198,7 +205,8 @@ class DiscountServiceIntegrationTest {
         var expected = Lists.newArrayList(expectedIter)
                 .stream().filter(e -> e.getDescription().toLowerCase().contains(description)).collect(Collectors.toList());
 
-        var pageable = PageRequest.of(0, 20);
+        var discountCount = (int) discountRepository.count();
+        var pageable = PageRequest.of(0, discountCount);
         var actual = discountService.findAll(query, pageable).getContent();
 
         matchAll(expected, actual);
@@ -216,7 +224,8 @@ class DiscountServiceIntegrationTest {
                 .filter(d -> d.getLocations().stream().anyMatch(l -> l.getCity().equalsIgnoreCase(city)))
                 .collect(Collectors.toList());
 
-        var pageable = PageRequest.of(0, 20);
+        var discountCount = (int) discountRepository.count();
+        var pageable = PageRequest.of(0, discountCount);
         var actual = discountService.findAll(query, pageable).getContent();
 
         matchAll(expected, actual);
@@ -233,7 +242,8 @@ class DiscountServiceIntegrationTest {
                 .filter(e -> e.getVendor().getTitle().equalsIgnoreCase(vendor))
                 .collect(Collectors.toList());
 
-        var pageable = PageRequest.of(0, 20);
+        var discountCount = (int) discountRepository.count();
+        var pageable = PageRequest.of(0, discountCount);
         var actual = discountService.findAll(query, pageable).getContent();
 
         matchAll(expected, actual);
@@ -250,7 +260,8 @@ class DiscountServiceIntegrationTest {
                 .filter(e -> e.getCategory().getTitle().equalsIgnoreCase(category))
                 .collect(Collectors.toList());
 
-        var pageable = PageRequest.of(0, 20);
+        var discountCount = (int) discountRepository.count();
+        var pageable = PageRequest.of(0, discountCount);
         var actual = discountService.findAll(query, pageable).getContent();
 
         matchAll(expected, actual);
@@ -272,7 +283,8 @@ class DiscountServiceIntegrationTest {
                         d.getLocations().stream().anyMatch(l -> l.getCity().equalsIgnoreCase(city)))
                 .collect(Collectors.toList());
 
-        var pageable = PageRequest.of(0, 20);
+        var discountCount = (int) discountRepository.count();
+        var pageable = PageRequest.of(0, discountCount);
         var actual = discountService.findAll(query, pageable).getContent();
 
         matchAll(expected, actual);
