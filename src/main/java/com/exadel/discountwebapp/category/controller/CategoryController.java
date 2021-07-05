@@ -48,6 +48,12 @@ public class CategoryController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
+    @DeleteMapping("/{id}/tags")
+    public void deleteTags(@PathVariable Long id, @Valid @RequestBody List<Long> tagIds) {
+        categoryService.deleteTags(id, tagIds);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id) {
         categoryService.deleteById(id);

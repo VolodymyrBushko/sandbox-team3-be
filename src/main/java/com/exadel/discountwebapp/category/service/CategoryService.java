@@ -74,6 +74,15 @@ public class CategoryService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteTags(Long id, List<Long> tagIds) {
+        Category category = categoryRepository.findById(id).
+                orElseThrow(() -> new EntityNotFoundException(Category.class, "id", id));
+
+        category.getTags().removeIf(e -> tagIds.contains(e.getId()));
+        categoryRepository.save(category);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
     public void deleteById(Long id) {
         categoryRepository.deleteById(id);
     }
