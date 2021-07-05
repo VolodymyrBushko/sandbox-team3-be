@@ -54,6 +54,5 @@ public class LocationMapper {
                 skip().setVendors(null);
             }
         };
-
     }
 }

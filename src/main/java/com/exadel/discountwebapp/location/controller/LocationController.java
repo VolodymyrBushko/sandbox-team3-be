@@ -2,6 +2,7 @@ package com.exadel.discountwebapp.location.controller;
 
 import com.exadel.discountwebapp.location.service.CountryService;
 import com.exadel.discountwebapp.location.service.LocationService;
+import com.exadel.discountwebapp.location.vo.city.CityResponseVO;
 import com.exadel.discountwebapp.location.vo.country.CountryResponseVO;
 import com.exadel.discountwebapp.location.vo.location.LocationRequestVO;
 import com.exadel.discountwebapp.location.vo.location.LocationResponseVO;
@@ -45,6 +46,14 @@ public class LocationController {
     @GetMapping("/countries")
     public List<CountryResponseVO> getAllCountries() {
         return countryService.findAllCountries();
+    }
+
+    // TODO: tests for this controller
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/cities")
+    public List<CityResponseVO> getAllCitiesByCountry(
+            @RequestParam(name="countryCode") String countryCode){
+        return locationService.findAllCitiesByCountryCode(countryCode);
     }
 
     @PreAuthorize("isAuthenticated()")

@@ -87,11 +87,11 @@ class LocationIntegrationTest {
     private LocationRequestVO createLocationRequest() {
         var countryCode = "UA";
         var city = "Kyiv";
-        var address_line = "Khreshchatyk, 22";
+        var addressLine = "Khreshchatyk, 22";
         return LocationRequestVO.builder()
                 .countryCode(countryCode)
                 .city(city)
-                .addressLine(address_line)
+                .addressLine(addressLine)
                 .build();
     }
 
