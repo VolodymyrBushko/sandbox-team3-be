@@ -5,11 +5,11 @@ import com.exadel.discountwebapp.discount.vo.DiscountRequestVO;
 import com.exadel.discountwebapp.discount.vo.DiscountResponseVO;
 import com.exadel.discountwebapp.tag.vo.TagResponseVO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -46,9 +46,15 @@ public class DiscountController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PatchMapping("/{id}/tags")
+    @PostMapping("/{id}/tags")
     public List<TagResponseVO> addTags(@PathVariable Long id, @Valid @RequestBody List<Long> tagIds) {
         return discountService.addTags(id, tagIds);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @DeleteMapping("/{id}/tags")
+    public void deleteTags(@PathVariable Long id, @Valid @RequestBody List<Long> tagIds) {
+        discountService.deleteTags(id, tagIds);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

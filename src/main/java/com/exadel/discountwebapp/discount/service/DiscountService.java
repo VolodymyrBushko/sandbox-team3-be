@@ -1,6 +1,5 @@
 package com.exadel.discountwebapp.discount.service;
 
-import com.exadel.discountwebapp.category.entity.Category;
 import com.exadel.discountwebapp.discount.entity.Discount;
 import com.exadel.discountwebapp.discount.mapper.DiscountMapper;
 import com.exadel.discountwebapp.discount.repository.DiscountRepository;
@@ -75,6 +74,15 @@ public class DiscountService {
         discountRepository.save(discount);
 
         return tags.stream().map(tagMapper::toVO).collect(Collectors.toList());
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteTags(Long id, List<Long> tagIds) {
+        Discount discount = discountRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(Discount.class, "id", id));
+
+        discount.getTags().removeIf(e -> tagIds.contains(e.getId()));
+        discountRepository.save(discount);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
