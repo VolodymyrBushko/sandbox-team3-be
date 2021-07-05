@@ -45,17 +45,11 @@ public class Discount {
     @Column(name = "dis_image_url", length = 510)
     private String imageUrl;
 
-    @Column(name = "dis_percentage", nullable = false)
+    @Column(name = "dis_percentage")
     private BigDecimal percentage;
 
-    @Column(name = "dis_flat_amount", nullable = false)
+    @Column(name = "dis_flat_amount")
     private BigDecimal flatAmount;
-
-    @Column(name = "dis_quantity", nullable = false)
-    private int quantity;
-
-    @Column(name = "dis_per_user", nullable = false)
-    private int perUser;
 
     @Column(name = "dis_price", nullable = false)
     private BigDecimal price;

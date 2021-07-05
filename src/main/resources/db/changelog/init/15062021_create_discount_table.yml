@@ -36,23 +36,9 @@ databaseChangeLog:
               - column:
                   name: dis_percentage
                   type: numeric(19, 2)
-                  constraints:
-                    nullable: false
               - column:
                   name: dis_flat_amount
                   type: numeric(19, 2)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: dis_quantity
-                  type: INTEGER
-                  constraints:
-                    nullable: false
-              - column:
-                  name: dis_per_user
-                  type: INTEGER
-                  constraints:
-                    nullable: false
               - column:
                   name: dis_price
                   type: numeric(19, 2)

@@ -5,18 +5,20 @@ import com.exadel.discountwebapp.discount.repository.DiscountRepository;
 import com.exadel.discountwebapp.discount.vo.DiscountRequestVO;
 import com.exadel.discountwebapp.discount.vo.DiscountResponseVO;
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
+import com.exadel.discountwebapp.exception.exception.client.IncorrectFilterInputException;
 import com.google.common.collect.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,7 +45,7 @@ class DiscountServiceIntegrationTest {
 
     @Test
     void shouldThrowExceptionIfNoDiscountFoundById() {
-        var id = 3L;
+        var id = 12345L;
         assertThrows(EntityNotFoundException.class, () -> {
             discountService.findById(id);
         });
@@ -51,14 +53,253 @@ class DiscountServiceIntegrationTest {
 
     @Test
     void shouldFindAllDiscounts() {
-        var query = "title:38% discount;";
-        var pageable = createPageable(0, 1, null);
+        var expectedIter = discountRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter);
+
+        var discountCount = (int) discountRepository.count();
+        var pageable = PageRequest.of(0, discountCount);
+        var actual = discountService.findAll(null, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllDiscountsAndSortByTitleWithDirAsc() {
+        var expectedIter = discountRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter);
+        expected.sort((a, b) -> a.getTitle().compareTo(b.getTitle()));
+
+        var sortField = "title";
+        var sortDir = Sort.Direction.ASC;
+        var sort = Sort.by(sortDir, sortField);
+
+        var discountCount = (int) discountRepository.count();
+        var pageable = PageRequest.of(0, discountCount, sort);
+        var actual = discountService.findAll(null, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllDiscountsAndSortByTitleWithDirDesc() {
+        var expectedIter = discountRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter);
+        expected.sort((a, b) -> b.getTitle().compareTo(a.getTitle()));
+
+        var sortField = "title";
+        var sortDir = Sort.Direction.DESC;
+        var sort = Sort.by(sortDir, sortField);
+
+        var discountCount = (int) discountRepository.count();
+        var pageable = PageRequest.of(0, discountCount, sort);
+        var actual = discountService.findAll(null, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllDiscountsWhereIdLessThanTwo() {
+        var id = 2L;
+        var query = "id<" + id;
 
         var expectedIter = discountRepository.findAll();
-        var expected = Lists.newArrayList(expectedIter).stream().filter(e -> e.getTitle().equals("38% discount")).collect(Collectors.toList());
+        var expected = Lists.newArrayList(expectedIter)
+                .stream().filter(e -> e.getId() < id).collect(Collectors.toList());
+
+        var discountCount = (int) discountRepository.count();
+        var pageable = PageRequest.of(0, discountCount);
         var actual = discountService.findAll(query, pageable).getContent();
 
         matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllDiscountsWhereIdGreaterThanTwo() {
+        var id = 2L;
+        var query = "id>" + id;
+
+        var expectedIter = discountRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter)
+                .stream().filter(e -> e.getId() > id).collect(Collectors.toList());
+
+        var discountCount = (int) discountRepository.count();
+        var pageable = PageRequest.of(0, discountCount);
+        var actual = discountService.findAll(query, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllDiscountsWhereCreatedDateBetweenTwoDates() {
+        var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        var firstDate = LocalDateTime.parse("2021-06-06 17:22:21", formatter);
+        var secondDate = LocalDateTime.parse("2023-06-06 17:22:21", formatter);
+        var query = String.format("created>%s;created<%s", firstDate, secondDate);
+
+        var expectedIter = discountRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter)
+                .stream().filter(e -> e.getCreated().isAfter(firstDate) && e.getCreated().isBefore(secondDate)).collect(Collectors.toList());
+
+        var discountCount = (int) discountRepository.count();
+        var pageable = PageRequest.of(0, discountCount);
+        var actual = discountService.findAll(query, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllDiscountsWhereTitleEqualsHappyDrink() {
+        var title = "happy drink";
+        var query = "title:" + title;
+
+        var expectedIter = discountRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter)
+                .stream().filter(e -> e.getTitle().equalsIgnoreCase(title)).collect(Collectors.toList());
+
+        var discountCount = (int) discountRepository.count();
+        var pageable = PageRequest.of(0, discountCount);
+        var actual = discountService.findAll(query, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllDiscountsWhereTitleStartsWithHappy() {
+        var title = "happy";
+        var query = "title:*" + title;
+
+        var expectedIter = discountRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter)
+                .stream().filter(e -> e.getTitle().toLowerCase().startsWith(title)).collect(Collectors.toList());
+
+        var discountCount = (int) discountRepository.count();
+        var pageable = PageRequest.of(0, discountCount);
+        var actual = discountService.findAll(query, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllDiscountsWhereTitleEndsWithDrink() {
+        var title = "drink";
+        var query = "title*:" + title;
+
+        var expectedIter = discountRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter)
+                .stream().filter(e -> e.getTitle().toLowerCase().endsWith(title)).collect(Collectors.toList());
+
+        var discountCount = (int) discountRepository.count();
+        var pageable = PageRequest.of(0, discountCount);
+        var actual = discountService.findAll(query, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllDiscountsWhereDescriptionContainsCaffe() {
+        var description = "caffe";
+        var query = "description*:*" + description;
+
+        var expectedIter = discountRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter)
+                .stream().filter(e -> e.getDescription().toLowerCase().contains(description)).collect(Collectors.toList());
+
+        var discountCount = (int) discountRepository.count();
+        var pageable = PageRequest.of(0, discountCount);
+        var actual = discountService.findAll(query, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    void shouldFindAllDiscountsWhereCityEqualsLviv() {
+        var city = "lviv";
+        var query = "locations.city:" + city;
+
+        var expectedIter = discountRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter)
+                .stream()
+                .filter(d -> d.getLocations().stream().anyMatch(l -> l.getCity().equalsIgnoreCase(city)))
+                .collect(Collectors.toList());
+
+        var discountCount = (int) discountRepository.count();
+        var pageable = PageRequest.of(0, discountCount);
+        var actual = discountService.findAll(query, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllDiscountsWhereVendorEqualsSportLife() {
+        var vendor = "sport life";
+        var query = "vendor.title:" + vendor;
+
+        var expectedIter = discountRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter)
+                .stream()
+                .filter(e -> e.getVendor().getTitle().equalsIgnoreCase(vendor))
+                .collect(Collectors.toList());
+
+        var discountCount = (int) discountRepository.count();
+        var pageable = PageRequest.of(0, discountCount);
+        var actual = discountService.findAll(query, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllDiscountsWhereCategoryEqualsSportsAndFitness() {
+        var category = "sports and fitness";
+        var query = "category.title:" + category;
+
+        var expectedIter = discountRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter)
+                .stream()
+                .filter(e -> e.getCategory().getTitle().equalsIgnoreCase(category))
+                .collect(Collectors.toList());
+
+        var discountCount = (int) discountRepository.count();
+        var pageable = PageRequest.of(0, discountCount);
+        var actual = discountService.findAll(query, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    void shouldFindAllDiscountsWhereTitleStartsWithHappyAndDescriptionContainsCaffeAndCityEqualsKyiv() {
+        var title = "happy";
+        var description = "caffe";
+        var city = "kyiv";
+        var query = String.format("title:*%s;description*:*%s;locations.city:%s", title, description, city);
+
+        var expectedIter = discountRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter)
+                .stream()
+                .filter(d -> d.getTitle().toLowerCase().startsWith(title) &&
+                        d.getDescription().toLowerCase().contains(description) &&
+                        d.getLocations().stream().anyMatch(l -> l.getCity().equalsIgnoreCase(city)))
+                .collect(Collectors.toList());
+
+        var discountCount = (int) discountRepository.count();
+        var pageable = PageRequest.of(0, discountCount);
+        var actual = discountService.findAll(query, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldThrowExceptionIfFieldDoesNotExistInVendor() {
+        var field = "I don't exist";
+        var query = field + ":some value";
+
+        var pageable = PageRequest.of(0, 20);
+
+        assertThrows(IncorrectFilterInputException.class, () -> {
+            discountService.findAll(query, pageable);
+        });
     }
 
     @Test
@@ -90,12 +331,9 @@ class DiscountServiceIntegrationTest {
         var description = "description";
         var imageUrl = "http://localhost/images/img.png";
         var flatAmount = BigDecimal.valueOf(100.15);
-        var percentage = BigDecimal.valueOf(10.15);
         var price = BigDecimal.valueOf(50.15);
         var startDate = LocalDateTime.now();
         var expirationDate = startDate.plusDays(1);
-        var quantity = 10;
-        var perUser = 1;
         var categoryId = 10L;
         var vendorId = 10L;
         var locationIds = List.of(10L, 20L);
@@ -107,12 +345,9 @@ class DiscountServiceIntegrationTest {
                 .description(description)
                 .imageUrl(imageUrl)
                 .flatAmount(flatAmount)
-                .percentage(percentage)
                 .price(price)
                 .startDate(startDate)
                 .expirationDate(expirationDate)
-                .quantity(quantity)
-                .perUser(perUser)
                 .categoryId(categoryId)
                 .vendorId(vendorId)
                 .tagIds(tagIds)
@@ -132,8 +367,6 @@ class DiscountServiceIntegrationTest {
         assertEquals(expected.getPrice(), actual.getPrice());
         assertEquals(expected.getStartDate(), actual.getStartDate());
         assertEquals(expected.getExpirationDate(), actual.getExpirationDate());
-        assertEquals(expected.getQuantity(), actual.getQuantity());
-        assertEquals(expected.getPerUser(), actual.getPerUser());
 
         assertNotNull(actual.getCategory());
         assertNotNull(actual.getVendor());
@@ -153,8 +386,6 @@ class DiscountServiceIntegrationTest {
         assertEquals(expected.getPrice(), actual.getPrice());
         assertEquals(expected.getStartDate(), actual.getStartDate());
         assertEquals(expected.getExpirationDate(), actual.getExpirationDate());
-        assertEquals(expected.getQuantity(), actual.getQuantity());
-        assertEquals(expected.getPerUser(), actual.getPerUser());
 
         assertNotNull(actual.getCategory());
         assertNotNull(actual.getVendor());
@@ -173,18 +404,5 @@ class DiscountServiceIntegrationTest {
         for (int i = 0; i < expected.size(); i++) {
             matchOne(expected.get(i), actual.get(i));
         }
-    }
-
-    private Pageable createPageable(int page, int size, String sortRule) {
-        Sort sort = null;
-        if (sortRule != null && !sortRule.isEmpty()) {
-            Direction sortDirection = sortRule.toLowerCase().contains("desc")
-                    ? Direction.DESC
-                    : Direction.ASC;
-            sort = Sort.by(sortDirection, sortRule);
-        }
-        return sort != null
-                ? PageRequest.of(page, size, sort)
-                : PageRequest.of(page, size);
     }
 }

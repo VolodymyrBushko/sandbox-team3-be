@@ -17,23 +17,21 @@ import java.util.List;
 @RequestMapping("/api/locations")
 @RequiredArgsConstructor
 public class LocationController {
+
     private final LocationService locationService;
     private final CountryService countryService;
 
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping
     public List<LocationResponseVO> getAllLocations() {
         return locationService.findAll();
     }
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
     public LocationResponseVO getLocationById(@PathVariable Long id) {
         return locationService.findById(id);
     }
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/country")
     public List<LocationResponseVO> getAllLocationsByCountry(
             @RequestParam(name = "countryCode") String countryCode) {
@@ -55,25 +53,24 @@ public class LocationController {
         return locationService.findAllCitiesByCountryCode(countryCode);
     }
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/city")
     public List<LocationResponseVO> getAllLocationsByCity(@Valid @RequestParam(name = "city") String city) {
         return locationService.findAllByCity(city);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public LocationResponseVO create(@Valid @RequestBody LocationRequestVO request) {
         return locationService.create(request);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
     public LocationResponseVO update(@PathVariable Long id, @Valid @RequestBody LocationRequestVO request) {
         return locationService.update(id, request);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         locationService.deleteById(id);

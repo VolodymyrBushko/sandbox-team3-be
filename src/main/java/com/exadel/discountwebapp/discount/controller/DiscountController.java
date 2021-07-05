@@ -20,32 +20,30 @@ public class DiscountController {
 
     private final DiscountService discountService;
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping
     public Page<DiscountResponseVO> findAll(@RequestParam(value = "query", defaultValue = "", required = false) String query,
                                             @PageableDefault(sort = {"expirationDate"}, direction = Sort.Direction.ASC) Pageable pageable) {
         return discountService.findAll(query, pageable);
     }
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
     public DiscountResponseVO findById(@PathVariable Long id) {
         return discountService.findById(id);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public DiscountResponseVO create(@Valid @RequestBody DiscountRequestVO request) {
         return discountService.create(request);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
     public DiscountResponseVO update(@PathVariable Long id, @Valid @RequestBody DiscountRequestVO request) {
         return discountService.update(id, request);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id) {
         discountService.deleteById(id);

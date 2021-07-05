@@ -35,9 +35,6 @@ public class UserDiscount {
     @ManyToOne
     private Discount discount;
 
-    @Column(name = "ud_discount_quantity", nullable = false)
-    private Integer discountQuantity;
-
     @CreatedDate
     @EqualsAndHashCode.Exclude
     @Column(name = "ud_created", updatable = false, nullable = false)
