@@ -11,7 +11,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashSet;
 import java.util.List;
 
 @RestController
@@ -52,7 +51,7 @@ public class LocationController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/cities")
     public List<CityResponseVO> getAllCitiesByCountry(
-            @RequestParam(name="countryCode") String countryCode){
+            @RequestParam(name = "countryCode") String countryCode) {
         return locationService.findAllCitiesByCountryCode(countryCode);
     }
 

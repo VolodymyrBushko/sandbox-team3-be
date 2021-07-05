@@ -12,7 +12,7 @@ public class CityMapper {
     private final ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
-    public CityMapper(){
+    public CityMapper() {
         configureModelMapper();
     }
 
@@ -20,7 +20,7 @@ public class CityMapper {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
     }
 
-    public CityResponseVO toVO(Location location){
+    public CityResponseVO toVO(Location location) {
         return modelMapper.map(location, CityResponseVO.class);
     }
 }
