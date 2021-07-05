@@ -3,10 +3,14 @@ package com.exadel.discountwebapp.category.service;
 import com.exadel.discountwebapp.category.entity.Category;
 import com.exadel.discountwebapp.category.mapper.CategoryMapper;
 import com.exadel.discountwebapp.category.repository.CategoryRepository;
+import com.exadel.discountwebapp.category.validator.CategoryValidator;
 import com.exadel.discountwebapp.category.vo.CategoryRequestVO;
 import com.exadel.discountwebapp.category.vo.CategoryResponseVO;
-import com.exadel.discountwebapp.category.validator.CategoryValidator;
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
+import com.exadel.discountwebapp.tag.entity.Tag;
+import com.exadel.discountwebapp.tag.mapper.TagMapper;
+import com.exadel.discountwebapp.tag.vo.TagRequestVO;
+import com.exadel.discountwebapp.tag.vo.TagResponseVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -14,11 +18,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
 
+    private final TagMapper tagMapper;
     private final CategoryMapper categoryMapper;
     private final CategoryRepository categoryRepository;
     private final CategoryValidator categoryValidator;
@@ -53,6 +59,18 @@ public class CategoryService {
         categoryMapper.updateEntity(request, category);
         categoryRepository.save(category);
         return categoryMapper.toVO(category);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public List<TagResponseVO> addTags(Long id, List<TagRequestVO> tagRequest) {
+        Category category = categoryRepository.findById(id).
+                orElseThrow(() -> new EntityNotFoundException(Category.class, "id", id));
+
+        List<Tag> tags = tagRequest.stream().map(e -> tagMapper.toEntity(e, category)).collect(Collectors.toList());
+        category.getTags().addAll(tags);
+        categoryRepository.save(category);
+
+        return tags.stream().map(tagMapper::toVO).collect(Collectors.toList());
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

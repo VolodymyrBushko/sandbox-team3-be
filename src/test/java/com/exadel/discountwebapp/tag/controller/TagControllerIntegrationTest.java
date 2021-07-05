@@ -197,7 +197,7 @@ class TagControllerIntegrationTest {
     private String getTagRequestVO() throws JsonProcessingException {
         var requestVO = TagRequestVO.builder()
                 .name("pizza")
-                .categoryId(10L)
+                //.categoryId(10L)
                 .build();
 
         return mapper.writeValueAsString(requestVO);
