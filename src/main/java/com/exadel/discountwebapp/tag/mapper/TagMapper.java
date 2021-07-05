@@ -1,8 +1,6 @@
 package com.exadel.discountwebapp.tag.mapper;
 
-import com.exadel.discountwebapp.category.entity.Category;
 import com.exadel.discountwebapp.category.repository.CategoryRepository;
-import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.tag.entity.Tag;
 import com.exadel.discountwebapp.tag.vo.TagRequestVO;
 import com.exadel.discountwebapp.tag.vo.TagResponseVO;
@@ -34,20 +32,11 @@ public class TagMapper {
 
     public Tag toEntity(TagRequestVO request) {
         Tag tag = modelMapper.map(request, Tag.class);
-        provideTagDependencies(request, tag);
         return tag;
     }
 
     public void updateEntity(TagRequestVO request, Tag tag) {
-        provideTagDependencies(request, tag);
         modelMapper.map(request, tag);
-    }
-
-    private void provideTagDependencies(TagRequestVO request, Tag tag) {
-        Category category = categoryRepository.findById(request.getCategoryId())
-                .orElseThrow(() ->new EntityNotFoundException(Category.class, "id", request.getCategoryId()));
-
-        tag.setCategory(category);
     }
 
     private PropertyMap<TagRequestVO, Tag> createSkipPropertyMap() {

@@ -3,6 +3,7 @@ package com.exadel.discountwebapp.discount.controller;
 import com.exadel.discountwebapp.discount.service.DiscountService;
 import com.exadel.discountwebapp.discount.vo.DiscountRequestVO;
 import com.exadel.discountwebapp.discount.vo.DiscountResponseVO;
+import com.exadel.discountwebapp.tag.vo.TagResponseVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/discounts")
@@ -41,6 +43,12 @@ public class DiscountController {
     @PutMapping("/{id}")
     public DiscountResponseVO update(@PathVariable Long id, @Valid @RequestBody DiscountRequestVO request) {
         return discountService.update(id, request);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PatchMapping("/{id}/tags")
+    public List<TagResponseVO> addTags(@PathVariable Long id, @Valid @RequestBody List<Long> tagIds) {
+        return discountService.addTags(id, tagIds);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

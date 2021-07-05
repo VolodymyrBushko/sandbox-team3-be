@@ -14,6 +14,6 @@ import java.io.Serializable;
 public class TagBaseVO implements Serializable {
 
     @NotBlank
-    @Size(min = 1, max = 50)
+    @Size(min = 2, max = 50)
     private String name;
 }
