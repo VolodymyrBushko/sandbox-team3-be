@@ -21,6 +21,6 @@ public class Country {
     @Column(name = "country_code", length = 50, nullable = false)
     private String countryCode;
 
-    @Column(name = "country_full_name", length = 255, nullable = false)
+    @Column(name = "country_full_name", nullable = false)
     private String countryFullName;
 }

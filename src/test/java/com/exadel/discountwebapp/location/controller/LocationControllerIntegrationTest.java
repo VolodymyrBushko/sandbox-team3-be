@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
@@ -21,7 +22,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -163,9 +163,10 @@ class LocationControllerIntegrationTest {
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
-
     private String getAllLocationResponseVO() throws JsonProcessingException {
-        List<LocationResponseVO> responseVO = service.findAll();
+        var locationCount = (int) repository.count();
+        var pageable = PageRequest.of(0, locationCount);
+        List<LocationResponseVO> responseVO = service.findAll(null, pageable).getContent();
         return mapper.writeValueAsString(responseVO);
     }
 

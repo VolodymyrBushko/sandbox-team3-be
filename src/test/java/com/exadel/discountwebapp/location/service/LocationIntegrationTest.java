@@ -9,6 +9,7 @@ import com.google.common.collect.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
@@ -47,7 +48,9 @@ class LocationIntegrationTest {
     void shouldFindAllLocations() {
         var expectedIter = locationRepository.findAll();
         var expected = Lists.newArrayList(expectedIter);
-        var actual = locationService.findAll();
+        var locationCount = (int) locationRepository.count();
+        var pageable = PageRequest.of(0, locationCount);
+        var actual = locationService.findAll(null, pageable).getContent();
 
         matchAll(expected, actual);
     }
