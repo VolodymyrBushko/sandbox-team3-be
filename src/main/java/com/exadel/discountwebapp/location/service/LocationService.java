@@ -47,18 +47,6 @@ public class LocationService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    public List<LocationResponseVO> findAllByCountryCode(String countryCode) {
-        List<Location> locations = locationRepository.findAllByCountry_CountryCode(countryCode);
-        return getLocationResponseVO(locations);
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    public List<LocationResponseVO> findAllByCity(String city) {
-        List<Location> locations = locationRepository.findAllByCity(city);
-        return getLocationResponseVO(locations);
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public List<CityResponseVO> findAllCitiesByCountryCode(String countryCode) {
         List<Location> locations = locationRepository.findAllByCountry_CountryCode(countryCode);
         List<CityResponseVO> response = new ArrayList<>();

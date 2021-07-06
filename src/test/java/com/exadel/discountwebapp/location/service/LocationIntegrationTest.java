@@ -60,9 +60,10 @@ class LocationIntegrationTest {
         var countryCode = "UA";
         var expectedIter = locationRepository.findAllByCountry_CountryCode(countryCode);
         var expected = Lists.newArrayList(expectedIter);
-        var actual = locationService.findAllByCountryCode(countryCode);
+        var pageable = PageRequest.of(0, 1);
+        var actual = locationService.findAll("country.countryCode=UA", pageable);
 
-        matchAll(expected, actual);
+        matchAll(expected, (List<LocationResponseVO>) actual);
     }
 
     @Test
@@ -71,9 +72,10 @@ class LocationIntegrationTest {
 
         var expectedIter = locationRepository.findAllByCity(city);
         var expected = Lists.newArrayList(expectedIter);
-        var actual = locationService.findAllByCity(city);
+        var pageable = PageRequest.of(0, 1);
+        var actual = locationService.findAll("city:Kyiv", pageable);
 
-        matchAll(expected, actual);
+        matchAll(expected, (List<LocationResponseVO>) actual);
     }
 
     @Test

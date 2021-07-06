@@ -36,12 +36,6 @@ public class LocationController {
         return locationService.findById(id);
     }
 
-    @GetMapping("/country")
-    public List<LocationResponseVO> getAllLocationsByCountry(
-            @RequestParam(name = "countryCode") String countryCode) {
-        return locationService.findAllByCountryCode(countryCode);
-    }
-
     // TODO: tests for this controller
     @GetMapping("/countries")
     public List<CountryResponseVO> getAllCountries() {
@@ -53,11 +47,6 @@ public class LocationController {
     public List<CityResponseVO> getAllCitiesByCountry(
             @RequestParam(name = "countryCode") String countryCode) {
         return locationService.findAllCitiesByCountryCode(countryCode);
-    }
-
-    @GetMapping("/city")
-    public List<LocationResponseVO> getAllLocationsByCity(@Valid @RequestParam(name = "city") String city) {
-        return locationService.findAllByCity(city);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
