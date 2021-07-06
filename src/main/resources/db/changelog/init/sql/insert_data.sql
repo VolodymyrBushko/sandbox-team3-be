@@ -20,27 +20,27 @@ INSERT INTO location (loc_id, country_code, loc_city, loc_address_line, loc_crea
 VALUES (3, 'BY', 'Minsk', 'Independence Avenue, 1', current_timestamp, current_timestamp);
 
 INSERT INTO location (loc_id, country_code, loc_city,loc_address_line, loc_created, loc_modified)
-VALUES (4, 'Ukraine', 'Rivne', 'Beregova, 13', current_timestamp, current_timestamp);
+VALUES (4, 'UA', 'Rivne', 'Beregova, 13', current_timestamp, current_timestamp);
 
 INSERT INTO location (loc_id, country_code, loc_city,loc_address_line, loc_created, loc_modified)
-VALUES (5, 'Ukraine', 'Chernigov', 'Ivana Bogyna, 6', current_timestamp, current_timestamp);
+VALUES (5, 'UA', 'Chernigov', 'Ivana Bogyna, 6', current_timestamp, current_timestamp);
 
 INSERT INTO location (loc_id, country_code, loc_city,loc_address_line, loc_created, loc_modified)
-VALUES (6, 'Belarus', 'Minsk', 'Kirova, 17', current_timestamp, current_timestamp);
+VALUES (6, 'BY', 'Minsk', 'Kirova, 17', current_timestamp, current_timestamp);
 
 INSERT INTO location (loc_id, country_code, loc_city,loc_address_line, loc_created, loc_modified)
-VALUES (7, 'Belarus', 'Grodno', 'Kalinina, 3', current_timestamp, current_timestamp);
+VALUES (7, 'BY', 'Grodno', 'Kalinina, 3', current_timestamp, current_timestamp);
 
 INSERT INTO location (loc_id, country_code, loc_city,loc_address_line, loc_created, loc_modified)
-VALUES (8, 'Belarus', 'Gomel', 'Artema, 5', current_timestamp, current_timestamp);
+VALUES (8, 'BY', 'Gomel', 'Artema, 5', current_timestamp, current_timestamp);
 
 INSERT INTO location (loc_id, country_code, loc_city,loc_address_line, loc_created, loc_modified)
-VALUES (9, 'Belarus', 'Brest', 'Gogolia, 9', current_timestamp, current_timestamp);
+VALUES (9, 'BY', 'Brest', 'Gogolia, 9', current_timestamp, current_timestamp);
 
 INSERT INTO location (loc_id, country_code, loc_city,loc_address_line, loc_created, loc_modified)
-VALUES (10, 'Belarus', 'Mogilev', 'Aviatorov, 15', current_timestamp, current_timestamp);
+VALUES (10, 'BY', 'Mogilev', 'Aviatorov, 15', current_timestamp, current_timestamp);
 
-INSERT INTO location (loc_id, country_code, loc_city,loc_address_line, loc_created, loc_modified)
+INSERT INTO category (cat_id, cat_title, cat_image_url, cat_created, cat_modified)
 VALUES (1, 'Sports and fitness', 'http://localhost/images/sport_image.jpeg', current_timestamp, current_timestamp);
 
 INSERT INTO category (cat_id, cat_title, cat_image_url, cat_created, cat_modified)

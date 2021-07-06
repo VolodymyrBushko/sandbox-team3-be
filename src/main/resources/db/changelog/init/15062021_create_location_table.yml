@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: 15062021_create_location_table
-      author: volodymyr.bushko@gmail.com & hreshchuk@gmail.com
+      author: volodymyr.bushko@gmail.com
       changes:
         - createTable:
             schemaName: public
@@ -17,7 +17,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: country_code
-                  type: VARCHAR(255)
+                  type: VARCHAR(2)
                   constraints:
                     foreignKeyName: fk_location_country
                     references: country(country_code)
@@ -26,7 +26,7 @@ databaseChangeLog:
                   name: loc_city
                   type: VARCHAR(50)
                   constraints:
-                    nullable: false
+                    nullable: true
               - column:
                   name: loc_address_line
                   type: VARCHAR(255)

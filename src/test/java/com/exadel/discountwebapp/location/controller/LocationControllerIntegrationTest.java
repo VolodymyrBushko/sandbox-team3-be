@@ -2,8 +2,8 @@ package com.exadel.discountwebapp.location.controller;
 
 import com.exadel.discountwebapp.location.repository.LocationRepository;
 import com.exadel.discountwebapp.location.service.LocationService;
-import com.exadel.discountwebapp.location.vo.LocationRequestVO;
-import com.exadel.discountwebapp.location.vo.LocationResponseVO;
+import com.exadel.discountwebapp.location.vo.location.LocationRequestVO;
+import com.exadel.discountwebapp.location.vo.location.LocationResponseVO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -171,7 +171,7 @@ class LocationControllerIntegrationTest {
 
     private String getLocationRequestVO() throws JsonProcessingException {
         var requestVO = new LocationRequestVO().builder()
-                .country("Belarus")
+                .countryCode("BY")
                 .city("Minsk")
                 .build();
 

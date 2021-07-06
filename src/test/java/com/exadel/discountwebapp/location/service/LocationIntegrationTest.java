@@ -119,7 +119,7 @@ class LocationIntegrationTest {
     private void matchOne(Location expected, LocationResponseVO actual) {
         assertNotNull(actual);
         assertEquals(expected.getId(), actual.getId());
-        assertEquals(expected.getCountryCode().getCountryCode(), actual.getCountryCode());
+        assertEquals(expected.getCountry().getCountryCode(), actual.getCountryCode());
         assertEquals(expected.getCity(), actual.getCity());
     }
 

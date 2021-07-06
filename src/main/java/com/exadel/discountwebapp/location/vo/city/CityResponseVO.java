@@ -13,7 +13,5 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CityResponseVO {
-    @NotBlank
-    @Size(min = 2, max = 50)
     private String city;
 }

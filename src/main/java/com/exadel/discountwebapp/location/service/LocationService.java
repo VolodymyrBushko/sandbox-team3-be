@@ -51,6 +51,7 @@ public class LocationService {
         return getLocationResponseVO(locations);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public List<CityResponseVO> findAllCitiesByCountryCode(String countryCode) {
         List<Location> locations = locationRepository.findAllByCountryCode(countryCode);
         List<CityResponseVO> response = new ArrayList<>();

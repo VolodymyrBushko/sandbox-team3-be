@@ -28,10 +28,9 @@ public class Location {
     @Column(name = "loc_city", length = 50, nullable = true)
     private String city;
 
-    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "country_code")
-    private Country countryCode;
+    private Country country;
 
     @Column(name = "loc_address_line", length = 255, nullable = true)
     private String addressLine;

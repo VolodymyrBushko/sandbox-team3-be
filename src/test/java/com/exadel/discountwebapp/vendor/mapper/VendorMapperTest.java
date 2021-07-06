@@ -36,7 +36,7 @@ class VendorMapperTest {
 
         assertEquals(actual.getLocation().getId(), expected.getLocation().getId());
         assertEquals(actual.getLocation().getCity(), expected.getLocation().getCity());
-        assertEquals(actual.getLocation().getCountryCode().getCountryCode(), expected.getLocation().getCountryCode());
+        assertEquals(actual.getLocation().getCountry().getCountryCode(), expected.getLocation().getCountryCode());
     }
 
     @Test

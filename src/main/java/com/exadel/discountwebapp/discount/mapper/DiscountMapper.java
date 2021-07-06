@@ -24,7 +24,6 @@ import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -74,11 +73,8 @@ public class DiscountMapper {
                 .stream().map(tagMapper::toVO)
                 .collect(Collectors.toList());
 
-        List<LocationResponseVO> locations = new ArrayList<>();
-        for (Location location : discount.getLocations()) {
-            LocationResponseVO locationResponseVO = locationMapper.toVO(location);
-            locations.add(locationResponseVO);
-        }
+        List<LocationResponseVO> locations = discount.getLocations().stream().map(locationMapper::toVO)
+                                             .collect(Collectors.toList());
 
         response.setLocations(locations);
         response.setCategory(category);

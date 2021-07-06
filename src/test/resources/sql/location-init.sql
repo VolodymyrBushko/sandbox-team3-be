@@ -1,6 +1,3 @@
-INSERT INTO  country
-VALUES ('UA', 'Ukraine');
-
 INSERT INTO location
 VALUES (1, 'Kyiv', 'Khreshchatyk, 22', '2021-06-06 17:22:21', '2021-06-06 17:22:21',  'UA'),
        (2, 'Lviv', 'Sichovyh Strilciv, 52', '2021-06-06 17:22:21', '2021-06-06 17:22:21', 'UA');

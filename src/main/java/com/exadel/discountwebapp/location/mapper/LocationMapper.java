@@ -30,7 +30,7 @@ public class LocationMapper {
 
     public LocationResponseVO toVO(Location location) {
         LocationResponseVO response = modelMapper.map(location, LocationResponseVO.class);
-        response.setCountryCode(location.getCountryCode().getCountryCode());
+        response.setCountryCode(location.getCountry().getCountryCode());
         return response;
     }
 

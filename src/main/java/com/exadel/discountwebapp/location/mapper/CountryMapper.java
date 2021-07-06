@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 public class CountryMapper {
     private final ModelMapper modelMapper = new ModelMapper();
 
-    @Autowired
     public CountryMapper() {
         configureModelMapper();
     }

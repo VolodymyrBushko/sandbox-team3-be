@@ -39,14 +39,12 @@ public class LocationController {
     }
 
     // TODO: tests for this controller
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/countries")
     public List<CountryResponseVO> getAllCountries() {
         return countryService.findAllCountries();
     }
 
     // TODO: tests for this controller
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/cities")
     public List<CityResponseVO> getAllCitiesByCountry(
             @RequestParam(name = "countryCode") String countryCode) {

@@ -17,15 +17,10 @@ import java.util.List;
 @Table(name = "country")
 @EntityListeners(AuditingEntityListener.class)
 public class Country {
-    @EqualsAndHashCode.Exclude
     @Id
-    @Column(name = "country_code", length = 50, nullable = false, unique = true)
-    String countryCode;
+    @Column(name = "country_code", length = 50, nullable = false)
+    private String countryCode;
 
-    @Column(name = "country_full_name", length = 255, nullable = false, unique = true)
-    String countryFullName;
-
-    @ToStringExclude
-    @OneToMany(mappedBy = "countryCode")
-    private List<Location> locations;
+    @Column(name = "country_full_name", length = 255, nullable = false)
+    private String countryFullName;
 }

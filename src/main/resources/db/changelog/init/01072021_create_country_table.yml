@@ -9,15 +9,13 @@ databaseChangeLog:
             columns:
               - column:
                   name: country_code
-                  type: VARCHAR(50)
+                  type: VARCHAR(2)
                   constraints:
                     primaryKey: true
                     primaryKeyName: pk_country_code
                     nullable: false
-                    unique: true
               - column:
                   name: country_full_name
                   type: VARCHAR(255)
                   constraints:
                     nullable: false
-                    unique: true
