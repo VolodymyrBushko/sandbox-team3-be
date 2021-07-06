@@ -62,6 +62,9 @@ public class Discount {
     @Column(name = "dis_expiration_date", nullable = false)
     private LocalDateTime expirationDate;
 
+    @Column(name = "dis_promocode", length = 100)
+    private String promocode;
+
     @EqualsAndHashCode.Exclude
     @CreatedDate
     @Column(name = "dis_created", nullable = false, updatable = false)

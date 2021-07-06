@@ -337,6 +337,7 @@ class DiscountServiceIntegrationTest {
         var categoryId = 10L;
         var vendorId = 10L;
         var locationIds = List.of(10L, 20L);
+        var promocode = "promocode123";
         var tagIds = List.of(1L, 2L);
 
         return DiscountRequestVO.builder()
@@ -352,6 +353,7 @@ class DiscountServiceIntegrationTest {
                 .vendorId(vendorId)
                 .tagIds(tagIds)
                 .locationIds(locationIds)
+                .promocode(promocode)
                 .build();
     }
 
@@ -367,6 +369,7 @@ class DiscountServiceIntegrationTest {
         assertEquals(expected.getPrice(), actual.getPrice());
         assertEquals(expected.getStartDate(), actual.getStartDate());
         assertEquals(expected.getExpirationDate(), actual.getExpirationDate());
+        assertEquals(expected.getPromocode(), actual.getPromocode());
 
         assertNotNull(actual.getCategory());
         assertNotNull(actual.getVendor());
@@ -386,6 +389,7 @@ class DiscountServiceIntegrationTest {
         assertEquals(expected.getPrice(), actual.getPrice());
         assertEquals(expected.getStartDate(), actual.getStartDate());
         assertEquals(expected.getExpirationDate(), actual.getExpirationDate());
+        assertEquals(expected.getPromocode(), actual.getPromocode());
 
         assertNotNull(actual.getCategory());
         assertNotNull(actual.getVendor());

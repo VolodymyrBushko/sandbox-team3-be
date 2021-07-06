@@ -45,6 +45,9 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: dis_promocode
+                  type: VARCHAR(100)
+              - column:
                   name: dis_start_date
                   type: TIMESTAMP WITHOUT TIME ZONE
                   constraints:

@@ -1,4 +1,4 @@
-package com.exadel.discountwebapp.user.vo;
+package com.exadel.discountwebapp.user_discount.vo;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

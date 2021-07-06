@@ -49,4 +49,7 @@ public abstract class DiscountBaseVO implements Serializable {
     @NotNull
     @Future
     private LocalDateTime expirationDate;
+
+    @Size(min = 2, max = 100)
+    private String promocode;
 }
