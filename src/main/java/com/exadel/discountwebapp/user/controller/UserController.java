@@ -5,6 +5,7 @@ import com.exadel.discountwebapp.user.vo.UserResponseVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -22,5 +23,10 @@ public class UserController {
     @GetMapping("/{id}")
     public UserResponseVO findById(@PathVariable Long id) {
         return userService.findById(id);
+    }
+
+    @GetMapping("/current")
+    public UserResponseVO getCurrentUser(Principal principal) {
+        return userService.findByEmail(principal.getName());
     }
 }
