@@ -52,30 +52,30 @@ public class TagServiceIntegrationTest {
 
     @Test
     void shouldCreateTag() {
-        //var expected = TagRequestVO.builder().name("cats").categoryId(10L).build();
-        //var createTag = tagService.create(expected);
+        var expected = TagRequestVO.builder().name("cats").categoryId(10L).build();
+        var createTag = tagService.create(expected);
 
-        //var actual = tagRepository.findById(createTag.getId()).get();
+        var actual = tagRepository.findById(createTag.getId()).get();
 
-        //assertNotNull(actual);
-        //assertNotNull(actual.getId());
+        assertNotNull(actual);
+        assertNotNull(actual.getId());
 
-        //assertEquals(expected.getName(), actual.getName());
-        //assertEquals(expected.getCategoryId(), actual.getCategory().getId());
+        assertEquals(expected.getName(), actual.getName());
+        assertEquals(expected.getCategoryId(), actual.getCategory().getId());
     }
 
     @Test
     void shouldUpdateTagById() {
-        //var id = 1L;
-        //var expected = TagRequestVO.builder().name("dogs").categoryId(20L).build();
-        //var updateTag = tagService.update(id, expected);
+        var id = 1L;
+        var expected = TagRequestVO.builder().name("dogs").categoryId(20L).build();
+        var updateTag = tagService.update(id, expected);
 
-        //var actual = tagRepository.findById(id).get();
+        var actual = tagRepository.findById(id).get();
 
-        //assertNotNull(actual);
-        //assertEquals(actual.getId(), id);
+        assertNotNull(actual);
+        assertEquals(actual.getId(), id);
 
-        //assertEquals(expected.getName(), actual.getName());
-        //assertEquals(expected.getCategoryId(), actual.getCategory().getId());
+        assertEquals(expected.getName(), actual.getName());
+        assertEquals(expected.getCategoryId(), actual.getCategory().getId());
     }
 }
