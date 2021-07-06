@@ -61,12 +61,18 @@ public class CategoryService {
         return categoryMapper.toVO(category);
     }
 
+    // TODO: created without ids
     @Transactional(propagation = Propagation.REQUIRED)
     public List<TagResponseVO> addTags(Long id, List<TagRequestVO> tagRequest) {
         Category category = categoryRepository.findById(id).
                 orElseThrow(() -> new EntityNotFoundException(Category.class, "id", id));
 
-        List<Tag> tags = tagRequest.stream().map(e -> tagMapper.toEntity(e, category)).collect(Collectors.toList());
+        List<Tag> tags = tagRequest
+                .stream()
+                .peek(e -> e.setCategoryId(category.getId()))
+                .map(tagMapper::toEntity)
+                .collect(Collectors.toList());
+
         category.getTags().addAll(tags);
         categoryRepository.save(category);
 

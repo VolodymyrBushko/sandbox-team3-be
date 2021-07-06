@@ -38,11 +38,12 @@ public class TagService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public TagResponseVO create(TagRequestVO request) {
-        Tag tag = tagMapper.toEntity(request);
-        tagValidator.checkUniqueTag(tag);
-        tagRepository.save(tag);
-        return tagMapper.toVO(tag);
+    public TagResponseVO create(TagRequestVO request) { // TODO: method was disabled
+        // Tag tag = tagMapper.toEntity(request);
+        // tagValidator.checkUniqueTag(tag);
+        // tagRepository.save(tag);
+        // return tagMapper.toVO(tag);
+        return null;
     }
 
 

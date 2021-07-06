@@ -10,4 +10,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class TagRequestVO extends TagBaseVO {
+
+    private Long categoryId;
 }
