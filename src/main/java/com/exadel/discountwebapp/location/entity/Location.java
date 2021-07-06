@@ -25,14 +25,14 @@ public class Location {
     @Column(name = "loc_id")
     private Long id;
 
-    @Column(name = "loc_city", length = 50, nullable = true)
+    @Column(name = "loc_city", length = 50)
     private String city;
 
     @ManyToOne
     @JoinColumn(name = "country_code")
     private Country country;
 
-    @Column(name = "loc_address_line", length = 255, nullable = true)
+    @Column(name = "loc_address_line")
     private String addressLine;
 
     @CreatedDate

@@ -13,7 +13,11 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CountryResponseVO {
+    @NotBlank
+    @Size(min = 2, max = 50)
     private String countryCode;
 
+    @NotBlank
+    @Size(min = 2, max = 255)
     private String countryFullName;
 }

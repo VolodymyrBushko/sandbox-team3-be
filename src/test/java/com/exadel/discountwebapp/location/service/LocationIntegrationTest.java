@@ -55,7 +55,7 @@ class LocationIntegrationTest {
     @Test
     void shouldFindAllLocationsByCountry() {
         var countryCode = "UA";
-        var expectedIter = locationRepository.findAllByCountryCode(countryCode);
+        var expectedIter = locationRepository.findAllByCountry_CountryCode(countryCode);
         var expected = Lists.newArrayList(expectedIter);
         var actual = locationService.findAllByCountryCode(countryCode);
 
