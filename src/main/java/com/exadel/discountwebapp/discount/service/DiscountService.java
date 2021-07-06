@@ -5,6 +5,7 @@ import com.exadel.discountwebapp.discount.mapper.DiscountMapper;
 import com.exadel.discountwebapp.discount.repository.DiscountRepository;
 import com.exadel.discountwebapp.discount.vo.DiscountRequestVO;
 import com.exadel.discountwebapp.discount.vo.DiscountResponseVO;
+import com.exadel.discountwebapp.exception.exception.client.EntityAlreadyExistsException;
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.filter.SpecificationBuilder;
 import com.exadel.discountwebapp.tag.entity.Tag;
@@ -67,13 +68,26 @@ public class DiscountService {
         Discount discount = discountRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Discount.class, "id", id));
 
-        List<Tag> tags = discount.getCategory().getTags()
-                .stream().filter(e -> tagIds.contains(e.getId())).collect(Collectors.toList());
+        List<Tag> categoryTags = discount.getCategory().getTags()
+                .stream()
+                .filter(e -> tagIds.contains(e.getId()))
+                .collect(Collectors.toList());
 
-        discount.getTags().addAll(tags);
+        List<Tag> discountTags = discount.getTags();
+
+        categoryTags.forEach(e -> {
+            if (discountTags.contains(e)) {
+                throw new EntityAlreadyExistsException(Tag.class, "id", e.getId());
+            }
+        });
+
+        discountTags.addAll(categoryTags);
         discountRepository.save(discount);
 
-        return tags.stream().map(tagMapper::toVO).collect(Collectors.toList());
+        return categoryTags
+                .stream()
+                .map(tagMapper::toVO)
+                .collect(Collectors.toList());
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

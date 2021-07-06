@@ -61,7 +61,7 @@ public class CategoryService {
         return categoryMapper.toVO(category);
     }
 
-    // TODO: created without ids
+    // TODO: fix this method (very strange things with tags)
     @Transactional(propagation = Propagation.REQUIRED)
     public List<TagResponseVO> addTags(Long id, List<TagRequestVO> tagRequest) {
         Category category = categoryRepository.findById(id).
@@ -76,13 +76,16 @@ public class CategoryService {
         category.getTags().addAll(tags);
         categoryRepository.save(category);
 
-        return tags.stream().map(tagMapper::toVO).collect(Collectors.toList());
+        return tags
+                .stream()
+                .map(tagMapper::toVO)
+                .collect(Collectors.toList());
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public void deleteTags(Long id, List<Long> tagIds) {
-        Category category = categoryRepository.findById(id).
-                orElseThrow(() -> new EntityNotFoundException(Category.class, "id", id));
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(Category.class, "id", id));
 
         category.getTags().removeIf(e -> tagIds.contains(e.getId()));
         categoryRepository.save(category);
