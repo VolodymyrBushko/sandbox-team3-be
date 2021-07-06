@@ -6,6 +6,7 @@ import com.exadel.discountwebapp.category.repository.CategoryRepository;
 import com.exadel.discountwebapp.category.validator.CategoryValidator;
 import com.exadel.discountwebapp.category.vo.CategoryRequestVO;
 import com.exadel.discountwebapp.category.vo.CategoryResponseVO;
+import com.exadel.discountwebapp.exception.exception.client.EntityAlreadyExistsException;
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.tag.entity.Tag;
 import com.exadel.discountwebapp.tag.mapper.TagMapper;
@@ -61,23 +62,31 @@ public class CategoryService {
         return categoryMapper.toVO(category);
     }
 
-    // TODO: fix this method (very strange things with tags)
     @Transactional(propagation = Propagation.REQUIRED)
     public List<TagResponseVO> addTags(Long id, List<TagRequestVO> tagRequest) {
         Category category = categoryRepository.findById(id).
                 orElseThrow(() -> new EntityNotFoundException(Category.class, "id", id));
 
-        List<Tag> tags = tagRequest
+        List<Tag> newTags = tagRequest
                 .stream()
                 .peek(e -> e.setCategoryId(category.getId()))
                 .map(tagMapper::toEntity)
                 .collect(Collectors.toList());
 
-        category.getTags().addAll(tags);
+        List<Tag> categoryTags = category.getTags();
+
+        newTags.forEach(e -> {
+            if (categoryTags.contains(e)) {
+                throw new EntityAlreadyExistsException(Tag.class, "name", e.getName());
+            }
+        });
+
+        categoryTags.addAll(newTags);
         categoryRepository.save(category);
 
-        return tags
+        return category.getTags()
                 .stream()
+                .filter(newTags::contains)
                 .map(tagMapper::toVO)
                 .collect(Collectors.toList());
     }
