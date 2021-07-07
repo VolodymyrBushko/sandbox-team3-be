@@ -1,6 +1,10 @@
+INSERT INTO country
+VALUES ('UA', 'Ukraine'),
+       ('BY', 'Belorus');
+
 INSERT INTO location (loc_id, country_code, loc_city, loc_address_line, loc_created, loc_modified)
-VALUES (10, 'UA','Kyiv', '2021-06-06 17:22:21', '2021-06-06 17:22:21'),
-       (20, 'UA','Lviv', '2021-06-06 17:22:21', '2021-06-06 17:22:21');
+VALUES (10, 'UA', 'Kyiv', 'Khreshchatyk, 25', '2021-06-06 17:22:21', '2021-06-06 17:22:21'),
+       (20, 'UA', 'Lviv', 'Sichovyh Strilciv, 52', '2021-06-06 17:22:21', '2021-06-06 17:22:21');
 
 INSERT INTO vendor
 VALUES (10, '2021-06-06 17:22:21', 'Sport Life - a chain of casual fitness centers', 'sprort_life@com.ua',

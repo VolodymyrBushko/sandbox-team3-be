@@ -60,7 +60,6 @@ class LocationIntegrationTest {
 
     @Test
     void shouldFindAllLocationsByCountry() {
-        var countryCode = "UA";
         var query = "country.countryCode:UA";
 
         var pageable = PageRequest.of(0, 1);
@@ -68,7 +67,6 @@ class LocationIntegrationTest {
         Specification<Location> specification = specificationBuilder.fromQuery(query);
         var expected = locationRepository.findAll(specification, pageable);
 
-//        var expected = Lists.newArrayList(expectedIter);
         var actual = locationService.findAll(query, pageable);
 
         matchAll(expected.getContent(), actual.getContent());
@@ -86,8 +84,6 @@ class LocationIntegrationTest {
 
         Page<Location> expected = locationRepository.findAll(specification, pageable);
 
-//        var expectedIter = locationRepository.findAllByCity(city);
-//        var expected = Lists.newArrayList(expectedIter);
         var actual = locationService.findAll(query, pageable);
 
         matchAll( expected.getContent(), actual.getContent());
