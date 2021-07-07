@@ -1,4 +1,4 @@
-package com.exadel.discountwebapp.user_discount.vo;
+package com.exadel.discountwebapp.userdiscount.vo;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

@@ -1,14 +1,13 @@
-package com.exadel.discountwebapp.user_discount.controller;
+package com.exadel.discountwebapp.userdiscount.controller;
 
-import com.exadel.discountwebapp.user_discount.service.UserDiscountService;
-import com.exadel.discountwebapp.user_discount.vo.UserDiscountRequestVO;
-import com.google.zxing.WriterException;
+import com.exadel.discountwebapp.userdiscount.service.UserDiscountService;
+import com.exadel.discountwebapp.userdiscount.vo.UserDiscountRequestVO;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,8 +16,9 @@ public class UserDiscountController {
 
     private final UserDiscountService userDiscountService;
 
+    @SneakyThrows
     @PostMapping(produces = MediaType.IMAGE_PNG_VALUE)
-    public byte[] create(@Valid @RequestBody UserDiscountRequestVO request) throws IOException, WriterException {
+    public byte[] create(@Valid @RequestBody UserDiscountRequestVO request) {
         return userDiscountService.create(request);
     }
 

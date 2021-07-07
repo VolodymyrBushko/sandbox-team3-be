@@ -1,4 +1,4 @@
-package com.exadel.discountwebapp.user_discount.entity;
+package com.exadel.discountwebapp.userdiscount.entity;
 
 import com.exadel.discountwebapp.discount.entity.Discount;
 import com.exadel.discountwebapp.user.entity.User;
