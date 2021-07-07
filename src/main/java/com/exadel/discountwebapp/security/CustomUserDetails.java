@@ -18,7 +18,6 @@ public class CustomUserDetails implements UserDetails {
     public static CustomUserDetails fromUserEntityToCustomUserDetails(UserResponseVO user) {
         CustomUserDetails customUserDetails = new CustomUserDetails();
         customUserDetails.email = user.getEmail();
-        customUserDetails.password = user.getPassword();
         customUserDetails.grantedAuthorities = Collections
                 .singletonList(new SimpleGrantedAuthority(user.getRole().getName()));
         return customUserDetails;
