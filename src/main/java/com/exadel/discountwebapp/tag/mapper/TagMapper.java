@@ -29,8 +29,8 @@ public class TagMapper {
         return modelMapper.map(tag, TagResponseVO.class);
     }
 
-    public Tag toEntity(TagRequestVO request) {
-        Category category = categoryRepository.findById(request.getCategoryId())
+    public Tag toEntity(TagRequestVO request, Long categoryId) {
+        Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new EntityNotFoundException(Category.class, "id", request.getCategoryId()));
         Tag tag = modelMapper.map(request, Tag.class);
         tag.setCategory(category);

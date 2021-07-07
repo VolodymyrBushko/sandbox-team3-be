@@ -64,42 +64,6 @@ public class DiscountService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public List<TagResponseVO> addTags(Long id, List<Long> tagIds) {
-        Discount discount = discountRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(Discount.class, "id", id));
-
-        List<Tag> categoryTags = discount.getCategory().getTags()
-                .stream()
-                .filter(e -> tagIds.contains(e.getId()))
-                .collect(Collectors.toList());
-
-        List<Tag> discountTags = discount.getTags();
-
-        categoryTags.forEach(e -> {
-            if (discountTags.contains(e)) {
-                throw new EntityAlreadyExistsException(Tag.class, "id", e.getId());
-            }
-        });
-
-        discountTags.addAll(categoryTags);
-        discountRepository.save(discount);
-
-        return categoryTags
-                .stream()
-                .map(tagMapper::toVO)
-                .collect(Collectors.toList());
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    public void deleteTags(Long id, List<Long> tagIds) {
-        Discount discount = discountRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(Discount.class, "id", id));
-
-        discount.getTags().removeIf(e -> tagIds.contains(e.getId()));
-        discountRepository.save(discount);
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
     public void deleteById(Long id) {
         discountRepository.deleteById(id);
     }

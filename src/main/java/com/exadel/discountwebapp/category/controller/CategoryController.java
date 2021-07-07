@@ -42,15 +42,15 @@ public class CategoryController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/{id}/tags")
-    public List<TagResponseVO> addTags(@PathVariable Long id, @Valid @RequestBody List<TagRequestVO> tagRequest) {
-        return categoryService.addTags(id, tagRequest);
+    @PostMapping("/{categoryId}/tags")
+    public CategoryResponseVO addTags(@PathVariable Long categoryId, @Valid @RequestBody List<TagRequestVO> tagRequest) {
+        return categoryService.addTags(categoryId, tagRequest);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @DeleteMapping("/{id}/tags")
-    public void deleteTags(@PathVariable Long id, @Valid @RequestBody List<Long> tagIds) {
-        categoryService.deleteTags(id, tagIds);
+    @DeleteMapping("/{categoryId}/tags")
+    public CategoryResponseVO deleteTags(@PathVariable Long categoryId, @Valid @RequestBody List<Long> tagIds) {
+        return categoryService.deleteTags(categoryId, tagIds);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

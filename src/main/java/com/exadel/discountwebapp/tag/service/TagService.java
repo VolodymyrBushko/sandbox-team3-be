@@ -39,7 +39,7 @@ public class TagService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public TagResponseVO create(TagRequestVO request) {
-         Tag tag = tagMapper.toEntity(request);
+         Tag tag = tagMapper.toEntity(request, request.getCategoryId());
          tagValidator.checkUniqueTag(tag);
          tagRepository.save(tag);
          return tagMapper.toVO(tag);

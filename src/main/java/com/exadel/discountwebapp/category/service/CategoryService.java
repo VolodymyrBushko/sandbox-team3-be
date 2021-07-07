@@ -6,12 +6,10 @@ import com.exadel.discountwebapp.category.repository.CategoryRepository;
 import com.exadel.discountwebapp.category.validator.CategoryValidator;
 import com.exadel.discountwebapp.category.vo.CategoryRequestVO;
 import com.exadel.discountwebapp.category.vo.CategoryResponseVO;
-import com.exadel.discountwebapp.exception.exception.client.EntityAlreadyExistsException;
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.tag.entity.Tag;
 import com.exadel.discountwebapp.tag.mapper.TagMapper;
 import com.exadel.discountwebapp.tag.vo.TagRequestVO;
-import com.exadel.discountwebapp.tag.vo.TagResponseVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -63,41 +61,34 @@ public class CategoryService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public List<TagResponseVO> addTags(Long id, List<TagRequestVO> tagRequest) {
-        Category category = categoryRepository.findById(id).
-                orElseThrow(() -> new EntityNotFoundException(Category.class, "id", id));
+    public CategoryResponseVO addTags(Long categoryId, List<TagRequestVO> tagRequest) {
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new EntityNotFoundException(Category.class, "id", categoryId));
 
         List<Tag> newTags = tagRequest
                 .stream()
-                .peek(e -> e.setCategoryId(category.getId()))
-                .map(tagMapper::toEntity)
+                .map(e -> tagMapper.toEntity(e, category.getId()))
                 .collect(Collectors.toList());
 
-        List<Tag> categoryTags = category.getTags();
+        categoryValidator.checkDuplicateTag(category, newTags);
 
-        newTags.forEach(e -> {
-            if (categoryTags.contains(e)) {
-                throw new EntityAlreadyExistsException(Tag.class, "name", e.getName());
-            }
-        });
+        category.getTags().addAll(newTags);
+        Category updatedCategory = categoryRepository.save(category);
 
-        categoryTags.addAll(newTags);
-        categoryRepository.save(category);
-
-        return category.getTags()
-                .stream()
-                .filter(newTags::contains)
-                .map(tagMapper::toVO)
-                .collect(Collectors.toList());
+        return categoryMapper.toVO(updatedCategory);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public void deleteTags(Long id, List<Long> tagIds) {
-        Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(Category.class, "id", id));
+    public CategoryResponseVO deleteTags(Long categoryId, List<Long> tagIds) {
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new EntityNotFoundException(Category.class, "id", categoryId));
+
+        categoryValidator.checkTagAlreadyUsedInDiscount(category, tagIds);
 
         category.getTags().removeIf(e -> tagIds.contains(e.getId()));
-        categoryRepository.save(category);
+        Category updatedCategory = categoryRepository.save(category);
+
+        return categoryMapper.toVO(updatedCategory);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

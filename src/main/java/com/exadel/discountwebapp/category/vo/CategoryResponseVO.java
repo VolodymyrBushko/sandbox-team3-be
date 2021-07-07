@@ -17,4 +17,7 @@ public class CategoryResponseVO extends CategoryBaseVO {
 
     @NotNull
     private Long id;
+
+    @NotNull
+    private List<TagResponseVO> tags;
 }
