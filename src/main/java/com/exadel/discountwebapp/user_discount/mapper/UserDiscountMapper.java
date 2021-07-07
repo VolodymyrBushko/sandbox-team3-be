@@ -1,6 +1,7 @@
 package com.exadel.discountwebapp.user_discount.mapper;
 
 import com.exadel.discountwebapp.discount.entity.Discount;
+import com.exadel.discountwebapp.discount.mapper.DiscountMapper;
 import com.exadel.discountwebapp.discount.repository.DiscountRepository;
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.user.entity.User;
@@ -26,7 +27,7 @@ public class UserDiscountMapper {
 
     public UserDiscountMapper(UserRepository userRepository,
                               DiscountRepository discountRepository,
-                              QRCodeGenerator qrCodeGenerator) {
+                              QRCodeGenerator qrCodeGenerator, DiscountMapper discountMapper) {
         this.userRepository = userRepository;
         this.discountRepository = discountRepository;
         this.qrCodeGenerator = qrCodeGenerator;
@@ -34,8 +35,6 @@ public class UserDiscountMapper {
 
     public UserDiscountResponseVO toVO(UserDiscount userDiscount) {
         UserDiscountResponseVO response = modelMapper.map(userDiscount, UserDiscountResponseVO.class);
-        response.setQrcode(userDiscount.getQrcode());
-
         return response;
     }
 

@@ -2,7 +2,6 @@ package com.exadel.discountwebapp.user_discount.controller;
 
 import com.exadel.discountwebapp.user_discount.service.UserDiscountService;
 import com.exadel.discountwebapp.user_discount.vo.UserDiscountRequestVO;
-import com.exadel.discountwebapp.user_discount.vo.UserDiscountResponseVO;
 import com.google.zxing.WriterException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -23,8 +22,8 @@ public class UserDiscountController {
         return userDiscountService.create(request);
     }
 
-    @GetMapping("/{userId}/{discountId}")
-    public UserDiscountResponseVO findUserDiscountById(@PathVariable Long userId, @PathVariable Long discountId) {
-        return userDiscountService.findUserDiscountById(userId, discountId);
+    @GetMapping(produces = MediaType.IMAGE_PNG_VALUE)
+    public byte[] findQRCodeByUserDiscountId(@Valid @RequestBody UserDiscountRequestVO request) {
+        return userDiscountService.findQRCodeByUserDiscountId(request);
     }
 }

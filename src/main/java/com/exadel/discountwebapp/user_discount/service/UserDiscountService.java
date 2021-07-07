@@ -6,7 +6,6 @@ import com.exadel.discountwebapp.user_discount.entity.UserDiscount;
 import com.exadel.discountwebapp.user_discount.mapper.UserDiscountMapper;
 import com.exadel.discountwebapp.user_discount.repository.UserDiscountRepository;
 import com.exadel.discountwebapp.user_discount.vo.UserDiscountRequestVO;
-import com.exadel.discountwebapp.user_discount.vo.UserDiscountResponseVO;
 import com.google.zxing.WriterException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,15 +28,14 @@ public class UserDiscountService {
             throw new EntityAlreadyExistsException(UserDiscount.class, "id", userDiscount.getId());
         }
         userDiscountRepository.save(userDiscount);
-        return userDiscountMapper.toVO(userDiscount).getQrcode();
+        return userDiscount.getQrcode();
     }
 
-
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    public UserDiscountResponseVO findUserDiscountById(Long userId, Long discountId) {
-        UserDiscount.UserDiscountId userDiscountId = new UserDiscount.UserDiscountId(userId, discountId);
-        UserDiscount discount = userDiscountRepository.findById(userDiscountId).orElseThrow(() -> new EntityNotFoundException(UserDiscount.class, "id", userDiscountId));
-        UserDiscountResponseVO response = userDiscountMapper.toVO(discount);
-        return response;
+    public byte[] findQRCodeByUserDiscountId(UserDiscountRequestVO request) {
+        UserDiscount.UserDiscountId userDiscountId = new UserDiscount.UserDiscountId(request.getUserId(), request.getDiscountId());
+        UserDiscount discount = userDiscountRepository.findById(userDiscountId)
+                .orElseThrow(() -> new EntityNotFoundException(UserDiscount.class, "id", userDiscountId));
+        return discount.getQrcode();
     }
 }
