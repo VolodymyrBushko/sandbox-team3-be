@@ -1,6 +1,7 @@
 package com.exadel.discountwebapp.location.service;
 
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
+import com.exadel.discountwebapp.filter.SpecificationBuilder;
 import com.exadel.discountwebapp.location.entity.Location;
 import com.exadel.discountwebapp.location.repository.LocationRepository;
 import com.exadel.discountwebapp.location.vo.location.LocationRequestVO;
@@ -9,7 +10,9 @@ import com.google.common.collect.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
@@ -58,24 +61,36 @@ class LocationIntegrationTest {
     @Test
     void shouldFindAllLocationsByCountry() {
         var countryCode = "UA";
-        var expectedIter = locationRepository.findAllByCountry_CountryCode(countryCode);
-        var expected = Lists.newArrayList(expectedIter);
-        var pageable = PageRequest.of(0, 1);
-        var actual = locationService.findAll("country.countryCode=UA", pageable);
+        var query = "country.countryCode:UA";
 
-        matchAll(expected, (List<LocationResponseVO>) actual);
+        var pageable = PageRequest.of(0, 1);
+        SpecificationBuilder<Location> specificationBuilder = new SpecificationBuilder<>();
+        Specification<Location> specification = specificationBuilder.fromQuery(query);
+        var expected = locationRepository.findAll(specification, pageable);
+
+//        var expected = Lists.newArrayList(expectedIter);
+        var actual = locationService.findAll(query, pageable);
+
+        matchAll(expected.getContent(), actual.getContent());
     }
 
     @Test
     void shouldFindAllLocationsByCity() {
         var city = "Kyiv";
+        var query = "city:Kyiv";
 
-        var expectedIter = locationRepository.findAllByCity(city);
-        var expected = Lists.newArrayList(expectedIter);
         var pageable = PageRequest.of(0, 1);
-        var actual = locationService.findAll("city:Kyiv", pageable);
 
-        matchAll(expected, (List<LocationResponseVO>) actual);
+        SpecificationBuilder<Location> specificationBuilder = new SpecificationBuilder<>();
+        Specification<Location> specification = specificationBuilder.fromQuery(query);
+
+        Page<Location> expected = locationRepository.findAll(specification, pageable);
+
+//        var expectedIter = locationRepository.findAllByCity(city);
+//        var expected = Lists.newArrayList(expectedIter);
+        var actual = locationService.findAll(query, pageable);
+
+        matchAll( expected.getContent(), actual.getContent());
     }
 
     @Test
@@ -126,11 +141,13 @@ class LocationIntegrationTest {
         assertEquals(expected.getId(), actual.getId());
         assertEquals(expected.getCountry().getCountryCode(), actual.getCountryCode());
         assertEquals(expected.getCity(), actual.getCity());
+        assertEquals(expected.getAddressLine(), actual.getAddressLine());
     }
 
     private void matchOne(LocationRequestVO expected, LocationResponseVO actual) {
         assertNotNull(actual);
         assertEquals(expected.getCountryCode(), actual.getCountryCode());
         assertEquals(expected.getCity(), actual.getCity());
+        assertEquals(expected.getAddressLine(), actual.getAddressLine());
     }
 }

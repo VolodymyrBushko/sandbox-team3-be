@@ -126,6 +126,7 @@ public class DiscountMapper {
                 skip().setVendor(null);
                 skip().setCategory(null);
                 skip().setTags(null);
+                skip().setLocations(null);
             }
         };
     }
