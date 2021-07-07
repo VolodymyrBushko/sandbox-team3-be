@@ -61,7 +61,6 @@ public class UserService {
 
         return new UserResponseVO().builder()
                 .email(email)
-                .password(password)
                 .role(roleMapper.toVO(user.getRole()))
                 .build();
     }

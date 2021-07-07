@@ -50,7 +50,6 @@ class CategoryControllerIntegrationTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/categories/1"))
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.title").value("category-1"))
-                .andExpect(jsonPath("$.imageUrl").value("http://localhost/images/img1.png"))
                 .andExpect(jsonPath("$.id").value("1"))
                 .andExpect(status().isOk());
     }
@@ -70,7 +69,6 @@ class CategoryControllerIntegrationTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/categories/2"))
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.title").value("category-2"))
-                .andExpect(jsonPath("$.imageUrl").value("http://localhost/images/img2.png"))
                 .andExpect(jsonPath("$.id").value("2"))
                 .andExpect(status().isOk());
     }
@@ -80,13 +78,11 @@ class CategoryControllerIntegrationTest {
     void shouldCreateCategoryByAdmin() throws Exception {
         CategoryRequestVO requestVO = new CategoryRequestVO().builder()
                 .title("category-3")
-                .imageUrl("http://localhost/images/img3.png")
                 .build();
 
         CategoryResponseVO responseVO = new CategoryResponseVO().builder()
                 .id(3L)
                 .title("category-3")
-                .imageUrl("http://localhost/images/img3.png")
                 .build();
 
         String jsonRequest = mapper.writeValueAsString(requestVO);
@@ -106,7 +102,6 @@ class CategoryControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getRequestVO()))
                 .andExpect(jsonPath("$.title").value("categoryUpdate-2"))
-                .andExpect(jsonPath("$.imageUrl").value("http://localhost/images/img2Update.png"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
@@ -179,7 +174,6 @@ class CategoryControllerIntegrationTest {
     private String getRequestVO() throws JsonProcessingException {
         var requestVO = new CategoryRequestVO().builder()
                 .title("categoryUpdate-2")
-                .imageUrl("http://localhost/images/img2Update.png")
                 .build();
 
         return mapper.writeValueAsString(requestVO);

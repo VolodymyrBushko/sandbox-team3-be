@@ -84,7 +84,7 @@ class DiscountControllerIntegrationTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/discounts")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getDiscountRequestVOAsJson()))
-                .andExpect(jsonPath("$.id").value("3"))
+                .andExpect(jsonPath("$.id").value("4"))
                 .andExpect(jsonPath("$.title").value("title333"))
                 .andExpect(jsonPath("$.imageUrl").value("http://localhost/images/img3.png"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
