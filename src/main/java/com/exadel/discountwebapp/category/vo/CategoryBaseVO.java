@@ -15,7 +15,4 @@ public abstract class CategoryBaseVO implements Serializable {
     @NotBlank
     @Size(min = 2, max = 25)
     private String title;
-
-    @Size(max = 510)
-    private String imageUrl;
 }

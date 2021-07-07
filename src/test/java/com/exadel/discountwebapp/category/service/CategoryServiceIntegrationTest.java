@@ -80,7 +80,6 @@ class CategoryServiceIntegrationTest {
 
         return CategoryRequestVO.builder()
                 .title(title)
-                .imageUrl(imageUrl)
                 .build();
     }
 
@@ -88,12 +87,10 @@ class CategoryServiceIntegrationTest {
         assertNotNull(actual);
         assertEquals(expected.getId(), actual.getId());
         assertEquals(expected.getTitle(), actual.getTitle());
-        assertEquals(expected.getImageUrl(), actual.getImageUrl());
     }
 
     private void matchOne(CategoryRequestVO expected, CategoryResponseVO actual) {
         assertEquals(expected.getTitle(), actual.getTitle());
-        assertEquals(expected.getImageUrl(), actual.getImageUrl());
     }
 
     private void matchAll(List<Category> expected, List<CategoryResponseVO> actual) {
