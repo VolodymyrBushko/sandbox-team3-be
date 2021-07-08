@@ -101,7 +101,7 @@ class VendorControllerIntegrationTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/vendors")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getVendorRequestVOAsJson()))
-                .andExpect(jsonPath("$.id").value("21"))
+                .andExpect(jsonPath("$.id").value("4"))
                 .andExpect(jsonPath("$.title").value("title3"))
                 .andExpect(jsonPath("$.imageUrl").value("http://localhost/images/img3.png"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
