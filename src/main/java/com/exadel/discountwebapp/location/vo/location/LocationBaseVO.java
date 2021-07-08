@@ -14,13 +14,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LocationBaseVO implements Serializable {
-    @NotBlank
-    @Size(min = 2, max = 50)
     private String countryCode;
-    @NotBlank
-    @Size(min = 2, max = 50)
     private String city;
-    @NotBlank
-    @Size(min = 2, max = 255)
     private String addressLine;
 }
