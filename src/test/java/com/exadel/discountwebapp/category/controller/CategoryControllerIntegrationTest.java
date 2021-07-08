@@ -80,18 +80,13 @@ class CategoryControllerIntegrationTest {
                 .title("category-3")
                 .build();
 
-        CategoryResponseVO responseVO = new CategoryResponseVO().builder()
-                .id(3L)
-                .title("category-3")
-                .build();
-
         String jsonRequest = mapper.writeValueAsString(requestVO);
-        String jsonResponse = mapper.writeValueAsString(responseVO);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/categories")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonRequest))
-                .andExpect(MockMvcResultMatchers.content().json(jsonResponse))
+                .andExpect(jsonPath("$.title").value("category-3"))
+                .andExpect(jsonPath("$.id").value("3"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
