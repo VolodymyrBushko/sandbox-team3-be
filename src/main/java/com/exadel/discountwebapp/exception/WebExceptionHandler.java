@@ -1,9 +1,6 @@
 package com.exadel.discountwebapp.exception;
 
-import com.exadel.discountwebapp.exception.exception.client.EntityAlreadyExistsException;
-import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
-import com.exadel.discountwebapp.exception.exception.client.IncorrectFilterInputException;
-import com.exadel.discountwebapp.exception.exception.client.ParseException;
+import com.exadel.discountwebapp.exception.exception.client.*;
 import com.exadel.discountwebapp.exception.response.ExceptionResponse;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -57,6 +54,13 @@ public class WebExceptionHandler {
     @ExceptionHandler(EntityAlreadyExistsException.class)
     @ResponseStatus(value = CONFLICT)
     public ExceptionResponse entityAlreadyExistsException(EntityAlreadyExistsException ex) {
+        String code = String.format(RESPONSE_CODE_PATTERN, ex.getClazz().getSimpleName(), ex.getFieldName(), UNPROCESSABLE_ENTITY.value());
+        return new ExceptionResponse(code, ex.getMessage());
+    }
+
+    @ExceptionHandler(EntityAlreadyUsedException.class)
+    @ResponseStatus(value = CONFLICT)
+    public ExceptionResponse entityAlreadyUsedException(EntityAlreadyUsedException ex) {
         String code = String.format(RESPONSE_CODE_PATTERN, ex.getClazz().getSimpleName(), ex.getFieldName(), UNPROCESSABLE_ENTITY.value());
         return new ExceptionResponse(code, ex.getMessage());
     }

@@ -63,19 +63,4 @@ public class TagServiceIntegrationTest {
         assertEquals(expected.getName(), actual.getName());
         assertEquals(expected.getCategoryId(), actual.getCategory().getId());
     }
-
-    @Test
-    void shouldUpdateTagById() {
-        var id = 1L;
-        var expected = TagRequestVO.builder().name("dogs").categoryId(20L).build();
-        var updateTag = tagService.update(id, expected);
-
-        var actual = tagRepository.findById(id).get();
-
-        assertNotNull(actual);
-        assertEquals(actual.getId(), id);
-
-        assertEquals(expected.getName(), actual.getName());
-        assertEquals(expected.getCategoryId(), actual.getCategory().getId());
-    }
 }

@@ -16,15 +16,22 @@ databaseChangeLog:
                     primaryKeyName: pk_location
                     nullable: false
               - column:
-                  name: loc_country
-                  type: VARCHAR(50)
+                  name: country_code
+                  type: VARCHAR(2)
                   constraints:
+                    foreignKeyName: fk_location_country
+                    references: country(country_code)
                     nullable: false
               - column:
                   name: loc_city
                   type: VARCHAR(50)
                   constraints:
-                    nullable: false
+                    nullable: true
+              - column:
+                  name: loc_address_line
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
               - column:
                   name: loc_created
                   type: TIMESTAMP WITHOUT TIME ZONE

@@ -1,11 +1,10 @@
-package com.exadel.discountwebapp.location.vo;
+package com.exadel.discountwebapp.location.vo.city;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.io.Serializable;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -13,10 +12,7 @@ import javax.validation.constraints.Size;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LocationBaseVO implements Serializable {
-    @NotBlank
-    @Size(min = 2, max = 50)
-    private String country;
+public class CityResponseVO {
     @NotBlank
     @Size(min = 2, max = 50)
     private String city;

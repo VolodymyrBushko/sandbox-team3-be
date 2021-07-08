@@ -1,6 +1,6 @@
 package com.exadel.discountwebapp.vendor.vo;
 
-import com.exadel.discountwebapp.location.vo.LocationResponseVO;
+import com.exadel.discountwebapp.location.vo.location.LocationResponseVO;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
