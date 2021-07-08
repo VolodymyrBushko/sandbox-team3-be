@@ -5,8 +5,12 @@ import com.exadel.discountwebapp.discount.mapper.DiscountMapper;
 import com.exadel.discountwebapp.discount.repository.DiscountRepository;
 import com.exadel.discountwebapp.discount.vo.DiscountRequestVO;
 import com.exadel.discountwebapp.discount.vo.DiscountResponseVO;
+import com.exadel.discountwebapp.exception.exception.client.EntityAlreadyExistsException;
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.filter.SpecificationBuilder;
+import com.exadel.discountwebapp.tag.entity.Tag;
+import com.exadel.discountwebapp.tag.mapper.TagMapper;
+import com.exadel.discountwebapp.tag.vo.TagResponseVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,10 +19,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+
 @Service
 @RequiredArgsConstructor
 public class DiscountService {
 
+    private final TagMapper tagMapper;
     private final DiscountMapper discountMapper;
     private final DiscountRepository discountRepository;
 

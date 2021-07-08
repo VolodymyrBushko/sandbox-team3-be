@@ -2,6 +2,7 @@ package com.exadel.discountwebapp.discount.entity;
 
 import com.exadel.discountwebapp.category.entity.Category;
 import com.exadel.discountwebapp.location.entity.Location;
+import com.exadel.discountwebapp.tag.entity.Tag;
 import com.exadel.discountwebapp.vendor.entity.Vendor;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -44,17 +45,11 @@ public class Discount {
     @Column(name = "dis_image_url", length = 510)
     private String imageUrl;
 
-    @Column(name = "dis_percentage", nullable = false)
+    @Column(name = "dis_percentage")
     private BigDecimal percentage;
 
-    @Column(name = "dis_flat_amount", nullable = false)
+    @Column(name = "dis_flat_amount")
     private BigDecimal flatAmount;
-
-    @Column(name = "dis_quantity", nullable = false)
-    private int quantity;
-
-    @Column(name = "dis_per_user", nullable = false)
-    private int perUser;
 
     @Column(name = "dis_price", nullable = false)
     private BigDecimal price;
@@ -98,4 +93,14 @@ public class Discount {
             inverseJoinColumns = @JoinColumn(name = "loc_id")
     )
     private List<Location> locations = new ArrayList<>();
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @ManyToMany
+    @JoinTable(
+            name = "tag_discount",
+            joinColumns = @JoinColumn(name = "dis_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private List<Tag> tags = new ArrayList<>();
 }

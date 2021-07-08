@@ -26,13 +26,13 @@ public class VendorMapper {
     }
 
     public VendorResponseVO toVO(Vendor vendor) {
-        VendorResponseVO response = modelMapper.map(vendor, VendorResponseVO.class);
+        var response = modelMapper.map(vendor, VendorResponseVO.class);
         response.setLocation(locationMapper.toVO(vendor.getLocation()));
         return response;
     }
 
     public Vendor toEntity(VendorRequestVO request) {
-        Vendor vendor = modelMapper.map(request, Vendor.class);
+        var vendor = modelMapper.map(request, Vendor.class);
         provideLocationDependencies(request, vendor);
         return vendor;
     }
@@ -43,7 +43,7 @@ public class VendorMapper {
     }
 
     private void provideLocationDependencies(VendorRequestVO request, Vendor vendor) {
-        Location location = locationService.findEntityById(request.getLocationId());
+        var location = locationService.findEntityById(request.getLocationId());
         vendor.setLocation(location);
     }
 

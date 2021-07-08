@@ -1,4 +1,4 @@
-package com.exadel.discountwebapp.validation;
+package com.exadel.discountwebapp.vendor.validator;
 
 import com.exadel.discountwebapp.exception.exception.client.EntityAlreadyExistsException;
 import com.exadel.discountwebapp.vendor.entity.Vendor;

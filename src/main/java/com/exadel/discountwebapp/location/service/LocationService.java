@@ -1,12 +1,18 @@
 package com.exadel.discountwebapp.location.service;
 
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
+import com.exadel.discountwebapp.filter.SpecificationBuilder;
 import com.exadel.discountwebapp.location.entity.Location;
+import com.exadel.discountwebapp.location.mapper.CityMapper;
 import com.exadel.discountwebapp.location.mapper.LocationMapper;
 import com.exadel.discountwebapp.location.repository.LocationRepository;
-import com.exadel.discountwebapp.location.vo.LocationRequestVO;
-import com.exadel.discountwebapp.location.vo.LocationResponseVO;
+import com.exadel.discountwebapp.location.vo.city.CityResponseVO;
+import com.exadel.discountwebapp.location.vo.location.LocationRequestVO;
+import com.exadel.discountwebapp.location.vo.location.LocationResponseVO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,11 +25,15 @@ import java.util.List;
 public class LocationService {
     private final LocationRepository locationRepository;
     private final LocationMapper locationMapper;
+    private final CityMapper cityMapper;
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    public List<LocationResponseVO> findAll() {
-        List<Location> locations = (List<Location>) locationRepository.findAll();
-        return getLocationResponseVO(locations);
+    public Page<LocationResponseVO> findAll(String query, Pageable pageable) {
+        SpecificationBuilder<Location> specificationBuilder = new SpecificationBuilder<>();
+        Specification<Location> specification = specificationBuilder.fromQuery(query);
+
+        Page<Location> page = locationRepository.findAll(specification, pageable);
+        return page.map(locationMapper::toVO);
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
@@ -37,15 +47,11 @@ public class LocationService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    public List<LocationResponseVO> findAllByCountry(String country) {
-        List<Location> locations = locationRepository.findAllByCountry(country);
-        return getLocationResponseVO(locations);
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    public List<LocationResponseVO> findAllByCity(String city) {
-        List<Location> locations = locationRepository.findAllByCity(city);
-        return getLocationResponseVO(locations);
+    public List<CityResponseVO> findAllCitiesByCountryCode(String countryCode) {
+        List<Location> locations = locationRepository.findAllByCountry_CountryCode(countryCode);
+        List<CityResponseVO> response = new ArrayList<>();
+        locations.forEach(entity -> response.add(cityMapper.toVO(entity)));
+        return response;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -55,7 +61,7 @@ public class LocationService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public LocationResponseVO update(Long id, LocationRequestVO request) {
-        Location location = getLocationById(id);
+        var location = getLocationById(id);
         locationMapper.update(location, request);
         locationRepository.save(location);
         return locationMapper.toVO(location);
@@ -77,4 +83,6 @@ public class LocationService {
         locations.forEach(entity -> response.add(locationMapper.toVO(entity)));
         return response;
     }
+
+
 }

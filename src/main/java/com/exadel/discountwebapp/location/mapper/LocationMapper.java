@@ -1,8 +1,11 @@
 package com.exadel.discountwebapp.location.mapper;
 
+import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
+import com.exadel.discountwebapp.location.entity.Country;
 import com.exadel.discountwebapp.location.entity.Location;
-import com.exadel.discountwebapp.location.vo.LocationRequestVO;
-import com.exadel.discountwebapp.location.vo.LocationResponseVO;
+import com.exadel.discountwebapp.location.repository.CountryRepository;
+import com.exadel.discountwebapp.location.vo.location.LocationRequestVO;
+import com.exadel.discountwebapp.location.vo.location.LocationResponseVO;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.modelmapper.convention.MatchingStrategies;
@@ -12,23 +15,48 @@ import org.springframework.stereotype.Component;
 @Component
 public class LocationMapper {
 
+    private final CountryRepository countryRepository;
+
+    private final CountryMapper countryMapper;
+
+
     private final ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
-    public LocationMapper() {
+    public LocationMapper(CountryRepository countryRepository,
+                          CountryMapper countryMapper) {
+        this.countryRepository = countryRepository;
+        this.countryMapper = countryMapper;
+
         configureModelMapper();
     }
 
     public LocationResponseVO toVO(Location location) {
-        return modelMapper.map(location, LocationResponseVO.class);
+        LocationResponseVO response = modelMapper.map(location, LocationResponseVO.class);
+        response.setCity(location.getCity());
+        response.setAddressLine(location.getAddressLine());
+
+        var country = countryMapper.toVO(location.getCountry());
+
+        response.setCountryCode(country.getCountryCode());
+        return response;
     }
 
     public Location toEntity(LocationRequestVO request) {
-        return modelMapper.map(request, Location.class);
+        var location = modelMapper.map(request, Location.class);
+        provideLocationDependencies(request, location);
+        return location;
     }
 
     public void update(Location location, LocationRequestVO request) {
+        provideLocationDependencies(request, location);
         modelMapper.map(request, location);
+    }
+
+    private void provideLocationDependencies(LocationRequestVO request, Location location) {
+        var country = countryRepository.findByCountryCode(request.getCountryCode())
+                .orElseThrow(() -> new EntityNotFoundException(Country.class, "CountryCode", request.getCountryCode()));
+        location.setCountry(country);
     }
 
     private void configureModelMapper() {
@@ -40,9 +68,9 @@ public class LocationMapper {
         return new PropertyMap<>() {
             @Override
             protected void configure() {
+                skip().setCountry(null);
                 skip().setVendors(null);
             }
         };
-
     }
 }

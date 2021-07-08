@@ -1,6 +1,7 @@
 package com.exadel.discountwebapp.category.entity;
 
 import com.exadel.discountwebapp.discount.entity.Discount;
+import com.exadel.discountwebapp.tag.entity.Tag;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -30,10 +31,6 @@ public class Category {
     private String title;
 
     @EqualsAndHashCode.Exclude
-    @Column(name = "cat_image_url", length = 510)
-    private String imageUrl;
-
-    @EqualsAndHashCode.Exclude
     @CreatedDate
     @Column(name = "cat_created", nullable = false, updatable = false)
     private LocalDateTime created;
@@ -47,4 +44,9 @@ public class Category {
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "category")
     private List<Discount> discounts = new ArrayList<>();
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Tag> tags = new ArrayList<>();
 }
