@@ -96,8 +96,6 @@ class VendorControllerIntegrationTest {
                 .andExpect(jsonPath("$.content[1].title").value("Sport Life"))
                 .andExpect(jsonPath("$.content[2].title").value("TUI"))
                 .andExpect(jsonPath("$.content[0].locations[0].city").value("Lviv"))
-                .andExpect(jsonPath("$.content[0].locations[0].city").value("Lviv"))
-                .andExpect(jsonPath("$.content[0].locations[0].city").value("Lviv"))
                 .andExpect(status().isOk());
         Assertions.assertNotNull(actual);
     }
