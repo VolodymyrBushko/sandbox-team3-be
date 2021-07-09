@@ -1,19 +1,23 @@
-package com.exadel.discountwebapp.tag.vo;
+package com.exadel.discountwebapp.location.vo.country;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 
 @Data
 @SuperBuilder
 @NoArgsConstructor
-public class TagBaseVO implements Serializable {
-
+@AllArgsConstructor
+public class CountryResponseVO {
     @NotBlank
     @Size(min = 2, max = 50)
-    private String name;
+    private String countryCode;
+
+    @NotBlank
+    @Size(min = 2, max = 255)
+    private String countryFullName;
 }

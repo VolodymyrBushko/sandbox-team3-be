@@ -1,9 +1,16 @@
 package com.exadel.discountwebapp.location.controller;
 
+import com.exadel.discountwebapp.location.service.CountryService;
 import com.exadel.discountwebapp.location.service.LocationService;
-import com.exadel.discountwebapp.location.vo.LocationRequestVO;
-import com.exadel.discountwebapp.location.vo.LocationResponseVO;
+import com.exadel.discountwebapp.location.vo.city.CityResponseVO;
+import com.exadel.discountwebapp.location.vo.country.CountryResponseVO;
+import com.exadel.discountwebapp.location.vo.location.LocationRequestVO;
+import com.exadel.discountwebapp.location.vo.location.LocationResponseVO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,10 +23,12 @@ import java.util.List;
 public class LocationController {
 
     private final LocationService locationService;
+    private final CountryService countryService;
 
     @GetMapping
-    public List<LocationResponseVO> getAllLocations() {
-        return locationService.findAll();
+    public Page<LocationResponseVO> findAllLocations(@RequestParam(value = "query", defaultValue = "", required = false) String query,
+                                                     @PageableDefault(sort = {"country"}, direction = Sort.Direction.ASC) Pageable pageable) {
+        return locationService.findAll(query, pageable);
     }
 
     @GetMapping("/{id}")
@@ -27,15 +36,17 @@ public class LocationController {
         return locationService.findById(id);
     }
 
-    @GetMapping("/country")
-    public List<LocationResponseVO> getAllLocationsByCountry(
-            @RequestParam(name = "country") String country) {
-        return locationService.findAllByCountry(country);
+    // TODO: tests for this controller
+    @GetMapping("/countries")
+    public List<CountryResponseVO> getAllCountries() {
+        return countryService.findAllCountries();
     }
 
-    @GetMapping("/city")
-    public List<LocationResponseVO> getAllLocationsByCity(@Valid @RequestParam(name = "city") String city) {
-        return locationService.findAllByCity(city);
+    // TODO: tests for this controller
+    @GetMapping("/cities")
+    public List<CityResponseVO> getAllCitiesByCountry(
+            @RequestParam(name = "countryCode") String countryCode) {
+        return locationService.findAllCitiesByCountryCode(countryCode);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

@@ -1,9 +1,7 @@
-package com.exadel.discountwebapp.category.controller;
+package com.exadel.discountwebapp.location.controller;
 
-import com.exadel.discountwebapp.category.repository.CategoryRepository;
-import com.exadel.discountwebapp.category.service.CategoryService;
-import com.exadel.discountwebapp.category.vo.CategoryRequestVO;
-import com.exadel.discountwebapp.category.vo.CategoryResponseVO;
+import com.exadel.discountwebapp.location.repository.LocationRepository;
+import com.exadel.discountwebapp.location.vo.location.LocationRequestVO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -22,153 +20,152 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/category-init.sql")
+@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/location2-init.sql")
 @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:sql/clean-up.sql")
-class CategoryControllerIntegrationTest {
+class LocationControllerIntegrationTestModif {
 
     @Autowired
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper mapper;
     @Autowired
-    private CategoryRepository repository;
-    @Autowired
-    private CategoryService service;
+    private LocationRepository locationRepository;
 
     @Test
     @WithMockUser(roles = "USER")
-    void shouldGetAllCategoriesWithRoleUser() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/categories")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.content().json(getAllCategoriesAsJsonData()))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    @WithMockUser(roles = "USER")
-    void shouldGetCategoryByIdWithRoleUser() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/categories/1"))
+    void shouldGetAllLocationsWithRoleUser() throws Exception {
+        var actual = mockMvc.perform(MockMvcRequestBuilders.get("/api/locations?search=offset=0&pageSize=10"))
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.title").value("category-1"))
-                .andExpect(jsonPath("$.id").value("1"))
+                .andExpect(jsonPath("$.content[*].id").isNotEmpty())
                 .andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void shouldGetAllCategoriesWithRoleAdmin() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/categories")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.content().json(getAllCategoriesAsJsonData()))
+    void shouldGetAllLocationWithRoleAdmin() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/locations"))
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$.content[*].id").isNotEmpty())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
+    void shouldGetLocationByIdWithRoleUser() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/locations/4"))
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$.id").value("4"))
+                .andExpect(jsonPath("$.countryCode").value("UA"))
+                .andExpect(jsonPath("$.city").value("Lviv"))
+                .andExpect(jsonPath("$.addressLine").value("Gorodockogo, 9"))
                 .andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void shouldGetCategoryByIdWithRoleAdmin() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/categories/2"))
+    void shouldGetLocationByIdWithRoleADMIN() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/locations/2"))
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.title").value("category-2"))
                 .andExpect(jsonPath("$.id").value("2"))
+                .andExpect(jsonPath("$.countryCode").value("UA"))
+                .andExpect(jsonPath("$.city").value("Lviv"))
+                .andExpect(jsonPath("$.addressLine").value("Sichovyh Strilciv, 52"))
                 .andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser(authorities = "ADMIN")
-    void shouldCreateCategoryByAdmin() throws Exception {
-        CategoryRequestVO requestVO = new CategoryRequestVO().builder()
-                .title("category-3")
-                .build();
-
-        String jsonRequest = mapper.writeValueAsString(requestVO);
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/categories")
+    void shouldCreateLocationByAdmin() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/locations")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonRequest))
-                .andExpect(jsonPath("$.title").value("category-3"))
-                .andExpect(jsonPath("$.id").value("3"))
+                .content(getLocationRequestVO()))
+                .andExpect(jsonPath("$.id").value("6"))
+                .andExpect(jsonPath("$.countryCode").value("BY"))
+                .andExpect(jsonPath("$.city").value("Minsk"))
+                .andExpect(jsonPath("$.addressLine").value("Belinsky, 22"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
     @WithMockUser(authorities = "ADMIN")
-    void shouldUpdateCategoryByAdmin() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/categories/{id}", "2")
+    void shouldUpdateLocationByAdmin() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/locations/{id}", "1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getRequestVO()))
-                .andExpect(jsonPath("$.title").value("categoryUpdate-2"))
+                .content(getLocationRequestVO()))
+                .andExpect(jsonPath("$.id").value("1"))
+                .andExpect(jsonPath("$.countryCode").value("BY"))
+                .andExpect(jsonPath("$.city").value("Minsk"))
+                .andExpect(jsonPath("$.addressLine").value("Belinsky, 22"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
     @WithMockUser(authorities = "ADMIN")
-    void shouldDeleteCategoryByAdmin() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/categories/{id}", "2"))
+    void shouldDeleteLocationByAdmin() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/locations/{id}", "1"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
-        assertThat(repository.existsById(2L)).isFalse();
+        assertThat(locationRepository.existsById(1L)).isFalse();
     }
 
     @Test
     @WithMockUser(authorities = "USER")
     void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToCreateResource() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/categories")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/locations")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getRequestVO()))
+                .content(getLocationRequestVO()))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
     @WithMockUser(authorities = "USER")
     void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToUpdateResource() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/categories/{id}", "2")
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/locations/{id}", "2")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getRequestVO()))
+                .content(getLocationRequestVO()))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
     @WithMockUser(authorities = "USER")
     void shouldGet403ErrorIfUserWithoutAdminRightsTryToGetAccessToDeleteResource() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/categories/{id}", "2"))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/locations/{id}", "2"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
-    void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseGetResource() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/categories"))
+    void shouldGet403ErrorWhenNotAuthorizedUserTryToUseGetResource() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/locations"))
                 .andExpect(MockMvcResultMatchers.status().reason("Access Denied"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
     void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseCreateResource() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/categories"))
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/locations"))
                 .andExpect(MockMvcResultMatchers.status().reason("Access Denied"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
     void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseUpdateResource() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/categories/{id}", "2"))
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/locations/{id}", "2"))
                 .andExpect(MockMvcResultMatchers.status().reason("Access Denied"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
     void shouldGet403ErrorWhenNotAuthenticatedUserTryToUseDeleteResource() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/categories/{id}", "2"))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/locations/{id}", "2"))
                 .andExpect(MockMvcResultMatchers.status().reason("Access Denied"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
-    private String getAllCategoriesAsJsonData() throws JsonProcessingException {
-        var responseVO = service.findAll();
-        return mapper.writeValueAsString(responseVO);
-    }
 
-    private String getRequestVO() throws JsonProcessingException {
-        var requestVO = new CategoryRequestVO().builder()
-                .title("categoryUpdate-2")
+    private String getLocationRequestVO() throws JsonProcessingException {
+        var requestVO = new LocationRequestVO().builder()
+                .countryCode("BY")
+                .city("Minsk")
+                .addressLine("Belinsky, 22")
                 .build();
 
         return mapper.writeValueAsString(requestVO);

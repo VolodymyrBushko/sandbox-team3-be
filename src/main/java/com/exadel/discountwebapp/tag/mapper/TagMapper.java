@@ -16,38 +16,29 @@ import org.springframework.stereotype.Component;
 public class TagMapper {
 
     private final CategoryRepository categoryRepository;
-
     private final ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
     public TagMapper(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
-
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         modelMapper.addMappings(createSkipPropertyMap());
     }
 
     public TagResponseVO toVO(Tag tag) {
-        TagResponseVO response = modelMapper.map(tag, TagResponseVO.class);
-        return response;
+        return modelMapper.map(tag, TagResponseVO.class);
     }
 
-    public Tag toEntity(TagRequestVO request) {
+    public Tag toEntity(TagRequestVO request, Long categoryId) {
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new EntityNotFoundException(Category.class, "id", request.getCategoryId()));
         Tag tag = modelMapper.map(request, Tag.class);
-        provideTagDependencies(request, tag);
+        tag.setCategory(category);
         return tag;
     }
 
     public void updateEntity(TagRequestVO request, Tag tag) {
-        provideTagDependencies(request, tag);
         modelMapper.map(request, tag);
-    }
-
-    private void provideTagDependencies(TagRequestVO request, Tag tag) {
-        Category category = categoryRepository.findById(request.getCategoryId())
-                .orElseThrow(() ->new EntityNotFoundException(Category.class, "id", request.getCategoryId()));
-
-        tag.setCategory(category);
     }
 
     private PropertyMap<TagRequestVO, Tag> createSkipPropertyMap() {
