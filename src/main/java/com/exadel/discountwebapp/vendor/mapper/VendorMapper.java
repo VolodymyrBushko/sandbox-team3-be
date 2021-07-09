@@ -42,27 +42,20 @@ public class VendorMapper {
     }
 
     public Vendor toEntity(VendorRequestVO request) {
-        Vendor vendor = modelMapper.map(request, Vendor.class);
+        var vendor = modelMapper.map(request, Vendor.class);
         provideLocationDependencies(request, vendor);
         return vendor;
     }
 
     public void update(VendorRequestVO request, Vendor vendor) {
-        List<Location> locations = request.getLocationIds().stream()
-                .map(l -> locationRepository.findById(l).orElseThrow(() -> new EntityNotFoundException(Location.class, "id", l)))
-                .collect(Collectors.toList());
-
-        locations.removeIf(e -> vendor.getLocations().contains(e));
-        vendor.getLocations().addAll(locations);
+        List<Location> locations = getLocationFromIds(request.getLocationIds());
+        vendor.setLocations(locations);
         modelMapper.map(request, vendor);
     }
 
     private void provideLocationDependencies(VendorRequestVO request, Vendor vendor) {
-        List<Location> locations = request.getLocationIds().stream()
-                .map(l -> locationRepository.findById(l).orElseThrow(() -> new EntityNotFoundException(Location.class, "id", l)))
-                .collect(Collectors.toList());
+        List<Location> locations = getLocationFromIds(request.getLocationIds());
         vendor.setLocations(locations);
-
     }
 
     private void configureModelMapper() {
@@ -77,5 +70,13 @@ public class VendorMapper {
                 skip().setLocations(null);
             }
         };
+    }
+
+    private List<Location> getLocationFromIds(List<Long> listIds) {
+        var locations = locationRepository.findLocationByIdIn(listIds);
+        if(locations.size()!= listIds.size()){
+            throw new EntityNotFoundException(Location.class, "id", "some id was not found");
+        }
+        return locations;
     }
 }

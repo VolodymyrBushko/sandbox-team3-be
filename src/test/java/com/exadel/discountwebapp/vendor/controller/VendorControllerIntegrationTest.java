@@ -129,10 +129,10 @@ class VendorControllerIntegrationTest {
     void shouldUpdateVendorByAdmin() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.put("/api/vendors/{id}", "2")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getVendorRequestVOAsJson()))
+                .content(updateVendorDataAsJson()))
                 .andExpect(jsonPath("$.id").value("2"))
-                .andExpect(jsonPath("$.title").value("title3"))
-                .andExpect(jsonPath("$.imageUrl").value("http://localhost/images/img3.png"))
+                .andExpect(jsonPath("$.title").value("title222"))
+                .andExpect(jsonPath("$.imageUrl").value("http://localhost/images/img222.png"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
@@ -204,6 +204,18 @@ class VendorControllerIntegrationTest {
                 .imageUrl("http://localhost/images/img3.png")
                 .email("testemail3@gmail.com")
                 .locationIds(List.of(1L))
+                .build();
+
+        return mapper.writeValueAsString(requestVO);
+    }
+
+    private String updateVendorDataAsJson() throws JsonProcessingException {
+        var requestVO = VendorRequestVO.builder()
+                .title("title222")
+                .description("description2")
+                .imageUrl("http://localhost/images/img222.png")
+                .email("dominos@gmail.com")
+                .locationIds(List.of(2L))
                 .build();
 
         return mapper.writeValueAsString(requestVO);

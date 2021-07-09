@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 09072021_drop_loc_id_column_from_vendor_table
+      author: tesliuk.ua@gmail.com
+      changes:
+        - dropColumn:
+            schemaName: public
+            tableName: vendor
+            columnName: loc_id

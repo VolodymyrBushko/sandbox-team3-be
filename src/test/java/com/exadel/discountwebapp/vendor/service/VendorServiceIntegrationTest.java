@@ -300,7 +300,7 @@ class VendorServiceIntegrationTest {
     @Test
     void shouldUpdateVendorById() {
         var id = 1L;
-        var expected = createVendorRequest();
+        var expected = updateVendorRequest();
         var actual = vendorService.update(id, expected);
 
         assertNotNull(actual);
@@ -321,6 +321,21 @@ class VendorServiceIntegrationTest {
                 .imageUrl(imageUrl)
                 .email(email)
                 .locationIds(List.of(1L, 2L))
+                .build();
+    }
+
+    private VendorRequestVO updateVendorRequest() {
+        var title = "titleSome";
+        var description = "descriptionSome";
+        var imageUrl = "http://localhost/images/Someimg.png";
+        var email = "sprort_life@com.ua";
+
+        return VendorRequestVO.builder()
+                .title(title)
+                .description(description)
+                .imageUrl(imageUrl)
+                .email(email)
+                .locationIds(List.of(2L))
                 .build();
     }
 

@@ -55,15 +55,16 @@ public class VendorService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public VendorResponseVO update(Long id, VendorRequestVO request) {
-        Vendor vendor = getVendorById(id);
+        var vendor = getVendorById(id);
+        vendorValidator.checkIfEmailExist(request.getEmail());
         vendorMapper.update(request, vendor);
-        Vendor updatedVendor = vendorRepository.save(vendor);
+        var updatedVendor = vendorRepository.save(vendor);
         return vendorMapper.toVO(updatedVendor);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public void deleteById(Long id) {
-        Vendor vendor = getVendorById(id);
+        var vendor = getVendorById(id);
         vendorRepository.deleteById(vendor.getId());
     }
 

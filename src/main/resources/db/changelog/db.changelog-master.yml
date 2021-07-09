@@ -38,3 +38,6 @@ databaseChangeLog:
   - include:
       file: init/07072021_create_location_vendor_table.yml
       relativeToChangelogFile: true
+  - include:
+      file: init/09072021_drop_loc_id_column_from_vendor_table.yml
+      relativeToChangelogFile: true
