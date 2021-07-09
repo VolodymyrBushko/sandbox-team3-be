@@ -278,9 +278,51 @@ class DiscountServiceIntegrationTest {
         var expectedIter = discountRepository.findAll();
         var expected = Lists.newArrayList(expectedIter)
                 .stream()
-                .filter(d -> d.getTitle().toLowerCase().startsWith(title) &&
-                        d.getDescription().toLowerCase().contains(description) &&
-                        d.getLocations().stream().anyMatch(l -> l.getCity().equalsIgnoreCase(city)))
+                .filter(e -> e.getTitle().toLowerCase().startsWith(title) &&
+                        e.getDescription().toLowerCase().contains(description) &&
+                        e.getLocations().stream().anyMatch(l -> l.getCity().equalsIgnoreCase(city)))
+                .collect(Collectors.toList());
+
+        var discountCount = (int) discountRepository.count();
+        var pageable = PageRequest.of(0, discountCount);
+        var actual = discountService.findAll(query, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    void shouldFindAllDiscountsWhereTagNameInFoodAndOrSport() {
+        var tagNames = List.of("sport", "food");
+        var query = String.format("tags.name~%s,%s;", tagNames.get(0), tagNames.get(1));
+
+        var expectedIter = discountRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter)
+                .stream()
+                .filter(d -> d.getTags()
+                        .stream()
+                        .anyMatch(t -> tagNames.contains(t.getName().toLowerCase())))
+                .collect(Collectors.toList());
+
+        var discountCount = (int) discountRepository.count();
+        var pageable = PageRequest.of(0, discountCount);
+        var actual = discountService.findAll(query, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    void shouldFindAllDiscountsWhereTagId1AndOr3() {
+        var tagIds = List.of(1L, 3L);
+        var query = String.format("tags.id~%s,%s;", tagIds.get(0), tagIds.get(1));
+
+        var expectedIter = discountRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter)
+                .stream()
+                .filter(d -> d.getTags()
+                        .stream()
+                        .anyMatch(t -> tagIds.contains(t.getId())))
                 .collect(Collectors.toList());
 
         var discountCount = (int) discountRepository.count();
