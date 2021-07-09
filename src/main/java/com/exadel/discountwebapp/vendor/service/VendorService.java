@@ -56,7 +56,9 @@ public class VendorService {
     @Transactional(propagation = Propagation.REQUIRED)
     public VendorResponseVO update(Long id, VendorRequestVO request) {
         var vendor = getVendorById(id);
-        vendorValidator.checkIfEmailExist(request.getEmail());
+        if (!vendor.getEmail().equals(request.getEmail())) {
+            vendorValidator.validate(request);
+        }
         vendorMapper.update(request, vendor);
         var updatedVendor = vendorRepository.save(vendor);
         return vendorMapper.toVO(updatedVendor);

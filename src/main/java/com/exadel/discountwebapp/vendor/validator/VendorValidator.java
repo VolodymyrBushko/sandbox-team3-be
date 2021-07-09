@@ -1,7 +1,6 @@
 package com.exadel.discountwebapp.vendor.validator;
 
 import com.exadel.discountwebapp.exception.exception.client.EntityAlreadyExistsException;
-import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.vendor.entity.Vendor;
 import com.exadel.discountwebapp.vendor.repository.VendorRepository;
 import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
@@ -23,9 +22,5 @@ public class VendorValidator {
                 .ifPresent(vendor -> {
                     throw new EntityAlreadyExistsException(Vendor.class, "email", vendor.getEmail());
                 });
-    }
-
-    public void checkIfEmailExist(String email) {
-        vendorRepository.findByEmail(email).orElseThrow((() -> new EntityNotFoundException(Vendor.class, "email", email)));
     }
 }

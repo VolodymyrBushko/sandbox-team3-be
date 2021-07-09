@@ -51,4 +51,4 @@ databaseChangeLog:
                   name: vn_modified
                   type: TIMESTAMP WITHOUT TIME ZONE
                   constraints:
-                    nulable: false
+                    nullable: false
