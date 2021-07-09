@@ -4,9 +4,9 @@ VALUES (10, 'Kyiv', 'Ukraine', '2021-06-06 17:22:21', '2021-06-06 17:22:21'),
 
 INSERT INTO vendor
 VALUES (10, '2021-06-06 17:22:21', 'Sport Life - a chain of casual fitness centers', 'sprort_life@com.ua',
-        'http://localhost/images/img.png', '2021-06-06 17:22:21', 'Sport Life', 10),
+        'http://localhost/images/img.png', '2021-06-06 17:22:21', 'Sport Life'),
        (20, '2021-06-06 17:22:21', 'Domino`s Pizza - an American multinational pizza restaurant chain founded in 1960',
-        'dominos.com', 'http://localhost/images/img.png', '2021-06-06 17:22:21', 'Domino`s Pizza', 20);
+        'dominos.com', 'http://localhost/images/img.png', '2021-06-06 17:22:21', 'Domino`s Pizza');
 
 INSERT INTO category
 VALUES (10, '2021-06-06 17:22:21', '2021-06-06 17:22:21', 'Sports and fitness'),

@@ -32,3 +32,6 @@ databaseChangeLog:
   - include:
       file: init/27062021_create_tag_discount_table.yml
       relativeToChangelogFile: true
+  - include:
+      file: init/07072021_create_location_vendor_table.yml
+      relativeToChangelogFile: true

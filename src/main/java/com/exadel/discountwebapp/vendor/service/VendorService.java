@@ -55,16 +55,17 @@ public class VendorService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public VendorResponseVO update(Long id, VendorRequestVO request) {
-        vendorValidator.validate(request);
         Vendor vendor = getVendorById(id);
-        vendorMapper.update(vendor, request);
+        vendorMapper.update(request, vendor);
         vendorRepository.save(vendor);
         return vendorMapper.toVO(vendor);
+
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public void deleteById(Long id) {
-        vendorRepository.deleteById(id);
+        Vendor vendor = getVendorById(id);
+        vendorRepository.deleteById(vendor.getId());
     }
 
     private Vendor getVendorById(Long id) {

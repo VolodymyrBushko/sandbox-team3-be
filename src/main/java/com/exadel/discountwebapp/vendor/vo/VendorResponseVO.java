@@ -4,13 +4,19 @@ import com.exadel.discountwebapp.location.vo.LocationResponseVO;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.util.List;
+
 @EqualsAndHashCode(callSuper = true)
 @Data
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class VendorResponseVO extends VendorBaseVO {
+    @NotNull
     private Long id;
 
-    private LocationResponseVO location;
+    @NotEmpty
+    private List<LocationResponseVO> locations;
 }

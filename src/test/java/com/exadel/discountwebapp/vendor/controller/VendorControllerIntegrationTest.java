@@ -16,6 +16,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -91,8 +93,13 @@ class VendorControllerIntegrationTest {
     void shouldGetVendorByTitleWithRoleAdmin() throws Exception {
         var actual = mockMvc.perform(MockMvcRequestBuilders.get("/api/vendors?title=title*.*Sport"))
                 .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$.content[0].title").value("Domino`s Pizza"))
+                .andExpect(jsonPath("$.content[1].title").value("Sport Life"))
+                .andExpect(jsonPath("$.content[2].title").value("TUI"))
+                .andExpect(jsonPath("$.content[0].locations[0].city").value("Lviv"))
+                .andExpect(jsonPath("$.content[0].locations[0].city").value("Lviv"))
+                .andExpect(jsonPath("$.content[0].locations[0].city").value("Lviv"))
                 .andExpect(status().isOk());
-
         Assertions.assertNotNull(actual);
     }
 
@@ -105,9 +112,10 @@ class VendorControllerIntegrationTest {
                 .andExpect(jsonPath("$.id").value("4"))
                 .andExpect(jsonPath("$.title").value("title3"))
                 .andExpect(jsonPath("$.imageUrl").value("http://localhost/images/img3.png"))
+                .andExpect(jsonPath("$.locations[0].id").value("1"))
+                .andExpect(jsonPath("$.locations[0].city").value("Kyiv"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
-
 
     @Test
     @WithMockUser(authorities = "ADMIN")
@@ -188,9 +196,10 @@ class VendorControllerIntegrationTest {
                 .description("description3")
                 .imageUrl("http://localhost/images/img3.png")
                 .email("testemail3@gmail.com")
-                .locationId(1L)
+                .locationIds(List.of(1L))
                 .build();
 
         return mapper.writeValueAsString(requestVO);
     }
+
 }

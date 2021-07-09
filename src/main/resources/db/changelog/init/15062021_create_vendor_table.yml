@@ -37,12 +37,6 @@ databaseChangeLog:
                     nullable: false
                     unique: true
               - column:
-                  name: loc_id
-                  type: BIGINT
-                  constraints:
-                    foreignKeyName: fk_vendor_location
-                    references: location(loc_id)
-              - column:
                   name: vn_created
                   type: TIMESTAMP WITHOUT TIME ZONE
                   constraints:
