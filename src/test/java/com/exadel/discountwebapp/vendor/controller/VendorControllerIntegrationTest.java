@@ -37,22 +37,30 @@ class VendorControllerIntegrationTest {
     @Test
     @WithMockUser(roles = "USER")
     void shouldGetAllVendorWithRoleUser() throws Exception {
-        var actual = mockMvc.perform(MockMvcRequestBuilders.get("/api/vendors")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/vendors")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$.content[0].title").value("Domino`s Pizza"))
+                .andExpect(jsonPath("$.content[1].title").value("Sport Life"))
+                .andExpect(jsonPath("$.content[2].title").value("TUI"))
+                .andExpect(jsonPath("$.content[0].locations[0].id").value("2"))
+                .andExpect(jsonPath("$.content[1].locations[0].id").value("1"))
+                .andExpect(jsonPath("$.content[2].locations[0].id").value("1"))
                 .andExpect(status().isOk());
-
-        Assertions.assertNotNull(actual);
     }
 
     @Test
     @WithMockUser(roles = "ADMIN")
     void shouldGetAllVendorsWithRoleAdmin() throws Exception {
-        var actual = mockMvc.perform(MockMvcRequestBuilders.get("/api/vendors")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/vendors")
                 .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.content[0].id").value("2"))
+                .andExpect(jsonPath("$.content[1].id").value("1"))
+                .andExpect(jsonPath("$.content[2].id").value("3"))
+                .andExpect(jsonPath("$.content[0].locations[0].city").value("Lviv"))
+                .andExpect(jsonPath("$.content[1].locations[0].city").value("Kyiv"))
+                .andExpect(jsonPath("$.content[2].locations[0].city").value("Kyiv"))
                 .andExpect(status().isOk());
-
-        Assertions.assertNotNull(actual);
     }
 
     @Test
@@ -63,6 +71,8 @@ class VendorControllerIntegrationTest {
                 .andExpect(jsonPath("$.id").value("1"))
                 .andExpect(jsonPath("$.title").value("Sport Life"))
                 .andExpect(jsonPath("$.description").value("Sport Life - a chain of casual fitness centers"))
+                .andExpect(jsonPath("$.locations[0].id").value("1"))
+                .andExpect(jsonPath("$.locations[0].city").value("Kyiv"))
                 .andExpect(status().isOk());
     }
 
@@ -74,28 +84,28 @@ class VendorControllerIntegrationTest {
                 .andExpect(jsonPath("$.id").value("2"))
                 .andExpect(jsonPath("$.title").value("Domino`s Pizza"))
                 .andExpect(jsonPath("$.description").value("Domino`s Pizza - an American multinational pizza restaurant chain founded in 1960"))
+                .andExpect(jsonPath("$.locations[0].id").value("2"))
+                .andExpect(jsonPath("$.locations[0].city").value("Lviv"))
                 .andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser(roles = "USER")
     void shouldGetVendorByTitleWithRoleUser() throws Exception {
-        var actual = mockMvc.perform(MockMvcRequestBuilders.get("/api/vendors?title=title*.*Sport"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/vendors?query=title:Domino`s Pizza"))
                 .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$.content[0].title").value("Domino`s Pizza"))
+                .andExpect(jsonPath("$.content[0].locations[0].city").value("Lviv"))
                 .andExpect(status().isOk());
-
-        Assertions.assertNotNull(actual);
     }
 
     @Test
     @WithMockUser(roles = "ADMIN")
     void shouldGetVendorByTitleWithRoleAdmin() throws Exception {
-        var actual = mockMvc.perform(MockMvcRequestBuilders.get("/api/vendors?title=title*.*Sport"))
+        var actual = mockMvc.perform(MockMvcRequestBuilders.get("/api/vendors?query=title:Sport Life"))
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.content[0].title").value("Domino`s Pizza"))
-                .andExpect(jsonPath("$.content[1].title").value("Sport Life"))
-                .andExpect(jsonPath("$.content[2].title").value("TUI"))
-                .andExpect(jsonPath("$.content[0].locations[0].city").value("Lviv"))
+                .andExpect(jsonPath("$.content[0].title").value("Sport Life"))
+                .andExpect(jsonPath("$.content[0].locations[0].city").value("Kyiv"))
                 .andExpect(status().isOk());
         Assertions.assertNotNull(actual);
     }
@@ -198,5 +208,4 @@ class VendorControllerIntegrationTest {
 
         return mapper.writeValueAsString(requestVO);
     }
-
 }

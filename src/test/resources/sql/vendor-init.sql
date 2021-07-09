@@ -16,6 +16,7 @@ VALUES (1, '2021-06-06 17:22:21', 'Sport Life - a chain of casual fitness center
 
 INSERT INTO location_vendor
 VALUES (2, 2),
-       (1, 1);
+       (1, 1),
+       (3, 1);
 
 
