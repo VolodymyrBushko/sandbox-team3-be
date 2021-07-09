@@ -346,7 +346,6 @@ class DiscountServiceIntegrationTest {
                 .description(description)
                 .imageUrl(imageUrl)
                 .flatAmount(flatAmount)
-                .price(price)
                 .startDate(startDate)
                 .expirationDate(expirationDate)
                 .categoryId(categoryId)
@@ -366,7 +365,6 @@ class DiscountServiceIntegrationTest {
         assertEquals(expected.getImageUrl(), actual.getImageUrl());
         assertEquals(expected.getFlatAmount(), actual.getFlatAmount());
         assertEquals(expected.getPercentage(), actual.getPercentage());
-        assertEquals(expected.getPrice(), actual.getPrice());
         assertEquals(expected.getStartDate(), actual.getStartDate());
         assertEquals(expected.getExpirationDate(), actual.getExpirationDate());
         assertEquals(expected.getPromocode(), actual.getPromocode());
@@ -386,7 +384,6 @@ class DiscountServiceIntegrationTest {
         assertEquals(expected.getImageUrl(), actual.getImageUrl());
         assertEquals(expected.getFlatAmount(), actual.getFlatAmount());
         assertEquals(expected.getPercentage(), actual.getPercentage());
-        assertEquals(expected.getPrice(), actual.getPrice());
         assertEquals(expected.getStartDate(), actual.getStartDate());
         assertEquals(expected.getExpirationDate(), actual.getExpirationDate());
         assertEquals(expected.getPromocode(), actual.getPromocode());

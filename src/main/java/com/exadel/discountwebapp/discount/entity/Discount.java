@@ -52,9 +52,6 @@ public class Discount {
     @Column(name = "dis_flat_amount")
     private BigDecimal flatAmount;
 
-    @Column(name = "dis_price", nullable = false)
-    private BigDecimal price;
-
     @EqualsAndHashCode.Exclude
     @Column(name = "dis_start_date", nullable = false)
     private LocalDateTime startDate;

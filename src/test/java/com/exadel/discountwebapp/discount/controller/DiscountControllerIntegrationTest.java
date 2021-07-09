@@ -172,7 +172,6 @@ class DiscountControllerIntegrationTest {
                 .description("description3")
                 .imageUrl("http://localhost/images/img3.png")
                 .flatAmount(BigDecimal.valueOf(150.15))
-                .price(BigDecimal.valueOf(55.15))
                 .startDate(LocalDateTime.now())
                 .expirationDate(data.plusDays(1))
                 .categoryId(10L)

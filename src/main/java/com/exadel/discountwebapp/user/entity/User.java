@@ -45,6 +45,10 @@ public class User {
     @Column(name = "usr_password", length = 510)
     private String password;
 
+    @EqualsAndHashCode.Exclude
+    @Column(name = "usr_image_url", length = 510, nullable = false)
+    private String imageUrl;
+
     @NotNull
     @ManyToOne
     @EqualsAndHashCode.Exclude

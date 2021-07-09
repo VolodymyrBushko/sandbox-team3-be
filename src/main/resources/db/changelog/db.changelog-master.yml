@@ -35,3 +35,15 @@ databaseChangeLog:
   - include:
       file: init/27062021_create_tag_discount_table.yml
       relativeToChangelogFile: true
+  - include:
+      file: changes01/09072021_drop_column_dis_price.yml
+      relativeToChangelogFile: true
+  - include:
+      file: changes01/09072021_add_column_user_image_url.yml
+      relativeToChangelogFile: true
+  - include:
+      file: changes01/09072021_add_column_dis_promocode.yml
+      relativeToChangelogFile: true
+  - include:
+      file: changes01/09072021_insert_user_image_url.yml
+      relativeToChangelogFile: true

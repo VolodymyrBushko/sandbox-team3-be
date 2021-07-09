@@ -39,11 +39,6 @@ public abstract class DiscountBaseVO implements Serializable {
     private BigDecimal percentage;
 
     @NotNull
-    @DecimalMin(value = "0.0")
-    @Digits(integer = 8, fraction = 2)
-    private BigDecimal price;
-
-    @NotNull
     private LocalDateTime startDate;
 
     @NotNull

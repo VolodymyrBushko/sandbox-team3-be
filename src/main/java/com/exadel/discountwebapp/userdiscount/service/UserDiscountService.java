@@ -1,14 +1,11 @@
 package com.exadel.discountwebapp.userdiscount.service;
 
-import com.exadel.discountwebapp.discount.entity.Discount;
 import com.exadel.discountwebapp.discount.repository.DiscountRepository;
 import com.exadel.discountwebapp.exception.exception.client.EntityAlreadyExistsException;
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
-import com.exadel.discountwebapp.user.entity.User;
 import com.exadel.discountwebapp.user.repository.UserRepository;
 import com.exadel.discountwebapp.userdiscount.entity.UserDiscount;
 import com.exadel.discountwebapp.userdiscount.mapper.UserDiscountMapper;
-import com.exadel.discountwebapp.userdiscount.qrcodegenerator.QRCodeData;
 import com.exadel.discountwebapp.userdiscount.qrcodegenerator.QRCodeGenerator;
 import com.exadel.discountwebapp.userdiscount.repository.UserDiscountRepository;
 import com.exadel.discountwebapp.userdiscount.vo.UserDiscountRequestVO;
@@ -29,9 +26,6 @@ public class UserDiscountService {
     private final UserDiscountRepository userDiscountRepository;
     private final UserDiscountMapper userDiscountMapper;
     private final QRCodeGenerator qrCodeGenerator;
-    private final UserRepository userRepository;
-    private final DiscountRepository discountRepository;
-    private final ObjectMapper objectMapper;
 
     @SneakyThrows
     @Transactional(propagation = Propagation.REQUIRED)
@@ -57,20 +51,10 @@ public class UserDiscountService {
 
     @SneakyThrows
     private String dataForQRCode(UserDiscountRequestVO request) {
-        var user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new EntityNotFoundException(User.class, "id", request.getUserId()));
-        var discount = discountRepository.findById(request.getDiscountId())
-                .orElseThrow(() -> new EntityNotFoundException(Discount.class, "id", request.getDiscountId()));
+        //TODO: add valid url adress
+        //String data = "http://localhost:8080/api/qrcode/" + request.getUserId() + "/" + request.getDiscountId();
 
-        QRCodeData qrcodeData = new QRCodeData();
-        qrcodeData.setUserFirstName(user.getFirstName());
-        qrcodeData.setUserLastName(user.getLastName());
-        qrcodeData.setVendorTitle(discount.getVendor().getTitle());
-        qrcodeData.setVendorEmail(discount.getVendor().getEmail());
-        qrcodeData.setDiscountTitle(discount.getTitle());
-        qrcodeData.setDiscountPromocode(discount.getPromocode());
-
-        String data = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(qrcodeData);
+        String data = "https://sandbox-discount.herokuapp.com/" + request.getUserId() + "/" + request.getDiscountId();
         return data;
     }
 }
