@@ -1,5 +1,6 @@
 package com.exadel.discountwebapp.userdiscount.qrcodegenerator;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,10 @@ public class QRCodeResponseVO {
     private String vendorEmail;
 
     private String discountTitle;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String promocode;
+
     private LocalDateTime discountStartDate;
     private LocalDateTime discountExpirationDate;
 
