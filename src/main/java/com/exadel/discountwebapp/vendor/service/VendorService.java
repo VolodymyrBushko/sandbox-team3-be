@@ -57,9 +57,8 @@ public class VendorService {
     public VendorResponseVO update(Long id, VendorRequestVO request) {
         Vendor vendor = getVendorById(id);
         vendorMapper.update(request, vendor);
-        vendorRepository.save(vendor);
-        return vendorMapper.toVO(vendor);
-
+        Vendor updatedVendor = vendorRepository.save(vendor);
+        return vendorMapper.toVO(updatedVendor);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

@@ -1,14 +1,11 @@
 package com.exadel.discountwebapp.vendor.mapper;
 
-import com.exadel.discountwebapp.exception.exception.client.EntityAlreadyExistsException;
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.location.entity.Location;
 import com.exadel.discountwebapp.location.mapper.LocationMapper;
 import com.exadel.discountwebapp.location.repository.LocationRepository;
-import com.exadel.discountwebapp.location.service.LocationService;
-import com.exadel.discountwebapp.location.vo.LocationResponseVO;
+import com.exadel.discountwebapp.location.vo.location.LocationResponseVO;
 import com.exadel.discountwebapp.vendor.entity.Vendor;
-import com.exadel.discountwebapp.vendor.repository.VendorRepository;
 import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
 import com.exadel.discountwebapp.vendor.vo.VendorResponseVO;
 import org.modelmapper.ModelMapper;
@@ -22,18 +19,14 @@ import java.util.stream.Collectors;
 
 @Component
 public class VendorMapper {
-    private final LocationService locationService;
     private final LocationMapper locationMapper;
     private final ModelMapper modelMapper = new ModelMapper();
     private final LocationRepository locationRepository;
-    private final VendorRepository vendorRepository;
 
     @Autowired
-    public VendorMapper(LocationService locationService, LocationMapper locationMapper, LocationRepository locationRepository, VendorRepository repository) {
-        this.locationService = locationService;
+    public VendorMapper(LocationMapper locationMapper, LocationRepository locationRepository) {
         this.locationMapper = locationMapper;
         this.locationRepository = locationRepository;
-        this.vendorRepository = repository;
         configureModelMapper();
     }
 
@@ -59,6 +52,7 @@ public class VendorMapper {
                 .map(l -> locationRepository.findById(l).orElseThrow(() -> new EntityNotFoundException(Location.class, "id", l)))
                 .collect(Collectors.toList());
 
+        locations.removeIf(e -> vendor.getLocations().contains(e));
         vendor.getLocations().addAll(locations);
         modelMapper.map(request, vendor);
     }
