@@ -42,18 +42,17 @@ public class UserDiscountService {
         }
         UserDiscount userDiscount = userDiscountMapper.toEntity(request);
         byte[] qrcode = qrCodeGenerator.generateQRCodeImage(dataForQRCode(request), QRCODE_WIDTH, QRCODE_HEIGHT);
-        userDiscount.setQrcode(qrcode);
         userDiscountRepository.save(userDiscount);
-
-        return userDiscount.getQrcode();
+        return qrcode;
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    public byte[] findQRCodeByUserDiscountId(UserDiscountRequestVO request) {
+    public byte[] getQRCodeByUserDiscountId(UserDiscountRequestVO request) {
         UserDiscount.UserDiscountId userDiscountId = new UserDiscount.UserDiscountId(request.getUserId(), request.getDiscountId());
         UserDiscount discount = userDiscountRepository.findById(userDiscountId)
                 .orElseThrow(() -> new EntityNotFoundException(UserDiscount.class, "id", userDiscountId));
-        return discount.getQrcode();
+        byte[] qrcode = qrCodeGenerator.generateQRCodeImage(dataForQRCode(request), QRCODE_WIDTH, QRCODE_HEIGHT);
+        return qrcode;
     }
 
     @SneakyThrows
@@ -69,9 +68,8 @@ public class UserDiscountService {
         qrcodeData.setVendorTitle(discount.getVendor().getTitle());
         qrcodeData.setVendorEmail(discount.getVendor().getEmail());
         qrcodeData.setDiscountTitle(discount.getTitle());
-        if (discount.getPromocode() != null) {
-            qrcodeData.setDiscountPromocode(discount.getPromocode());
-        }
+        qrcodeData.setDiscountPromocode(discount.getPromocode());
+
         String data = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(qrcodeData);
         return data;
     }

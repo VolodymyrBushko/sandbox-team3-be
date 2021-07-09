@@ -24,6 +24,6 @@ public class UserDiscountController {
 
     @GetMapping(produces = MediaType.IMAGE_PNG_VALUE)
     public byte[] findQRCodeByUserDiscountId(@Valid @RequestBody UserDiscountRequestVO request) {
-        return userDiscountService.findQRCodeByUserDiscountId(request);
+        return userDiscountService.getQRCodeByUserDiscountId(request);
     }
 }
