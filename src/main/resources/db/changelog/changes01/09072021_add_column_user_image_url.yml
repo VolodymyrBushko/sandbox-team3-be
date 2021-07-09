@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 09072021_add_column_dis_promocode
+      id: 09072021_add_column_usr_image_url
       author: bozhokmaria@gmail.com
       changes:
        - addColumn:
