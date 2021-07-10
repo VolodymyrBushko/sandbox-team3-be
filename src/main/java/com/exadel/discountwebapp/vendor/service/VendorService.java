@@ -1,14 +1,13 @@
 package com.exadel.discountwebapp.vendor.service;
 
-import com.exadel.discountwebapp.exception.exception.client.EntityAlreadyExistsException;
-import com.exadel.discountwebapp.user.entity.User;
-import com.exadel.discountwebapp.user.service.UserService;
-import com.exadel.discountwebapp.vendor.validator.VendorValidator;
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.filter.SpecificationBuilder;
+import com.exadel.discountwebapp.user.entity.User;
+import com.exadel.discountwebapp.user.service.UserService;
 import com.exadel.discountwebapp.vendor.entity.Vendor;
 import com.exadel.discountwebapp.vendor.mapper.VendorMapper;
 import com.exadel.discountwebapp.vendor.repository.VendorRepository;
+import com.exadel.discountwebapp.vendor.validator.VendorValidator;
 import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
 import com.exadel.discountwebapp.vendor.vo.VendorResponseVO;
 import lombok.RequiredArgsConstructor;
@@ -98,5 +97,10 @@ public class VendorService {
         if (isRemoved) {
             vendorRepository.save(vendor);
         }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    public List<String> findAllSubEmailsByVendorId(Long id) {
+        return vendorRepository.findAllSubEmailsByVendorId(id);
     }
 }
