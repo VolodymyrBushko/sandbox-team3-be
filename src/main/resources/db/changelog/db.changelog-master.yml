@@ -3,8 +3,8 @@ databaseChangeLog:
       file: init/15062021_create_role_table.yml
       relativeToChangelogFile: true
   - include:
-     file: init/01072021_create_country_table.yml
-     relativeToChangelogFile: true
+      file: init/01072021_create_country_table.yml
+      relativeToChangelogFile: true
   - include:
       file: init/15062021_create_location_table.yml
       relativeToChangelogFile: true
@@ -34,4 +34,7 @@ databaseChangeLog:
       relativeToChangelogFile: true
   - include:
       file: init/27062021_create_tag_discount_table.yml
+      relativeToChangelogFile: true
+  - include:
+      file: init/10072021_create_user_vendor_subscribe_table.yml
       relativeToChangelogFile: true
