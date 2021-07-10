@@ -1,5 +1,8 @@
 package com.exadel.discountwebapp.vendor.service;
 
+import com.exadel.discountwebapp.exception.exception.client.EntityAlreadyExistsException;
+import com.exadel.discountwebapp.user.entity.User;
+import com.exadel.discountwebapp.user.service.UserService;
 import com.exadel.discountwebapp.vendor.validator.VendorValidator;
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.filter.SpecificationBuilder;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,6 +29,7 @@ public class VendorService {
     private final VendorMapper vendorMapper;
     private final VendorRepository vendorRepository;
     private final VendorValidator vendorValidator;
+    private final UserService userService;
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public Page<VendorResponseVO> findAll(String query, Pageable pageable) {
@@ -70,5 +75,28 @@ public class VendorService {
     private Vendor getVendorById(Long id) {
         return vendorRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Vendor.class, "id", id));
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void subscribe(Long vendorId, String userEmail) {
+        Vendor vendor = getVendorById(vendorId);
+        User user = userService.getUserByEmail(userEmail);
+
+        vendorValidator.checkDuplicateSubscriber(vendor, user);
+
+        vendor.getSubscribers().add(user);
+        vendorRepository.save(vendor);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void unsubscribe(Long vendorId, String userEmail) {
+        Vendor vendor = getVendorById(vendorId);
+        User user = userService.getUserByEmail(userEmail);
+
+        boolean isRemoved = vendor.getSubscribers().remove(user);
+
+        if (isRemoved) {
+            vendorRepository.save(vendor);
+        }
     }
 }

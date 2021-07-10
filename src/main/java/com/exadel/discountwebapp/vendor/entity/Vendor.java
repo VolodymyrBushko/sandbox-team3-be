@@ -2,6 +2,7 @@ package com.exadel.discountwebapp.vendor.entity;
 
 import com.exadel.discountwebapp.discount.entity.Discount;
 import com.exadel.discountwebapp.location.entity.Location;
+import com.exadel.discountwebapp.user.entity.User;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -22,6 +23,7 @@ import java.util.List;
 @Builder
 @EntityListeners(AuditingEntityListener.class)
 public class Vendor {
+
     @EqualsAndHashCode.Exclude
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,4 +64,14 @@ public class Vendor {
     @EqualsAndHashCode.Exclude
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "vendor")
     private List<Discount> discounts = new ArrayList<>();
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @ManyToMany
+    @JoinTable(
+            name = "user_vendor_subscribe",
+            joinColumns = @JoinColumn(name = "vn_id"),
+            inverseJoinColumns = @JoinColumn(name = "usr_id")
+    )
+    private List<User> subscribers = new ArrayList<>();
 }

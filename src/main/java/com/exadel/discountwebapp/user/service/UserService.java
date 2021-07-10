@@ -51,12 +51,18 @@ public class UserService {
         return mapper.toVO(user);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    public User getUserByEmail(String email) {
+        return userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException(User.class, "email", email));
+    }
+
     @Transactional(propagation = Propagation.REQUIRED)
     public UserResponseVO findByLoginAndPassword(SigninVO signinVO) {
         String email = signinVO.getEmail();
         String password = signinVO.getPassword();
         User user = userRepository.findUserByEmail(email)
-                .filter(u->passwordEncoder.matches(password, u.getPassword()))
+                .filter(u -> passwordEncoder.matches(password, u.getPassword()))
                 .orElseThrow(() -> new EntityNotFoundException("Can not find User by Login or Password"));
 
         return new UserResponseVO().builder()
