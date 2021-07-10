@@ -63,7 +63,7 @@ public class UserService {
         String password = signinVO.getPassword();
         User user = userRepository.findUserByEmail(email)
                 .filter(u -> passwordEncoder.matches(password, u.getPassword()))
-                .orElseThrow(() -> new EntityNotFoundException("Can not find User by Login or Password"));
+                .orElseThrow(() -> new EntityNotFoundException(User.class, "Can not find User by Login or Password"));
 
         return new UserResponseVO().builder()
                 .email(email)

@@ -1,6 +1,7 @@
 package com.exadel.discountwebapp.vendor.validator;
 
 import com.exadel.discountwebapp.exception.exception.client.EntityAlreadyExistsException;
+import com.exadel.discountwebapp.exception.exception.notification.EntityAlreadySubscribedException;
 import com.exadel.discountwebapp.user.entity.User;
 import com.exadel.discountwebapp.vendor.entity.Vendor;
 import com.exadel.discountwebapp.vendor.repository.VendorRepository;
@@ -27,7 +28,7 @@ public class VendorValidator {
 
     public void checkDuplicateSubscriber(Vendor vendor, User user) {
         if (vendor.getSubscribers().contains(user)) {
-            throw new EntityAlreadyExistsException(User.class, "email", user.getEmail());
+            throw new EntityAlreadySubscribedException(User.class, "email", user.getEmail());
         }
     }
 }

@@ -1,7 +1,9 @@
 package com.exadel.discountwebapp.exception;
 
 import com.exadel.discountwebapp.exception.exception.client.*;
+import com.exadel.discountwebapp.exception.exception.notification.EntityAlreadySubscribedException;
 import com.exadel.discountwebapp.exception.response.ExceptionResponse;
+import org.springframework.mail.MailException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
@@ -15,10 +17,12 @@ import static org.springframework.http.HttpStatus.*;
 @RestControllerAdvice
 public class WebExceptionHandler {
 
-    private static final String AUTHORIZED_EXCEPTION_CODE = "UNAUTHORIZED";
-    private static final String GLOBAL_EXCEPTION_CODE = "INTERNAL_SERVER_ERROR";
-    private static final String GLOBAL_EXCEPTION_MESSAGE = "Something is wrong";
     private static final String FORBIDDEN_CODE = "FORBIDDEN";
+    private static final String AUTHORIZED_EXCEPTION_CODE = "UNAUTHORIZED";
+    private static final String FAILED_EMAIL_CODE = "FAILED_TO_SEND_EMAIL";
+    private static final String GLOBAL_EXCEPTION_CODE = "INTERNAL_SERVER_ERROR";
+
+    private static final String GLOBAL_EXCEPTION_MESSAGE = "Something is wrong";
 
     private static final String RESPONSE_CODE_PATTERN = "%s.%s.%s";
 
@@ -54,14 +58,21 @@ public class WebExceptionHandler {
     @ExceptionHandler(EntityAlreadyExistsException.class)
     @ResponseStatus(value = CONFLICT)
     public ExceptionResponse entityAlreadyExistsException(EntityAlreadyExistsException ex) {
-        String code = String.format(RESPONSE_CODE_PATTERN, ex.getClazz().getSimpleName(), ex.getFieldName(), UNPROCESSABLE_ENTITY.value());
+        String code = String.format(RESPONSE_CODE_PATTERN, ex.getClazz().getSimpleName(), ex.getFieldName(), CONFLICT.value());
         return new ExceptionResponse(code, ex.getMessage());
     }
 
     @ExceptionHandler(EntityAlreadyUsedException.class)
     @ResponseStatus(value = CONFLICT)
     public ExceptionResponse entityAlreadyUsedException(EntityAlreadyUsedException ex) {
-        String code = String.format(RESPONSE_CODE_PATTERN, ex.getClazz().getSimpleName(), ex.getFieldName(), UNPROCESSABLE_ENTITY.value());
+        String code = String.format(RESPONSE_CODE_PATTERN, ex.getClazz().getSimpleName(), ex.getFieldName(), CONFLICT.value());
+        return new ExceptionResponse(code, ex.getMessage());
+    }
+
+    @ExceptionHandler(EntityAlreadySubscribedException.class)
+    @ResponseStatus(value = CONFLICT)
+    public ExceptionResponse userAlreadySubscribedException(EntityAlreadySubscribedException ex) {
+        String code = String.format(RESPONSE_CODE_PATTERN, ex.getClazz().getSimpleName(), ex.getFieldName(), CONFLICT.value());
         return new ExceptionResponse(code, ex.getMessage());
     }
 
@@ -75,6 +86,12 @@ public class WebExceptionHandler {
     @ResponseStatus(value = FORBIDDEN)
     public ExceptionResponse forbiddenException(AccessDeniedException ex) {
         return new ExceptionResponse(FORBIDDEN_CODE, ex.getMessage());
+    }
+
+    @ExceptionHandler(MailException.class)
+    @ResponseStatus(value = CONFLICT)
+    public ExceptionResponse mailException(MailException ex) {
+        return new ExceptionResponse(FAILED_EMAIL_CODE, ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
