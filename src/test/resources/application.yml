@@ -17,4 +17,4 @@ spring:
     host: 127.0.0.1
     port: 3025
     protocol: smtp
-    test-connection: true
+    test-connection: false
