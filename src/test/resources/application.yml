@@ -11,3 +11,10 @@ spring:
     show-sql: true
   liquibase:
     enabled: false
+  mail:
+    password: 1111
+    username: user
+    host: 127.0.0.1
+    port: 3025
+    protocol: smtp
+    test-connection: true

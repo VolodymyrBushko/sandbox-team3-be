@@ -14,3 +14,8 @@ VALUES (1, '2021-06-06 17:22:21', 'Sport Life - a chain of casual fitness center
        (3, '2023-06-06 17:22:21', 'TUI AG - travel and tourism company', 'tuigroup.com', 'tui_image_1.jsp',
         '2023-06-06 17:22:21', 'TUI', 1);
 
+INSERT INTO role (rol_id, rol_name, rol_created, rol_modified)
+VALUES (1, 'USER', '2021-06-06 17:22:21', '2021-06-06 17:22:21');
+
+INSERT INTO "user"
+VALUES (1, '2021-06-06 17:22:21', 'ivan_ivanov@gmail.com', 'Ivan', 'Ivanov', '2021-06-06 17:22:21', '$2y$12$QkgAOhRydRHVZz07qhfT0eKFgWMLWp4WLjrr2ZLJNnA3yMt44lWq2', 1, 1);

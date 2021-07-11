@@ -2,17 +2,24 @@ package com.exadel.discountwebapp.vendor.service;
 
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.exception.exception.client.IncorrectFilterInputException;
+import com.exadel.discountwebapp.user.repository.UserRepository;
 import com.exadel.discountwebapp.vendor.entity.Vendor;
 import com.exadel.discountwebapp.vendor.repository.VendorRepository;
 import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
 import com.exadel.discountwebapp.vendor.vo.VendorResponseVO;
 import com.google.common.collect.Lists;
+import com.icegreen.greenmail.configuration.GreenMailConfiguration;
+import com.icegreen.greenmail.junit5.GreenMailExtension;
+import com.icegreen.greenmail.util.ServerSetupTest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -28,9 +35,15 @@ class VendorServiceIntegrationTest {
 
     @Autowired
     private VendorService vendorService;
-
     @Autowired
     private VendorRepository vendorRepository;
+    @Autowired
+    private UserRepository userRepository;
+
+    @RegisterExtension
+    static GreenMailExtension greenMail = new GreenMailExtension(ServerSetupTest.SMTP)
+            .withConfiguration(GreenMailConfiguration.aConfig().withUser("user", "1111"))
+            .withPerMethodLifecycle(false);
 
     @Test
     void shouldFindVendorById() {
@@ -298,6 +311,48 @@ class VendorServiceIntegrationTest {
         assertEquals(actual.getId(), id);
 
         matchOne(expected, actual);
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.REQUIRED)
+    void shouldSubscribe() {
+        var user = userRepository.findById(1L).orElse(null);
+        var vendor = vendorRepository.findById(1L).orElse(null);
+
+        assertNotNull(user);
+        assertNotNull(vendor);
+
+        assertFalse(vendor.getSubscribers().contains(user));
+
+        assertNotNull(vendor.getId());
+        assertNotNull(user.getEmail());
+
+        vendorService.subscribe(vendor.getId(), user.getEmail());
+
+        assertTrue(vendor.getSubscribers().contains(user));
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.REQUIRED)
+    void shouldUnsubscribe() {
+        var user = userRepository.findById(1L).orElse(null);
+        var vendor = vendorRepository.findById(1L).orElse(null);
+
+        assertNotNull(user);
+        assertNotNull(vendor);
+
+        assertFalse(vendor.getSubscribers().contains(user));
+
+        assertNotNull(vendor.getId());
+        assertNotNull(user.getEmail());
+
+        vendorService.subscribe(vendor.getId(), user.getEmail());
+
+        assertTrue(vendor.getSubscribers().contains(user));
+
+        vendorService.unsubscribe(vendor.getId(), user.getEmail());
+
+        assertFalse(vendor.getSubscribers().contains(user));
     }
 
     private VendorRequestVO createVendorRequest() {

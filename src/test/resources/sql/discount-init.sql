@@ -38,3 +38,12 @@ VALUES (1, '2021-06-06 17:22:21',
         '2023-12-06 17:22:21', 150, 'drinks.jsp',
         '2023-06-06 17:22:21', null, 150, '70% discount on all drinks menus',
         '2023-06-06 17:22:21', 'HappyDrink', 20, 20);
+
+INSERT INTO role
+VALUES (1, '2021-06-04 17:22:21', '2021-06-04 17:22:21', 'USER');
+
+INSERT INTO "user"
+VALUES (1, '2021-06-06 17:22:21', 'ivan_ivanov@gmail.com', 'Ivan', 'Ivanov', '2021-06-06 17:22:21', '$2y$12$QkgAOhRydRHVZz07qhfT0eKFgWMLWp4WLjrr2ZLJNnA3yMt44lWq2', 10, 1);
+
+INSERT INTO user_vendor_subscribe (usr_id, vn_id)
+VALUES (1, 10);

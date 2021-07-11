@@ -28,6 +28,7 @@
         <jjwt.version>0.9.1</jjwt.version>
         <json-path.version>2.4.0</json-path.version>
         <hamcrest-library.version>2.2</hamcrest-library.version>
+        <greenmail-junit5.version>1.6.4</greenmail-junit5.version>
     </properties>
 
     <dependencies>
@@ -107,6 +108,12 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>com.icegreen</groupId>
+            <artifactId>greenmail-junit5</artifactId>
+            <version>${greenmail-junit5.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
             <version>${jjwt.version}</version>
@@ -125,6 +132,10 @@
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
         </dependency>
     </dependencies>
 

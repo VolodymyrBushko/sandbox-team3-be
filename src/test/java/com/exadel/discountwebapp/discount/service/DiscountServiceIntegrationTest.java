@@ -7,7 +7,15 @@ import com.exadel.discountwebapp.discount.vo.DiscountResponseVO;
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.exception.exception.client.IncorrectFilterInputException;
 import com.google.common.collect.Lists;
+import com.icegreen.greenmail.configuration.GreenMailConfiguration;
+import com.icegreen.greenmail.junit5.GreenMailExtension;
+import com.icegreen.greenmail.util.GreenMailUtil;
+import com.icegreen.greenmail.util.ServerSetupTest;
+import lombok.SneakyThrows;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +24,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.internet.MimeMessage;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -33,6 +42,21 @@ class DiscountServiceIntegrationTest {
     private DiscountService discountService;
     @Autowired
     private DiscountRepository discountRepository;
+
+    @RegisterExtension
+    static GreenMailExtension greenMail = new GreenMailExtension(ServerSetupTest.SMTP)
+            .withConfiguration(GreenMailConfiguration.aConfig().withUser("user", "1111"))
+            .withPerMethodLifecycle(false);
+
+    @BeforeEach
+    void startMailServer() {
+        greenMail.start();
+    }
+
+    @AfterEach
+    void stopMailServer() {
+        greenMail.stop();
+    }
 
     @Test
     void shouldFindDiscountById() {
@@ -311,6 +335,28 @@ class DiscountServiceIntegrationTest {
         assertNotNull(actual.getId());
 
         matchOne(expected, actual);
+    }
+
+    @Test
+    @SneakyThrows
+    void shouldReceiveDiscountCreateMailNotification() {
+        int messageCount = 1;
+        String[] to = {"ivan_ivanov@gmail.com"};
+        String title = "title";
+        String content = "shortDescription";
+
+        var request = createDiscountRequest();
+        var discount = discountService.create(request);
+
+        MimeMessage[] receivedMessages = greenMail.getReceivedMessages();
+        assertEquals(messageCount, receivedMessages.length);
+
+        MimeMessage receivedMessage = receivedMessages[0];
+
+        assertEquals(to.length, receivedMessage.getAllRecipients().length);
+        assertEquals(to[0], receivedMessage.getAllRecipients()[0].toString());
+        assertEquals(title, receivedMessage.getSubject());
+        assertTrue(GreenMailUtil.getBody(greenMail.getReceivedMessages()[0]).contains(content));
     }
 
     @Test
