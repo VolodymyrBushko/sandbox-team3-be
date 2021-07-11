@@ -2,6 +2,12 @@ databaseChangeLog:
   - changeSet:
       id: 09072021_drop_loc_id_column_from_vendor_table
       author: tesliuk.ua@gmail.com
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - columnExists:
+                columnName: loc_id
+                tableName: vendor
       changes:
         - dropColumn:
             schemaName: public

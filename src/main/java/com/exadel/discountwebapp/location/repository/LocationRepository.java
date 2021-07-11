@@ -15,5 +15,5 @@ public interface LocationRepository extends CrudRepository<Location, Long>, JpaS
 
     List<Location> findAllByCity(String city);
 
-    List<Location> findLocationByIdIn(Collection<Long> ids);
+    List<Location> findAllByIdIn(Collection<Long> ids);
 }
