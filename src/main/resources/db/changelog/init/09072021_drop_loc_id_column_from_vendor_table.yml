@@ -4,7 +4,7 @@ databaseChangeLog:
       author: tesliuk.ua@gmail.com
       preConditions:
         - onFail: MARK_RAN
-        - not:
+        - and:
             - columnExists:
                 columnName: loc_id
                 tableName: vendor
