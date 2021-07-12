@@ -18,3 +18,5 @@ spring:
     port: 3025
     protocol: smtp
     test-connection: false
+app:
+  url: https://discount-system-team3.herokuapp.com/discountinfo

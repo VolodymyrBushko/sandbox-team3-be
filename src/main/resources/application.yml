@@ -30,3 +30,5 @@ spring:
     change-log: db/changelog/db.changelog-master.yml
 jwt:
   secret: javamaster
+app:
+  url: https://discount-system-team3.herokuapp.com/discountinfo

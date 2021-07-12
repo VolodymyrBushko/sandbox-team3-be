@@ -1,18 +1,18 @@
 package com.exadel.discountwebapp.user.entity;
 
-import com.exadel.discountwebapp.role.entity.Role;
 import com.exadel.discountwebapp.location.entity.Location;
-
+import com.exadel.discountwebapp.role.entity.Role;
+import com.exadel.discountwebapp.userdiscount.entity.UserDiscount;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Data
 @Entity
@@ -44,6 +44,10 @@ public class User {
     @NotNull
     @Column(name = "usr_password", length = 510)
     private String password;
+
+    @EqualsAndHashCode.Exclude
+    @Column(name = "usr_image_url", length = 510, nullable = false)
+    private String imageUrl;
 
     @NotNull
     @ManyToOne

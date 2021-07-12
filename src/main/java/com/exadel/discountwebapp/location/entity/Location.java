@@ -47,7 +47,7 @@ public class Location {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "location")
+    @ManyToMany(mappedBy = "locations")
     private List<Vendor> vendors = new ArrayList<>();
 
     @ToString.Exclude

@@ -3,7 +3,8 @@ package com.exadel.discountwebapp.vendor.vo;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -11,6 +12,6 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class VendorRequestVO extends VendorBaseVO {
 
-    @NotNull
-    private Long locationId;
+    @NotEmpty
+    private List<Long> locationIds;
 }
