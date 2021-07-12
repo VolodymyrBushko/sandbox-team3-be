@@ -306,7 +306,6 @@ class DiscountServiceIntegrationTest {
                 .imageUrl("sport_life_discount_image_1.jsp")
                 .percentage(null)
                 .flatAmount(new BigDecimal("100.00"))
-                .price(new BigDecimal("50.00"))
                 .startDate(LocalDateTime.parse("2021-06-06T17:22:21"))
                 .expirationDate(LocalDateTime.parse("2021-12-06T17:22:21"))
                 .created(LocalDateTime.parse("2021-06-06T17:22:21"))
@@ -321,7 +320,6 @@ class DiscountServiceIntegrationTest {
                 .imageUrl("domino`s_pizza_discount_image_1.jsp")
                 .percentage(null)
                 .flatAmount(new BigDecimal("150.00"))
-                .price(new BigDecimal("150.00"))
                 .startDate(LocalDateTime.parse("2022-06-06T17:22:21"))
                 .expirationDate(LocalDateTime.parse("2022-12-06T17:22:21"))
                 .created(LocalDateTime.parse("2021-06-06T17:22:21"))
@@ -353,7 +351,6 @@ class DiscountServiceIntegrationTest {
                 .imageUrl("sport_life_discount_image_1.jsp")
                 .percentage(null)
                 .flatAmount(new BigDecimal("100.00"))
-                .price(new BigDecimal("50.00"))
                 .startDate(LocalDateTime.parse("2021-06-06T17:22:21"))
                 .expirationDate(LocalDateTime.parse("2021-12-06T17:22:21"))
                 .created(LocalDateTime.parse("2021-06-06T17:22:21"))
@@ -368,7 +365,6 @@ class DiscountServiceIntegrationTest {
                 .imageUrl("drinks.jsp")
                 .percentage(null)
                 .flatAmount(new BigDecimal("150.00"))
-                .price(new BigDecimal("150.00"))
                 .startDate(LocalDateTime.parse("2023-06-06T17:22:21"))
                 .expirationDate(LocalDateTime.parse("2023-12-06T17:22:21"))
                 .created(LocalDateTime.parse("2021-06-06T17:22:21"))
@@ -425,12 +421,12 @@ class DiscountServiceIntegrationTest {
         var description = "description";
         var imageUrl = "http://localhost/images/img.png";
         var flatAmount = BigDecimal.valueOf(100.15);
-        var price = BigDecimal.valueOf(50.15);
         var startDate = LocalDateTime.now();
         var expirationDate = startDate.plusDays(1);
         var categoryId = 10L;
         var vendorId = 10L;
         var locationIds = List.of(10L, 20L);
+        var promocode = "promocode123";
         var tagIds = List.of(1L, 2L);
 
         return DiscountRequestVO.builder()
@@ -439,13 +435,13 @@ class DiscountServiceIntegrationTest {
                 .description(description)
                 .imageUrl(imageUrl)
                 .flatAmount(flatAmount)
-                .price(price)
                 .startDate(startDate)
                 .expirationDate(expirationDate)
                 .categoryId(categoryId)
                 .vendorId(vendorId)
                 .tagIds(tagIds)
                 .locationIds(locationIds)
+                .promocode(promocode)
                 .build();
     }
 
@@ -457,9 +453,9 @@ class DiscountServiceIntegrationTest {
         assertEquals(expected.getImageUrl(), actual.getImageUrl());
         assertEquals(expected.getFlatAmount(), actual.getFlatAmount());
         assertEquals(expected.getPercentage(), actual.getPercentage());
-        assertEquals(expected.getPrice(), actual.getPrice());
         assertEquals(expected.getStartDate(), actual.getStartDate());
         assertEquals(expected.getExpirationDate(), actual.getExpirationDate());
+        assertEquals(expected.getPromocode(), actual.getPromocode());
 
         assertNotNull(actual.getCategory());
         assertNotNull(actual.getVendor());
@@ -476,9 +472,9 @@ class DiscountServiceIntegrationTest {
         assertEquals(expected.getImageUrl(), actual.getImageUrl());
         assertEquals(expected.getFlatAmount(), actual.getFlatAmount());
         assertEquals(expected.getPercentage(), actual.getPercentage());
-        assertEquals(expected.getPrice(), actual.getPrice());
         assertEquals(expected.getStartDate(), actual.getStartDate());
         assertEquals(expected.getExpirationDate(), actual.getExpirationDate());
+        assertEquals(expected.getPromocode(), actual.getPromocode());
 
         assertNotNull(actual.getCategory());
         assertNotNull(actual.getVendor());
@@ -498,7 +494,6 @@ class DiscountServiceIntegrationTest {
         assertEquals(expected.getImageUrl(), actual.getImageUrl());
         assertEquals(expected.getFlatAmount(), actual.getFlatAmount());
         assertEquals(expected.getPercentage(), actual.getPercentage());
-        assertEquals(expected.getPrice(), actual.getPrice());
         assertEquals(expected.getStartDate(), actual.getStartDate());
         assertEquals(expected.getExpirationDate(), actual.getExpirationDate());
     }

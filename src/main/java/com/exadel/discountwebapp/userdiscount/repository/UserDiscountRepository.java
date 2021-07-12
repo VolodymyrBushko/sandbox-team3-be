@@ -1,6 +1,6 @@
-package com.exadel.discountwebapp.user.repository;
+package com.exadel.discountwebapp.userdiscount.repository;
 
-import com.exadel.discountwebapp.user.entity.UserDiscount;
+import com.exadel.discountwebapp.userdiscount.entity.UserDiscount;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

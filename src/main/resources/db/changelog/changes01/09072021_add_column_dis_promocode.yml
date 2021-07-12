@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 09072021_add_column_dis_promocode
+      author: bozhokmaria@gmail.com
+      changes:
+       - addColumn:
+          tableName: discount
+          columns:
+           - column:
+              name: dis_promocode
+              type: VARCHAR(100)

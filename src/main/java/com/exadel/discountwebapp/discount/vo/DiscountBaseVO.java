@@ -1,6 +1,8 @@
 package com.exadel.discountwebapp.discount.vo;
 
 import com.exadel.discountwebapp.discount.validator.FlatAmountOrPercentageFieldsNotNull;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -39,14 +41,13 @@ public abstract class DiscountBaseVO implements Serializable {
     private BigDecimal percentage;
 
     @NotNull
-    @DecimalMin(value = "0.0")
-    @Digits(integer = 8, fraction = 2)
-    private BigDecimal price;
-
-    @NotNull
     private LocalDateTime startDate;
 
     @NotNull
     @Future
     private LocalDateTime expirationDate;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Size(min = 2, max = 100)
+    private String promocode;
 }

@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id:  09072021_insert_user_image_url
+      author:  bozhokmaria@gmail.com
+      changes:
+        -  sqlFile:
+             comment:  Inserting data into user table
+             dbms:  'postgresql'
+             path:  ./sql/insert_user_image_url.sql
+             relativeToChangelogFile: true

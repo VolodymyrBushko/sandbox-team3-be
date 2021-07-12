@@ -11,3 +11,4 @@ spring:
     show-sql: true
   liquibase:
     enabled: false
+app.url: https://discount-system-team3.herokuapp.com/discountinfo

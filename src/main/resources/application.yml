@@ -13,3 +13,5 @@ spring:
       hibernate.show_sql: true
   liquibase:
     change-log: db/changelog/db.changelog-master.yml
+
+app.url: https://discount-system-team3.herokuapp.com/discountinfo

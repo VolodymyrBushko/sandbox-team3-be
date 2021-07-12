@@ -1,6 +1,7 @@
-package com.exadel.discountwebapp.user.entity;
+package com.exadel.discountwebapp.userdiscount.entity;
 
 import com.exadel.discountwebapp.discount.entity.Discount;
+import com.exadel.discountwebapp.user.entity.User;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
