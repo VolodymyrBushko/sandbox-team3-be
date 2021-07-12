@@ -4,14 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDTO {
-    private String firstName;
-    private String lastName;
-    private String email;
-    private long quantity;
+public class RequestDataDTO {
+    @NotNull
+    private String dataFrom;
+    @NotNull
+    private String dataTo;
 }

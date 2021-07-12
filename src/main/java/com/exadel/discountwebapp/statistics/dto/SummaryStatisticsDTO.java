@@ -5,13 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Map;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDTO {
-    private String firstName;
-    private String lastName;
-    private String email;
-    private long quantity;
+public class SummaryStatisticsDTO {
+    private Map<String, Long> usersDiscountsStats;
+    private Map<String, Long> categoryDiscountsStats;
+    private Map<String, Long> vendorDiscountsStats;
 }
