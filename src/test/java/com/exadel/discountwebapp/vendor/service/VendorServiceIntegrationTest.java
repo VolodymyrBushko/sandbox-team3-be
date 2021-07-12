@@ -309,6 +309,81 @@ class VendorServiceIntegrationTest {
         matchOne(expected, actual);
     }
 
+    @Test
+    void shouldFindAllVendorsWhereTitleContainsSportOrPizza() {
+        var firstTitle = "sport";
+        var secondTitle = "pizza";
+
+        var query = String.format("title?*:*%s;title?*:*%s;", firstTitle, secondTitle);
+
+        var firstVendor = Vendor.builder()
+                .id(1L)
+                .title("Sport Life")
+                .description("Sport Life - a chain of casual fitness centers")
+                .imageUrl("sport_life_image_1.jsp")
+                .email("sprort_life@com.ua")
+                .created(LocalDateTime.parse("2021-12-06T17:22:21"))
+                .modified(LocalDateTime.parse("2021-12-06T17:22:21"))
+                .build();
+
+        var secondVendor = Vendor.builder()
+                .id(2L)
+                .title("Domino`s Pizza")
+                .description("Domino`s Pizza - an American multinational pizza restaurant chain founded in 1960")
+                .imageUrl("dominos.com_image_1.jsp")
+                .email("dominos@gmail.com")
+                .created(LocalDateTime.parse("2022-06-06T17:22:21"))
+                .modified(LocalDateTime.parse("2022-06-06T17:22:21"))
+                .build();
+
+        var vendorCount = (int) vendorRepository.count();
+        var pageable = PageRequest.of(0, vendorCount);
+
+        var expected = List.of(firstVendor, secondVendor);
+        var actual = vendorService.findAll(query, pageable).getContent();
+
+        matchAllPure(expected, actual);
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    void shouldFindAllVendorsWhereDescriptionContainsTravelOrPizzaAndEmailEndsWithCom() {
+        var firstDesc = "travel";
+        var secondDesc = "pizza";
+        var emailEnds = "com";
+
+        var query = String.format("description?*:*%s;description?*:*%s;email*:%s",
+                firstDesc, secondDesc, emailEnds);
+
+        var firstVendor = Vendor.builder()
+                .id(2L)
+                .title("Domino`s Pizza")
+                .description("Domino`s Pizza - an American multinational pizza restaurant chain founded in 1960")
+                .imageUrl("dominos.com_image_1.jsp")
+                .email("dominos@gmail.com")
+                .created(LocalDateTime.parse("2022-06-06T17:22:21"))
+                .modified(LocalDateTime.parse("2022-06-06T17:22:21"))
+                .build();
+
+        var secondVendor = Vendor.builder()
+                .id(3L)
+                .title("TUI")
+                .description("TUI AG - travel and tourism company")
+                .imageUrl("tui_image_1.jsp")
+                .email("tuigroup@gmail.com")
+                .created(LocalDateTime.parse("2023-06-06T17:22:21"))
+                .modified(LocalDateTime.parse("2023-06-06T17:22:21"))
+                .build();
+
+        var vendorCount = (int) vendorRepository.count();
+        var pageable = PageRequest.of(0, vendorCount);
+
+        var expected = List.of(firstVendor, secondVendor);
+        var actual = vendorService.findAll(query, pageable).getContent();
+
+        matchAllPure(expected, actual);
+    }
+
     private VendorRequestVO createVendorRequest() {
         var title = "title";
         var description = "description";
@@ -339,15 +414,6 @@ class VendorServiceIntegrationTest {
                 .build();
     }
 
-    private void matchAll(List<Vendor> expected, List<VendorResponseVO> actual) {
-        assertNotNull(actual);
-        assertEquals(expected.size(), actual.size());
-
-        for (int i = 0; i < expected.size(); i++) {
-            matchOne(expected.get(i), actual.get(i));
-        }
-    }
-
     private void matchOne(Vendor expected, VendorResponseVO actual) {
         assertNotNull(actual);
         assertEquals(expected.getId(), actual.getId());
@@ -364,5 +430,32 @@ class VendorServiceIntegrationTest {
         assertEquals(expected.getImageUrl(), actual.getImageUrl());
         assertEquals(expected.getEmail(), actual.getEmail());
         assertEquals(expected.getLocationIds().get(0), actual.getLocations().get(0).getId());
+    }
+
+    private void matchOnePure(Vendor expected, VendorResponseVO actual) {
+        assertNotNull(actual);
+        assertEquals(expected.getId(), actual.getId());
+        assertEquals(expected.getTitle(), actual.getTitle());
+        assertEquals(expected.getDescription(), actual.getDescription());
+        assertEquals(expected.getImageUrl(), actual.getImageUrl());
+        assertEquals(expected.getEmail(), actual.getEmail());
+    }
+
+    private void matchAll(List<Vendor> expected, List<VendorResponseVO> actual) {
+        assertNotNull(actual);
+        assertEquals(expected.size(), actual.size());
+
+        for (int i = 0; i < expected.size(); i++) {
+            matchOne(expected.get(i), actual.get(i));
+        }
+    }
+
+    private void matchAllPure(List<Vendor> expected, List<VendorResponseVO> actual) {
+        assertNotNull(actual);
+        assertEquals(expected.size(), actual.size());
+
+        for (int i = 0; i < expected.size(); i++) {
+            matchOnePure(expected.get(i), actual.get(i));
+        }
     }
 }

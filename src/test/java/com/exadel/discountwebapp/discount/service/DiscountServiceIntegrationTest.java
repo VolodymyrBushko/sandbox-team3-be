@@ -415,6 +415,97 @@ class DiscountServiceIntegrationTest {
         matchOne(expected, actual);
     }
 
+    @Test
+    void shouldFindAllDiscountsWhereTitleContains38Or50Percentage() {
+        var firstPercentage = "38%";
+        var secondPercentage = "50%";
+
+        var query = String.format("title?*:*%s;title?*:*%s;", firstPercentage, secondPercentage);
+
+        var firstDiscount = Discount.builder()
+                .id(1L)
+                .title("38% discount")
+                .shortDescription("an unlimited annual subscription")
+                .description("38% discount on the purchase of an unlimited annual subscription to the fitness club \"Sport Life\"")
+                .imageUrl("sport_life_discount_image_1.jsp")
+                .percentage(null)
+                .flatAmount(new BigDecimal("100.00"))
+                .startDate(LocalDateTime.parse("2021-06-06T17:22:21"))
+                .expirationDate(LocalDateTime.parse("2021-12-06T17:22:21"))
+                .created(LocalDateTime.parse("2021-06-06T17:22:21"))
+                .modified(LocalDateTime.parse("2021-06-06T17:22:21"))
+                .build();
+
+        var secondDiscount = Discount.builder()
+                .id(2L)
+                .title("50% discount")
+                .shortDescription("50% discount on all pizza menus")
+                .description("50% discount on all pizza menus from the pizzeria \"Domino`s Pizza\"")
+                .imageUrl("domino`s_pizza_discount_image_1.jsp")
+                .percentage(null)
+                .flatAmount(new BigDecimal("150.00"))
+                .startDate(LocalDateTime.parse("2022-06-06T17:22:21"))
+                .expirationDate(LocalDateTime.parse("2022-12-06T17:22:21"))
+                .created(LocalDateTime.parse("2021-06-06T17:22:21"))
+                .modified(LocalDateTime.parse("2022-06-06T17:22:21"))
+                .build();
+
+        var discountCount = (int) discountRepository.count();
+        var pageable = PageRequest.of(0, discountCount);
+
+        var expected = List.of(firstDiscount, secondDiscount);
+        var actual = discountService.findAll(query, pageable).getContent();
+
+        matchAllPure(expected, actual);
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    void shouldFindAllDiscountsWhereDescriptionContainsDrinkOrPizzaAndCategoryContainsFood() {
+        var firstDesc = "drink";
+        var secondDesc = "pizza";
+        var category = "food";
+
+        var query = String.format("description?*:*%s;description?*:*%s;category.title*:*%s",
+                firstDesc, secondDesc, category);
+
+        var firstDiscount = Discount.builder()
+                .id(2L)
+                .title("50% discount")
+                .shortDescription("50% discount on all pizza menus")
+                .description("50% discount on all pizza menus from the pizzeria \"Domino`s Pizza\"")
+                .imageUrl("domino`s_pizza_discount_image_1.jsp")
+                .percentage(null)
+                .flatAmount(new BigDecimal("150.00"))
+                .startDate(LocalDateTime.parse("2022-06-06T17:22:21"))
+                .expirationDate(LocalDateTime.parse("2022-12-06T17:22:21"))
+                .created(LocalDateTime.parse("2021-06-06T17:22:21"))
+                .modified(LocalDateTime.parse("2022-06-06T17:22:21"))
+                .build();
+
+        var secondDiscount = Discount.builder()
+                .id(3L)
+                .title("HappyDrink")
+                .shortDescription("70% discount on all drinks menus")
+                .description("70% discount on all drinks menus from the caffe \"Drink House\"")
+                .imageUrl("drinks.jsp")
+                .percentage(null)
+                .flatAmount(new BigDecimal("150.00"))
+                .startDate(LocalDateTime.parse("2023-06-06T17:22:21"))
+                .expirationDate(LocalDateTime.parse("2023-12-06T17:22:21"))
+                .created(LocalDateTime.parse("2021-06-06T17:22:21"))
+                .modified(LocalDateTime.parse("2023-06-06T17:22:21"))
+                .build();
+
+        var discountCount = (int) discountRepository.count();
+        var pageable = PageRequest.of(0, discountCount);
+
+        var expected = List.of(firstDiscount, secondDiscount);
+        var actual = discountService.findAll(query, pageable).getContent();
+
+        matchAllPure(expected, actual);
+    }
+
     private DiscountRequestVO createDiscountRequest() {
         var title = "title";
         var shortDescription = "shortDescription";

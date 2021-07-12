@@ -15,4 +15,5 @@ public class SearchCriteria implements Serializable {
     private String key;
     private String value;
     private SearchOperation operation;
+    private boolean orPredicate;
 }

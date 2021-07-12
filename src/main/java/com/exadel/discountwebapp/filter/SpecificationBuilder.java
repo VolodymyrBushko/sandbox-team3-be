@@ -12,7 +12,7 @@ public class SpecificationBuilder<T> {
 
     private final List<SearchCriteria> criteria = new ArrayList<>();
 
-    private static final String REGEXP = "(\\w+(?:\\.?\\w+)+)(:|<|>|\\*:|:\\*|\\*:\\*|~)([^(\\*)]+?);";
+    private static final String REGEXP = "(\\w+(?:\\.?\\w+)+(?:\\??))(:|<|>|\\*:|:\\*|\\*:\\*|~)([^(\\*)]+?);";
     private static final Pattern pattern = Pattern.compile(REGEXP);
 
     public Specification<T> fromQuery(String query) {
@@ -23,17 +23,28 @@ public class SpecificationBuilder<T> {
         Matcher matcher = pattern.matcher(query.trim() + ";");
 
         while (matcher.find()) {
-            with(matcher.group(1), matcher.group(2), matcher.group(3));
+            String key = matcher.group(1);
+            String operation = matcher.group(2);
+            String value = matcher.group(3);
+            boolean orPredicate = false;
+
+            if (key.endsWith("?")) {
+                key = key.substring(0, key.length() - 1);
+                orPredicate = true;
+            }
+
+            with(key, operation, value, orPredicate);
         }
 
         return build();
     }
 
-    private void with(String key, String operation, String value) {
+    private void with(String key, String operation, String value, boolean orPredicate) {
         SearchCriteria newCriteria = SearchCriteria.builder()
                 .key(key)
                 .value(value)
                 .operation(SearchOperation.getOperation(operation))
+                .orPredicate(orPredicate)
                 .build();
         criteria.add(newCriteria);
     }
@@ -50,7 +61,12 @@ public class SpecificationBuilder<T> {
         Specification<T> result = specifications.get(0);
 
         for (int i = 1; i < criteria.size(); i++) {
-            result = Specification.where(result).and(specifications.get(i));
+            result = criteria.get(i)
+                    .isOrPredicate()
+                    ? Specification.where(result)
+                    .or(specifications.get(i))
+                    : Specification.where(result)
+                    .and(specifications.get(i));
         }
 
         return result;
