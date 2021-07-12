@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -78,12 +79,13 @@ public class VendorService {
     @Transactional(propagation = Propagation.REQUIRED)
     public void subscribe(Long vendorId, String userEmail) {
         Vendor vendor = getVendorById(vendorId);
+        List<User> subscribers = vendor.getSubscribers();
         User user = userService.getUserByEmail(userEmail);
 
-        vendorValidator.checkDuplicateSubscriber(vendor, user);
-
-        vendor.getSubscribers().add(user);
-        vendorRepository.save(vendor);
+        if (!subscribers.contains(user)) {
+            subscribers.add(user);
+            vendorRepository.save(vendor);
+        }
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

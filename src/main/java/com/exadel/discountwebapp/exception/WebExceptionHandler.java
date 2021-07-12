@@ -1,7 +1,6 @@
 package com.exadel.discountwebapp.exception;
 
 import com.exadel.discountwebapp.exception.exception.client.*;
-import com.exadel.discountwebapp.exception.exception.notification.EntityAlreadySubscribedException;
 import com.exadel.discountwebapp.exception.response.ExceptionResponse;
 import org.springframework.mail.MailException;
 import org.springframework.security.access.AccessDeniedException;
@@ -65,13 +64,6 @@ public class WebExceptionHandler {
     @ExceptionHandler(EntityAlreadyUsedException.class)
     @ResponseStatus(value = CONFLICT)
     public ExceptionResponse entityAlreadyUsedException(EntityAlreadyUsedException ex) {
-        String code = String.format(RESPONSE_CODE_PATTERN, ex.getClazz().getSimpleName(), ex.getFieldName(), CONFLICT.value());
-        return new ExceptionResponse(code, ex.getMessage());
-    }
-
-    @ExceptionHandler(EntityAlreadySubscribedException.class)
-    @ResponseStatus(value = CONFLICT)
-    public ExceptionResponse userAlreadySubscribedException(EntityAlreadySubscribedException ex) {
         String code = String.format(RESPONSE_CODE_PATTERN, ex.getClazz().getSimpleName(), ex.getFieldName(), CONFLICT.value());
         return new ExceptionResponse(code, ex.getMessage());
     }
