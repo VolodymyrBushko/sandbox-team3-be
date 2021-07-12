@@ -3,7 +3,6 @@ package com.exadel.discountwebapp.user.service;
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.filter.SpecificationBuilder;
 import com.exadel.discountwebapp.role.mapper.RoleMapper;
-import com.exadel.discountwebapp.security.CustomUserDetails;
 import com.exadel.discountwebapp.security.SigninVO;
 import com.exadel.discountwebapp.user.entity.User;
 import com.exadel.discountwebapp.user.mapper.UserMapper;
@@ -13,15 +12,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -75,11 +71,8 @@ public class UserService {
                 .build();
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
-    public String getExpirationLocalDate() {
-        CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        LocalDateTime localDate = customUserDetails.getExpirationDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy 'at' hh:mm");
-        return localDate.format(formatter);
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    public List<Long> findSubscribersIdsByEmail(String email) {
+        return userRepository.findSubscribersIdsByEmail(email);
     }
 }
