@@ -6,14 +6,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 
 @SpringBootTest
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/vendor-init.sql")
 @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:sql/clean-up.sql")
-class VendorMapperTest {
+public class VendorMapperTest {
 
     @Autowired
     private VendorMapper vendorMapper;
@@ -22,7 +25,8 @@ class VendorMapperTest {
     private VendorRepository vendorRepository;
 
     @Test
-    void shouldMapEntityToVO(){
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    public void shouldMapEntityToVO() {
         var id = 1L;
         var actual = vendorRepository.findById(id).get();
 
@@ -34,19 +38,18 @@ class VendorMapperTest {
         assertEquals(actual.getImageUrl(), expected.getImageUrl());
         assertEquals(actual.getEmail(), expected.getEmail());
 
-        assertEquals(actual.getLocation().getId(), expected.getLocation().getId());
-        assertEquals(actual.getLocation().getCity(), expected.getLocation().getCity());
-        assertEquals(actual.getLocation().getCountry().getCountryCode(), expected.getLocation().getCountryCode());
+        assertEquals(actual.getLocations().get(0).getId(), expected.getLocations().get(0).getId());
+        assertEquals(actual.getLocations().get(0).getCity(), expected.getLocations().get(0).getCity());
     }
 
     @Test
-    void shouldMapVOToEntity(){
-        var actual = new  VendorRequestVO();
+    public void shouldMapVOToEntity() {
+        var actual = new VendorRequestVO();
         actual.setTitle("title");
         actual.setDescription("description");
         actual.setEmail("testemail@gmail.com");
         actual.setImageUrl("http://localhost/images/img.png");
-        actual.setLocationId(1L);
+        actual.setLocationIds(List.of(1L, 2L));
 
         var expected = vendorMapper.toEntity(actual);
 
@@ -54,6 +57,7 @@ class VendorMapperTest {
         assertEquals(actual.getDescription(), expected.getDescription());
         assertEquals(actual.getImageUrl(), expected.getImageUrl());
         assertEquals(actual.getEmail(), expected.getEmail());
-        assertEquals(actual.getLocationId(), expected.getLocation().getId());
+        assertEquals(actual.getLocationIds().get(0), expected.getLocations().get(0).getId());
+        assertEquals(actual.getLocationIds().get(1), expected.getLocations().get(1).getId());
     }
 }

@@ -8,9 +8,9 @@ VALUES (10, 'UA', 'Kyiv', 'Khreshchatyk, 25', '2021-06-06 17:22:21', '2021-06-06
 
 INSERT INTO vendor
 VALUES (10, '2021-06-06 17:22:21', 'Sport Life - a chain of casual fitness centers', 'sprort_life@com.ua',
-        'http://localhost/images/img.png', '2021-06-06 17:22:21', 'Sport Life', 10),
+        'http://localhost/images/img.png', '2021-06-06 17:22:21', 'Sport Life'),
        (20, '2021-06-06 17:22:21', 'Domino`s Pizza - an American multinational pizza restaurant chain founded in 1960',
-        'dominos.com', 'http://localhost/images/img.png', '2021-06-06 17:22:21', 'Domino`s Pizza', 20);
+        'dominos.com', 'http://localhost/images/img.png', '2021-06-06 17:22:21', 'Domino`s Pizza');
 
 INSERT INTO category
 VALUES (10, '2021-06-06 17:22:21', '2021-06-06 17:22:21', 'Sports and fitness'),
@@ -24,7 +24,7 @@ VALUES (1, '2021-06-04 17:22:21', '2021-06-04 17:22:21', 'sport', 10),
 
 INSERT INTO discount
 VALUES (1, '2021-06-06 17:22:21',
-        '38% discount on the purchase of an unlimited annual subscription to the fitness club "Sport Life',
+        '38% discount on the purchase of an unlimited annual subscription to the fitness club "Sport Life"',
         '2021-12-06 17:22:21', 100, 'sport_life_discount_image_1.jsp',
         '2021-06-06 17:22:21', null, null, 'an unlimited annual subscription',
         '2021-06-06 17:22:21', '38% discount', 10, 10),
@@ -38,3 +38,9 @@ VALUES (1, '2021-06-06 17:22:21',
         '2023-12-06 17:22:21', 150, 'drinks.jsp',
         '2023-06-06 17:22:21', null, null, '70% discount on all drinks menus',
         '2023-06-06 17:22:21', 'HappyDrink', 20, 20);
+
+INSERT INTO tag_discount (dis_id, tag_id)
+VALUES (1, 1),
+       (1, 2),
+       (2, 4),
+       (3, 3);

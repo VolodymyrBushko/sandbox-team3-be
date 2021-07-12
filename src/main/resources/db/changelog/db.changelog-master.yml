@@ -3,8 +3,8 @@ databaseChangeLog:
       file: init/15062021_create_role_table.yml
       relativeToChangelogFile: true
   - include:
-     file: init/01072021_create_country_table.yml
-     relativeToChangelogFile: true
+      file: init/01072021_create_country_table.yml
+      relativeToChangelogFile: true
   - include:
       file: init/15062021_create_location_table.yml
       relativeToChangelogFile: true
@@ -34,6 +34,15 @@ databaseChangeLog:
       relativeToChangelogFile: true
   - include:
       file: init/27062021_create_tag_discount_table.yml
+      relativeToChangelogFile: true
+  - include:
+      file: init/07072021_create_location_vendor_table.yml
+      relativeToChangelogFile: true
+  - include:
+      file: init/11072021_insert_to_location_vendor_table.yml
+      relativeToChangelogFile: true
+  - include:
+      file: init/09072021_drop_loc_id_column_from_vendor_table.yml
       relativeToChangelogFile: true
   - include:
       file: changes01/09072021_drop_column_dis_price.yml
