@@ -1,5 +1,6 @@
 package com.exadel.discountwebapp.user.entity;
 
+import com.exadel.discountwebapp.discount.entity.Discount;
 import com.exadel.discountwebapp.location.entity.Location;
 import com.exadel.discountwebapp.role.entity.Role;
 import com.exadel.discountwebapp.userdiscount.entity.UserDiscount;
@@ -64,6 +65,11 @@ public class User {
     @OneToMany(mappedBy = "user")
     @EqualsAndHashCode.Exclude
     private List<UserDiscount> discounts = new ArrayList<>();
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @ManyToMany(mappedBy = "favoriteUsers")
+    private List<Discount> favoriteDiscounts = new ArrayList<>();
 
     @CreatedDate
     @EqualsAndHashCode.Exclude

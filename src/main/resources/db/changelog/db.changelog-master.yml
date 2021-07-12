@@ -56,3 +56,6 @@ databaseChangeLog:
   - include:
       file: changes01/09072021_insert_user_image_url.yml
       relativeToChangelogFile: true
+  - include:
+      file: changes01/12072021_create_favorites_table.yml
+      relativeToChangelogFile: true

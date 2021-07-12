@@ -3,6 +3,7 @@ package com.exadel.discountwebapp.discount.entity;
 import com.exadel.discountwebapp.category.entity.Category;
 import com.exadel.discountwebapp.location.entity.Location;
 import com.exadel.discountwebapp.tag.entity.Tag;
+import com.exadel.discountwebapp.user.entity.User;
 import com.exadel.discountwebapp.userdiscount.entity.UserDiscount;
 import com.exadel.discountwebapp.vendor.entity.Vendor;
 import lombok.*;
@@ -108,4 +109,14 @@ public class Discount {
     @OneToMany(mappedBy = "discount")
     @EqualsAndHashCode.Exclude
     private List<UserDiscount> users = new ArrayList<>();
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @ManyToMany
+    @JoinTable(
+            name = "favorites",
+            joinColumns = @JoinColumn(name = "dis_id"),
+            inverseJoinColumns = @JoinColumn(name = "usr_id")
+    )
+    private List<User> favoriteUsers = new ArrayList<>();
 }
