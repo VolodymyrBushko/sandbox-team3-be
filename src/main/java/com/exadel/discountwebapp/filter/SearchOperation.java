@@ -12,7 +12,8 @@ public enum SearchOperation {
     ENDS_WITH("*:"),
     CONTAINS("*:*"),
     LESS_THAN("<"),
-    GREATER_THAN(">");
+    GREATER_THAN(">"),
+    IN("~");
 
     private final String operation;
 

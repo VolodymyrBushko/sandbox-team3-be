@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.Specification;
 import javax.persistence.criteria.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 
 @RequiredArgsConstructor
 public class CustomSpecification<T> implements Specification<T> {
@@ -50,6 +51,9 @@ public class CustomSpecification<T> implements Specification<T> {
                 return builder.like(builder.lower(path.as(String.class)), "%" + value);
             case CONTAINS:
                 return builder.like(builder.lower(path.as(String.class)), "%" + value + "%");
+            case IN:
+                List<String> arguments = List.of(value.split(","));
+                return builder.lower(path.as(String.class)).in(arguments);
             default:
                 return null;
         }
