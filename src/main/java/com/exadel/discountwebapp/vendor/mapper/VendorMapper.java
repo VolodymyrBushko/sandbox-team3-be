@@ -73,10 +73,8 @@ public class VendorMapper {
     }
 
     private List<Location> getLocationFromIds(List<Long> listIds) {
-        var locations = locationRepository.findAllByIdIn(listIds);
-        if(locations.size()!= listIds.size()){
-            throw new EntityNotFoundException(Location.class, "id", "some id was not found");
-        }
-        return locations;
+        return listIds.stream()
+                .map(e->locationRepository.findById(e).orElseThrow(()-> new EntityNotFoundException(Location.class, "id", e)))
+                .collect(Collectors.toList());
     }
 }

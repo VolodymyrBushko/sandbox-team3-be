@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -14,6 +13,4 @@ public interface LocationRepository extends CrudRepository<Location, Long>, JpaS
     List<Location> findAllByCountry_CountryCode(String countryCode);
 
     List<Location> findAllByCity(String city);
-
-    List<Location> findAllByIdIn(Collection<Long> ids);
 }
