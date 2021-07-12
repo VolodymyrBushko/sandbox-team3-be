@@ -44,7 +44,7 @@ class VendorControllerIntegrationTest {
                 .andExpect(jsonPath("$.content[1].title").value("Sport Life"))
                 .andExpect(jsonPath("$.content[2].title").value("TUI"))
                 .andExpect(jsonPath("$.content[0].locations[0].id").value("2"))
-                .andExpect(jsonPath("$.content[1].locations[0].id").value("1"))
+                .andExpect(jsonPath("$.content[1].locations[0].id").value("2"))
                 .andExpect(jsonPath("$.content[2].locations[0].id").value("1"))
                 .andExpect(status().isOk());
     }
@@ -105,7 +105,7 @@ class VendorControllerIntegrationTest {
         var actual = mockMvc.perform(MockMvcRequestBuilders.get("/api/vendors?query=title:Sport Life"))
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.content[0].title").value("Sport Life"))
-                .andExpect(jsonPath("$.content[0].locations[0].city").value("Kyiv"))
+                .andExpect(jsonPath("$.content[0].locations[0].city").value("Lviv"))
                 .andExpect(status().isOk());
         Assertions.assertNotNull(actual);
     }
