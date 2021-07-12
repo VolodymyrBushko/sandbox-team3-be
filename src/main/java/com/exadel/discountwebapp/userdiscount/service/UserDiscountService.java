@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserDiscountService {
 
-
     private final String APP_URL;
 
     private final Integer QRCODE_WIDTH = 300;
