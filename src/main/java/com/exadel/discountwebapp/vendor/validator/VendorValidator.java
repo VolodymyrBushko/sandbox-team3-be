@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class VendorEmailValidator {
+public class VendorValidator {
 
     private final VendorRepository vendorRepository;
 
