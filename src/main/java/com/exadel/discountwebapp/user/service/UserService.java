@@ -1,6 +1,7 @@
 package com.exadel.discountwebapp.user.service;
 
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
+import com.exadel.discountwebapp.filter.SpecificationBuilder;
 import com.exadel.discountwebapp.role.mapper.RoleMapper;
 import com.exadel.discountwebapp.security.CustomUserDetails;
 import com.exadel.discountwebapp.security.SigninVO;
@@ -9,6 +10,9 @@ import com.exadel.discountwebapp.user.mapper.UserMapper;
 import com.exadel.discountwebapp.user.repository.UserRepository;
 import com.exadel.discountwebapp.user.vo.UserResponseVO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,8 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,27 +30,29 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final RoleMapper roleMapper;
-    private final UserMapper mapper;
+    private final UserMapper userMapper;
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public UserResponseVO findById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(User.class, "id", id));
-        return mapper.toVO(user);
+        return userMapper.toVO(user);
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    public List<UserResponseVO> findAll() {
-        List<UserResponseVO> response = new ArrayList<>();
-        userRepository.findAll().forEach(user -> response.add(mapper.toVO(user)));
-        return response;
+    public Page<UserResponseVO> findAll(String query, Pageable pageable) {
+        SpecificationBuilder<User> specificationBuilder = new SpecificationBuilder<>();
+        Specification<User> specification = specificationBuilder.fromQuery(query);
+
+        Page<User> page = userRepository.findAll(specification, pageable);
+        return page.map(userMapper::toVO);
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public UserResponseVO findByEmail(String email) {
         User user = userRepository.findUserByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException(User.class, "email", email));
-        return mapper.toVO(user);
+        return userMapper.toVO(user);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
