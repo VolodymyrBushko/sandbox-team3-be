@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: 11072021_insert_to_location_vendor_table
+      author: tesliuk.ua@gmail.com
+      changes:
+        - sqlFile:
+            comment: get data from vendor table and insert data to location_vendor table
+            dbms: 'postgresql'
+            path: ./sql/insert_data_to_location_vendor_table.sql
+            relativeToChangelogFile: true

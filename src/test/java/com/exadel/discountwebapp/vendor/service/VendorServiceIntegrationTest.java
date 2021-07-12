@@ -230,13 +230,17 @@ class VendorServiceIntegrationTest {
     }
 
     @Test
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     void shouldFindAllVendorsWhereCityEqualsLviv() {
         var city = "lviv";
-        var query = "location.city:" + city;
+        var query = "locations.city:" + city;
 
         var expectedIter = vendorRepository.findAll();
-        var expected = Lists.newArrayList(expectedIter)
-                .stream().filter(e -> e.getLocation().getCity().equalsIgnoreCase(city)).collect(Collectors.toList());
+
+        var expected = Lists.newArrayList(expectedIter).stream()
+                .filter(e -> e.getLocations().stream()
+                        .anyMatch(l -> l.getCity().equalsIgnoreCase(city)))
+                .collect(Collectors.toList());
 
         var vendorCount = (int) vendorRepository.count();
         var pageable = PageRequest.of(0, vendorCount);
@@ -246,18 +250,21 @@ class VendorServiceIntegrationTest {
     }
 
     @Test
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     void shouldFindAllVendorsWhereTitleStartsWithSportAndDescriptionContainsCasualAndCityEqualsKyiv() {
         var title = "sport";
         var description = "casual";
         var city = "kyiv";
-        var query = String.format("title:*%s;description*:*%s;location.city:%s", title, description, city);
+        var query = String.format("title:*%s;description*:*%s;locations.city:%s", title, description, city);
 
         var expectedIter = vendorRepository.findAll();
         var expected = Lists.newArrayList(expectedIter)
                 .stream()
                 .filter(e -> e.getTitle().toLowerCase().startsWith(title) &&
-                        e.getDescription().toLowerCase().contains(description) &&
-                        e.getLocation().getCity().equalsIgnoreCase(city))
+                        e.getDescription().toLowerCase().contains(description)
+                        &&
+                        e.getLocations().stream().anyMatch(l -> l.getCity().equalsIgnoreCase(city))
+                )
                 .collect(Collectors.toList());
 
         var vendorCount = (int) vendorRepository.count();
@@ -293,7 +300,7 @@ class VendorServiceIntegrationTest {
     @Test
     void shouldUpdateVendorById() {
         var id = 1L;
-        var expected = createVendorRequest();
+        var expected = updateVendorRequest();
         var actual = vendorService.update(id, expected);
 
         assertNotNull(actual);
@@ -382,14 +389,28 @@ class VendorServiceIntegrationTest {
         var description = "description";
         var imageUrl = "http://localhost/images/img.png";
         var email = "testemail@gmail.com";
-        var locationId = 1L;
 
         return VendorRequestVO.builder()
                 .title(title)
                 .description(description)
                 .imageUrl(imageUrl)
                 .email(email)
-                .locationId(locationId)
+                .locationIds(List.of(1L, 2L))
+                .build();
+    }
+
+    private VendorRequestVO updateVendorRequest() {
+        var title = "titleSome";
+        var description = "descriptionSome";
+        var imageUrl = "http://localhost/images/Someimg.png";
+        var email = "sprort_life@com.ua";
+
+        return VendorRequestVO.builder()
+                .title(title)
+                .description(description)
+                .imageUrl(imageUrl)
+                .email(email)
+                .locationIds(List.of(2L))
                 .build();
     }
 
@@ -400,7 +421,6 @@ class VendorServiceIntegrationTest {
         assertEquals(expected.getDescription(), actual.getDescription());
         assertEquals(expected.getImageUrl(), actual.getImageUrl());
         assertEquals(expected.getEmail(), actual.getEmail());
-        assertEquals(expected.getLocation().getId(), actual.getLocation().getId());
     }
 
     private void matchOne(VendorRequestVO expected, VendorResponseVO actual) {
@@ -409,7 +429,7 @@ class VendorServiceIntegrationTest {
         assertEquals(expected.getDescription(), actual.getDescription());
         assertEquals(expected.getImageUrl(), actual.getImageUrl());
         assertEquals(expected.getEmail(), actual.getEmail());
-        assertEquals(expected.getLocationId(), actual.getLocation().getId());
+        assertEquals(expected.getLocationIds().get(0), actual.getLocations().get(0).getId());
     }
 
     private void matchOnePure(Vendor expected, VendorResponseVO actual) {
