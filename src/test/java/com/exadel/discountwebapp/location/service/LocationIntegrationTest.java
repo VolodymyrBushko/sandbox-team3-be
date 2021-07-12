@@ -1,14 +1,18 @@
 package com.exadel.discountwebapp.location.service;
 
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
+import com.exadel.discountwebapp.filter.SpecificationBuilder;
 import com.exadel.discountwebapp.location.entity.Location;
 import com.exadel.discountwebapp.location.repository.LocationRepository;
-import com.exadel.discountwebapp.location.vo.LocationRequestVO;
-import com.exadel.discountwebapp.location.vo.LocationResponseVO;
+import com.exadel.discountwebapp.location.vo.location.LocationRequestVO;
+import com.exadel.discountwebapp.location.vo.location.LocationResponseVO;
 import com.google.common.collect.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
@@ -47,29 +51,42 @@ class LocationIntegrationTest {
     void shouldFindAllLocations() {
         var expectedIter = locationRepository.findAll();
         var expected = Lists.newArrayList(expectedIter);
-        var actual = locationService.findAll();
+        var locationCount = (int) locationRepository.count();
+        var pageable = PageRequest.of(0, locationCount);
+        var actual = locationService.findAll(null, pageable).getContent();
 
         matchAll(expected, actual);
     }
 
     @Test
     void shouldFindAllLocationsByCountry() {
-        var country = "Ukraine";
-        var expectedIter = locationRepository.findAllByCountry(country);
-        var expected = Lists.newArrayList(expectedIter);
-        var actual = locationService.findAllByCountry(country);
+        var query = "country.countryCode:UA";
 
-        matchAll(expected, actual);
+        var pageable = PageRequest.of(0, 1);
+        SpecificationBuilder<Location> specificationBuilder = new SpecificationBuilder<>();
+        Specification<Location> specification = specificationBuilder.fromQuery(query);
+        var expected = locationRepository.findAll(specification, pageable);
+
+        var actual = locationService.findAll(query, pageable);
+
+        matchAll(expected.getContent(), actual.getContent());
     }
 
     @Test
     void shouldFindAllLocationsByCity() {
         var city = "Kyiv";
-        var expectedIter = locationRepository.findAllByCity(city);
-        var expected = Lists.newArrayList(expectedIter);
-        var actual = locationService.findAllByCity(city);
+        var query = "city:Kyiv";
 
-        matchAll(expected, actual);
+        var pageable = PageRequest.of(0, 1);
+
+        SpecificationBuilder<Location> specificationBuilder = new SpecificationBuilder<>();
+        Specification<Location> specification = specificationBuilder.fromQuery(query);
+
+        Page<Location> expected = locationRepository.findAll(specification, pageable);
+
+        var actual = locationService.findAll(query, pageable);
+
+        matchAll( expected.getContent(), actual.getContent());
     }
 
     @Test
@@ -84,12 +101,13 @@ class LocationIntegrationTest {
     }
 
     private LocationRequestVO createLocationRequest() {
-        var country = "Belarus";
-        var city = "Minsk";
-
+        var countryCode = "UA";
+        var city = "Kyiv";
+        var addressLine = "Khreshchatyk, 22";
         return LocationRequestVO.builder()
-                .country(country)
+                .countryCode(countryCode)
                 .city(city)
+                .addressLine(addressLine)
                 .build();
     }
 
@@ -117,13 +135,15 @@ class LocationIntegrationTest {
     private void matchOne(Location expected, LocationResponseVO actual) {
         assertNotNull(actual);
         assertEquals(expected.getId(), actual.getId());
-        assertEquals(expected.getCountry(), actual.getCountry());
+        assertEquals(expected.getCountry().getCountryCode(), actual.getCountryCode());
         assertEquals(expected.getCity(), actual.getCity());
+        assertEquals(expected.getAddressLine(), actual.getAddressLine());
     }
 
     private void matchOne(LocationRequestVO expected, LocationResponseVO actual) {
         assertNotNull(actual);
-        assertEquals(expected.getCountry(), actual.getCountry());
+        assertEquals(expected.getCountryCode(), actual.getCountryCode());
         assertEquals(expected.getCity(), actual.getCity());
+        assertEquals(expected.getAddressLine(), actual.getAddressLine());
     }
 }

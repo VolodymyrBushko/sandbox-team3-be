@@ -1,6 +1,7 @@
 package com.exadel.discountwebapp.vendor.service;
 
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
+import com.exadel.discountwebapp.exception.exception.client.IncorrectFilterInputException;
 import com.exadel.discountwebapp.vendor.entity.Vendor;
 import com.exadel.discountwebapp.vendor.repository.VendorRepository;
 import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
@@ -10,10 +11,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,14 +68,213 @@ class VendorServiceIntegrationTest {
 
     @Test
     void shouldFindAllVendors() {
-        var query = "title:Sport Life;";
-        var pageable = createPageable(0, 1, null);
+        var expectedIter = vendorRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter);
+
+        var vendorCount = (int) vendorRepository.count();
+        var pageable = PageRequest.of(0, vendorCount);
+        var actual = vendorService.findAll(null, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllVendorsAndSortByTitleWithDirAsc() {
+        var expectedIter = vendorRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter);
+        expected.sort((a, b) -> a.getTitle().compareTo(b.getTitle()));
+
+        var sortField = "title";
+        var sortDir = Sort.Direction.ASC;
+        var sort = Sort.by(sortDir, sortField);
+
+        var vendorCount = (int) vendorRepository.count();
+        var pageable = PageRequest.of(0, vendorCount, sort);
+        var actual = vendorService.findAll(null, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllVendorsAndSortByTitleWithDirDesc() {
+        var expectedIter = vendorRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter);
+        expected.sort((a, b) -> b.getTitle().compareTo(a.getTitle()));
+
+        var sortField = "title";
+        var sortDir = Sort.Direction.DESC;
+        var sort = Sort.by(sortDir, sortField);
+
+        var vendorCount = (int) vendorRepository.count();
+        var pageable = PageRequest.of(0, vendorCount, sort);
+        var actual = vendorService.findAll(null, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllVendorsWhereIdLessThanTwo() {
+        var id = 2L;
+        var query = "id<" + id;
 
         var expectedIter = vendorRepository.findAll();
-        var expected = Lists.newArrayList(expectedIter).stream().filter(e -> e.getTitle().equals("Sport Life")).collect(Collectors.toList());
+        var expected = Lists.newArrayList(expectedIter)
+                .stream().filter(e -> e.getId() < id).collect(Collectors.toList());
+
+        var vendorCount = (int) vendorRepository.count();
+        var pageable = PageRequest.of(0, vendorCount);
         var actual = vendorService.findAll(query, pageable).getContent();
 
         matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllVendorsWhereIdGreaterThanTwo() {
+        var id = 2L;
+        var query = "id>" + id;
+
+        var expectedIter = vendorRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter)
+                .stream().filter(e -> e.getId() > id).collect(Collectors.toList());
+
+        var vendorCount = (int) vendorRepository.count();
+        var pageable = PageRequest.of(0, vendorCount);
+        var actual = vendorService.findAll(query, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllVendorsWhereCreatedDateBetweenTwoDates() {
+        var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        var firstDate = LocalDateTime.parse("2021-06-06 17:22:21", formatter);
+        var secondDate = LocalDateTime.parse("2023-06-06 17:22:21", formatter);
+        var query = String.format("created>%s;created<%s", firstDate, secondDate);
+
+        var expectedIter = vendorRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter)
+                .stream().filter(e -> e.getCreated().isAfter(firstDate) && e.getCreated().isBefore(secondDate)).collect(Collectors.toList());
+
+        var vendorCount = (int) vendorRepository.count();
+        var pageable = PageRequest.of(0, vendorCount);
+        var actual = vendorService.findAll(query, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllVendorsWhereTitleEqualsSportLife() {
+        var title = "sport life";
+        var query = "title:" + title;
+
+        var expectedIter = vendorRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter)
+                .stream().filter(e -> e.getTitle().equalsIgnoreCase(title)).collect(Collectors.toList());
+
+        var vendorCount = (int) vendorRepository.count();
+        var pageable = PageRequest.of(0, vendorCount);
+        var actual = vendorService.findAll(query, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllVendorsWhereTitleStartsWithSport() {
+        var title = "sport";
+        var query = "title:*" + title;
+
+        var expectedIter = vendorRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter)
+                .stream().filter(e -> e.getTitle().toLowerCase().startsWith(title)).collect(Collectors.toList());
+
+        var vendorCount = (int) vendorRepository.count();
+        var pageable = PageRequest.of(0, vendorCount);
+        var actual = vendorService.findAll(query, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllVendorsWhereTitleEndsWithLife() {
+        var title = "life";
+        var query = "title*:" + title;
+
+        var expectedIter = vendorRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter)
+                .stream().filter(e -> e.getTitle().toLowerCase().endsWith(title)).collect(Collectors.toList());
+
+        var vendorCount = (int) vendorRepository.count();
+        var pageable = PageRequest.of(0, vendorCount);
+        var actual = vendorService.findAll(query, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllVendorsWhereDescriptionContainsPizza() {
+        var description = "pizza";
+        var query = "description*:*" + description;
+
+        var expectedIter = vendorRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter)
+                .stream().filter(e -> e.getDescription().toLowerCase().contains(description)).collect(Collectors.toList());
+
+        var vendorCount = (int) vendorRepository.count();
+        var pageable = PageRequest.of(0, vendorCount);
+        var actual = vendorService.findAll(query, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllVendorsWhereCityEqualsLviv() {
+        var city = "lviv";
+        var query = "location.city:" + city;
+
+        var expectedIter = vendorRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter)
+                .stream().filter(e -> e.getLocation().getCity().equalsIgnoreCase(city)).collect(Collectors.toList());
+
+        var vendorCount = (int) vendorRepository.count();
+        var pageable = PageRequest.of(0, vendorCount);
+        var actual = vendorService.findAll(query, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllVendorsWhereTitleStartsWithSportAndDescriptionContainsCasualAndCityEqualsKyiv() {
+        var title = "sport";
+        var description = "casual";
+        var city = "kyiv";
+        var query = String.format("title:*%s;description*:*%s;location.city:%s", title, description, city);
+
+        var expectedIter = vendorRepository.findAll();
+        var expected = Lists.newArrayList(expectedIter)
+                .stream()
+                .filter(e -> e.getTitle().toLowerCase().startsWith(title) &&
+                        e.getDescription().toLowerCase().contains(description) &&
+                        e.getLocation().getCity().equalsIgnoreCase(city))
+                .collect(Collectors.toList());
+
+        var vendorCount = (int) vendorRepository.count();
+        var pageable = PageRequest.of(0, vendorCount);
+        var actual = vendorService.findAll(query, pageable).getContent();
+
+        matchAll(expected, actual);
+    }
+
+    @Test
+    void shouldThrowExceptionIfFieldDoesNotExistInVendor() {
+        var field = "I don't exist";
+        var query = field + ":some value";
+
+        var pageable = PageRequest.of(0, 20);
+
+        assertThrows(IncorrectFilterInputException.class, () -> {
+            vendorService.findAll(query, pageable);
+        });
     }
 
     @Test
@@ -141,18 +342,5 @@ class VendorServiceIntegrationTest {
         assertEquals(expected.getImageUrl(), actual.getImageUrl());
         assertEquals(expected.getEmail(), actual.getEmail());
         assertEquals(expected.getLocationId(), actual.getLocation().getId());
-    }
-
-    private Pageable createPageable(int page, int size, String sortRule) {
-        Sort sort = null;
-        if (sortRule != null && !sortRule.isEmpty()) {
-            Sort.Direction sortDirection = sortRule.toLowerCase().contains("desc")
-                    ? Sort.Direction.DESC
-                    : Sort.Direction.ASC;
-            sort = Sort.by(sortDirection, sortRule);
-        }
-        return sort != null
-                ? PageRequest.of(page, size, sort)
-                : PageRequest.of(page, size);
     }
 }

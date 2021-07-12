@@ -1,6 +1,8 @@
 package com.exadel.discountwebapp.user.vo;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.Email;
@@ -25,8 +27,4 @@ public abstract class UserBaseVO implements Serializable {
     @Email
     @Size(max = 255)
     private String email;
-
-    @NotBlank
-    @Size(max = 510)
-    private String password;
 }

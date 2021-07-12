@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.Specification;
 import javax.persistence.criteria.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 
 @RequiredArgsConstructor
 public class CustomSpecification<T> implements Specification<T> {
@@ -16,11 +17,11 @@ public class CustomSpecification<T> implements Specification<T> {
 
     @Override
     public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
-        Path<Object> path = null;
+        Path<Object> path;
         Class clazz = root.getJavaType();
 
         String key = criteria.getKey();
-        String value = criteria.getValue();
+        String value = criteria.getValue().toLowerCase();
         SearchOperation operation = criteria.getOperation();
 
         try {
@@ -35,21 +36,24 @@ public class CustomSpecification<T> implements Specification<T> {
             case EQUALITY:
                 return path.getJavaType() == LocalDateTime.class
                         ? builder.equal(path.as(LocalDateTime.class), parseLocalDateTime(clazz, key, value))
-                        : builder.equal(path.as(String.class), value);
+                        : builder.equal(builder.lower(path.as(String.class)), value);
             case LESS_THAN:
                 return path.getJavaType() == LocalDateTime.class
                         ? builder.lessThan(path.as(LocalDateTime.class), parseLocalDateTime(clazz, key, value))
-                        : builder.lessThan(path.as(String.class), value);
+                        : builder.lessThan(builder.lower(path.as(String.class)), value);
             case GREATER_THAN:
                 return path.getJavaType() == LocalDateTime.class
                         ? builder.greaterThan(path.as(LocalDateTime.class), parseLocalDateTime(clazz, key, value))
-                        : builder.greaterThan(path.as(String.class), value);
+                        : builder.greaterThan(builder.lower(path.as(String.class)), value);
             case STARTS_WITH:
-                return builder.like(path.as(String.class), value + "%");
+                return builder.like(builder.lower(path.as(String.class)), value + "%");
             case ENDS_WITH:
-                return builder.like(path.as(String.class), "%" + value);
+                return builder.like(builder.lower(path.as(String.class)), "%" + value);
             case CONTAINS:
-                return builder.like(path.as(String.class), "%" + value + "%");
+                return builder.like(builder.lower(path.as(String.class)), "%" + value + "%");
+            case IN:
+                List<String> arguments = List.of(value.split(","));
+                return builder.lower(path.as(String.class)).in(arguments);
             default:
                 return null;
         }

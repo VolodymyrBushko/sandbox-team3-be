@@ -16,9 +16,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
 @Table(name = "location")
-@Builder
 @EntityListeners(AuditingEntityListener.class)
 public class Location {
     @EqualsAndHashCode.Exclude
@@ -27,11 +25,15 @@ public class Location {
     @Column(name = "loc_id")
     private Long id;
 
-    @Column(name = "loc_country", length = 50, nullable = false)
-    private String country;
-
-    @Column(name = "loc_city", length = 50, nullable = false)
+    @Column(name = "loc_city", length = 50)
     private String city;
+
+    @ManyToOne
+    @JoinColumn(name = "country_code")
+    private Country country;
+
+    @Column(name = "loc_address_line")
+    private String addressLine;
 
     @CreatedDate
     @EqualsAndHashCode.Exclude

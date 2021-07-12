@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/vendor-init.sql")
 @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:sql/clean-up.sql")
-public class VendorMapperTest {
+class VendorMapperTest {
 
     @Autowired
     private VendorMapper vendorMapper;
@@ -22,7 +22,7 @@ public class VendorMapperTest {
     private VendorRepository vendorRepository;
 
     @Test
-    public void shouldMapEntityToVO(){
+    void shouldMapEntityToVO(){
         var id = 1L;
         var actual = vendorRepository.findById(id).get();
 
@@ -36,11 +36,11 @@ public class VendorMapperTest {
 
         assertEquals(actual.getLocation().getId(), expected.getLocation().getId());
         assertEquals(actual.getLocation().getCity(), expected.getLocation().getCity());
-        assertEquals(actual.getLocation().getCountry(), expected.getLocation().getCountry());
+        assertEquals(actual.getLocation().getCountry().getCountryCode(), expected.getLocation().getCountryCode());
     }
 
     @Test
-    public void shouldMapVOToEntity(){
+    void shouldMapVOToEntity(){
         var actual = new  VendorRequestVO();
         actual.setTitle("title");
         actual.setDescription("description");

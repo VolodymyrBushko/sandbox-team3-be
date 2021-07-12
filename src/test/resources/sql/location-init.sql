@@ -1,9 +1,13 @@
-INSERT INTO location
-VALUES (1, 'Kyiv', 'Ukraine', '2021-06-06 17:22:21', '2021-06-06 17:22:21'),
-       (2, 'Lviv', 'Ukraine', '2021-06-06 17:22:21', '2021-06-06 17:22:21'),
-       (3, 'Kyiv', 'Ukraine', '2021-06-06 17:22:21', '2021-06-06 17:22:21'),
-       (4, 'Lviv', 'Ukraine', '2021-06-06 17:22:21', '2021-06-06 17:22:21'),
-       (5, 'Kharkiv', 'Ukraine', '2021-06-06 17:22:21', '2021-06-06 17:22:21');
+INSERT INTO country
+VALUES ('UA', 'Ukraine'),
+       ('BY', 'Belorus');
+
+INSERT INTO location (loc_id, country_code, loc_city, loc_address_line, loc_created, loc_modified)
+VALUES (1, 'UA', 'Kyiv', 'Khreshchatyk, 25', '2021-06-06 17:22:21', '2021-06-06 17:22:21'),
+       (2, 'UA', 'Lviv', 'Sichovyh Strilciv, 52', '2021-06-06 17:22:21', '2021-06-06 17:22:21'),
+       (3, 'UA', 'Kyiv', 'Prospekt Nauky, 41', '2021-06-06 17:22:21', '2021-06-06 17:22:21'),
+       (4, 'UA', 'Lviv', 'Gorodockogo, 9', '2021-06-06 17:22:21', '2021-06-06 17:22:21'),
+       (5, 'UA', 'Kharkiv', 'Peremogy, 11', '2021-06-06 17:22:21', '2021-06-06 17:22:21');
 
 INSERT INTO vendor
 VALUES (1, '2021-06-06 17:22:21', 'Sport Life - a chain of casual fitness centers', 'sprort_life@com.ua',

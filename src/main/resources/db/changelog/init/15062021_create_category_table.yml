@@ -22,11 +22,6 @@ databaseChangeLog:
                     nullable: false
                     unique: true
               - column:
-                  name: cat_image_url
-                  type: VARCHAR(510)
-                  constraints:
-                    nullable: true
-              - column:
                   name: cat_created
                   type: TIMESTAMP WITHOUT TIME ZONE
                   constraints:

@@ -31,10 +31,6 @@ public class Category {
     private String title;
 
     @EqualsAndHashCode.Exclude
-    @Column(name = "cat_image_url", length = 510)
-    private String imageUrl;
-
-    @EqualsAndHashCode.Exclude
     @CreatedDate
     @Column(name = "cat_created", nullable = false, updatable = false)
     private LocalDateTime created;
@@ -51,6 +47,6 @@ public class Category {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Tag> tags = new ArrayList<>();
 }
