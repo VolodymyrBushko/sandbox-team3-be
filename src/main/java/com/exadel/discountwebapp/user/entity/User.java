@@ -1,18 +1,18 @@
 package com.exadel.discountwebapp.user.entity;
 
-import com.exadel.discountwebapp.discount.entity.Discount;
-import com.exadel.discountwebapp.role.entity.Role;
 import com.exadel.discountwebapp.location.entity.Location;
+import com.exadel.discountwebapp.role.entity.Role;
+import com.exadel.discountwebapp.userdiscount.entity.UserDiscount;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Data
 @Entity
@@ -61,9 +61,9 @@ public class User {
     @JoinColumn(name = "rol_id")
     private Role role;
 
-    @ManyToMany(mappedBy = "users")
+    @OneToMany(mappedBy = "user")
     @EqualsAndHashCode.Exclude
-    private List<Discount> discounts = new ArrayList<>();
+    private List<UserDiscount> discounts = new ArrayList<>();
 
     @CreatedDate
     @EqualsAndHashCode.Exclude

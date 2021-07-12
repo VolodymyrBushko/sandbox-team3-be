@@ -8,8 +8,8 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-public class UserDiscountRequestVO extends UserDiscountBaseVO{
+@EqualsAndHashCode
+public class UserDiscountRequestVO {
 
     @NotNull
     private Long discountId;

@@ -3,7 +3,7 @@ package com.exadel.discountwebapp.discount.entity;
 import com.exadel.discountwebapp.category.entity.Category;
 import com.exadel.discountwebapp.location.entity.Location;
 import com.exadel.discountwebapp.tag.entity.Tag;
-import com.exadel.discountwebapp.user.entity.User;
+import com.exadel.discountwebapp.userdiscount.entity.UserDiscount;
 import com.exadel.discountwebapp.vendor.entity.Vendor;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -105,13 +105,7 @@ public class Discount {
     )
     private List<Tag> tags = new ArrayList<>();
 
-    @ToString.Exclude
+    @OneToMany(mappedBy = "discount")
     @EqualsAndHashCode.Exclude
-    @ManyToMany
-    @JoinTable(
-            name = "user_discount",
-            joinColumns = @JoinColumn(name = "dis_id"),
-            inverseJoinColumns = @JoinColumn(name = "usr_id")
-    )
-    private List<User> users = new ArrayList<>();
+    private List<UserDiscount> users = new ArrayList<>();
 }

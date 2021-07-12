@@ -7,7 +7,6 @@ import com.exadel.discountwebapp.user.entity.User;
 import com.exadel.discountwebapp.user.repository.UserRepository;
 import com.exadel.discountwebapp.userdiscount.entity.UserDiscount;
 import com.exadel.discountwebapp.userdiscount.vo.UserDiscountRequestVO;
-import com.exadel.discountwebapp.userdiscount.vo.UserDiscountResponseVO;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
@@ -23,11 +22,6 @@ public class UserDiscountMapper {
                               DiscountRepository discountRepository) {
         this.userRepository = userRepository;
         this.discountRepository = discountRepository;
-    }
-
-    public UserDiscountResponseVO toVO(UserDiscount userDiscount) {
-        UserDiscountResponseVO response = modelMapper.map(userDiscount, UserDiscountResponseVO.class);
-        return response;
     }
 
     public UserDiscount toEntity(UserDiscountRequestVO request) {
