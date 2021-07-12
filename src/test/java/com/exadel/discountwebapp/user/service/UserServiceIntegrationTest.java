@@ -2,17 +2,16 @@ package com.exadel.discountwebapp.user.service;
 
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.user.repository.UserRepository;
-import com.exadel.discountwebapp.user.vo.UserResponseVO;
 import com.google.common.collect.Lists;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/user-init.sql")
@@ -30,7 +29,10 @@ class UserServiceIntegrationTest {
 
         var expectedItr = userRepository.findAll();
         var expected = Lists.newArrayList(expectedItr);
-        var actual = userService.findAll();
+
+        var userCount = (int) userRepository.count();
+        var pageable = PageRequest.of(0, userCount);
+        var actual = userService.findAll(null, pageable).getContent();
 
         Assertions.assertEquals(2, actual.size());
 
@@ -67,10 +69,9 @@ class UserServiceIntegrationTest {
 
     @Test
     void shouldThrowExceptionIfNoUserFoundById() {
-        List<UserResponseVO> users = userService.findAll();
-
-        Assertions.assertNotEquals(3L, users.size());
-
-        Assertions.assertThrows(EntityNotFoundException.class, () -> userService.findById(3L));
+        var id = 12345L;
+        assertThrows(EntityNotFoundException.class, () -> {
+            userService.findById(id);
+        });
     }
 }

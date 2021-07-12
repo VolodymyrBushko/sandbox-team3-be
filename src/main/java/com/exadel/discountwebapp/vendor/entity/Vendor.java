@@ -53,10 +53,15 @@ public class Vendor {
     @Column(name = "vn_modified")
     private LocalDateTime modified;
 
+    @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @ManyToOne
-    @JoinColumn(name = "loc_id")
-    private Location location;
+    @ManyToMany
+    @JoinTable(
+            name="location_vendor",
+            joinColumns = @JoinColumn(name="vn_id"),
+            inverseJoinColumns = @JoinColumn(name="loc_id")
+    )
+    private List<Location> locations;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
