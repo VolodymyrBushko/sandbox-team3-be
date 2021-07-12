@@ -24,7 +24,7 @@ VALUES (1, '2021-06-04 17:22:21', '2021-06-04 17:22:21', 'sport', 10),
 
 INSERT INTO discount
 VALUES (1, '2021-06-06 17:22:21',
-        '38% discount on the purchase of an unlimited annual subscription to the fitness club "Sport Life',
+        '38% discount on the purchase of an unlimited annual subscription to the fitness club "Sport Life"',
         '2021-12-06 17:22:21', 100, 'sport_life_discount_image_1.jsp',
         '2021-06-06 17:22:21', null, 50, 'an unlimited annual subscription',
         '2021-06-06 17:22:21', '38% discount', 10, 10),
