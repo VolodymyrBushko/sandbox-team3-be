@@ -4,14 +4,15 @@ import com.exadel.discountwebapp.vendor.service.VendorService;
 import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
 import com.exadel.discountwebapp.vendor.vo.VendorResponseVO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/vendors")
@@ -52,5 +53,15 @@ public class VendorController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         vendorService.deleteById(id);
+    }
+
+    @GetMapping("/{vendorId}/subscribe")
+    public void subscribe(@PathVariable Long vendorId, Principal principal) {
+        vendorService.subscribe(vendorId, principal.getName());
+    }
+
+    @GetMapping("/{vendorId}/unsubscribe")
+    public void unsubscribe(@PathVariable Long vendorId, Principal principal) {
+        vendorService.unsubscribe(vendorId, principal.getName());
     }
 }
