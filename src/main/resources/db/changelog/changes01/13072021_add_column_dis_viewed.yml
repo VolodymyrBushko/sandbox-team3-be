@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 13072021_add_column_dis_viewed
+      author: tesliuk.ua@gmail.com
+      changes:
+        - addColumn:
+            tableName: discount
+            columns:
+              - column:
+                  name: dis_viewed
+                  type: BIGINT

@@ -32,10 +32,13 @@ public class DiscountService {
         return page.map(discountMapper::toVO);
     }
 
-    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    @Transactional(propagation = Propagation.REQUIRED)
     public DiscountResponseVO findById(Long id) {
         Discount discount = discountRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Discount.class, "id", id));
+        Long quantity = discount.getQuantityViews() == null ? 1 : discount.getQuantityViews() + 1;
+        discount.setQuantityViews(quantity);
+        discountRepository.insertDiscountView(quantity, id);
         return discountMapper.toVO(discount);
     }
 

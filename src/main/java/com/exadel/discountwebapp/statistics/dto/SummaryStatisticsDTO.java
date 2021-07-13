@@ -12,7 +12,8 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SummaryStatisticsDTO {
-    private Map<String, Long> usersDiscountsStats;
-    private Map<String, Long> categoryDiscountsStats;
-    private Map<String, Long> vendorDiscountsStats;
+    private Map<String, Long> mostActiveUsersStats;
+    private Map<String, Long> popularCategoriesStats;
+    private Map<String, Long> popularVendorsStats;
+    private Map<String, Long> popularDiscountsStats;
 }
