@@ -3,6 +3,7 @@ package com.exadel.discountwebapp.discount.entity;
 import com.exadel.discountwebapp.category.entity.Category;
 import com.exadel.discountwebapp.location.entity.Location;
 import com.exadel.discountwebapp.tag.entity.Tag;
+import com.exadel.discountwebapp.userdiscount.entity.UserDiscount;
 import com.exadel.discountwebapp.vendor.entity.Vendor;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -51,9 +52,6 @@ public class Discount {
     @Column(name = "dis_flat_amount")
     private BigDecimal flatAmount;
 
-    @Column(name = "dis_price", nullable = false)
-    private BigDecimal price;
-
     @EqualsAndHashCode.Exclude
     @Column(name = "dis_start_date", nullable = false)
     private LocalDateTime startDate;
@@ -61,6 +59,9 @@ public class Discount {
     @EqualsAndHashCode.Exclude
     @Column(name = "dis_expiration_date", nullable = false)
     private LocalDateTime expirationDate;
+
+    @Column(name = "dis_promocode", length = 100)
+    private String promocode;
 
     @EqualsAndHashCode.Exclude
     @CreatedDate
@@ -103,4 +104,8 @@ public class Discount {
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     private List<Tag> tags = new ArrayList<>();
+
+    @OneToMany(mappedBy = "discount")
+    @EqualsAndHashCode.Exclude
+    private List<UserDiscount> users = new ArrayList<>();
 }

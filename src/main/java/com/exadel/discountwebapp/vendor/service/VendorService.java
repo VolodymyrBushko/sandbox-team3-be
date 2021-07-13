@@ -1,6 +1,6 @@
 package com.exadel.discountwebapp.vendor.service;
 
-import com.exadel.discountwebapp.vendor.validator.VendorValidator;
+import com.exadel.discountwebapp.vendor.validator.VendorEmailValidator;
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.filter.SpecificationBuilder;
 import com.exadel.discountwebapp.vendor.entity.Vendor;
@@ -24,7 +24,7 @@ public class VendorService {
 
     private final VendorMapper vendorMapper;
     private final VendorRepository vendorRepository;
-    private final VendorValidator vendorValidator;
+    private final VendorEmailValidator vendorEmailValidator;
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public Page<VendorResponseVO> findAll(String query, Pageable pageable) {
@@ -49,17 +49,19 @@ public class VendorService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public VendorResponseVO create(VendorRequestVO request) {
-        vendorValidator.validate(request);
+        vendorEmailValidator.validate(request);
         return vendorMapper.toVO(vendorRepository.save(vendorMapper.toEntity(request)));
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public VendorResponseVO update(Long id, VendorRequestVO request) {
-        vendorValidator.validate(request);
-        Vendor vendor = getVendorById(id);
-        vendorMapper.update(vendor, request);
-        vendorRepository.save(vendor);
-        return vendorMapper.toVO(vendor);
+        var vendor = getVendorById(id);
+        if (!vendor.getEmail().equals(request.getEmail())) {
+            vendorEmailValidator.validate(request);
+        }
+        vendorMapper.update(request, vendor);
+        var updatedVendor = vendorRepository.save(vendor);
+        return vendorMapper.toVO(updatedVendor);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
