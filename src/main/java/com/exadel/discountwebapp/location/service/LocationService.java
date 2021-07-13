@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -56,7 +57,8 @@ public class LocationService {
         List<CityResponseVO> allItems = new ArrayList<>();
         locations.forEach(entity -> allItems.add(cityMapper.toVO(entity)));
         return allItems.stream()
-                .filter(el -> el.getCity() != null && !el.getCity().equals("")).distinct().collect(Collectors.toList());
+                .filter(el -> el.getCity() != null && !el.getCity().equals("")).distinct()
+                .sorted(Comparator.comparing(CityResponseVO::getCity)).collect(Collectors.toList());
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
