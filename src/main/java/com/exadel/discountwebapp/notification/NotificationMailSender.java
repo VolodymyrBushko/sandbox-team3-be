@@ -15,12 +15,12 @@ public class NotificationMailSender {
     private final JavaMailSender javaMailSender;
 
     @SneakyThrows
-    public void sendMail(String subject, String text, String[] to) {
+    public void sendMail(String subject, String content, String[] to) {
         MimeMessage message = javaMailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
         helper.setSubject(subject);
-        helper.setText(text);
+        helper.setText(content, true);
         helper.setTo(to);
 
         javaMailSender.send(message);
