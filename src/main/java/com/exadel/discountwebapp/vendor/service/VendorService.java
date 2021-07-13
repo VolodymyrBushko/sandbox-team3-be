@@ -1,6 +1,6 @@
 package com.exadel.discountwebapp.vendor.service;
 
-import com.exadel.discountwebapp.vendor.validator.VendorValidator;
+import com.exadel.discountwebapp.vendor.validator.VendorEmailValidator;
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.filter.SpecificationBuilder;
 import com.exadel.discountwebapp.user.entity.User;
@@ -27,7 +27,7 @@ public class VendorService {
 
     private final VendorMapper vendorMapper;
     private final VendorRepository vendorRepository;
-    private final VendorValidator vendorValidator;
+    private final VendorEmailValidator vendorEmailValidator;
     private final UserService userService;
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
@@ -53,7 +53,7 @@ public class VendorService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public VendorResponseVO create(VendorRequestVO request) {
-        vendorValidator.validate(request);
+        vendorEmailValidator.validate(request);
         return vendorMapper.toVO(vendorRepository.save(vendorMapper.toEntity(request)));
     }
 
@@ -61,7 +61,7 @@ public class VendorService {
     public VendorResponseVO update(Long id, VendorRequestVO request) {
         var vendor = getVendorById(id);
         if (!vendor.getEmail().equals(request.getEmail())) {
-            vendorValidator.validate(request);
+            vendorEmailValidator.validate(request);
         }
         vendorMapper.update(request, vendor);
         var updatedVendor = vendorRepository.save(vendor);
