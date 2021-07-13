@@ -1,12 +1,14 @@
 package com.exadel.discountwebapp.vendor.repository;
 
 import com.exadel.discountwebapp.vendor.entity.Vendor;
+import org.javers.spring.annotation.JaversSpringDataAuditable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+@JaversSpringDataAuditable
 @Repository
 public interface VendorRepository
         extends CrudRepository<Vendor, Long>, JpaSpecificationExecutor<Vendor> {
