@@ -22,10 +22,10 @@ public class StatisticsController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping()
     public SummaryStatisticsDTO getStatistics(@RequestBody RequestDataDTO request) {
-        return statisticsService.getStats(toStringToLocalDateTime(request.getDataFrom()) , toStringToLocalDateTime(request.getDataTo()));
+        return statisticsService.getStats(toStringToLocalDateTime(request.getDataFrom()), toStringToLocalDateTime(request.getDataTo()));
     }
 
-    private LocalDateTime toStringToLocalDateTime (String str){
+    private LocalDateTime toStringToLocalDateTime(String str) {
         var formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         var ld = LocalDate.parse(str, formatter);
         return LocalDateTime.of(ld, LocalDateTime.now().toLocalTime());
