@@ -118,5 +118,5 @@ public class Discount {
             joinColumns = @JoinColumn(name = "dis_id"),
             inverseJoinColumns = @JoinColumn(name = "usr_id")
     )
-    private List<User> favoriteUsers = new ArrayList<>();
+    private List<User> userFavorites = new ArrayList<>();
 }

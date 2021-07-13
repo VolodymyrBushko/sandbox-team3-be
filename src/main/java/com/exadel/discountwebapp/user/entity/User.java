@@ -68,8 +68,8 @@ public class User {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @ManyToMany(mappedBy = "favoriteUsers")
-    private List<Discount> favoriteDiscounts = new ArrayList<>();
+    @ManyToMany(mappedBy = "userFavorites")
+    private List<Discount> discountFavorites = new ArrayList<>();
 
     @CreatedDate
     @EqualsAndHashCode.Exclude

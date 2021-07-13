@@ -3,7 +3,6 @@ package com.exadel.discountwebapp.discount.service;
 import com.exadel.discountwebapp.discount.entity.Discount;
 import com.exadel.discountwebapp.discount.mapper.DiscountMapper;
 import com.exadel.discountwebapp.discount.repository.DiscountRepository;
-import com.exadel.discountwebapp.discount.validator.DiscountValidator;
 import com.exadel.discountwebapp.discount.vo.DiscountRequestVO;
 import com.exadel.discountwebapp.discount.vo.DiscountResponseVO;
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
@@ -28,7 +27,6 @@ public class DiscountService {
     private final DiscountMapper discountMapper;
     private final DiscountRepository discountRepository;
     private final UserRepository userRepository;
-    private final DiscountValidator discountValidator;
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public Page<DiscountResponseVO> findAll(String query, Pageable pageable) {
@@ -41,8 +39,8 @@ public class DiscountService {
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public DiscountResponseVO findById(Long id) {
-        discountValidator.checkIfDiscountIsPresentById(id);
-        Discount discount = discountRepository.findById(id).get();
+        Discount discount = discountRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(Discount.class, "id", id));
         return discountMapper.toVO(discount);
     }
 
@@ -55,8 +53,8 @@ public class DiscountService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public DiscountResponseVO update(Long id, DiscountRequestVO request) {
-        discountValidator.checkIfDiscountIsPresentById(id);
-        Discount discount = discountRepository.findById(id).get();
+        Discount discount = discountRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(Discount.class, "id", id));
         discountMapper.updateEntity(request, discount);
         discountRepository.save(discount);
         return discountMapper.toVO(discount);
@@ -64,31 +62,26 @@ public class DiscountService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public void deleteById(Long id) {
-        discountValidator.checkIfDiscountIsPresentById(id);
         discountRepository.deleteById(id);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity<String> addDiscountToFavorites(Long userId, Long discountId) {
-        discountValidator.checkIfDiscountIsPresentById(discountId);
-        Discount discount = discountRepository.findById(discountId).get();
+    public void addDiscountToFavorites(Long userId, Long discountId) {
+        Discount discount = discountRepository.findById(discountId)
+                .orElseThrow(() -> new EntityNotFoundException(Discount.class, "id", discountId));
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException(User.class, "id", userId));
-        discountValidator.checkFavoritesToAdd(discount, user);
-        discount.getFavoriteUsers().add(user);
+        discount.getUserFavorites().add(user);
         discountRepository.save(discount);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity<String> deleteDiscountFromFavorites(Long userId, Long discountId) {
-        discountValidator.checkIfDiscountIsPresentById(discountId);
-        Discount discount = discountRepository.findById(discountId).get();
+    public void deleteDiscountFromFavorites(Long userId, Long discountId) {
+        Discount discount = discountRepository.findById(discountId)
+                .orElseThrow(() -> new EntityNotFoundException(Discount.class, "id", discountId));
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException(User.class, "id", userId));
-        discountValidator.checkFavoritesToDelete(discount, user);
-        discount.getFavoriteUsers().remove(user);
+        discount.getUserFavorites().remove(user);
         discountRepository.save(discount);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
