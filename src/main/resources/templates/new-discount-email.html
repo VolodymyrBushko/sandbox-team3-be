@@ -1,6 +1,9 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Please confirm your subscription to Mailing-List XYZ?</title>
     <style>
         .mb-10 {
@@ -94,17 +97,17 @@
 </head>
 <body>
 <div class="container">
-    <h1>DiscountTitle</h1>
+    <h1 th:text="${discountTitle}"></h1>
     <div class="img-block mb-10">
-        <img src="https://picsum.photos/200"/>
-        <p class="discount-label">-30%</p>
+        <img th:src="${discountImageUrl}"/>
+        <p class="discount-label" th:text="${discountDiscount}"></p>
     </div>
     <div class="row-wrapper">
-        <p>Vendor</p>
-        <p>Category</p>
+        <p th:text="${vendorTitle}"></p>
+        <p th:text="${discountCategory}"></p>
     </div>
-    <p class="description">DiscountShortDescription</p>
-    <a href="UrlToFE" class="btn">Go to discount</a>
+    <p class="description" th:text="${discountDescription}"></p>
+    <a th:href="${discountInfoUrl}" class="btn">Go to discount</a>
 </div>
 </body>
 </html>
