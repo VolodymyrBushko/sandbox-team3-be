@@ -1,0 +1,40 @@
+databaseChangeLog:
+  - changeSet:
+      id: 07072021_create_location_vendor_table
+      author: tesliuk.ua@gmail.com
+      changes:
+        - createTable:
+            schemaName: public
+            tableName: location_vendor
+            columns:
+              - column:
+                  name: loc_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_location_vendor_location
+                    references: location(loc_id)
+                    nullable: false
+              - column:
+                  name: vn_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_location_vendor_vendor
+                    references: vendor(vn_id)
+                    nullable: false
+              - column:
+                  name: lv_created
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 07072021_add_composite_pk_location_vendor_table
+      author: tesliuk.ua@gmail.com
+      changes:
+        - addPrimaryKey:
+            clustered: true
+            columnNames: loc_id, vn_id
+            constraintName: pk_loc_id_vn_id
+            schemaName: public
+            tableName: location_vendor
+            validate: true

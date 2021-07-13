@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 09072021_drop_column_dis_price
+      author: bozhokmaria@gmail.com
+      changes:
+        - dropColumn:
+            schemaName: public
+            tableName: discount
+            columnName: dis_price

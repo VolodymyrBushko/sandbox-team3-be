@@ -1,5 +1,6 @@
 package com.exadel.discountwebapp.user.controller;
 
+import com.exadel.discountwebapp.user.repository.UserRepository;
 import com.exadel.discountwebapp.user.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
@@ -25,16 +27,27 @@ class UserControllerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
-    private UserService service;
+    private UserService userService;
     @Autowired
     private ObjectMapper mapper;
+    @Autowired
+    private UserRepository userRepository;
 
     @Test
     @WithMockUser(roles = "USER")
     void shouldGetAllUsersWithRoleUser() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/users")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.content().json(getUsersResponseVo()))
+                .andExpect(jsonPath("$.content[0].firstName").value("Ivan"))
+                .andExpect(jsonPath("$.content[0].lastName").value("Ivanov"))
+                .andExpect(jsonPath("$.content[0].email").value("ivan_ivanov@gmail.com"))
+                .andExpect(jsonPath("$.content[0].imageUrl").value("user1.jsp"))
+
+                .andExpect(jsonPath("$.content[1].firstName").value("Petro"))
+                .andExpect(jsonPath("$.content[1].lastName").value("Petrenko"))
+                .andExpect(jsonPath("$.content[1].email").value("petro_petrenko@gmail.com"))
+                .andExpect(jsonPath("$.content[1].imageUrl").value("user2.jsp"))
+
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
@@ -46,6 +59,7 @@ class UserControllerIntegrationTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value("Petro"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.lastName").value("Petrenko"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("petro_petrenko@gmail.com"))
+                .andExpect(jsonPath("$.imageUrl").value("user2.jsp"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
@@ -54,7 +68,17 @@ class UserControllerIntegrationTest {
     void shouldGetAllUsersWithRoleAdmin() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/users")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.content().json(getUsersResponseVo()))
+
+                .andExpect(jsonPath("$.content[0].firstName").value("Ivan"))
+                .andExpect(jsonPath("$.content[0].lastName").value("Ivanov"))
+                .andExpect(jsonPath("$.content[0].email").value("ivan_ivanov@gmail.com"))
+                .andExpect(jsonPath("$.content[0].imageUrl").value("user1.jsp"))
+
+                .andExpect(jsonPath("$.content[1].firstName").value("Petro"))
+                .andExpect(jsonPath("$.content[1].lastName").value("Petrenko"))
+                .andExpect(jsonPath("$.content[1].email").value("petro_petrenko@gmail.com"))
+                .andExpect(jsonPath("$.content[1].imageUrl").value("user2.jsp"))
+
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
@@ -95,10 +119,5 @@ class UserControllerIntegrationTest {
     void shouldReturn404ErrorIfAuthorizedUserTryGetUserByWrongId() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/users/100"))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
-    }
-
-    private String getUsersResponseVo() throws JsonProcessingException {
-        var responseVo = service.findAll();
-        return mapper.writeValueAsString(responseVo);
     }
 }

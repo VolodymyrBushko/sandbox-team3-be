@@ -19,6 +19,7 @@ import java.util.List;
 @Table(name = "location")
 @EntityListeners(AuditingEntityListener.class)
 public class Location {
+
     @EqualsAndHashCode.Exclude
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +36,12 @@ public class Location {
     @Column(name = "loc_address_line")
     private String addressLine;
 
+    @Column(name = "loc_longitude")
+    private Double longitude;
+
+    @Column(name = "loc_latitude")
+    private Double latitude;
+
     @CreatedDate
     @EqualsAndHashCode.Exclude
     @Column(name = "loc_created", nullable = false, updatable = false)
@@ -47,7 +54,7 @@ public class Location {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "location")
+    @ManyToMany(mappedBy = "locations")
     private List<Vendor> vendors = new ArrayList<>();
 
     @ToString.Exclude

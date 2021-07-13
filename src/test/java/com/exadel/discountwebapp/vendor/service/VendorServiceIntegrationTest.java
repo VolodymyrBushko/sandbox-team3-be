@@ -2,6 +2,7 @@ package com.exadel.discountwebapp.vendor.service;
 
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.exception.exception.client.IncorrectFilterInputException;
+import com.exadel.discountwebapp.user.repository.UserRepository;
 import com.exadel.discountwebapp.vendor.entity.Vendor;
 import com.exadel.discountwebapp.vendor.repository.VendorRepository;
 import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
@@ -13,6 +14,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -28,9 +31,10 @@ class VendorServiceIntegrationTest {
 
     @Autowired
     private VendorService vendorService;
-
     @Autowired
     private VendorRepository vendorRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Test
     void shouldFindVendorById() {
@@ -228,13 +232,17 @@ class VendorServiceIntegrationTest {
     }
 
     @Test
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     void shouldFindAllVendorsWhereCityEqualsLviv() {
         var city = "lviv";
-        var query = "location.city:" + city;
+        var query = "locations.city:" + city;
 
         var expectedIter = vendorRepository.findAll();
-        var expected = Lists.newArrayList(expectedIter)
-                .stream().filter(e -> e.getLocation().getCity().equalsIgnoreCase(city)).collect(Collectors.toList());
+
+        var expected = Lists.newArrayList(expectedIter).stream()
+                .filter(e -> e.getLocations().stream()
+                        .anyMatch(l -> l.getCity().equalsIgnoreCase(city)))
+                .collect(Collectors.toList());
 
         var vendorCount = (int) vendorRepository.count();
         var pageable = PageRequest.of(0, vendorCount);
@@ -244,18 +252,21 @@ class VendorServiceIntegrationTest {
     }
 
     @Test
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     void shouldFindAllVendorsWhereTitleStartsWithSportAndDescriptionContainsCasualAndCityEqualsKyiv() {
         var title = "sport";
         var description = "casual";
         var city = "kyiv";
-        var query = String.format("title:*%s;description*:*%s;location.city:%s", title, description, city);
+        var query = String.format("title:*%s;description*:*%s;locations.city:%s", title, description, city);
 
         var expectedIter = vendorRepository.findAll();
         var expected = Lists.newArrayList(expectedIter)
                 .stream()
                 .filter(e -> e.getTitle().toLowerCase().startsWith(title) &&
-                        e.getDescription().toLowerCase().contains(description) &&
-                        e.getLocation().getCity().equalsIgnoreCase(city))
+                        e.getDescription().toLowerCase().contains(description)
+                        &&
+                        e.getLocations().stream().anyMatch(l -> l.getCity().equalsIgnoreCase(city))
+                )
                 .collect(Collectors.toList());
 
         var vendorCount = (int) vendorRepository.count();
@@ -291,7 +302,7 @@ class VendorServiceIntegrationTest {
     @Test
     void shouldUpdateVendorById() {
         var id = 1L;
-        var expected = createVendorRequest();
+        var expected = updateVendorRequest();
         var actual = vendorService.update(id, expected);
 
         assertNotNull(actual);
@@ -300,20 +311,178 @@ class VendorServiceIntegrationTest {
         matchOne(expected, actual);
     }
 
+    @Test
+    void shouldFindAllVendorsWhereTitleContainsSportOrPizza() {
+        var firstTitle = "sport";
+        var secondTitle = "pizza";
+
+        var query = String.format("title?*:*%s;title?*:*%s;", firstTitle, secondTitle);
+
+        var firstVendor = Vendor.builder()
+                .id(1L)
+                .title("Sport Life")
+                .description("Sport Life - a chain of casual fitness centers")
+                .imageUrl("sport_life_image_1.jsp")
+                .email("sprort_life@com.ua")
+                .created(LocalDateTime.parse("2021-12-06T17:22:21"))
+                .modified(LocalDateTime.parse("2021-12-06T17:22:21"))
+                .build();
+
+        var secondVendor = Vendor.builder()
+                .id(2L)
+                .title("Domino`s Pizza")
+                .description("Domino`s Pizza - an American multinational pizza restaurant chain founded in 1960")
+                .imageUrl("dominos.com_image_1.jsp")
+                .email("dominos@gmail.com")
+                .created(LocalDateTime.parse("2022-06-06T17:22:21"))
+                .modified(LocalDateTime.parse("2022-06-06T17:22:21"))
+                .build();
+
+        var vendorCount = (int) vendorRepository.count();
+        var pageable = PageRequest.of(0, vendorCount);
+
+        var expected = List.of(firstVendor, secondVendor);
+        var actual = vendorService.findAll(query, pageable).getContent();
+
+        matchAllPure(expected, actual);
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    void shouldFindAllVendorsWhereDescriptionContainsTravelOrPizzaAndEmailEndsWithCom() {
+        var firstDesc = "travel";
+        var secondDesc = "pizza";
+        var emailEnds = "com";
+
+        var query = String.format("description?*:*%s;description?*:*%s;email*:%s",
+                firstDesc, secondDesc, emailEnds);
+
+        var firstVendor = Vendor.builder()
+                .id(2L)
+                .title("Domino`s Pizza")
+                .description("Domino`s Pizza - an American multinational pizza restaurant chain founded in 1960")
+                .imageUrl("dominos.com_image_1.jsp")
+                .email("dominos@gmail.com")
+                .created(LocalDateTime.parse("2022-06-06T17:22:21"))
+                .modified(LocalDateTime.parse("2022-06-06T17:22:21"))
+                .build();
+
+        var secondVendor = Vendor.builder()
+                .id(3L)
+                .title("TUI")
+                .description("TUI AG - travel and tourism company")
+                .imageUrl("tui_image_1.jsp")
+                .email("tuigroup@gmail.com")
+                .created(LocalDateTime.parse("2023-06-06T17:22:21"))
+                .modified(LocalDateTime.parse("2023-06-06T17:22:21"))
+                .build();
+
+        var vendorCount = (int) vendorRepository.count();
+        var pageable = PageRequest.of(0, vendorCount);
+
+        var expected = List.of(firstVendor, secondVendor);
+        var actual = vendorService.findAll(query, pageable).getContent();
+
+        matchAllPure(expected, actual);
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.REQUIRED)
+    void shouldSubscribe() {
+        var user = userRepository.findById(1L).orElse(null);
+        var vendor = vendorRepository.findById(1L).orElse(null);
+
+        assertNotNull(user);
+        assertNotNull(vendor);
+
+        assertFalse(vendor.getSubscribers().contains(user));
+
+        assertNotNull(vendor.getId());
+        assertNotNull(user.getEmail());
+
+        vendorService.subscribe(vendor.getId(), user.getEmail());
+
+        assertTrue(vendor.getSubscribers().contains(user));
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.REQUIRED)
+    void shouldUnsubscribe() {
+        var user = userRepository.findById(1L).orElse(null);
+        var vendor = vendorRepository.findById(1L).orElse(null);
+
+        assertNotNull(user);
+        assertNotNull(vendor);
+
+        assertFalse(vendor.getSubscribers().contains(user));
+
+        assertNotNull(vendor.getId());
+        assertNotNull(user.getEmail());
+
+        vendorService.subscribe(vendor.getId(), user.getEmail());
+
+        assertTrue(vendor.getSubscribers().contains(user));
+
+        vendorService.unsubscribe(vendor.getId(), user.getEmail());
+
+        assertFalse(vendor.getSubscribers().contains(user));
+    }
+
     private VendorRequestVO createVendorRequest() {
         var title = "title";
         var description = "description";
         var imageUrl = "http://localhost/images/img.png";
         var email = "testemail@gmail.com";
-        var locationId = 1L;
 
         return VendorRequestVO.builder()
                 .title(title)
                 .description(description)
                 .imageUrl(imageUrl)
                 .email(email)
-                .locationId(locationId)
+                .locationIds(List.of(1L, 2L))
                 .build();
+    }
+
+    private VendorRequestVO updateVendorRequest() {
+        var title = "titleSome";
+        var description = "descriptionSome";
+        var imageUrl = "http://localhost/images/Someimg.png";
+        var email = "sprort_life@com.ua";
+
+        return VendorRequestVO.builder()
+                .title(title)
+                .description(description)
+                .imageUrl(imageUrl)
+                .email(email)
+                .locationIds(List.of(2L))
+                .build();
+    }
+
+    private void matchOne(Vendor expected, VendorResponseVO actual) {
+        assertNotNull(actual);
+        assertEquals(expected.getId(), actual.getId());
+        assertEquals(expected.getTitle(), actual.getTitle());
+        assertEquals(expected.getDescription(), actual.getDescription());
+        assertEquals(expected.getImageUrl(), actual.getImageUrl());
+        assertEquals(expected.getEmail(), actual.getEmail());
+    }
+
+    private void matchOne(VendorRequestVO expected, VendorResponseVO actual) {
+        assertNotNull(actual);
+        assertEquals(expected.getTitle(), actual.getTitle());
+        assertEquals(expected.getDescription(), actual.getDescription());
+        assertEquals(expected.getImageUrl(), actual.getImageUrl());
+        assertEquals(expected.getEmail(), actual.getEmail());
+        assertEquals(expected.getLocationIds().get(0), actual.getLocations().get(0).getId());
+    }
+
+    private void matchOnePure(Vendor expected, VendorResponseVO actual) {
+        assertNotNull(actual);
+        assertEquals(expected.getId(), actual.getId());
+        assertEquals(expected.getTitle(), actual.getTitle());
+        assertEquals(expected.getDescription(), actual.getDescription());
+        assertEquals(expected.getImageUrl(), actual.getImageUrl());
+        assertEquals(expected.getEmail(), actual.getEmail());
     }
 
     private void matchAll(List<Vendor> expected, List<VendorResponseVO> actual) {
@@ -325,22 +494,12 @@ class VendorServiceIntegrationTest {
         }
     }
 
-    private void matchOne(Vendor expected, VendorResponseVO actual) {
+    private void matchAllPure(List<Vendor> expected, List<VendorResponseVO> actual) {
         assertNotNull(actual);
-        assertEquals(expected.getId(), actual.getId());
-        assertEquals(expected.getTitle(), actual.getTitle());
-        assertEquals(expected.getDescription(), actual.getDescription());
-        assertEquals(expected.getImageUrl(), actual.getImageUrl());
-        assertEquals(expected.getEmail(), actual.getEmail());
-        assertEquals(expected.getLocation().getId(), actual.getLocation().getId());
-    }
+        assertEquals(expected.size(), actual.size());
 
-    private void matchOne(VendorRequestVO expected, VendorResponseVO actual) {
-        assertNotNull(actual);
-        assertEquals(expected.getTitle(), actual.getTitle());
-        assertEquals(expected.getDescription(), actual.getDescription());
-        assertEquals(expected.getImageUrl(), actual.getImageUrl());
-        assertEquals(expected.getEmail(), actual.getEmail());
-        assertEquals(expected.getLocationId(), actual.getLocation().getId());
+        for (int i = 0; i < expected.size(); i++) {
+            matchOnePure(expected.get(i), actual.get(i));
+        }
     }
 }

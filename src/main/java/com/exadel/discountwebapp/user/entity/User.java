@@ -1,18 +1,19 @@
 package com.exadel.discountwebapp.user.entity;
 
-import com.exadel.discountwebapp.role.entity.Role;
 import com.exadel.discountwebapp.location.entity.Location;
-
+import com.exadel.discountwebapp.role.entity.Role;
+import com.exadel.discountwebapp.userdiscount.entity.UserDiscount;
+import com.exadel.discountwebapp.vendor.entity.Vendor;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Data
 @Entity
@@ -45,6 +46,10 @@ public class User {
     @Column(name = "usr_password", length = 510)
     private String password;
 
+    @EqualsAndHashCode.Exclude
+    @Column(name = "usr_image_url", length = 510, nullable = false)
+    private String imageUrl;
+
     @NotNull
     @ManyToOne
     @EqualsAndHashCode.Exclude
@@ -60,6 +65,11 @@ public class User {
     @OneToMany(mappedBy = "user")
     @EqualsAndHashCode.Exclude
     private List<UserDiscount> discounts = new ArrayList<>();
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @ManyToMany(mappedBy = "subscribers")
+    private List<Vendor> subscriptions;
 
     @CreatedDate
     @EqualsAndHashCode.Exclude
