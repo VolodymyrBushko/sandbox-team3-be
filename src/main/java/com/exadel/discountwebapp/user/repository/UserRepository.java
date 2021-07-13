@@ -14,6 +14,6 @@ public interface UserRepository extends CrudRepository<User, Long>, JpaSpecifica
 
     Optional<User> findUserByEmail(String email);
 
-    @Query("select v.id from Vendor v left join User u on v.id in (select s.id from u.subscriptions s) where u.email = ?1")
+    @Query("select v.id from Vendor v left join v.subscribers s where s.email = ?1")
     List<Long> findSubscribersIdsByEmail(String email);
 }
