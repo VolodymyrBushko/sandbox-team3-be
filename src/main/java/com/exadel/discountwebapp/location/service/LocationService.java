@@ -56,7 +56,11 @@ public class LocationService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public LocationResponseVO create(LocationRequestVO request) {
-        return locationMapper.toVO(locationRepository.save(locationMapper.toEntity(request)));
+        Location location = locationRepository.findByCountry_CountryCodeAndCityAndAddressLine(
+                request.getCountryCode(),
+                request.getCity(),
+                request.getAddressLine());
+        return location == null ? locationMapper.toVO(locationRepository.save(locationMapper.toEntity(request))) : locationMapper.toVO(location);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

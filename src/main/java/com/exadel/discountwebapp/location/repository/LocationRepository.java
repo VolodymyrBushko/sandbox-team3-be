@@ -13,4 +13,6 @@ public interface LocationRepository extends CrudRepository<Location, Long>, JpaS
     List<Location> findAllByCountry_CountryCode(String countryCode);
 
     List<Location> findAllByCity(String city);
+
+    Location findByCountry_CountryCodeAndCityAndAddressLine(String countryCode, String city, String addressLine);
 }
