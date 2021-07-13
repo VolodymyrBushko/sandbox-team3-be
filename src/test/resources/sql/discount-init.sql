@@ -44,3 +44,12 @@ VALUES (1, 1),
        (1, 2),
        (2, 4),
        (3, 3);
+
+INSERT INTO role
+VALUES (1, '2021-06-04 17:22:21', '2021-06-04 17:22:21', 'USER');
+
+INSERT INTO "user" (usr_id, usr_modified, usr_email, usr_first_name, usr_last_name, usr_created, usr_password, usr_image_url, rol_id, loc_id)
+VALUES (1, '2021-06-06 17:22:21', 'ivan_ivanov@gmail.com', 'Ivan', 'Ivanov', '2021-06-06 17:22:21', '$2y$12$QkgAOhRydRHVZz07qhfT0eKFgWMLWp4WLjrr2ZLJNnA3yMt44lWq2','user1.jsp', 1, 10);
+
+INSERT INTO user_vendor_subscribe (usr_id, vn_id)
+VALUES (1, 10);

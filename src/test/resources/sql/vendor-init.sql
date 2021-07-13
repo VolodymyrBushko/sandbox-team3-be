@@ -19,3 +19,8 @@ VALUES (2, 2),
        (1, 1),
        (3, 1);
 
+INSERT INTO role (rol_id, rol_name, rol_created, rol_modified)
+VALUES (1, 'USER', '2021-06-06 17:22:21', '2021-06-06 17:22:21');
+
+INSERT INTO "user" (usr_id, usr_modified, usr_email, usr_first_name, usr_last_name, usr_created, usr_password, usr_image_url, rol_id, loc_id)
+VALUES (1, '2021-06-06 17:22:21', 'ivan_ivanov@gmail.com', 'Ivan', 'Ivanov', '2021-06-06 17:22:21', '$2y$12$QkgAOhRydRHVZz07qhfT0eKFgWMLWp4WLjrr2ZLJNnA3yMt44lWq2','user1.jsp', 1, 1);

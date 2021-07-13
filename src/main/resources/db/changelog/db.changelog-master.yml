@@ -36,6 +36,9 @@ databaseChangeLog:
       file: init/27062021_create_tag_discount_table.yml
       relativeToChangelogFile: true
   - include:
+      file: init/10072021_create_user_vendor_subscribe_table.yml
+      relativeToChangelogFile: true
+  - include:
       file: init/07072021_create_location_vendor_table.yml
       relativeToChangelogFile: true
   - include:
@@ -59,3 +62,4 @@ databaseChangeLog:
   - include:
       file: init/13072021_add_latitude_and_longitude_columns_to_location_table.yml
       relativeToChangelogFile: true
+

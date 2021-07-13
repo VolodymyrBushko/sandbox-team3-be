@@ -1,10 +1,10 @@
 package com.exadel.discountwebapp.exception.exception.client;
 
-import com.exadel.discountwebapp.exception.exception.base.ClientBaseException;
+import com.exadel.discountwebapp.exception.exception.base.CustomBaseException;
 import lombok.Getter;
 
 @Getter
-public class EntityAlreadyExistsException extends ClientBaseException {
+public class EntityAlreadyExistsException extends CustomBaseException {
 
     private static final String MESSAGE_PATTERN = "%s already exists with %s: %s";
 

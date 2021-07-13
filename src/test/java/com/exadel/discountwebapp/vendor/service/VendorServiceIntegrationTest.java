@@ -2,6 +2,7 @@ package com.exadel.discountwebapp.vendor.service;
 
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.exception.exception.client.IncorrectFilterInputException;
+import com.exadel.discountwebapp.user.repository.UserRepository;
 import com.exadel.discountwebapp.vendor.entity.Vendor;
 import com.exadel.discountwebapp.vendor.repository.VendorRepository;
 import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
@@ -30,9 +31,10 @@ class VendorServiceIntegrationTest {
 
     @Autowired
     private VendorService vendorService;
-
     @Autowired
     private VendorRepository vendorRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Test
     void shouldFindVendorById() {
@@ -382,6 +384,48 @@ class VendorServiceIntegrationTest {
         var actual = vendorService.findAll(query, pageable).getContent();
 
         matchAllPure(expected, actual);
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.REQUIRED)
+    void shouldSubscribe() {
+        var user = userRepository.findById(1L).orElse(null);
+        var vendor = vendorRepository.findById(1L).orElse(null);
+
+        assertNotNull(user);
+        assertNotNull(vendor);
+
+        assertFalse(vendor.getSubscribers().contains(user));
+
+        assertNotNull(vendor.getId());
+        assertNotNull(user.getEmail());
+
+        vendorService.subscribe(vendor.getId(), user.getEmail());
+
+        assertTrue(vendor.getSubscribers().contains(user));
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.REQUIRED)
+    void shouldUnsubscribe() {
+        var user = userRepository.findById(1L).orElse(null);
+        var vendor = vendorRepository.findById(1L).orElse(null);
+
+        assertNotNull(user);
+        assertNotNull(vendor);
+
+        assertFalse(vendor.getSubscribers().contains(user));
+
+        assertNotNull(vendor.getId());
+        assertNotNull(user.getEmail());
+
+        vendorService.subscribe(vendor.getId(), user.getEmail());
+
+        assertTrue(vendor.getSubscribers().contains(user));
+
+        vendorService.unsubscribe(vendor.getId(), user.getEmail());
+
+        assertFalse(vendor.getSubscribers().contains(user));
     }
 
     private VendorRequestVO createVendorRequest() {

@@ -1,10 +1,10 @@
 package com.exadel.discountwebapp.exception.exception.client;
 
-import com.exadel.discountwebapp.exception.exception.base.ClientBaseException;
+import com.exadel.discountwebapp.exception.exception.base.CustomBaseException;
 import lombok.Getter;
 
 @Getter
-public class ParseException extends ClientBaseException {
+public class ParseException extends CustomBaseException {
 
     private static final String MESSAGE_PATTERN = "Could not parse in class %s field %s with value: %s";
 
