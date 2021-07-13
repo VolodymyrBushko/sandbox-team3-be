@@ -9,6 +9,8 @@ import com.exadel.discountwebapp.location.repository.LocationRepository;
 import com.exadel.discountwebapp.location.vo.city.CityResponseVO;
 import com.exadel.discountwebapp.location.vo.location.LocationRequestVO;
 import com.exadel.discountwebapp.location.vo.location.LocationResponseVO;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -49,9 +53,10 @@ public class LocationService {
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public List<CityResponseVO> findAllCitiesByCountryCode(String countryCode) {
         List<Location> locations = locationRepository.findAllByCountry_CountryCode(countryCode);
-        List<CityResponseVO> response = new ArrayList<>();
-        locations.forEach(entity -> response.add(cityMapper.toVO(entity)));
-        return response;
+        List<CityResponseVO> allItems = new ArrayList<>();
+        locations.forEach(entity -> allItems.add(cityMapper.toVO(entity)));
+        return allItems.stream()
+                .filter(el -> el.getCity() != null && !el.getCity().equals("")).distinct().collect(Collectors.toList());
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
