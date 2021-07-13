@@ -16,7 +16,7 @@ import java.io.Serializable;
 public class LocationBaseVO implements Serializable {
 
     @NotBlank
-    @Size(min = 2, max = 50)
+    @Size(min = 2, max = 2)
     private String countryCode;
 
     @NotBlank
