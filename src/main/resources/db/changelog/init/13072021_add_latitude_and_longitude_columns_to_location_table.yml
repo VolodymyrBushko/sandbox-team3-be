@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: 13072021_add_latitude_and_longitude_columns_to_location_table
+      author: volodymyr.bushko@gmail.com
+      preConditions:
+        - onFail: MARK_RAN
+        - and:
+            - not:
+                - columnExists:
+                    columnName: loc_latitude
+                    tableName: location
+                - columnExists:
+                    columnName: loc_longitude
+                    tableName: location
+      changes:
+        - addColumn:
+            schemaName: public
+            tableName: location
+            columns:
+              - column:
+                  name: loc_latitude
+                  type: DOUBLE
+                  constraints:
+                    nullable: true
+              - column:
+                  name: loc_longitude
+                  type: DOUBLE
+                  constraints:
+                    nullable: true
