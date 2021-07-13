@@ -1,10 +1,10 @@
-package com.exadel.discountwebapp.user.repository;
+package com.exadel.discountwebapp.userdiscount.repository;
 
 import com.exadel.discountwebapp.statistics.dto.CategoryDTO;
 import com.exadel.discountwebapp.statistics.dto.UserDTO;
 
 import com.exadel.discountwebapp.statistics.dto.VendorDTO;
-import com.exadel.discountwebapp.user.entity.UserDiscount;
+import com.exadel.discountwebapp.userdiscount.entity.UserDiscount;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;

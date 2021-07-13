@@ -4,7 +4,7 @@ import com.exadel.discountwebapp.statistics.dto.CategoryDTO;
 import com.exadel.discountwebapp.statistics.dto.SummaryStatisticsDTO;
 import com.exadel.discountwebapp.statistics.dto.UserDTO;
 import com.exadel.discountwebapp.statistics.dto.VendorDTO;
-import com.exadel.discountwebapp.user.repository.UserDiscountRepository;
+import com.exadel.discountwebapp.userdiscount.repository.UserDiscountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class StatisticsService {
+
     private final UserDiscountRepository userDiscountRepository;
+
     private static final String OTHERS = "Others";
 
     public SummaryStatisticsDTO getStats(LocalDateTime dataFrom, LocalDateTime dataTo) {
