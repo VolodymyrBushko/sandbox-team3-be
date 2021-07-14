@@ -3,15 +3,13 @@ package com.exadel.discountwebapp.location.service;
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.filter.SpecificationBuilder;
 import com.exadel.discountwebapp.location.entity.Location;
-import com.exadel.discountwebapp.location.mapper.CityMapper;
 import com.exadel.discountwebapp.location.mapper.LocationMapper;
+import com.exadel.discountwebapp.location.projections.CityView;
 import com.exadel.discountwebapp.location.repository.LocationRepository;
-import com.exadel.discountwebapp.location.vo.city.CityResponseVO;
 import com.exadel.discountwebapp.location.vo.location.LocationRequestVO;
 import com.exadel.discountwebapp.location.vo.location.LocationResponseVO;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import lombok.RequiredArgsConstructor;
+import org.codehaus.plexus.util.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -19,10 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,7 +25,6 @@ import java.util.stream.Collectors;
 public class LocationService {
     private final LocationRepository locationRepository;
     private final LocationMapper locationMapper;
-    private final CityMapper cityMapper;
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public Page<LocationResponseVO> findAll(String query, Pageable pageable) {
@@ -52,22 +46,26 @@ public class LocationService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    public List<CityResponseVO> findAllCitiesByCountryCode(String countryCode) {
-        List<Location> locations = locationRepository.findAllByCountry_CountryCode(countryCode);
-        List<CityResponseVO> allItems = new ArrayList<>();
-        locations.forEach(entity -> allItems.add(cityMapper.toVO(entity)));
-        return allItems.stream()
-                .filter(el -> el.getCity() != null && !el.getCity().equals("")).distinct()
-                .sorted(Comparator.comparing(CityResponseVO::getCity)).collect(Collectors.toList());
+    public List<String> findAllCitiesByCountryCode(String countryCode) {
+        return locationRepository.findAllByCountry_CountryCode(countryCode)
+                .stream()
+                .map(CityView::getCity)
+                .filter(StringUtils::isNotBlank)
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public LocationResponseVO create(LocationRequestVO request) {
-        Location location = locationRepository.findByCountry_CountryCodeAndCityAndAddressLine(
+    public LocationResponseVO createIfNotExist(LocationRequestVO request) {
+        var existedLocation = locationRepository.findByCountry_CountryCodeAndCityAndAddressLine(
                 request.getCountryCode(),
                 request.getCity(),
                 request.getAddressLine());
-        return location == null ? locationMapper.toVO(locationRepository.save(locationMapper.toEntity(request))) : locationMapper.toVO(location);
+
+        return existedLocation == null ?
+                locationMapper.toVO(locationRepository.save(locationMapper.toEntity(request)))
+                : locationMapper.toVO(existedLocation);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -88,12 +86,4 @@ public class LocationService {
         return locationRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Location.class, "id", id));
     }
-
-    private List<LocationResponseVO> getLocationResponseVO(List<Location> locations) {
-        List<LocationResponseVO> response = new ArrayList<>();
-        locations.forEach(entity -> response.add(locationMapper.toVO(entity)));
-        return response;
-    }
-
-
 }

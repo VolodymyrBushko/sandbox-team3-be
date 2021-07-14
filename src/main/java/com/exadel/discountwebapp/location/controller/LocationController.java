@@ -2,7 +2,6 @@ package com.exadel.discountwebapp.location.controller;
 
 import com.exadel.discountwebapp.location.service.CountryService;
 import com.exadel.discountwebapp.location.service.LocationService;
-import com.exadel.discountwebapp.location.vo.city.CityResponseVO;
 import com.exadel.discountwebapp.location.vo.country.CountryResponseVO;
 import com.exadel.discountwebapp.location.vo.location.LocationRequestVO;
 import com.exadel.discountwebapp.location.vo.location.LocationResponseVO;
@@ -44,7 +43,7 @@ public class LocationController {
 
     // TODO: tests for this controller
     @GetMapping("/cities")
-    public List<CityResponseVO> getAllCitiesByCountry(
+    public List<String> getAllCitiesByCountry(
             @RequestParam(name = "countryCode") String countryCode) {
         return locationService.findAllCitiesByCountryCode(countryCode);
     }
@@ -52,7 +51,7 @@ public class LocationController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public LocationResponseVO create(@Valid @RequestBody LocationRequestVO request) {
-        return locationService.create(request);
+        return locationService.createIfNotExist(request);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
