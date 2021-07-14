@@ -76,7 +76,6 @@ class CategoryServiceIntegrationTest {
 
     private CategoryRequestVO createCategoryRequest() {
         var title = "title";
-        var imageUrl = "http://localhost/images/img.png";
 
         return CategoryRequestVO.builder()
                 .title(title)
