@@ -65,4 +65,26 @@ public class DiscountService {
     public void deleteById(Long id) {
         discountRepository.deleteById(id);
     }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void addDiscountToFavorites(Long userId, Long discountId) {
+        Discount discount = discountRepository.findById(discountId)
+                .orElseThrow(() -> new EntityNotFoundException(Discount.class, "id", discountId));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException(User.class, "id", userId));
+        if (!discount.getUserFavorites().contains(user)) {
+            discount.getUserFavorites().add(user);
+            discountRepository.save(discount);
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteDiscountFromFavorites(Long userId, Long discountId) {
+        Discount discount = discountRepository.findById(discountId)
+                .orElseThrow(() -> new EntityNotFoundException(Discount.class, "id", discountId));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException(User.class, "id", userId));
+        discount.getUserFavorites().remove(user);
+        discountRepository.save(discount);
+    }
 }

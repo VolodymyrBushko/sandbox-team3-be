@@ -2,6 +2,7 @@ package com.exadel.discountwebapp.exception;
 
 import com.exadel.discountwebapp.exception.exception.client.*;
 import com.exadel.discountwebapp.exception.response.ExceptionResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.MailException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import static org.springframework.http.HttpStatus.*;
 
+@Slf4j
 @RestControllerAdvice
 public class WebExceptionHandler {
 
@@ -88,7 +90,8 @@ public class WebExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(value = INTERNAL_SERVER_ERROR)
-    public ExceptionResponse globalException() {
+    public ExceptionResponse globalException(Exception ex) {
+        log.error(GLOBAL_EXCEPTION_MESSAGE, ex);
         return new ExceptionResponse(GLOBAL_EXCEPTION_CODE, GLOBAL_EXCEPTION_MESSAGE);
     }
 }
