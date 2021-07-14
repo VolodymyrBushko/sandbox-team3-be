@@ -8,6 +8,7 @@ import com.exadel.discountwebapp.discount.vo.DiscountResponseVO;
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.filter.SpecificationBuilder;
 import com.exadel.discountwebapp.notification.NotificationService;
+import com.exadel.discountwebapp.vendor.repository.VendorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,12 +17,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class DiscountService {
 
     private final DiscountMapper discountMapper;
     private final DiscountRepository discountRepository;
+    private final VendorRepository vendorRepository;
     private final NotificationService notificationService;
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
@@ -44,7 +48,11 @@ public class DiscountService {
     public DiscountResponseVO create(DiscountRequestVO request) {
         Discount discount = discountMapper.toEntity(request);
         discountRepository.save(discount);
-        notificationService.sendNewDiscountNotification(discount);
+
+        Long vendorId = discount.getVendor().getId();
+        List<String> subEmails = vendorRepository.findAllSubEmailsByVendorId(vendorId);
+        notificationService.sendNewDiscountNotification(discount, subEmails);
+
         return discountMapper.toVO(discount);
     }
 

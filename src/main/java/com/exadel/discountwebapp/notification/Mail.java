@@ -14,8 +14,8 @@ import java.util.Map;
 public class Mail {
 
     private String subject;
+    private String template;
     private String from;
     private String[] to;
-    private String template;
     private Map<String, Object> variables;
 }
