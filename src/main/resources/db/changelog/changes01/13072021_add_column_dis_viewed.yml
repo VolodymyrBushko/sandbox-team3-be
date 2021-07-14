@@ -2,12 +2,13 @@ databaseChangeLog:
   - changeSet:
       id: 13072021_add_column_dis_viewed
       author: tesliuk.ua@gmail.com
-  preConditions:
-    - onFail: MARK_RAN
-      not:
-    - columnExists:
-        columnName: dis_viewed
-        tableName: discount
+      preConditions:
+        - onFail: MARK_RAN
+          not:
+            - columnExists:
+                columnName: dis_viewed
+                tableName: discount
+                schemaName:  pulic
       changes:
         - addColumn:
             tableName: discount
