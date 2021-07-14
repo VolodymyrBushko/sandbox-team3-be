@@ -60,9 +60,8 @@ databaseChangeLog:
       file: changes01/09072021_insert_user_image_url.yml
       relativeToChangelogFile: true
   - include:
-      file: changes01/12072021_create_favorites_table.yml
-      relativeToChangelogFile: true
-  - include:
       file: init/13072021_add_latitude_and_longitude_columns_to_location_table.yml
       relativeToChangelogFile: true
-
+  - include:
+      file: changes01/12072021_create_favorites_table.yml
+      relativeToChangelogFile: true

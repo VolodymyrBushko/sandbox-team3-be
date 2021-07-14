@@ -71,8 +71,10 @@ public class DiscountService {
                 .orElseThrow(() -> new EntityNotFoundException(Discount.class, "id", discountId));
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException(User.class, "id", userId));
-        discount.getUserFavorites().add(user);
-        discountRepository.save(discount);
+        if (!discount.getUserFavorites().contains(user)) {
+            discount.getUserFavorites().add(user);
+            discountRepository.save(discount);
+        }
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

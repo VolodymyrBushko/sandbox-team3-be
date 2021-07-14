@@ -4,7 +4,6 @@ import com.exadel.discountwebapp.discount.service.DiscountService;
 import com.exadel.discountwebapp.discount.vo.DiscountRequestVO;
 import com.exadel.discountwebapp.discount.vo.DiscountResponseVO;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -53,13 +52,13 @@ public class DiscountController {
     }
 
     @PostMapping("/favorites")
-    public ResponseEntity<String> addDiscountToFavorites(@RequestParam(value = "userId") Long userId, @RequestParam(value = "discountId") Long discountId) {
+    public ResponseEntity<Void> addDiscountToFavorites(@RequestParam(value = "userId") Long userId, @RequestParam(value = "discountId") Long discountId) {
         discountService.addDiscountToFavorites(userId, discountId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/favorites")
-    public ResponseEntity<String> deleteDiscountFromFavorites(@RequestParam(value = "userId") Long userId, @RequestParam(value = "discountId") Long discountId) {
+    public ResponseEntity<Void> deleteDiscountFromFavorites(@RequestParam(value = "userId") Long userId, @RequestParam(value = "discountId") Long discountId) {
         discountService.deleteDiscountFromFavorites(userId, discountId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
