@@ -92,7 +92,7 @@ class LocationIntegrationTest {
     @Test
     void shouldCreateLocation() {
         var expected = createLocationRequest();
-        var actual = locationService.create(expected);
+        var actual = locationService.createIfNotExist(expected);
 
         assertNotNull(actual);
         assertNotNull(actual.getId());

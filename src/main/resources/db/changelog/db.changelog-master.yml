@@ -65,3 +65,7 @@ databaseChangeLog:
   - include:
       file: changes01/12072021_create_favorites_table.yml
       relativeToChangelogFile: true
+#  - include:
+#      file: changes01/14072021_add_location_composite_constraint.yml
+#      relativeToChangelogFile: true
+#
