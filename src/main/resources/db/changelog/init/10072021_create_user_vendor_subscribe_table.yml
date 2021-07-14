@@ -1,0 +1,40 @@
+databaseChangeLog:
+  - changeSet:
+      id: 10072021_create_user_vendor_subscribe_table
+      author: volodymyr.bushko@gmail.com
+      changes:
+        - createTable:
+            schemaName: public
+            tableName: user_vendor_subscribe
+            columns:
+              - column:
+                  name: usr_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_user_vendor_subscribe_user
+                    references: user(usr_id)
+                    nullable: false
+              - column:
+                  name: vn_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_user_vendor_subscribe_vendor
+                    references: vendor(vn_id)
+                    nullable: false
+              - column:
+                  name: uvs_created
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 10072021_add_composite_pk_user_vendor_subscribe_table
+      author: volodymyr.bushko@gmail.com
+      changes:
+        - addPrimaryKey:
+            schemaName: public
+            tableName: user_vendor_subscribe
+            columnNames: usr_id, vn_id
+            constraintName: pk_usr_id_vn_id
+            clustered: true
+            validate: true

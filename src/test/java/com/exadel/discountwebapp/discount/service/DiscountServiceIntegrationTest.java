@@ -7,7 +7,15 @@ import com.exadel.discountwebapp.discount.vo.DiscountResponseVO;
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.exception.exception.client.IncorrectFilterInputException;
 import com.google.common.collect.Lists;
+import com.icegreen.greenmail.configuration.GreenMailConfiguration;
+import com.icegreen.greenmail.junit5.GreenMailExtension;
+import com.icegreen.greenmail.util.GreenMailUtil;
+import com.icegreen.greenmail.util.ServerSetupTest;
+import lombok.SneakyThrows;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +24,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.internet.MimeMessage;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -33,6 +42,21 @@ class DiscountServiceIntegrationTest {
     private DiscountService discountService;
     @Autowired
     private DiscountRepository discountRepository;
+
+    @RegisterExtension
+    static GreenMailExtension greenMail = new GreenMailExtension(ServerSetupTest.SMTP)
+            .withConfiguration(GreenMailConfiguration.aConfig().withUser("user", "1111"))
+            .withPerMethodLifecycle(false);
+
+    @BeforeEach
+    void startMailServer() {
+        greenMail.start();
+    }
+
+    @AfterEach
+    void stopMailServer() {
+        greenMail.stop();
+    }
 
     @Test
     void shouldFindDiscountById() {
@@ -404,6 +428,28 @@ class DiscountServiceIntegrationTest {
     }
 
     @Test
+    @SneakyThrows
+    void shouldReceiveDiscountCreateMailNotification() {
+        int messageCount = 1;
+        String[] to = {"ivan_ivanov@gmail.com"};
+        String title = "title";
+        String content = "shortDescription";
+
+        var request = createDiscountRequest();
+        var discount = discountService.create(request);
+
+        MimeMessage[] receivedMessages = greenMail.getReceivedMessages();
+        assertEquals(messageCount, receivedMessages.length);
+
+        MimeMessage receivedMessage = receivedMessages[0];
+
+        assertEquals(to.length, receivedMessage.getAllRecipients().length);
+        assertEquals(to[0], receivedMessage.getAllRecipients()[0].toString());
+        assertEquals(title, receivedMessage.getSubject());
+        assertTrue(GreenMailUtil.getBody(greenMail.getReceivedMessages()[0]).contains(content));
+    }
+
+    @Test
     void shouldDiscountUpdateById() {
         var id = 1L;
         var expected = createDiscountRequest();
@@ -481,6 +527,90 @@ class DiscountServiceIntegrationTest {
                 .expirationDate(LocalDateTime.parse("2022-12-06T17:22:21"))
                 .created(LocalDateTime.parse("2021-06-06T17:22:21"))
                 .modified(LocalDateTime.parse("2022-06-06T17:22:21"))
+                .build();
+
+        var secondDiscount = Discount.builder()
+                .id(3L)
+                .title("HappyDrink")
+                .shortDescription("70% discount on all drinks menus")
+                .description("70% discount on all drinks menus from the caffe \"Drink House\"")
+                .imageUrl("drinks.jsp")
+                .percentage(null)
+                .flatAmount(new BigDecimal("150.00"))
+                .startDate(LocalDateTime.parse("2023-06-06T17:22:21"))
+                .expirationDate(LocalDateTime.parse("2023-12-06T17:22:21"))
+                .created(LocalDateTime.parse("2021-06-06T17:22:21"))
+                .modified(LocalDateTime.parse("2023-06-06T17:22:21"))
+                .build();
+
+        var discountCount = (int) discountRepository.count();
+        var pageable = PageRequest.of(0, discountCount);
+
+        var expected = List.of(firstDiscount, secondDiscount);
+        var actual = discountService.findAll(query, pageable).getContent();
+
+        matchAllPure(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllDiscountsWhereTitleNotEqualsHappyDrink() {
+        var title = "HappyDrink";
+
+        var query = String.format("title!:%s", title);
+
+        var firstDiscount = Discount.builder()
+                .id(1L)
+                .title("38% discount")
+                .shortDescription("an unlimited annual subscription")
+                .description("38% discount on the purchase of an unlimited annual subscription to the fitness club \"Sport Life\"")
+                .imageUrl("sport_life_discount_image_1.jsp")
+                .percentage(null)
+                .flatAmount(new BigDecimal("100.00"))
+                .startDate(LocalDateTime.parse("2021-06-06T17:22:21"))
+                .expirationDate(LocalDateTime.parse("2021-12-06T17:22:21"))
+                .created(LocalDateTime.parse("2021-06-06T17:22:21"))
+                .modified(LocalDateTime.parse("2021-06-06T17:22:21"))
+                .build();
+
+        var secondDiscount = Discount.builder()
+                .id(2L)
+                .title("50% discount")
+                .shortDescription("50% discount on all pizza menus")
+                .description("50% discount on all pizza menus from the pizzeria \"Domino`s Pizza\"")
+                .imageUrl("domino`s_pizza_discount_image_1.jsp")
+                .percentage(null)
+                .flatAmount(new BigDecimal("150.00"))
+                .startDate(LocalDateTime.parse("2022-06-06T17:22:21"))
+                .expirationDate(LocalDateTime.parse("2022-12-06T17:22:21"))
+                .created(LocalDateTime.parse("2021-06-06T17:22:21"))
+                .modified(LocalDateTime.parse("2022-06-06T17:22:21"))
+                .build();
+
+        var discountCount = (int) discountRepository.count();
+        var pageable = PageRequest.of(0, discountCount);
+
+        var expected = List.of(firstDiscount, secondDiscount);
+        var actual = discountService.findAll(query, pageable).getContent();
+
+        matchAllPure(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllDiscountsWherePromocodeIsNull() {
+        var query = "promocode:null";
+
+        var firstDiscount = Discount.builder()
+                .id(1L)
+                .title("38% discount")
+                .shortDescription("an unlimited annual subscription")
+                .description("38% discount on the purchase of an unlimited annual subscription to the fitness club \"Sport Life\"")
+                .imageUrl("sport_life_discount_image_1.jsp")
+                .percentage(null)
+                .flatAmount(new BigDecimal("100.00"))
+                .startDate(LocalDateTime.parse("2021-06-06T17:22:21"))
+                .expirationDate(LocalDateTime.parse("2021-12-06T17:22:21"))
+                .created(LocalDateTime.parse("2021-06-06T17:22:21"))
+                .modified(LocalDateTime.parse("2021-06-06T17:22:21"))
                 .build();
 
         var secondDiscount = Discount.builder()

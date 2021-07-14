@@ -11,7 +11,24 @@ spring:
     properties:
       hibernate.format_sql: true
       hibernate.show_sql: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    protocol: smtp
+    username: exadelteam3@gmail.com
+    password: QFRsLRUTmy97UxvM
+    properties:
+      mail:
+        smtp:
+          auth: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+          starttls:
+            enable: true
   liquibase:
     change-log: db/changelog/db.changelog-master.yml
-
-app.url: https://discount-system-team3.herokuapp.com/discountinfo
+jwt:
+  secret: javamaster
+app:
+  url: https://discount-system-team3.herokuapp.com/discountinfo

@@ -1,8 +1,10 @@
 package com.exadel.discountwebapp.user.entity;
 
+import com.exadel.discountwebapp.discount.entity.Discount;
 import com.exadel.discountwebapp.location.entity.Location;
 import com.exadel.discountwebapp.role.entity.Role;
 import com.exadel.discountwebapp.userdiscount.entity.UserDiscount;
+import com.exadel.discountwebapp.vendor.entity.Vendor;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -64,6 +66,16 @@ public class User {
     @OneToMany(mappedBy = "user")
     @EqualsAndHashCode.Exclude
     private List<UserDiscount> discounts = new ArrayList<>();
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @ManyToMany(mappedBy = "userFavorites")
+    private List<Discount> discountFavorites = new ArrayList<>();
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @ManyToMany(mappedBy = "subscribers")
+    private List<Vendor> subscriptions;
 
     @CreatedDate
     @EqualsAndHashCode.Exclude

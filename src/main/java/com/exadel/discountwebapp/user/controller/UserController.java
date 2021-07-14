@@ -10,6 +10,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,5 +33,10 @@ public class UserController {
     @GetMapping("/current")
     public UserResponseVO getCurrentUser(Principal principal) {
         return userService.findByEmail(principal.getName());
+    }
+
+    @GetMapping("/subscribersIds")
+    public List<Long> findSubscribersIds(Principal principal) {
+        return userService.findSubscribersIdsByEmail(principal.getName());
     }
 }
