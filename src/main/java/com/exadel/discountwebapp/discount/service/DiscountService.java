@@ -8,6 +8,8 @@ import com.exadel.discountwebapp.discount.vo.DiscountResponseVO;
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.filter.SpecificationBuilder;
 import com.exadel.discountwebapp.notification.event.EntityCreateEvent;
+import com.exadel.discountwebapp.user.entity.User;
+import com.exadel.discountwebapp.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
@@ -24,6 +26,7 @@ public class DiscountService {
     private final DiscountMapper discountMapper;
     private final DiscountRepository discountRepository;
     private final ApplicationEventPublisher eventPublisher;
+    private final UserRepository userRepository;
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public Page<DiscountResponseVO> findAll(String query, Pageable pageable) {
