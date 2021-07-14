@@ -62,4 +62,6 @@ databaseChangeLog:
   - include:
       file: init/13072021_add_latitude_and_longitude_columns_to_location_table.yml
       relativeToChangelogFile: true
-
+  - include:
+      file: changes01/12072021_create_favorites_table.yml
+      relativeToChangelogFile: true

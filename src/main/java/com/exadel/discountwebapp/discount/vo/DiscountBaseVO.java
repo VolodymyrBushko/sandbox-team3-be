@@ -1,7 +1,6 @@
 package com.exadel.discountwebapp.discount.vo;
 
 import com.exadel.discountwebapp.discount.validator.FlatAmountOrPercentageFieldsNotNull;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
