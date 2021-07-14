@@ -29,7 +29,6 @@ public class NotificationMailSender {
 
         helper.setSubject(mail.getSubject());
         helper.setText(content, true);
-        helper.setFrom(mail.getFrom());
         helper.setTo(mail.getTo());
 
         javaMailSender.send(message);

@@ -1,30 +1,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Please confirm your subscription to Mailing-List XYZ?</title>
-    <style>
+    <style type="text/css">
         .mb-10 {
             margin-bottom: 10px;
-        }
-
-        body {
-            display: flex;
-            justify-content: center;
         }
 
         .container {
             padding: 15px;
             width: 100%;
-            max-width: 400px;
-        }
-
-        .row-wrapper {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
+            max-width: 450px;
+            margin: 0 auto;
         }
 
         h1 {
@@ -40,42 +30,39 @@
             font-size: 0.9rem;
         }
 
-        .img-block {
-            width: 100%;
-            position: relative;
-            display: flex;
-            justify-content: center;
-        }
-
         img {
             width: 100%;
             height: 100%;
+            max-height: 300px;
             object-fit: cover;
+            border-radius: 5px;
         }
 
-        .discount-label {
-            position: absolute;
-            top: 0;
-            right: 0;
-            background-color: #0082CA;
+        .discount-label-block {
             text-align: right;
+            margin-bottom: -30px;
+        }
+
+        .discount-label-block p {
+            display: inline-block;
+        }
+
+        .discount-label-block .discount-triangle {
+            background-color: #0082CA;
+            height: 17px;
+            width: 17px;
+            margin-right: -32px;
+            margin-bottom: -4px;
+            transform: rotate(45deg);
+        }
+
+        .discount-label-block .discount-label {
+            position: relative;
+            background-color: #0082CA;
             color: #FFFFFF;
             padding: 3px;
             margin-left: 20px;
             border-radius: 0 3px 3px 0;
-        }
-
-        .discount-label::before {
-            content: '';
-            display: block;
-            position: absolute;
-            top: 0;
-            right: 100%;
-            width: 0;
-            height: 0;
-            border-top: 12px solid transparent;
-            border-bottom: 12px solid transparent;
-            border-right: 15px solid #0082CA;
         }
 
         a.btn {
@@ -99,15 +86,16 @@
 <div class="container">
     <h1 th:text="${discountTitle}"></h1>
     <div class="img-block mb-10">
-        <img th:src="${discountImageUrl}"/>
-        <p class="discount-label" th:text="${discountDiscount}"></p>
+        <img th:src="${imageUrl}" alt="discount"/>
     </div>
-    <div class="row-wrapper">
-        <p th:text="${vendorTitle}"></p>
-        <p th:text="${discountCategory}"></p>
+    <div class="discount-label-block">
+        <p class="discount-triangle"></p>
+        <p class="discount-label" th:text="${amount}"></p>
     </div>
-    <p class="description" th:text="${discountDescription}"></p>
-    <a th:href="${discountInfoUrl}" class="btn">Go to discount</a>
+    <p th:text="${vendorTitle}"></p>
+    <p th:text="${categoryTitle}"></p>
+    <p class="description" th:text="${description}"></p>
+    <a th:href="${infoUrl}" class="btn">Go to discount</a>
 </div>
 </body>
 </html>

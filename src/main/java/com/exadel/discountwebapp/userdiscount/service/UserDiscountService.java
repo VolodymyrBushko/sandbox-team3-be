@@ -29,7 +29,7 @@ public class UserDiscountService {
     private final QRCodeGenerator qrCodeGenerator;
 
     @Autowired
-    public UserDiscountService(@Value("${app.url}") String APP_URL,
+    public UserDiscountService(@Value("${qrcode.url}") String APP_URL,
                                UserDiscountRepository userDiscountRepository,
                                UserDiscountMapper userDiscountMapper,
                                QRCodeGenerator qrCodeGenerator) {
