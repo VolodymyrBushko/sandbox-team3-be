@@ -1,5 +1,9 @@
 package com.exadel.discountwebapp.statistics.dto;
 
+import com.exadel.discountwebapp.statistics.vo.CategoryVO;
+import com.exadel.discountwebapp.statistics.vo.discountvo.DiscountVO;
+import com.exadel.discountwebapp.statistics.vo.VendorVO;
+import com.exadel.discountwebapp.statistics.vo.uservo.UserVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,8 +16,8 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SummaryStatisticsDTO {
-    private Map<String, Long> mostActiveUsersStats;
-    private Map<String, Long> popularCategoriesStats;
-    private Map<String, Long> popularVendorsStats;
-    private Map<String, Long> popularDiscountsStats;
+    private Map<UserVO, Long> mostActiveUsersStats;
+    private Map<CategoryVO, Long> popularCategoriesStats;
+    private Map<VendorVO, Long> popularVendorsStats;
+    private Map<DiscountVO, Long> popularDiscountsStats;
 }

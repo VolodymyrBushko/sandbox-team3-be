@@ -2,6 +2,12 @@ package com.exadel.discountwebapp.statistics.service;
 
 import com.exadel.discountwebapp.discount.repository.DiscountRepository;
 import com.exadel.discountwebapp.statistics.dto.*;
+import com.exadel.discountwebapp.statistics.vo.CategoryVO;
+import com.exadel.discountwebapp.statistics.vo.discountvo.DiscountVO;
+import com.exadel.discountwebapp.statistics.vo.discountvo.OthersDiscountsVO;
+import com.exadel.discountwebapp.statistics.vo.uservo.OthersUsersVO;
+import com.exadel.discountwebapp.statistics.vo.uservo.UserVO;
+import com.exadel.discountwebapp.statistics.vo.VendorVO;
 import com.exadel.discountwebapp.userdiscount.repository.UserDiscountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,20 +32,23 @@ public class StatisticsService {
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public SummaryStatisticsDTO getStats(LocalDateTime dataFrom, LocalDateTime dataTo) {
-        Map<String, Long> usersDiscountsStats = getDataActivatedDiscountPerUsers(dataFrom, dataTo);
-        Map<String, Long> categoryDiscountsStats = getDataActivatedDiscountPerCategory(dataFrom, dataTo);
-        Map<String, Long> categoryVendorStats = getDataActivatedDiscountPerVendor(dataFrom, dataTo);
-        Map<String, Long> discountViewingStats = getDiscountPerViewing(dataFrom, dataTo);
+        Map<UserVO, Long> usersDiscountsStats = getDataActivatedDiscountPerUsers(dataFrom, dataTo);
+        Map<CategoryVO, Long> categoryDiscountsStats = getDataActivatedDiscountPerCategory(dataFrom, dataTo);
+        Map<VendorVO, Long> categoryVendorStats = getDataActivatedDiscountPerVendor(dataFrom, dataTo);
+        Map<DiscountVO, Long> discountViewingStats = getDiscountPerViewing(dataFrom, dataTo);
         return new SummaryStatisticsDTO(usersDiscountsStats, categoryDiscountsStats, categoryVendorStats, discountViewingStats);
     }
 
-    public Map<String, Long> getDataActivatedDiscountPerUsers(LocalDateTime dataFrom, LocalDateTime dataTo) {
+    @SuppressWarnings("unchecked")
+    public Map<UserVO, Long> getDataActivatedDiscountPerUsers(LocalDateTime dataFrom, LocalDateTime dataTo) {
         var userData = userDiscountRepository.getUserDiscountStatistics(dataFrom, dataTo);
-        Map<String, Long> result = new HashMap<>();
+
+        Map<UserVO, Long> result = new HashMap<>();
         for (UserDTO elem : userData) {
-            result.put(String.format("%s %s, %s", elem.getFirstName(), elem.getLastName(), elem.getEmail()), elem.getQuantity());
+            result.put(new UserVO(elem.getFirstName(), elem.getLastName(), elem.getEmail()), elem.getQuantity());
         }
-        result = sortingMap(result);
+
+        result = (Map<UserVO, Long>) sortingMap(result);
 
         var othersQuantity = userData.stream()
                 .sorted((v1, v2) -> (int) (v2.getQuantity() - v1.getQuantity()))
@@ -48,19 +57,21 @@ public class StatisticsService {
                 .sum();
 
         if (othersQuantity != 0L) {
-            result.put(OTHERS, othersQuantity);
+            result.put(new OthersUsersVO(OTHERS), othersQuantity);
         }
         return result;
     }
 
-    public Map<String, Long> getDataActivatedDiscountPerCategory(LocalDateTime dataFrom, LocalDateTime dataTo) {
+    @SuppressWarnings("unchecked")
+    public Map<CategoryVO, Long> getDataActivatedDiscountPerCategory(LocalDateTime dataFrom, LocalDateTime dataTo) {
         var categoryData = userDiscountRepository.getCategoryDiscountStatistics(dataFrom, dataTo);
-        Map<String, Long> result = new HashMap<>();
+
+        Map<CategoryVO, Long> result = new HashMap<>();
         for (CategoryDTO elem : categoryData) {
-            result.put(String.format("%s", elem.getTitle()), elem.getQuantity());
+            result.put(new CategoryVO(elem.getTitle()), elem.getQuantity());
         }
 
-        result = sortingMap(result);
+        result = (Map<CategoryVO, Long>) sortingMap(result);
 
         var othersQuantity = categoryData.stream()
                 .sorted((v1, v2) -> (int) (v2.getQuantity() - v1.getQuantity()))
@@ -69,19 +80,21 @@ public class StatisticsService {
                 .sum();
 
         if (othersQuantity != 0L) {
-            result.put(OTHERS, othersQuantity);
+            result.put(new CategoryVO(OTHERS), othersQuantity);
         }
         return result;
     }
 
-    public Map<String, Long> getDataActivatedDiscountPerVendor(LocalDateTime dataFrom, LocalDateTime dataTo) {
+    @SuppressWarnings("unchecked")
+    public Map<VendorVO, Long> getDataActivatedDiscountPerVendor(LocalDateTime dataFrom, LocalDateTime dataTo) {
         var vendorData = userDiscountRepository.getVendorDiscountStatistics(dataFrom, dataTo);
-        Map<String, Long> result = new HashMap<>();
+
+        Map<VendorVO, Long> result = new HashMap<>();
         for (VendorDTO elem : vendorData) {
-            result.put(String.format("%s", elem.getTitle()), elem.getQuantity());
+            result.put(new VendorVO(elem.getTitle()), elem.getQuantity());
         }
 
-        result = sortingMap(result);
+        result = (Map<VendorVO, Long>) sortingMap(result);
 
         var othersQuantity = vendorData.stream()
                 .sorted((v1, v2) -> (int) (v2.getQuantity() - v1.getQuantity()))
@@ -90,28 +103,21 @@ public class StatisticsService {
                 .sum();
 
         if (othersQuantity != 0L) {
-            result.put(OTHERS, othersQuantity);
+            result.put(new VendorVO(OTHERS), othersQuantity);
         }
         return result;
     }
 
-    public Map<String, Long> getDiscountPerViewing(LocalDateTime dataFrom, LocalDateTime dataTo) {
+    @SuppressWarnings("unchecked")
+    public Map<DiscountVO, Long> getDiscountPerViewing(LocalDateTime dataFrom, LocalDateTime dataTo) {
         var disViewsData = discountRepository.getDiscountViewing(dataFrom, dataTo);
 
-        Map<String, Long> result = new HashMap<>();
+        Map<DiscountVO, Long> result = new HashMap<>();
         for (DiscountViewingDTO elem : disViewsData) {
-            result.put(String.format("%d, %s", elem.getId(), elem.getTitle()), elem.getQuantity());
+            result.put(new DiscountVO(elem.getId(), elem.getTitle()), elem.getQuantity());
         }
 
-        result = result.entrySet()
-                .stream()
-                .filter(v -> v.getValue() != null)
-                .sorted((v1, v2) -> (int) (v2.getValue() - v1.getValue()))
-                .limit(10)
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        Map.Entry::getValue,
-                        (e1, e2) -> e1, LinkedHashMap::new));
+        result = (Map<DiscountVO, Long>) sortingMap(result);
 
         var othersQuantity = disViewsData.stream()
                 .filter(e -> e.getQuantity() != null)
@@ -121,14 +127,15 @@ public class StatisticsService {
                 .sum();
 
         if (othersQuantity != 0L) {
-            result.put(OTHERS, othersQuantity);
+            result.put(new OthersDiscountsVO(OTHERS), othersQuantity);
         }
         return result;
     }
 
-    private Map<String, Long> sortingMap(Map<String, Long> data) {
+    private Map<?, Long> sortingMap(Map<?, Long> data) {
         return data.entrySet()
                 .stream()
+                .filter(v -> v.getValue() != null)
                 .sorted((v1, v2) -> (int) (v2.getValue() - v1.getValue()))
                 .limit(10)
                 .collect(Collectors.toMap(
