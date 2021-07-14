@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id:  14072021_add_location_composite_constraint
+      author:  hreshchuk@gmail.com
+      changes:
+        - addUniqueConstraint:
+            constraintName: unique_composite_constraint
+            clustered:  true
+            tableName: location
+            columnNames: country_code, loc_city, loc_address_line
