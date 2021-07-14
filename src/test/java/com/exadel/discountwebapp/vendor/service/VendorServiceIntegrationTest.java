@@ -387,6 +387,41 @@ class VendorServiceIntegrationTest {
     }
 
     @Test
+    void shouldFindAllVendorsWhereTitleNotEqualsDominoPizza() {
+        var title = "Domino`s Pizza";
+
+        var query = String.format("title!:%s", title);
+
+        var firstVendor = Vendor.builder()
+                .id(1L)
+                .title("Sport Life")
+                .description("Sport Life - a chain of casual fitness centers")
+                .imageUrl("sport_life_image_1.jsp")
+                .email("sprort_life@com.ua")
+                .created(LocalDateTime.parse("2021-12-06T17:22:21"))
+                .modified(LocalDateTime.parse("2021-12-06T17:22:21"))
+                .build();
+
+        var secondVendor = Vendor.builder()
+                .id(3L)
+                .title("TUI")
+                .description("TUI AG - travel and tourism company")
+                .imageUrl("tui_image_1.jsp")
+                .email("tuigroup@gmail.com")
+                .created(LocalDateTime.parse("2023-06-06T17:22:21"))
+                .modified(LocalDateTime.parse("2023-06-06T17:22:21"))
+                .build();
+
+        var vendorCount = (int) vendorRepository.count();
+        var pageable = PageRequest.of(0, vendorCount);
+
+        var expected = List.of(firstVendor, secondVendor);
+        var actual = vendorService.findAll(query, pageable).getContent();
+
+        matchAllPure(expected, actual);
+    }
+
+    @Test
     @Transactional(propagation = Propagation.REQUIRED)
     void shouldSubscribe() {
         var user = userRepository.findById(1L).orElse(null);

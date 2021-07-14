@@ -13,6 +13,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomSpecification<T> implements Specification<T> {
 
+    private static final String NULL_VALUE = "null";
+
     private final SearchCriteria criteria;
 
     @Override
@@ -34,15 +36,27 @@ public class CustomSpecification<T> implements Specification<T> {
 
         switch (operation) {
             case EQUALITY:
-                return path.getJavaType() == LocalDateTime.class
-                        ? builder.equal(path.as(LocalDateTime.class), parseLocalDateTime(clazz, key, value))
-                        : builder.equal(builder.lower(path.as(String.class)), value);
+                if (path.getJavaType().equals(LocalDateTime.class)) {
+                    return builder.equal(path.as(LocalDateTime.class), parseLocalDateTime(clazz, key, value));
+                } else if (value.equalsIgnoreCase(NULL_VALUE)) {
+                    return builder.isNull(path);
+                } else {
+                    return builder.equal(builder.lower(path.as(String.class)), value);
+                }
+            case NOT_EQUALITY:
+                if (path.getJavaType().equals(LocalDateTime.class)) {
+                    return builder.notEqual(path.as(LocalDateTime.class), parseLocalDateTime(clazz, key, value));
+                } else if (value.equalsIgnoreCase(NULL_VALUE)) {
+                    return builder.isNotNull(path);
+                } else {
+                    return builder.notEqual(builder.lower(path.as(String.class)), value);
+                }
             case LESS_THAN:
-                return path.getJavaType() == LocalDateTime.class
+                return path.getJavaType().equals(LocalDateTime.class)
                         ? builder.lessThan(path.as(LocalDateTime.class), parseLocalDateTime(clazz, key, value))
                         : builder.lessThan(builder.lower(path.as(String.class)), value);
             case GREATER_THAN:
-                return path.getJavaType() == LocalDateTime.class
+                return path.getJavaType().equals(LocalDateTime.class)
                         ? builder.greaterThan(path.as(LocalDateTime.class), parseLocalDateTime(clazz, key, value))
                         : builder.greaterThan(builder.lower(path.as(String.class)), value);
             case STARTS_WITH:
@@ -68,7 +82,6 @@ public class CustomSpecification<T> implements Specification<T> {
             for (int i = 1; i < split.length - 1; i++) {
                 join = join.join(split[i], JoinType.LEFT);
             }
-
             return join.get(field);
         }
         return root.get(key);
