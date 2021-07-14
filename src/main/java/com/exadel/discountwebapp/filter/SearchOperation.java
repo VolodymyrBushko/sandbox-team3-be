@@ -8,6 +8,7 @@ import java.util.Arrays;
 @Getter
 public enum SearchOperation {
     EQUALITY(":"),
+    NOT_EQUALITY("!:"),
     STARTS_WITH(":*"),
     ENDS_WITH("*:"),
     CONTAINS("*:*"),
