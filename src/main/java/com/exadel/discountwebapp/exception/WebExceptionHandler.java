@@ -2,7 +2,7 @@ package com.exadel.discountwebapp.exception;
 
 import com.exadel.discountwebapp.exception.exception.client.*;
 import com.exadel.discountwebapp.exception.response.ExceptionResponse;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.MailException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import static org.springframework.http.HttpStatus.*;
 
-@Log4j2
+@Slf4j
 @RestControllerAdvice
 public class WebExceptionHandler {
 
