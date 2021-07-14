@@ -9,7 +9,7 @@ import com.exadel.discountwebapp.location.repository.LocationRepository;
 import com.exadel.discountwebapp.location.vo.location.LocationRequestVO;
 import com.exadel.discountwebapp.location.vo.location.LocationResponseVO;
 import lombok.RequiredArgsConstructor;
-import org.codehaus.plexus.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
