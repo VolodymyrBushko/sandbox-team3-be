@@ -1,7 +1,6 @@
 package com.exadel.discountwebapp.discount.validator;
 
 import com.exadel.discountwebapp.discount.vo.DiscountBaseVO;
-import org.springframework.stereotype.Component;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
