@@ -41,7 +41,7 @@ public class UserDiscountService {
 
     @SneakyThrows
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity<String> addDiscount(UserDiscountRequestVO request) {
+    public ResponseEntity<Void> addDiscount(UserDiscountRequestVO request) {
         UserDiscount.UserDiscountId userDiscountId = new UserDiscount.UserDiscountId(request.getUserId(), request.getDiscountId());
         if (userDiscountRepository.existsById(userDiscountId)) {
             throw new EntityAlreadyExistsException(UserDiscount.class, "id", userDiscountId);
@@ -52,15 +52,14 @@ public class UserDiscountService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    public byte[] getQRCodeByUserDiscountId(UserDiscountRequestVO request) {
-        if (!(userDiscountRepository.existsById(new UserDiscount.UserDiscountId(request.getUserId(), request.getDiscountId())))) {
-            throw new EntityNotFoundException(UserDiscount.class, "id", new UserDiscount.UserDiscountId(request.getUserId(), request.getDiscountId()));
-        }
-        return qrCodeGenerator.generateQRCodeImage(dataForQRCode(request), QRCODE_WIDTH, QRCODE_HEIGHT);
+    public byte[] getQRCodeByUserDiscountId(Long userId, Long discountId) {
+        UserDiscount.UserDiscountId userDiscountId = new UserDiscount.UserDiscountId(userId, discountId);
+        UserDiscount userDiscount = userDiscountRepository.findById(userDiscountId).orElseThrow(()->new EntityNotFoundException(UserDiscount.class, "id", userDiscountId));
+        return qrCodeGenerator.generateQRCodeImage(dataForQRCode(userDiscount), QRCODE_WIDTH, QRCODE_HEIGHT);
     }
 
     @SneakyThrows
-    private String dataForQRCode(UserDiscountRequestVO request) {
-        return APP_URL + "/" + request.getUserId() + "/" + request.getDiscountId();
+    private String dataForQRCode(UserDiscount request) {
+        return APP_URL + "/" + request.getUser().getId() + "/" + request.getDiscount().getId();
     }
 }
