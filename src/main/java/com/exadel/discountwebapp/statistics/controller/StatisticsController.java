@@ -43,6 +43,5 @@ public class StatisticsController {
         var summaryStats = statisticsService.getStats(dateFrom.atStartOfDay(), dateTo.atStartOfDay());
         var xlsxExported = new XLSXExported(summaryStats);
         xlsxExported.export(response.getOutputStream());
-        response.getOutputStream().close();
     }
 }
