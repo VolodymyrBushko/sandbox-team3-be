@@ -33,14 +33,14 @@ public class QRCodeService {
         qrcodeResponse.setLastName(user.getLastName());
         qrcodeResponse.setImageUrl(user.getImageUrl());
 
-            qrcodeResponse.setVendorTitle(discount.getVendor().getTitle());
-            qrcodeResponse.setVendorEmail(discount.getVendor().getEmail());
+        qrcodeResponse.setVendorTitle(discount.getVendor().getTitle());
+        qrcodeResponse.setVendorEmail(discount.getVendor().getEmail());
 
-            qrcodeResponse.setDiscountTitle(discount.getTitle());
-            qrcodeResponse.setPromocode(discount.getPromocode());
-            qrcodeResponse.setDiscountStartDate(discount.getStartDate());
-            qrcodeResponse.setDiscountExpirationDate(discount.getExpirationDate());
+        qrcodeResponse.setDiscountTitle(discount.getTitle());
+        qrcodeResponse.setPromocode(discount.getPromocode());
+        qrcodeResponse.setDiscountStartDate(discount.getStartDate());
+        qrcodeResponse.setDiscountExpirationDate(discount.getExpirationDate());
 
-            return qrcodeResponse;
+        return qrcodeResponse;
     }
 }
