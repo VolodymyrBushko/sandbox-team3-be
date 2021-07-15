@@ -18,5 +18,13 @@ spring:
     port: 3025
     protocol: smtp
     test-connection: false
-app:
+
+notification:
+  client:
+    url: https://discount-system-team3.herokuapp.com
+  discount:
+    template: discount-email-template
+
+qrcode:
   url: https://discount-system-team3.herokuapp.com/discountinfo
+

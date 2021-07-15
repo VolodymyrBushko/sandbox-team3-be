@@ -19,13 +19,13 @@ public class UserDiscountController {
 
     @SneakyThrows
     @PostMapping
-    public ResponseEntity addDiscount(@Valid @RequestBody UserDiscountRequestVO request) {
+    public ResponseEntity<Void> addDiscount(@Valid @RequestBody UserDiscountRequestVO request) {
         return userDiscountService.addDiscount(request);
     }
 
 
-    @GetMapping(produces = MediaType.IMAGE_PNG_VALUE)
-    public byte[] getQRCodeByUserDiscountId(@Valid @RequestBody UserDiscountRequestVO request) {
-        return userDiscountService.getQRCodeByUserDiscountId(request);
+    @GetMapping(value = "/{userId}/{discountId}", produces = MediaType.IMAGE_PNG_VALUE)
+    public byte[] getQRCodeByUserDiscountId(@PathVariable Long userId, @PathVariable Long discountId) {
+        return userDiscountService.getQRCodeByUserDiscountId(userId, discountId);
     }
 }

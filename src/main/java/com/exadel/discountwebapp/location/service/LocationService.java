@@ -47,7 +47,7 @@ public class LocationService {
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public List<String> findAllCitiesByCountryCode(String countryCode) {
-        return locationRepository.findAllByCountry_CountryCode(countryCode)
+        return locationRepository.findAllCityView(countryCode)
                 .stream()
                 .map(CityView::getCity)
                 .filter(StringUtils::isNotBlank)
