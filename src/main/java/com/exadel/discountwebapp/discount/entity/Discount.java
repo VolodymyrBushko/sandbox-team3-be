@@ -65,7 +65,7 @@ public class Discount {
     private String promocode;
 
     @Column(name = "dis_viewed")
-    private Long quantityViews;
+    private Long viewNumber;
 
     @EqualsAndHashCode.Exclude
     @CreatedDate

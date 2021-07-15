@@ -40,9 +40,9 @@ public class DiscountService {
     public DiscountResponseVO findById(Long id) {
         Discount discount = discountRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Discount.class, "id", id));
-        Long quantity = discount.getQuantityViews() == null ? 1 : discount.getQuantityViews() + 1;
-        discount.setQuantityViews(quantity);
-        discountRepository.insertDiscountView(quantity, id);
+        Long quantity = discount.getViewNumber() == null ? 1 : discount.getViewNumber() + 1;
+        discount.setViewNumber(quantity);
+        discountRepository.save(discount);
         return discountMapper.toVO(discount);
     }
 

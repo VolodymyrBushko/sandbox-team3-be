@@ -8,5 +8,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class VendorVO {
+    private Long id;
     private String title;
+
+    public VendorVO(String title) {
+        this.title = title;
+    }
 }

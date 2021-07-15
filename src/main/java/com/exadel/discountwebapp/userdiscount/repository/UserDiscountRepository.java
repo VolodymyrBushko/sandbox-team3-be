@@ -17,14 +17,14 @@ import java.util.List;
 public interface UserDiscountRepository extends CrudRepository<UserDiscount, UserDiscount.UserDiscountId> {
 
     @Query(value = "SELECT new com.exadel.discountwebapp.statistics.dto.UserDTO(ud.user.firstName, ud.user.lastName, ud.user.email, count (ud.user))" +
-            " FROM UserDiscount ud WHERE  ud.created >= :dataFrom and ud.created < :dataTo group by ud.user.firstName, ud.user.lastName, ud.user.email")
-    List<UserDTO> getUserDiscountStatistics(@Param("dataFrom") LocalDateTime dataFrom, @Param("dataTo") LocalDateTime dataTo);
+            " FROM UserDiscount ud WHERE  ud.created >= :dateFrom and ud.created < :dateTo group by ud.user.firstName, ud.user.lastName, ud.user.email")
+    List<UserDTO> getUserDiscountStatistics(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo);
 
     @Query(value = "SELECT new com.exadel.discountwebapp.statistics.dto.CategoryDTO(ud.discount.category.title, count (ud.discount))" +
-            " FROM UserDiscount ud WHERE  ud.created >= :dataFrom and ud.created < :dataTo group by ud.discount.category.title")
-    List<CategoryDTO> getCategoryDiscountStatistics(@Param("dataFrom") LocalDateTime dataFrom, @Param("dataTo") LocalDateTime dataTo);
+            " FROM UserDiscount ud WHERE  ud.created >= :dateFrom and ud.created < :dateTo group by ud.discount.category.title")
+    List<CategoryDTO> getCategoryDiscountStatistics(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo);
 
-    @Query(value = "SELECT new com.exadel.discountwebapp.statistics.dto.VendorDTO(ud.discount.vendor.title, count (ud.discount))" +
-            " FROM UserDiscount ud WHERE  ud.created >= :dataFrom and ud.created < :dataTo group by ud.discount.vendor.title")
-    List<VendorDTO> getVendorDiscountStatistics(@Param("dataFrom") LocalDateTime dataFrom, @Param("dataTo") LocalDateTime dataTo);
+    @Query(value = "SELECT new com.exadel.discountwebapp.statistics.dto.VendorDTO(ud.discount.vendor.id, ud.discount.vendor.title, count (ud.discount))" +
+            " FROM UserDiscount ud WHERE  ud.created >= :dateFrom and ud.created < :dateTo group by ud.discount.vendor.id, ud.discount.vendor.title")
+    List<VendorDTO> getVendorDiscountStatistics(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo);
 }

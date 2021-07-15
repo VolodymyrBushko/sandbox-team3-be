@@ -7,26 +7,26 @@ import com.exadel.discountwebapp.statistics.vo.discountvo.DiscountVO;
 import com.exadel.discountwebapp.statistics.vo.discountvo.OthersDiscountsVO;
 import com.exadel.discountwebapp.statistics.vo.uservo.OthersUsersVO;
 import com.exadel.discountwebapp.statistics.vo.uservo.UserVO;
+import lombok.SneakyThrows;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Map;
 
-public class ExcelExporter {
+public class XLSXExported {
     private static final String QUANTITY = "quantity";
     private static final String TITLE = "title";
+    private static final String ID = "id";
 
     private XSSFWorkbook workbook;
     private XSSFSheet sheet;
     private SummaryStatisticsDTO summaryStats;
 
-    public ExcelExporter(SummaryStatisticsDTO summaryStats) {
+    public XLSXExported(SummaryStatisticsDTO summaryStats) {
         this.summaryStats = summaryStats;
         workbook = new XSSFWorkbook();
     }
@@ -99,12 +99,14 @@ public class ExcelExporter {
         Row rowVendor = sheet.createRow(rowCount++);
 
         createCell(rowTitleVendor, 0, "Top most popular Vendors", style16);
-        createCell(rowVendor, 0, TITLE, style15);
-        createCell(rowVendor, 1, QUANTITY, style15);
+        createCell(rowVendor, 0, ID, style15);
+        createCell(rowVendor, 1, TITLE, style15);
+        createCell(rowVendor, 2, QUANTITY, style15);
 
         for (Map.Entry<VendorVO, Long> pair : summaryStats.getPopularVendorsStats().entrySet()) {
             Row row = sheet.createRow(rowCount++);
             var columnCount = 0;
+            createCell(row, columnCount++, pair.getKey().getId(), style);
             createCell(row, columnCount++, pair.getKey().getTitle(), style);
             createCell(row, columnCount, pair.getValue(), style);
         }
@@ -114,7 +116,7 @@ public class ExcelExporter {
         Row rowDiscountViews = sheet.createRow(rowCount++);
 
         createCell(rowTitleDiscountViews, 0, "Top most popular discounts by views", style16);
-        createCell(rowDiscountViews, 0, "id", style15);
+        createCell(rowDiscountViews, 0, ID, style15);
         createCell(rowDiscountViews, 1, TITLE, style15);
         createCell(rowDiscountViews, 2, QUANTITY, style15);
 
@@ -130,13 +132,12 @@ public class ExcelExporter {
         }
     }
 
-    public void export(HttpServletResponse response) throws IOException {
+    @SneakyThrows
+    public void export(OutputStream outputStream) {
         writeHeaderLine();
         writeDataLines();
-        ServletOutputStream outputStream = response.getOutputStream();
         workbook.write(outputStream);
         workbook.close();
-        outputStream.close();
     }
 
     private CellStyle setStyle(Integer num) {

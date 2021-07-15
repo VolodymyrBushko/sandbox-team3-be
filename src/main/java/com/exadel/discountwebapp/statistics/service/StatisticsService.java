@@ -31,17 +31,17 @@ public class StatisticsService {
     private static final String OTHERS = "Others";
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    public SummaryStatisticsDTO getStats(LocalDateTime dataFrom, LocalDateTime dataTo) {
-        Map<UserVO, Long> usersDiscountsStats = getDataActivatedDiscountPerUsers(dataFrom, dataTo);
-        Map<CategoryVO, Long> categoryDiscountsStats = getDataActivatedDiscountPerCategory(dataFrom, dataTo);
-        Map<VendorVO, Long> categoryVendorStats = getDataActivatedDiscountPerVendor(dataFrom, dataTo);
-        Map<DiscountVO, Long> discountViewingStats = getDiscountPerViewing(dataFrom, dataTo);
+    public SummaryStatisticsDTO getStats(LocalDateTime dateFrom, LocalDateTime dateTo) {
+        Map<UserVO, Long> usersDiscountsStats = getDataActivatedDiscountPerUsers(dateFrom, dateTo);
+        Map<CategoryVO, Long> categoryDiscountsStats = getDataActivatedDiscountPerCategory(dateFrom, dateTo);
+        Map<VendorVO, Long> categoryVendorStats = getDataActivatedDiscountPerVendor(dateFrom, dateTo);
+        Map<DiscountVO, Long> discountViewingStats = getDiscountPerViewing();
         return new SummaryStatisticsDTO(usersDiscountsStats, categoryDiscountsStats, categoryVendorStats, discountViewingStats);
     }
 
     @SuppressWarnings("unchecked")
-    public Map<UserVO, Long> getDataActivatedDiscountPerUsers(LocalDateTime dataFrom, LocalDateTime dataTo) {
-        var userData = userDiscountRepository.getUserDiscountStatistics(dataFrom, dataTo);
+    public Map<UserVO, Long> getDataActivatedDiscountPerUsers(LocalDateTime dateFrom, LocalDateTime dateTo) {
+        var userData = userDiscountRepository.getUserDiscountStatistics(dateFrom, dateTo);
 
         Map<UserVO, Long> result = new HashMap<>();
         for (UserDTO elem : userData) {
@@ -63,8 +63,8 @@ public class StatisticsService {
     }
 
     @SuppressWarnings("unchecked")
-    public Map<CategoryVO, Long> getDataActivatedDiscountPerCategory(LocalDateTime dataFrom, LocalDateTime dataTo) {
-        var categoryData = userDiscountRepository.getCategoryDiscountStatistics(dataFrom, dataTo);
+    public Map<CategoryVO, Long> getDataActivatedDiscountPerCategory(LocalDateTime dateFrom, LocalDateTime dateTo) {
+        var categoryData = userDiscountRepository.getCategoryDiscountStatistics(dateFrom, dateTo);
 
         Map<CategoryVO, Long> result = new HashMap<>();
         for (CategoryDTO elem : categoryData) {
@@ -86,12 +86,12 @@ public class StatisticsService {
     }
 
     @SuppressWarnings("unchecked")
-    public Map<VendorVO, Long> getDataActivatedDiscountPerVendor(LocalDateTime dataFrom, LocalDateTime dataTo) {
-        var vendorData = userDiscountRepository.getVendorDiscountStatistics(dataFrom, dataTo);
+    public Map<VendorVO, Long> getDataActivatedDiscountPerVendor(LocalDateTime dateFrom, LocalDateTime dateTo) {
+        var vendorData = userDiscountRepository.getVendorDiscountStatistics(dateFrom, dateTo);
 
         Map<VendorVO, Long> result = new HashMap<>();
         for (VendorDTO elem : vendorData) {
-            result.put(new VendorVO(elem.getTitle()), elem.getQuantity());
+            result.put(new VendorVO(elem.getId(), elem.getTitle()), elem.getQuantity());
         }
 
         result = (Map<VendorVO, Long>) sortingMap(result);
@@ -109,8 +109,8 @@ public class StatisticsService {
     }
 
     @SuppressWarnings("unchecked")
-    public Map<DiscountVO, Long> getDiscountPerViewing(LocalDateTime dataFrom, LocalDateTime dataTo) {
-        var disViewsData = discountRepository.getDiscountViewing(dataFrom, dataTo);
+    public Map<DiscountVO, Long> getDiscountPerViewing() {
+        var disViewsData = discountRepository.getDiscountSummary();
 
         Map<DiscountVO, Long> result = new HashMap<>();
         for (DiscountViewingDTO elem : disViewsData) {
