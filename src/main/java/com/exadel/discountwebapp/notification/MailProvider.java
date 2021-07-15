@@ -26,6 +26,10 @@ public class MailProvider {
         Long vendorId = discount.getVendor().getId();
         List<String> subEmails = vendorRepository.findAllSubEmailsByVendorId(vendorId);
 
+        if (subEmails.isEmpty()) {
+            return null;
+        }
+
         return Mail.builder()
                 .subject(discount.getTitle())
                 .template(discountEmailTemplate)
