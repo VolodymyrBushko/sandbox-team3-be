@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id:  15072021_update_user_image_insert_new_users
+      author:  bozhokmaria@gmail.com
+      changes:
+        -  sqlFile:
+             comment:  Inserting data into user table
+             dbms:  'postgresql'
+             path:  ./sql/update_images_insert_new_users.sql
+             relativeToChangelogFile: true
