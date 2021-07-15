@@ -4,6 +4,7 @@ import com.exadel.discountwebapp.userdiscount.service.UserDiscountService;
 import com.exadel.discountwebapp.userdiscount.vo.UserDiscountRequestVO;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,8 @@ public class UserDiscountController {
     @SneakyThrows
     @PostMapping
     public ResponseEntity<Void> addDiscount(@Valid @RequestBody UserDiscountRequestVO request) {
-        return userDiscountService.addDiscount(request);
+        userDiscountService.addDiscount(request);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 

@@ -10,8 +10,6 @@ import com.exadel.discountwebapp.userdiscount.vo.UserDiscountRequestVO;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,14 +39,13 @@ public class UserDiscountService {
 
     @SneakyThrows
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity<Void> addDiscount(UserDiscountRequestVO request) {
+    public void addDiscount(UserDiscountRequestVO request) {
         UserDiscount.UserDiscountId userDiscountId = new UserDiscount.UserDiscountId(request.getUserId(), request.getDiscountId());
         if (userDiscountRepository.existsById(userDiscountId)) {
             throw new EntityAlreadyExistsException(UserDiscount.class, "id", userDiscountId);
         }
         UserDiscount userDiscount = userDiscountMapper.toEntity(request);
         userDiscountRepository.save(userDiscount);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
