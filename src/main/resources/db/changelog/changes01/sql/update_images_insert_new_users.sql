@@ -31,7 +31,7 @@ VALUES (8, 'John', 'Ivanov', 'john_ivanov@gmail.com', '$2y$12$QkgAOhRydRHVZz07qh
         'https://raw.githubusercontent.com/Bozhokmaria/images/main/admin.jpg', current_timestamp, current_timestamp, 3, 2);
 
 INSERT INTO "user" (usr_id, usr_first_name, usr_last_name, usr_email, usr_password, usr_image_url, usr_created, usr_modified, loc_id, rol_id)
-VALUES (9, 'John', 'Smith', 'test_john@gmail.com', '$2y$12$QkgAOhRydRHVZz07qhfT0eKFgWMLWp4WLjrr2ZLJNnA3yMt44lWq2',
+VALUES (9, 'John', 'Smith', 'hreshchuk@gmail.com', '$2y$12$QkgAOhRydRHVZz07qhfT0eKFgWMLWp4WLjrr2ZLJNnA3yMt44lWq2',
         'https://raw.githubusercontent.com/Bozhokmaria/images/main/user.jpg', current_timestamp, current_timestamp, 2, 2);
 
 INSERT INTO "user" (usr_id, usr_first_name, usr_last_name, usr_email, usr_password, usr_image_url, usr_created, usr_modified, loc_id, rol_id)
