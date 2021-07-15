@@ -20,16 +20,18 @@ public class QRCodeService {
 
     public QRCodeResponseVO qrCodeViewPage(Long userId, Long discountId) {
         UserDiscount.UserDiscountId userDiscountId = new UserDiscount.UserDiscountId(userId, discountId);
-        if (userDiscountRepository.existsById(userDiscountId)) {
-            var user = userRepository.findById(userId)
-                    .orElseThrow(() -> new EntityNotFoundException(User.class, "id", userId));
-            var discount = discountRepository.findById(discountId)
-                    .orElseThrow(() -> new EntityNotFoundException(Discount.class, "id", discountId));
+        if (!userDiscountRepository.existsById(userDiscountId)) {
+            throw new EntityNotFoundException(UserDiscount.class, "id", userDiscountId);
+        }
+        var user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException(User.class, "id", userId));
+        var discount = discountRepository.findById(discountId)
+                .orElseThrow(() -> new EntityNotFoundException(Discount.class, "id", discountId));
 
-            QRCodeResponseVO qrcodeResponse = new QRCodeResponseVO();
-            qrcodeResponse.setFirstName(user.getFirstName());
-            qrcodeResponse.setLastName(user.getLastName());
-            qrcodeResponse.setImageUrl(user.getImageUrl());
+        QRCodeResponseVO qrcodeResponse = new QRCodeResponseVO();
+        qrcodeResponse.setFirstName(user.getFirstName());
+        qrcodeResponse.setLastName(user.getLastName());
+        qrcodeResponse.setImageUrl(user.getImageUrl());
 
             qrcodeResponse.setVendorTitle(discount.getVendor().getTitle());
             qrcodeResponse.setVendorEmail(discount.getVendor().getEmail());
@@ -40,8 +42,5 @@ public class QRCodeService {
             qrcodeResponse.setDiscountExpirationDate(discount.getExpirationDate());
 
             return qrcodeResponse;
-        } else {
-            throw new EntityNotFoundException(UserDiscount.class, "id", userDiscountId);
-        }
     }
 }
