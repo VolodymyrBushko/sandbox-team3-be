@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -22,19 +23,20 @@ public class MailProvider {
 
     private final VendorRepository vendorRepository;
 
-    public Mail getMail(Discount discount) {
+    public List<Mail> getMails(Discount discount) {
         Long vendorId = discount.getVendor().getId();
-        List<String> subEmails = vendorRepository.findAllSubEmailsByVendorId(vendorId);
+        return vendorRepository.findAllSubEmailsByVendorId(vendorId)
+                .stream()
+                .map(to -> getMail(discount, to))
+                .collect(Collectors.toList());
+    }
 
-        if (subEmails.isEmpty()) {
-            return null;
-        }
-
+    private Mail getMail(Discount discount, String to) {
         return Mail.builder()
                 .subject(discount.getTitle())
                 .template(discountEmailTemplate)
                 .variables(getTemplateVariables(discount))
-                .to(subEmails.toArray(new String[0]))
+                .to(to)
                 .build();
     }
 

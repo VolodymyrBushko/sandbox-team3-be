@@ -13,7 +13,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class Mail {
 
-    private String[] to;
+    private String to;
     private String subject;
     private String template;
     private Map<String, Object> variables;

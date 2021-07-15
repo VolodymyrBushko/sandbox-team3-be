@@ -17,6 +17,8 @@ import javax.mail.MessagingException;
 @RequiredArgsConstructor
 public class NotificationEventListener {
 
+    private static final String SEND_MAIL_EXCEPTION_MESSAGE_PATTERN = "Failed to send the mail to: %s. Exception message: %s";
+
     private final NotificationMailSender mailSender;
     private final MailProvider mailProvider;
 
@@ -24,13 +26,13 @@ public class NotificationEventListener {
     @EventListener(value = {EntityCreateEvent.class})
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void sendNotification(EntityCreateEvent<Discount> event) {
-        Mail mail = mailProvider.getMail(event.getEntity());
-        if (mail != null) {
-            try {
-                mailSender.sendMail(mail);
-            } catch (MessagingException ex) {
-                log.error(ex.getMessage(), ex);
-            }
-        }
+        mailProvider.getMails(event.getEntity())
+                .forEach(mail -> {
+                    try {
+                        mailSender.sendMail(mail);
+                    } catch (MessagingException ex) {
+                        log.error(String.format(SEND_MAIL_EXCEPTION_MESSAGE_PATTERN, mail.getTo(), ex.getMessage()), ex);
+                    }
+                });
     }
 }
