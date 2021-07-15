@@ -41,7 +41,7 @@ public class UserDiscountService {
 
     @SneakyThrows
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity<String> addDiscount(UserDiscountRequestVO request) {
+    public ResponseEntity<Void> addDiscount(UserDiscountRequestVO request) {
         UserDiscount.UserDiscountId userDiscountId = new UserDiscount.UserDiscountId(request.getUserId(), request.getDiscountId());
         if (userDiscountRepository.existsById(userDiscountId)) {
             throw new EntityAlreadyExistsException(UserDiscount.class, "id", userDiscountId);

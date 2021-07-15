@@ -19,7 +19,7 @@ public class UserDiscountController {
 
     @SneakyThrows
     @PostMapping
-    public ResponseEntity addDiscount(@Valid @RequestBody UserDiscountRequestVO request) {
+    public ResponseEntity<Void> addDiscount(@Valid @RequestBody UserDiscountRequestVO request) {
         return userDiscountService.addDiscount(request);
     }
 
