@@ -28,7 +28,15 @@ spring:
             enable: true
   liquibase:
     change-log: db/changelog/db.changelog-master.yml
+
+notification:
+  client:
+    url: https://discount-system-team3.herokuapp.com
+  discount:
+    template: discount-email-template
+
+qrcode:
+  url: https://discount-system-team3.herokuapp.com/discountinfo
+
 jwt:
   secret: javamaster
-app:
-  url: https://discount-system-team3.herokuapp.com/discountinfo
