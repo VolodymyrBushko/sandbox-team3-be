@@ -2,7 +2,8 @@ package com.exadel.discountwebapp.statistics.excelexport;
 
 import com.exadel.discountwebapp.statistics.dto.SummaryStatisticsDTO;
 import com.exadel.discountwebapp.statistics.vo.CategoryVO;
-import com.exadel.discountwebapp.statistics.vo.VendorVO;
+import com.exadel.discountwebapp.statistics.vo.vendorvo.OthersVendorsVO;
+import com.exadel.discountwebapp.statistics.vo.vendorvo.VendorVO;
 import com.exadel.discountwebapp.statistics.vo.discountvo.DiscountVO;
 import com.exadel.discountwebapp.statistics.vo.discountvo.OthersDiscountsVO;
 import com.exadel.discountwebapp.statistics.vo.uservo.OthersUsersVO;
@@ -15,7 +16,6 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.OutputStream;
-import java.util.Map;
 
 public class XLSXExported {
     private static final String QUANTITY = "quantity";
@@ -46,7 +46,6 @@ public class XLSXExported {
         cell.setCellStyle(style);
     }
 
-
     private void writeDataLines() {
         var rowCount = 0;
         Row rowTitleUsers = sheet.createRow(rowCount++);
@@ -66,15 +65,16 @@ public class XLSXExported {
         font.setFontHeight(14);
         style.setFont(font);
 
-        for (Map.Entry<UserVO, Long> pair : summaryStats.getMostActiveUsersStats().entrySet()) {
+        for (UserVO elem : summaryStats.getMostActiveUsersStats()) {
             Row row = sheet.createRow(rowCount++);
             var columnCount = 0;
-            createCell(row, columnCount++, pair.getKey().getFirstName(), style);
-            createCell(row, columnCount++, pair.getKey().getLastName(), style);
-            createCell(row, columnCount++, pair.getKey().getEmail(), style);
-            createCell(row, columnCount, pair.getValue(), style);
-            if (pair.getKey() instanceof OthersUsersVO) {
-                createCell(row, 0, ((OthersUsersVO) pair.getKey()).getTitle(), style);
+                createCell(row, columnCount++, elem.getFirstName(), style);
+                createCell(row, columnCount++, elem.getLastName(), style);
+                createCell(row, columnCount++, elem.getEmail(), style);
+                createCell(row, columnCount, elem.getQuantity(), style);
+            if (elem instanceof OthersUsersVO) {
+                createCell(row, 0, ((OthersUsersVO) elem).getOthersTitle(), style);
+                createCell(row, 3, ((OthersUsersVO) elem).getOthersQuantity(), style);
             }
         }
 
@@ -87,11 +87,11 @@ public class XLSXExported {
         createCell(rowCategory, 1, QUANTITY, style15);
 
 
-        for (Map.Entry<CategoryVO, Long> pair : summaryStats.getPopularCategoriesStats().entrySet()) {
+        for (CategoryVO elem : summaryStats.getPopularCategoriesStats()) {
             Row row = sheet.createRow(rowCount++);
             var columnCount = 0;
-            createCell(row, columnCount++, pair.getKey().getTitle(), style);
-            createCell(row, columnCount, pair.getValue(), style);
+            createCell(row, columnCount++, elem.getTitle(), style);
+            createCell(row, columnCount, elem.getQuantity(), style);
         }
 
         rowCount++;
@@ -103,12 +103,16 @@ public class XLSXExported {
         createCell(rowVendor, 1, TITLE, style15);
         createCell(rowVendor, 2, QUANTITY, style15);
 
-        for (Map.Entry<VendorVO, Long> pair : summaryStats.getPopularVendorsStats().entrySet()) {
+        for (VendorVO elem : summaryStats.getPopularVendorsStats()) {
             Row row = sheet.createRow(rowCount++);
             var columnCount = 0;
-            createCell(row, columnCount++, pair.getKey().getId(), style);
-            createCell(row, columnCount++, pair.getKey().getTitle(), style);
-            createCell(row, columnCount, pair.getValue(), style);
+                createCell(row, columnCount++, elem.getId(), style);
+                createCell(row, columnCount++, elem.getTitle(), style);
+                createCell(row, columnCount, elem.getQuantity(), style);
+            if (elem instanceof OthersVendorsVO) {
+                createCell(row, 0, ((OthersVendorsVO) elem).getOthersTitle(), style);
+                createCell(row, 2, ((OthersVendorsVO) elem).getOthersQuantity(), style);
+            }
         }
 
         rowCount++;
@@ -120,14 +124,15 @@ public class XLSXExported {
         createCell(rowDiscountViews, 1, TITLE, style15);
         createCell(rowDiscountViews, 2, QUANTITY, style15);
 
-        for (Map.Entry<DiscountVO, Long> pair : summaryStats.getPopularDiscountsStats().entrySet()) {
+        for (DiscountVO elem : summaryStats.getPopularDiscountsStats()) {
             Row row = sheet.createRow(rowCount++);
             var columnCount = 0;
-            createCell(row, columnCount++, pair.getKey().getId(), style);
-            createCell(row, columnCount++, pair.getKey().getTitle(), style);
-            createCell(row, columnCount, pair.getValue(), style);
-            if (pair.getKey() instanceof OthersDiscountsVO) {
-                createCell(row, 0, pair.getKey().getTitle(), style);
+                createCell(row, columnCount++, elem.getId(), style);
+                createCell(row, columnCount++, elem.getTitle(), style);
+                createCell(row, columnCount, elem.getQuantity(), style);
+            if (elem instanceof OthersDiscountsVO) {
+                createCell(row, 0, ((OthersDiscountsVO) elem).getOthersTitle(), style);
+                createCell(row, 2, ((OthersDiscountsVO) elem).getOthersQuantity(), style);
             }
         }
     }
@@ -148,5 +153,4 @@ public class XLSXExported {
         style.setFont(font);
         return style;
     }
-
 }

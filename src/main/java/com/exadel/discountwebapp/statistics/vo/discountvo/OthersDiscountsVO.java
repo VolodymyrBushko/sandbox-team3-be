@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class OthersDiscountsVO extends DiscountVO {
-    private String title;
+    private String othersTitle;
+    private Long othersQuantity;
 }

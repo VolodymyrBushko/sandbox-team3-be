@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CategoryVO {
     private String title;
+    private long quantity;
 }
