@@ -3,7 +3,8 @@ package com.exadel.discountwebapp.category.service;
 import com.exadel.discountwebapp.category.entity.Category;
 import com.exadel.discountwebapp.category.mapper.CategoryMapper;
 import com.exadel.discountwebapp.category.repository.CategoryRepository;
-import com.exadel.discountwebapp.category.validator.CategoryValidator;
+import com.exadel.discountwebapp.category.validator.CategoryTagsValidator;
+import com.exadel.discountwebapp.category.validator.CategoryTitleValidator;
 import com.exadel.discountwebapp.category.vo.CategoryRequestVO;
 import com.exadel.discountwebapp.category.vo.CategoryResponseVO;
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
@@ -26,7 +27,9 @@ public class CategoryService {
     private final TagMapper tagMapper;
     private final CategoryMapper categoryMapper;
     private final CategoryRepository categoryRepository;
-    private final CategoryValidator categoryValidator;
+
+    private final CategoryTagsValidator categoryTagsValidator;
+    private final CategoryTitleValidator categoryTitleValidator;
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public List<CategoryResponseVO> findAll() {
@@ -44,7 +47,7 @@ public class CategoryService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public CategoryResponseVO create(CategoryRequestVO request) {
-        categoryValidator.validate(request);
+        categoryTitleValidator.validate(request);
         Category category = categoryMapper.toEntity(request);
         categoryRepository.save(category);
         return categoryMapper.toVO(category);
@@ -52,9 +55,13 @@ public class CategoryService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public CategoryResponseVO update(Long id, CategoryRequestVO request) {
-        categoryValidator.validate(request);
         Category category = categoryRepository.findById(id).
                 orElseThrow(() -> new EntityNotFoundException(Category.class, "id", id));
+
+        if (!category.getTitle().equals(request.getTitle())) {
+            categoryTitleValidator.validate(request);
+        }
+
         categoryMapper.updateEntity(request, category);
         categoryRepository.save(category);
         return categoryMapper.toVO(category);
@@ -70,7 +77,7 @@ public class CategoryService {
                 .map(e -> tagMapper.toEntity(e, category.getId()))
                 .collect(Collectors.toList());
 
-        categoryValidator.checkDuplicateTag(category, newTags);
+        categoryTagsValidator.checkDuplicateTag(category, newTags);
 
         category.getTags().addAll(newTags);
         Category updatedCategory = categoryRepository.save(category);
@@ -83,7 +90,7 @@ public class CategoryService {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new EntityNotFoundException(Category.class, "id", categoryId));
 
-        categoryValidator.checkTagAlreadyUsedInDiscount(category, tagIds);
+        categoryTagsValidator.checkTagAlreadyUsedInDiscount(category, tagIds);
 
         category.getTags().removeIf(e -> tagIds.contains(e.getId()));
         Category updatedCategory = categoryRepository.save(category);

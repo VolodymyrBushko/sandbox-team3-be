@@ -19,8 +19,6 @@ public interface VendorRepository
 
     Optional<Vendor> findByEmail(String email);
 
-    boolean existsByEmail(String email);
-
-    @Query("select u.email from User u left join Vendor v on u.id in (select s.id from v.subscribers s) where v.id = ?1")
+    @Query("select u.email from User u left join u.subscriptions s where s.id = ?1")
     List<String> findAllSubEmailsByVendorId(Long id);
 }

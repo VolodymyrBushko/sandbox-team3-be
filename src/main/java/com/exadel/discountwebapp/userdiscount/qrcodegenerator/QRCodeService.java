@@ -5,6 +5,8 @@ import com.exadel.discountwebapp.discount.repository.DiscountRepository;
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.user.entity.User;
 import com.exadel.discountwebapp.user.repository.UserRepository;
+import com.exadel.discountwebapp.userdiscount.entity.UserDiscount;
+import com.exadel.discountwebapp.userdiscount.repository.UserDiscountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +16,13 @@ public class QRCodeService {
 
     private final UserRepository userRepository;
     private final DiscountRepository discountRepository;
+    private final UserDiscountRepository userDiscountRepository;
 
     public QRCodeResponseVO qrCodeViewPage(Long userId, Long discountId) {
+        UserDiscount.UserDiscountId userDiscountId = new UserDiscount.UserDiscountId(userId, discountId);
+        if (!userDiscountRepository.existsById(userDiscountId)) {
+            throw new EntityNotFoundException(UserDiscount.class, "id", userDiscountId);
+        }
         var user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException(User.class, "id", userId));
         var discount = discountRepository.findById(discountId)
