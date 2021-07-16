@@ -21,6 +21,7 @@
         <java.version>11</java.version>
         <modelmapper.version>2.4.2</modelmapper.version>
         <liquibase.version>4.3.5</liquibase.version>
+        <javers.version>5.14.0</javers.version>
         <postgresql.version>42.2.21</postgresql.version>
         <springfox-swagger-ui.version>2.9.2</springfox-swagger-ui.version>
         <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
