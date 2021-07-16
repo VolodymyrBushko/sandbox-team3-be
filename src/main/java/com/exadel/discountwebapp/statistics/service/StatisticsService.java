@@ -2,7 +2,8 @@ package com.exadel.discountwebapp.statistics.service;
 
 import com.exadel.discountwebapp.discount.repository.DiscountRepository;
 import com.exadel.discountwebapp.statistics.dto.*;
-import com.exadel.discountwebapp.statistics.vo.CategoryVO;
+import com.exadel.discountwebapp.statistics.vo.categoryvo.CategoryVO;
+import com.exadel.discountwebapp.statistics.vo.categoryvo.OthersCategoriesVO;
 import com.exadel.discountwebapp.statistics.vo.discountvo.DiscountVO;
 import com.exadel.discountwebapp.statistics.vo.discountvo.OthersDiscountsVO;
 import com.exadel.discountwebapp.statistics.vo.uservo.OthersUsersVO;
@@ -43,7 +44,7 @@ public class StatisticsService {
 
         List<UserVO> result = new ArrayList<>();
         for (UserDTO elem : userData) {
-            result.add(new UserVO(elem.getFirstName(), elem.getLastName(), elem.getEmail(), elem.getQuantity()));
+            result.add(new UserVO(elem.getId(), elem.getFirstName(), elem.getLastName(), elem.getEmail(), elem.getQuantity()));
         }
 
         result = result.stream()
@@ -69,7 +70,7 @@ public class StatisticsService {
 
         List<CategoryVO> result = new ArrayList<>();
         for (CategoryDTO elem : categoryData) {
-            result.add(new CategoryVO(elem.getTitle(), elem.getQuantity()));
+            result.add(new CategoryVO(elem.getId(), elem.getTitle(), elem.getQuantity()));
         }
 
         result = result.stream()
@@ -84,7 +85,7 @@ public class StatisticsService {
                 .sum();
 
         if (othersQuantity != 0L) {
-            result.add(new CategoryVO(OTHERS, othersQuantity));
+            result.add(new OthersCategoriesVO(OTHERS, othersQuantity));
         }
         return result;
     }

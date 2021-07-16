@@ -1,7 +1,8 @@
 package com.exadel.discountwebapp.statistics.excelexport;
 
 import com.exadel.discountwebapp.statistics.dto.SummaryStatisticsDTO;
-import com.exadel.discountwebapp.statistics.vo.CategoryVO;
+import com.exadel.discountwebapp.statistics.vo.categoryvo.CategoryVO;
+import com.exadel.discountwebapp.statistics.vo.categoryvo.OthersCategoriesVO;
 import com.exadel.discountwebapp.statistics.vo.vendorvo.OthersVendorsVO;
 import com.exadel.discountwebapp.statistics.vo.vendorvo.VendorVO;
 import com.exadel.discountwebapp.statistics.vo.discountvo.DiscountVO;
@@ -55,10 +56,11 @@ public class XLSXExported {
         CellStyle style15 = setStyle(15);
 
         createCell(rowTitleUsers, 0, "Top most active Users", style16);
-        createCell(rowUsers, 0, "firstName", style15);
-        createCell(rowUsers, 1, "lastName", style15);
-        createCell(rowUsers, 2, "email", style15);
-        createCell(rowUsers, 3, QUANTITY, style15);
+        createCell(rowUsers, 0, "id", style15);
+        createCell(rowUsers, 1, "firstName", style15);
+        createCell(rowUsers, 2, "lastName", style15);
+        createCell(rowUsers, 3, "email", style15);
+        createCell(rowUsers, 4, QUANTITY, style15);
 
         CellStyle style = workbook.createCellStyle();
         XSSFFont font = workbook.createFont();
@@ -68,13 +70,14 @@ public class XLSXExported {
         for (UserVO elem : summaryStats.getMostActiveUsersStats()) {
             Row row = sheet.createRow(rowCount++);
             var columnCount = 0;
+                createCell(row, columnCount++, elem.getId(), style);
                 createCell(row, columnCount++, elem.getFirstName(), style);
                 createCell(row, columnCount++, elem.getLastName(), style);
                 createCell(row, columnCount++, elem.getEmail(), style);
                 createCell(row, columnCount, elem.getQuantity(), style);
             if (elem instanceof OthersUsersVO) {
                 createCell(row, 0, ((OthersUsersVO) elem).getOthersTitle(), style);
-                createCell(row, 3, ((OthersUsersVO) elem).getOthersQuantity(), style);
+                createCell(row, 4, ((OthersUsersVO) elem).getOthersQuantity(), style);
             }
         }
 
@@ -83,15 +86,21 @@ public class XLSXExported {
         Row rowCategory = sheet.createRow(rowCount++);
 
         createCell(rowTitleCategory, 0, "Top most popular Categories", style16);
-        createCell(rowCategory, 0, TITLE, style15);
-        createCell(rowCategory, 1, QUANTITY, style15);
+        createCell(rowCategory, 0, ID, style15);
+        createCell(rowCategory, 1, TITLE, style15);
+        createCell(rowCategory, 2, QUANTITY, style15);
 
 
         for (CategoryVO elem : summaryStats.getPopularCategoriesStats()) {
             Row row = sheet.createRow(rowCount++);
             var columnCount = 0;
+            createCell(row, columnCount++, elem.getId(), style);
             createCell(row, columnCount++, elem.getTitle(), style);
             createCell(row, columnCount, elem.getQuantity(), style);
+            if (elem instanceof OthersCategoriesVO) {
+                createCell(row, 0, ((OthersCategoriesVO) elem).getOthersTitle(), style);
+                createCell(row, 2, ((OthersCategoriesVO) elem).getOthersQuantity(), style);
+            }
         }
 
         rowCount++;

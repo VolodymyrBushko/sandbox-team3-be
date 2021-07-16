@@ -1,6 +1,6 @@
 package com.exadel.discountwebapp.statistics.dto;
 
-import com.exadel.discountwebapp.statistics.vo.CategoryVO;
+import com.exadel.discountwebapp.statistics.vo.categoryvo.CategoryVO;
 import com.exadel.discountwebapp.statistics.vo.discountvo.DiscountVO;
 import com.exadel.discountwebapp.statistics.vo.vendorvo.VendorVO;
 import com.exadel.discountwebapp.statistics.vo.uservo.UserVO;

@@ -1,4 +1,4 @@
-package com.exadel.discountwebapp.statistics.vo;
+package com.exadel.discountwebapp.statistics.vo.categoryvo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CategoryVO {
+    private Long id;
     private String title;
-    private long quantity;
+    private Long quantity;
 }
