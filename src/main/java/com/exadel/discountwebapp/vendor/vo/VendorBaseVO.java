@@ -1,5 +1,6 @@
 package com.exadel.discountwebapp.vendor.vo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,7 +27,10 @@ public class VendorBaseVO implements Serializable {
     @Size(min = 2, max = 510)
     private String imageUrl;
 
-    @NotBlank
     @Email
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String email;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String phoneNumber;
 }
