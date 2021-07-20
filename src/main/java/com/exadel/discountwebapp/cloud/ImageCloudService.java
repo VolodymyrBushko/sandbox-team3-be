@@ -21,6 +21,7 @@ import java.util.regex.Pattern;
 public class ImageCloudService {
 
     private final Cloudinary cloudinary;
+    private final ImageCloudValidator imageValidator;
 
     private final int IMAGE_WIDTH = 200;
     private final int IMAGE_HEIGHT = 200;
@@ -34,17 +35,19 @@ public class ImageCloudService {
     private static final Pattern pattern = Pattern.compile(CLOUDINARY_IMAGE_URL_REGEXP);
 
     @Autowired
-    public ImageCloudService(Cloudinary cloudinary) {
+    public ImageCloudService(Cloudinary cloudinary, ImageCloudValidator imageValidator) {
         this.cloudinary = cloudinary;
+        this.imageValidator = imageValidator;
     }
 
-    public String upload(MultipartFile file) {
+    public String upload(MultipartFile image) {
         try {
+            imageValidator.validate(image);
             Transformation transformation = new Transformation().width(IMAGE_WIDTH).height(IMAGE_HEIGHT).crop("scale");
-            Map response = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("transformation", transformation));
+            Map response = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.asMap("transformation", transformation));
             return response.get(IMAGE_URL_TYPE).toString();
         } catch (IOException ex) {
-            String filename = file.getName();
+            String filename = image.getName();
             log.error(String.format(EXCEPTION_MESSAGE_PATTERN, filename, ex.getMessage()));
             throw new FileUploadException(filename);
         }
