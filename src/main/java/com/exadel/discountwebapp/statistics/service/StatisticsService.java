@@ -2,6 +2,12 @@ package com.exadel.discountwebapp.statistics.service;
 
 import com.exadel.discountwebapp.discount.repository.DiscountRepository;
 import com.exadel.discountwebapp.statistics.dto.*;
+import com.exadel.discountwebapp.statistics.dto.extendeddto.*;
+import com.exadel.discountwebapp.statistics.extendedvo.ExtendedCategoryVO;
+import com.exadel.discountwebapp.statistics.extendedvo.ExtendedDiscountVO;
+import com.exadel.discountwebapp.statistics.extendedvo.ExtendedUserVO;
+import com.exadel.discountwebapp.statistics.extendedvo.ExtendedVendorVO;
+import com.exadel.discountwebapp.statistics.mapper.*;
 import com.exadel.discountwebapp.statistics.vo.categoryvo.CategoryVO;
 import com.exadel.discountwebapp.statistics.vo.categoryvo.OthersCategoriesVO;
 import com.exadel.discountwebapp.statistics.vo.discountvo.DiscountVO;
@@ -20,13 +26,13 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
 @RequiredArgsConstructor
 @Service
 public class StatisticsService {
 
     private final UserDiscountRepository userDiscountRepository;
     private final DiscountRepository discountRepository;
+    private final StatsMapper statsMapper;
 
     private static final String OTHERS = "Others";
 
@@ -39,6 +45,68 @@ public class StatisticsService {
         return new SummaryStatisticsDTO(usersDiscountsStats, categoryDiscountsStats, categoryVendorStats, discountViewingStats);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    public ExtendedSummaryStatsDTO getExtendedStats(LocalDateTime dateFrom, LocalDateTime dateTo) {
+        List<ExtendedUserVO> extendedUsersStats = getExtendedDataDiscountPerUsers(dateFrom, dateTo);
+        List<ExtendedCategoryVO> extendedCategoriesStats = getExtendedDataActivatedDiscountPerCategory(dateFrom, dateTo);
+        List<ExtendedVendorVO> extendedVendorsStats = getExtendedDataActivatedDiscountPerVendor(dateFrom, dateTo);
+        List<ExtendedDiscountVO> extendedDiscountsStats = getExtendedDiscountsStats();
+        return new ExtendedSummaryStatsDTO(extendedUsersStats, extendedCategoriesStats, extendedVendorsStats, extendedDiscountsStats);
+    }
+
+
+    public List<ExtendedUserVO> getExtendedDataDiscountPerUsers(LocalDateTime dateFrom, LocalDateTime dateTo) {
+        var extendedUserData = userDiscountRepository.getExtendedUserDiscountStatistics(dateFrom, dateTo);
+
+        List<ExtendedUserVO> result = new ArrayList<>();
+        for (ExtendedUserDTO elem : extendedUserData) {
+            result.add(statsMapper.userToVO(elem));
+        }
+        return result.stream()
+                .sorted((v1, v2) -> (int) (v2.getQuantity() - v1.getQuantity()))
+                .collect(Collectors.toList());
+    }
+
+    public List<ExtendedCategoryVO> getExtendedDataActivatedDiscountPerCategory(LocalDateTime dateFrom, LocalDateTime dateTo) {
+        var categoryData = userDiscountRepository.getExtendedCategoryDiscountStatistics(dateFrom, dateTo);
+
+        List<ExtendedCategoryVO> result = new ArrayList<>();
+        for (ExtendedCategoryDTO elem : categoryData) {
+            result.add(statsMapper.categoryToVO(elem));
+        }
+        return result.stream()
+                .sorted((v1, v2) -> (int) (v2.getQuantity() - v1.getQuantity()))
+                .collect(Collectors.toList());
+    }
+
+    public List<ExtendedVendorVO> getExtendedDataActivatedDiscountPerVendor(LocalDateTime dateFrom, LocalDateTime dateTo) {
+        var vendorData = userDiscountRepository.getExtendedVendorDiscountStatistics(dateFrom, dateTo);
+
+        List<ExtendedVendorVO> result = new ArrayList<>();
+        for (ExtendedVendorDTO elem : vendorData) {
+            result.add(statsMapper.vendorToVO(elem));
+        }
+
+        return result.stream()
+                .sorted((v1, v2) -> (int) (v2.getQuantity() - v1.getQuantity()))
+                .collect(Collectors.toList());
+    }
+
+    public List<ExtendedDiscountVO> getExtendedDiscountsStats() {
+        var disViewsData = discountRepository.getExtendedDiscountSummary();
+
+        List<ExtendedDiscountVO> result = new ArrayList<>();
+
+        for (ExtendedDiscountViewsDTO elem : disViewsData) {
+            if (elem.getViewNumber() != null)
+                result.add(statsMapper.discountToVO(elem));
+        }
+
+        return result.stream()
+                .sorted((v1, v2) -> (int) (v2.getViewNumber() - v1.getViewNumber()))
+                .collect(Collectors.toList());
+    }
+
     public List<UserVO> getDataActivatedDiscountPerUsers(LocalDateTime dateFrom, LocalDateTime dateTo) {
         var userData = userDiscountRepository.getUserDiscountStatistics(dateFrom, dateTo);
 
@@ -49,13 +117,13 @@ public class StatisticsService {
 
         result = result.stream()
                 .sorted((v1, v2) -> (int) (v2.getQuantity() - v1.getQuantity()))
-                .limit(10)
+                .limit(5)
                 .collect(Collectors.toList());
 
 
         var othersQuantity = userData.stream()
                 .sorted((v1, v2) -> (int) (v2.getQuantity() - v1.getQuantity()))
-                .skip(10)
+                .skip(5)
                 .mapToLong(UserDTO::getQuantity)
                 .sum();
 
@@ -75,12 +143,12 @@ public class StatisticsService {
 
         result = result.stream()
                 .sorted((v1, v2) -> (int) (v2.getQuantity() - v1.getQuantity()))
-                .limit(10)
+                .limit(5)
                 .collect(Collectors.toList());
 
         var othersQuantity = categoryData.stream()
                 .sorted((v1, v2) -> (int) (v2.getQuantity() - v1.getQuantity()))
-                .skip(10)
+                .skip(5)
                 .mapToLong(CategoryDTO::getQuantity)
                 .sum();
 
@@ -100,12 +168,12 @@ public class StatisticsService {
 
         result = result.stream()
                 .sorted((v1, v2) -> (int) (v2.getQuantity() - v1.getQuantity()))
-                .limit(10)
+                .limit(5)
                 .collect(Collectors.toList());
 
         var othersQuantity = vendorData.stream()
                 .sorted((v1, v2) -> (int) (v2.getQuantity() - v1.getQuantity()))
-                .skip(10)
+                .skip(5)
                 .mapToLong(VendorDTO::getQuantity)
                 .sum();
 
@@ -127,13 +195,13 @@ public class StatisticsService {
 
         result = result.stream()
                 .sorted((v1, v2) -> (int) (v2.getQuantity() - v1.getQuantity()))
-                .limit(10)
+                .limit(5)
                 .collect(Collectors.toList());
 
         var othersQuantity = disViewsData.stream()
                 .filter(e -> e.getQuantity() != null)
                 .sorted((v1, v2) -> (int) (v2.getQuantity() - v1.getQuantity()))
-                .skip(10)
+                .skip(5)
                 .mapToLong(DiscountViewingDTO::getQuantity)
                 .sum();
 
@@ -142,5 +210,4 @@ public class StatisticsService {
         }
         return result;
     }
-
 }

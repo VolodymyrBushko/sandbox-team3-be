@@ -1,14 +1,10 @@
 package com.exadel.discountwebapp.statistics.excelexport;
 
-import com.exadel.discountwebapp.statistics.dto.SummaryStatisticsDTO;
-import com.exadel.discountwebapp.statistics.vo.categoryvo.CategoryVO;
-import com.exadel.discountwebapp.statistics.vo.categoryvo.OthersCategoriesVO;
-import com.exadel.discountwebapp.statistics.vo.vendorvo.OthersVendorsVO;
-import com.exadel.discountwebapp.statistics.vo.vendorvo.VendorVO;
-import com.exadel.discountwebapp.statistics.vo.discountvo.DiscountVO;
-import com.exadel.discountwebapp.statistics.vo.discountvo.OthersDiscountsVO;
-import com.exadel.discountwebapp.statistics.vo.uservo.OthersUsersVO;
-import com.exadel.discountwebapp.statistics.vo.uservo.UserVO;
+import com.exadel.discountwebapp.statistics.dto.extendeddto.ExtendedSummaryStatsDTO;
+import com.exadel.discountwebapp.statistics.extendedvo.ExtendedCategoryVO;
+import com.exadel.discountwebapp.statistics.extendedvo.ExtendedDiscountVO;
+import com.exadel.discountwebapp.statistics.extendedvo.ExtendedUserVO;
+import com.exadel.discountwebapp.statistics.extendedvo.ExtendedVendorVO;
 import lombok.SneakyThrows;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
@@ -19,21 +15,23 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.OutputStream;
 
 public class XLSXExported {
-    private static final String QUANTITY = "quantity";
-    private static final String TITLE = "title";
-    private static final String ID = "id";
+    private static final String QUANTITY = "Quantity";
+    private static final String TITLE = "Title";
+    private static final String NUMBER_SIGN = "№";
+    private static final String EMAIL = "Email";
+    private static final String DESCRIPTION = "Description";
 
     private XSSFWorkbook workbook;
     private XSSFSheet sheet;
-    private SummaryStatisticsDTO summaryStats;
+    private ExtendedSummaryStatsDTO extendedSummaryStats;
 
-    public XLSXExported(SummaryStatisticsDTO summaryStats) {
-        this.summaryStats = summaryStats;
+    public XLSXExported(ExtendedSummaryStatsDTO summaryStats) {
+        this.extendedSummaryStats = summaryStats;
         workbook = new XSSFWorkbook();
     }
 
-    private void writeHeaderLine() {
-        sheet = workbook.createSheet("statistics");
+    private void writeHeaderLine(String name) {
+        sheet = workbook.createSheet(name);
     }
 
     private void createCell(Row row, int columnCount, Object value, CellStyle style) {
@@ -41,6 +39,8 @@ public class XLSXExported {
         var cell = row.createCell(columnCount);
         if (value instanceof Long) {
             cell.setCellValue((Long) value);
+        } else if (value instanceof Integer) {
+            cell.setCellValue((Integer) value);
         } else {
             cell.setCellValue((String) value);
         }
@@ -48,107 +48,132 @@ public class XLSXExported {
     }
 
     private void writeDataLines() {
+        writeHeaderLine("users");
+
         var rowCount = 0;
         Row rowTitleUsers = sheet.createRow(rowCount++);
+        rowCount++;
         Row rowUsers = sheet.createRow(rowCount++);
 
         CellStyle style16 = setStyle(16);
         CellStyle style15 = setStyle(15);
 
-        createCell(rowTitleUsers, 0, "Top most active Users", style16);
-        createCell(rowUsers, 0, "id", style15);
-        createCell(rowUsers, 1, "firstName", style15);
-        createCell(rowUsers, 2, "lastName", style15);
-        createCell(rowUsers, 3, "email", style15);
-        createCell(rowUsers, 4, QUANTITY, style15);
+        createCell(rowTitleUsers, 0, "Active Users", style16);
+        createCell(rowUsers, 0, NUMBER_SIGN, style15);
+        createCell(rowUsers, 1, "First Name", style15);
+        createCell(rowUsers, 2, "Last Name", style15);
+        createCell(rowUsers, 3, EMAIL, style15);
+        createCell(rowUsers, 4, "Country", style15);
+        createCell(rowUsers, 5, "City", style15);
+        createCell(rowUsers, 6, "Role", style15);
+        createCell(rowUsers, 7, QUANTITY, style15);
 
         CellStyle style = workbook.createCellStyle();
         XSSFFont font = workbook.createFont();
         font.setFontHeight(14);
         style.setFont(font);
 
-        for (UserVO elem : summaryStats.getMostActiveUsersStats()) {
+        var urCounter = 1;
+        for (ExtendedUserVO elem : extendedSummaryStats.getExtendedUsersStats()) {
             Row row = sheet.createRow(rowCount++);
             var columnCount = 0;
-                createCell(row, columnCount++, elem.getId(), style);
-                createCell(row, columnCount++, elem.getFirstName(), style);
-                createCell(row, columnCount++, elem.getLastName(), style);
-                createCell(row, columnCount++, elem.getEmail(), style);
-                createCell(row, columnCount, elem.getQuantity(), style);
-            if (elem instanceof OthersUsersVO) {
-                createCell(row, 0, ((OthersUsersVO) elem).getOthersTitle(), style);
-                createCell(row, 4, ((OthersUsersVO) elem).getOthersQuantity(), style);
-            }
+            createCell(row, columnCount++, urCounter++, style);
+            createCell(row, columnCount++, elem.getFirstName(), style);
+            createCell(row, columnCount++, elem.getLastName(), style);
+            createCell(row, columnCount++, elem.getEmail(), style);
+            createCell(row, columnCount++, elem.getCountry(), style);
+            createCell(row, columnCount++, elem.getCity(), style);
+            createCell(row, columnCount++, elem.getRole(), style);
+            createCell(row, columnCount, elem.getQuantity(), style);
         }
 
-        rowCount++;
-        Row rowTitleCategory = sheet.createRow(rowCount++);
-        Row rowCategory = sheet.createRow(rowCount++);
+        writeHeaderLine("categories");
 
-        createCell(rowTitleCategory, 0, "Top most popular Categories", style16);
-        createCell(rowCategory, 0, ID, style15);
+        var rowCount2 = 0;
+        Row rowTitleCategory = sheet.createRow(rowCount2++);
+        rowCount2++;
+        Row rowCategory = sheet.createRow(rowCount2++);
+
+        createCell(rowTitleCategory, 0, "Popular Categories", style16);
+        createCell(rowCategory, 0, NUMBER_SIGN, style15);
         createCell(rowCategory, 1, TITLE, style15);
         createCell(rowCategory, 2, QUANTITY, style15);
 
-
-        for (CategoryVO elem : summaryStats.getPopularCategoriesStats()) {
-            Row row = sheet.createRow(rowCount++);
+        var catCounter = 1;
+        for (ExtendedCategoryVO elem : extendedSummaryStats.getExtendedCategoriesStats()) {
+            Row row = sheet.createRow(rowCount2++);
             var columnCount = 0;
-            createCell(row, columnCount++, elem.getId(), style);
+            createCell(row, columnCount++, catCounter++, style);
             createCell(row, columnCount++, elem.getTitle(), style);
             createCell(row, columnCount, elem.getQuantity(), style);
-            if (elem instanceof OthersCategoriesVO) {
-                createCell(row, 0, ((OthersCategoriesVO) elem).getOthersTitle(), style);
-                createCell(row, 2, ((OthersCategoriesVO) elem).getOthersQuantity(), style);
-            }
         }
 
-        rowCount++;
-        Row rowTitleVendor = sheet.createRow(rowCount++);
-        Row rowVendor = sheet.createRow(rowCount++);
+        writeHeaderLine("vendors");
+        var rowCount3 = 0;
+        Row rowTitleVendor = sheet.createRow(rowCount3++);
+        rowCount3++;
+        Row rowVendor = sheet.createRow(rowCount3++);
 
-        createCell(rowTitleVendor, 0, "Top most popular Vendors", style16);
-        createCell(rowVendor, 0, ID, style15);
+        createCell(rowTitleVendor, 0, "Popular Vendors", style16);
+        createCell(rowVendor, 0, NUMBER_SIGN, style15);
         createCell(rowVendor, 1, TITLE, style15);
-        createCell(rowVendor, 2, QUANTITY, style15);
+        createCell(rowVendor, 2, DESCRIPTION, style15);
+        createCell(rowVendor, 3, EMAIL, style15);
+        createCell(rowVendor, 4, QUANTITY, style15);
 
-        for (VendorVO elem : summaryStats.getPopularVendorsStats()) {
-            Row row = sheet.createRow(rowCount++);
+        var vnCounter = 1;
+        for (ExtendedVendorVO elem : extendedSummaryStats.getExtendedVendorsStats()) {
+            Row row = sheet.createRow(rowCount3++);
             var columnCount = 0;
-                createCell(row, columnCount++, elem.getId(), style);
-                createCell(row, columnCount++, elem.getTitle(), style);
-                createCell(row, columnCount, elem.getQuantity(), style);
-            if (elem instanceof OthersVendorsVO) {
-                createCell(row, 0, ((OthersVendorsVO) elem).getOthersTitle(), style);
-                createCell(row, 2, ((OthersVendorsVO) elem).getOthersQuantity(), style);
-            }
+            createCell(row, columnCount++, vnCounter++, style);
+            createCell(row, columnCount++, elem.getTitle(), style);
+            createCell(row, columnCount++, elem.getDescription(), style);
+            createCell(row, columnCount++, elem.getEmail(), style);
+            createCell(row, columnCount, elem.getQuantity(), style);
         }
 
-        rowCount++;
-        Row rowTitleDiscountViews = sheet.createRow(rowCount++);
-        Row rowDiscountViews = sheet.createRow(rowCount++);
+        writeHeaderLine("discount views");
 
-        createCell(rowTitleDiscountViews, 0, "Top most popular discounts by views", style16);
-        createCell(rowDiscountViews, 0, ID, style15);
+        var rowCount4 = 0;
+        Row rowTitleDiscountViews = sheet.createRow(rowCount4++);
+        rowCount4++;
+        Row rowDiscountViews = sheet.createRow(rowCount4++);
+
+        createCell(rowTitleDiscountViews, 0, "Popular discounts by views", style16);
+        createCell(rowDiscountViews, 0, NUMBER_SIGN, style15);
         createCell(rowDiscountViews, 1, TITLE, style15);
-        createCell(rowDiscountViews, 2, QUANTITY, style15);
+        createCell(rowDiscountViews, 2, "Short Description", style15);
+        createCell(rowDiscountViews, 3, DESCRIPTION, style15);
+        createCell(rowDiscountViews, 4, "Promocode", style15);
+        createCell(rowDiscountViews, 5, "Percentage", style15);
+        createCell(rowDiscountViews, 6, "Flat amount", style15);
+        createCell(rowDiscountViews, 7, "Start Date", style15);
+        createCell(rowDiscountViews, 8, "Expiration Date", style15);
+        createCell(rowDiscountViews, 9, "Vendor", style15);
+        createCell(rowDiscountViews, 10, "Category", style15);
+        createCell(rowDiscountViews, 11, QUANTITY, style15);
 
-        for (DiscountVO elem : summaryStats.getPopularDiscountsStats()) {
-            Row row = sheet.createRow(rowCount++);
+        var disCounter = 1;
+        for (ExtendedDiscountVO elem : extendedSummaryStats.getExtendedDiscountsStats()) {
+            Row row = sheet.createRow(rowCount4++);
             var columnCount = 0;
-                createCell(row, columnCount++, elem.getId(), style);
-                createCell(row, columnCount++, elem.getTitle(), style);
-                createCell(row, columnCount, elem.getQuantity(), style);
-            if (elem instanceof OthersDiscountsVO) {
-                createCell(row, 0, ((OthersDiscountsVO) elem).getOthersTitle(), style);
-                createCell(row, 2, ((OthersDiscountsVO) elem).getOthersQuantity(), style);
-            }
+            createCell(row, columnCount++, disCounter++, style);
+            createCell(row, columnCount++, elem.getTitle(), style);
+            createCell(row, columnCount++, elem.getShortDescription(), style);
+            createCell(row, columnCount++, elem.getDescription(), style);
+            createCell(row, columnCount++, elem.getPromocode(), style);
+            createCell(row, columnCount++, String.valueOf(elem.getPercentage() == null ? "" : elem.getPercentage()), style);
+            createCell(row, columnCount++, String.valueOf(elem.getFlatAmount()), style);
+            createCell(row, columnCount++, String.valueOf(elem.getStartDate()), style);
+            createCell(row, columnCount++, String.valueOf(elem.getExpirationDate()), style);
+            createCell(row, columnCount++, elem.getVendorTitle(), style);
+            createCell(row, columnCount++, elem.getCategoryTitle(), style);
+            createCell(row, columnCount, elem.getViewNumber(), style);
         }
     }
 
     @SneakyThrows
     public void export(OutputStream outputStream) {
-        writeHeaderLine();
         writeDataLines();
         workbook.write(outputStream);
         workbook.close();
