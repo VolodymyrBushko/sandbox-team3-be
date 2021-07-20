@@ -1,5 +1,6 @@
 package com.exadel.discountwebapp.discount.service;
 
+import com.exadel.discountwebapp.cloud.ImageCloudService;
 import com.exadel.discountwebapp.discount.entity.Discount;
 import com.exadel.discountwebapp.discount.mapper.DiscountMapper;
 import com.exadel.discountwebapp.discount.repository.DiscountRepository;
@@ -27,6 +28,7 @@ public class DiscountService {
     private final DiscountRepository discountRepository;
     private final ApplicationEventPublisher eventPublisher;
     private final UserRepository userRepository;
+    private final ImageCloudService imageCloudService;
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public Page<DiscountResponseVO> findAll(String query, Pageable pageable) {
@@ -60,16 +62,29 @@ public class DiscountService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public DiscountResponseVO update(Long id, DiscountRequestVO request) {
-        Discount discount = discountRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(Discount.class, "id", id));
+        Discount discount = getDiscountById(id);
+        String imageUrl = discount.getImageUrl();
+
         discountMapper.updateEntity(request, discount);
         discountRepository.save(discount);
+
+        if (!imageUrl.equals(request.getImageUrl())) {
+            imageCloudService.destroy(imageUrl);
+        }
+
         return discountMapper.toVO(discount);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public void deleteById(Long id) {
-        discountRepository.deleteById(id);
+        Discount discount = getDiscountById(id);
+        discountRepository.deleteById(discount.getId());
+        imageCloudService.destroy(discount.getImageUrl());
+    }
+
+    private Discount getDiscountById(Long id) {
+        return discountRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(Discount.class, "id", id));
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
