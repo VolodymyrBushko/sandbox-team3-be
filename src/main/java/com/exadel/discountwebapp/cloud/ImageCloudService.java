@@ -3,6 +3,10 @@ package com.exadel.discountwebapp.cloud;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.Transformation;
 import com.cloudinary.utils.ObjectUtils;
+import com.exadel.discountwebapp.exception.exception.fileupload.FileDestroyException;
+import com.exadel.discountwebapp.exception.exception.fileupload.FileUploadException;
+import com.exadel.discountwebapp.exception.exception.fileupload.IncorrectFileUrlException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,6 +16,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Slf4j
 @Service
 public class ImageCloudService {
 
@@ -23,6 +28,7 @@ public class ImageCloudService {
 
     private final String IMAGE_URL_TYPE = "secure_url";
     private final String SUCCESSFUL_DESTROY_STATUS = "ok";
+    private final String EXCEPTION_MESSAGE_PATTERN = "Failed to handle %s. Exception message: %s";
 
     private static final String CLOUDINARY_IMAGE_URL_REGEXP = "/(.*)([\\/](\\w+))(\\.(jpg|png|gif|jpeg))";
     private static final Pattern pattern = Pattern.compile(CLOUDINARY_IMAGE_URL_REGEXP);
@@ -38,7 +44,9 @@ public class ImageCloudService {
             Map response = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("transformation", transformation));
             return response.get(IMAGE_URL_TYPE).toString();
         } catch (IOException ex) {
-            return null;
+            String filename = file.getName();
+            log.error(String.format(EXCEPTION_MESSAGE_PATTERN, filename, ex.getMessage()));
+            throw new FileUploadException(filename);
         }
     }
 
@@ -49,7 +57,8 @@ public class ImageCloudService {
             String result = response.get("result").toString();
             return result.equalsIgnoreCase(SUCCESSFUL_DESTROY_STATUS);
         } catch (IOException ex) {
-            return false;
+            log.error(String.format(EXCEPTION_MESSAGE_PATTERN, url, ex.getMessage()));
+            throw new FileDestroyException(url);
         }
     }
 
@@ -58,6 +67,6 @@ public class ImageCloudService {
         if (matcher.find()) {
             return matcher.group(PUBLIC_ID_GROUP);
         }
-        return null;
+        throw new IncorrectFileUrlException(url);
     }
 }
