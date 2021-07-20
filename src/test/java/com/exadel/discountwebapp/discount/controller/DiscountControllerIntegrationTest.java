@@ -71,7 +71,7 @@ class DiscountControllerIntegrationTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/discounts/{id}", "1"))
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.title").value("38% discount"))
-                .andExpect(jsonPath("$.imageUrl").value("sport_life_discount_image_1.jsp"))
+                .andExpect(jsonPath("$.imageUrl").value("https://res.cloudinary.com/hudrds7km/image/upload/v1626823788/ltcgv0hmuszxheoa6i1p.png"))
                 .andExpect(jsonPath("$.id").value("1"))
                 .andExpect(status().isOk());
     }
@@ -82,7 +82,7 @@ class DiscountControllerIntegrationTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/discounts/{id}", "2"))
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.title").value("50% discount"))
-                .andExpect(jsonPath("$.imageUrl").value("domino`s_pizza_discount_image_1.jsp"))
+                .andExpect(jsonPath("$.imageUrl").value("https://res.cloudinary.com/hudrds7km/image/upload/v1626823788/ltcgv0hmuszxheoa6i1p.png"))
                 .andExpect(jsonPath("$.id").value("2"))
                 .andExpect(status().isOk());
     }

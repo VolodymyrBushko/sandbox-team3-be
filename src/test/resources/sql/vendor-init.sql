@@ -8,10 +8,10 @@ VALUES (1, 'UA', 'Kyiv', 'Khreshchatyk, 25', '2021-06-06 17:22:21', '2021-06-06 
 
 INSERT INTO vendor (vn_id, vn_title, vn_description, vn_image_url, vn_email, vn_created, vn_modified)
 VALUES (1, 'Sport Life', 'Sport Life - a chain of casual fitness centers',
-        'sport_life_image_1.jsp', 'sprort_life@com.ua',  '2021-06-06 17:22:21', '2021-06-06 17:22:21'),
+        'https://res.cloudinary.com/hudrds7km/image/upload/v1626823788/ltcgv0hmuszxheoa6i1p.png', 'sprort_life@com.ua',  '2021-06-06 17:22:21', '2021-06-06 17:22:21'),
        (2, 'Domino`s Pizza', 'Domino`s Pizza - an American multinational pizza restaurant chain founded in 1960',
-         'dominos.com_image_1.jsp', 'dominos@gmail.com', '2022-06-06 17:22:21', '2022-06-06 17:22:21'),
-       (3, 'TUI', 'TUI AG - travel and tourism company', 'tui_image_1.jsp', 'tuigroup@gmail.com',
+         'https://res.cloudinary.com/hudrds7km/image/upload/v1626823788/ltcgv0hmuszxheoa6i1p.png', 'dominos@gmail.com', '2022-06-06 17:22:21', '2022-06-06 17:22:21'),
+       (3, 'TUI', 'TUI AG - travel and tourism company', 'https://res.cloudinary.com/hudrds7km/image/upload/v1626823788/ltcgv0hmuszxheoa6i1p.png', 'tuigroup@gmail.com',
         '2023-06-06 17:22:21', '2023-06-06 17:22:21');
 
 INSERT INTO location_vendor (vn_id, loc_id)
