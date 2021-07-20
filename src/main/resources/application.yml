@@ -40,3 +40,6 @@ qrcode:
 
 jwt:
   secret: javamaster
+
+cloudinary:
+  url: ${CLOUDINARY_URL}
