@@ -74,3 +74,6 @@ databaseChangeLog:
   - include:
       file: changes01/15072021_update_user_image_insert_new_users.yml
       relativeToChangelogFile: true
+  - include:
+      file: changes01/19072021_drop_notnull_constraint_vn_email_add_column_vn_phone.yml
+      relativeToChangelogFile: true
