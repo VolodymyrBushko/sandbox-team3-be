@@ -26,8 +26,8 @@ public class StatisticsController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
     public SummaryStatisticsDTO getStatistics(@RequestParam(value = "dateFrom") @DateTimeFormat(pattern = "dd.MM.yyyy", iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
-                                              @RequestParam(value = "dateTo") @DateTimeFormat(pattern = "dd.MM.yyyy", iso = DateTimeFormat.ISO.DATE) LocalDate dateTo) {
-        return statisticsService.getStats(dateFrom.atStartOfDay(), dateTo.atStartOfDay().plusHours(24));
+                                              @RequestParam(value = "dateTo") @DateTimeFormat(pattern = "dd.MM.yyyy", iso = DateTimeFormat.ISO.DATE) LocalDate dateTo, @RequestParam(value = "range", defaultValue = "5", required = false) Integer range) {
+        return statisticsService.getStats(dateFrom.atStartOfDay(), dateTo.atStartOfDay().plusHours(24), range);
     }
 
     @SneakyThrows

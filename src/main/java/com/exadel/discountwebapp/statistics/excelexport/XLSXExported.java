@@ -13,6 +13,8 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.OutputStream;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 public class XLSXExported {
     private static final String QUANTITY = "Quantity";
@@ -20,10 +22,15 @@ public class XLSXExported {
     private static final String NUMBER_SIGN = "№";
     private static final String EMAIL = "Email";
     private static final String DESCRIPTION = "Description";
+    private static final String HEADLINE_USERS = "users";
+    private static final String HEADLINE_CATEGORIES = "categories";
+    private static final String HEADLINE_VENDORS = "vendors";
+    private static final String HEADLINE_DIS_VIEWS = "discount views";
+    private static final String DATE_PATTERN = "dd/MM/yyyy HH:mm:ss";
 
-    private XSSFWorkbook workbook;
+    private final XSSFWorkbook workbook;
     private XSSFSheet sheet;
-    private ExtendedSummaryStatsDTO extendedSummaryStats;
+    private final ExtendedSummaryStatsDTO extendedSummaryStats;
 
     public XLSXExported(ExtendedSummaryStatsDTO summaryStats) {
         this.extendedSummaryStats = summaryStats;
@@ -48,7 +55,7 @@ public class XLSXExported {
     }
 
     private void writeDataLines() {
-        writeHeaderLine("users");
+        writeHeaderLine(HEADLINE_USERS);
 
         var rowCount = 0;
         Row rowTitleUsers = sheet.createRow(rowCount++);
@@ -87,7 +94,7 @@ public class XLSXExported {
             createCell(row, columnCount, elem.getQuantity(), style);
         }
 
-        writeHeaderLine("categories");
+        writeHeaderLine(HEADLINE_CATEGORIES);
 
         var rowCount2 = 0;
         Row rowTitleCategory = sheet.createRow(rowCount2++);
@@ -108,7 +115,7 @@ public class XLSXExported {
             createCell(row, columnCount, elem.getQuantity(), style);
         }
 
-        writeHeaderLine("vendors");
+        writeHeaderLine(HEADLINE_VENDORS);
         var rowCount3 = 0;
         Row rowTitleVendor = sheet.createRow(rowCount3++);
         rowCount3++;
@@ -132,7 +139,7 @@ public class XLSXExported {
             createCell(row, columnCount, elem.getQuantity(), style);
         }
 
-        writeHeaderLine("discount views");
+        writeHeaderLine(HEADLINE_DIS_VIEWS);
 
         var rowCount4 = 0;
         Row rowTitleDiscountViews = sheet.createRow(rowCount4++);
@@ -164,8 +171,8 @@ public class XLSXExported {
             createCell(row, columnCount++, elem.getPromocode(), style);
             createCell(row, columnCount++, String.valueOf(elem.getPercentage() == null ? "" : elem.getPercentage()), style);
             createCell(row, columnCount++, String.valueOf(elem.getFlatAmount()), style);
-            createCell(row, columnCount++, String.valueOf(elem.getStartDate()), style);
-            createCell(row, columnCount++, String.valueOf(elem.getExpirationDate()), style);
+            createCell(row, columnCount++, new SimpleDateFormat(DATE_PATTERN).format(Timestamp.valueOf(elem.getStartDate())), style);
+            createCell(row, columnCount++, new SimpleDateFormat(DATE_PATTERN).format(Timestamp.valueOf(elem.getExpirationDate())), style);
             createCell(row, columnCount++, elem.getVendorTitle(), style);
             createCell(row, columnCount++, elem.getCategoryTitle(), style);
             createCell(row, columnCount, elem.getViewNumber(), style);
