@@ -2,6 +2,7 @@ package com.exadel.discountwebapp.discount.service;
 
 import com.exadel.discountwebapp.baseclasses.BaseEntityMapper;
 import com.exadel.discountwebapp.baseclasses.BaseFilterService;
+import com.exadel.discountwebapp.fileupload.image.ImageUploadService;
 import com.exadel.discountwebapp.discount.entity.Discount;
 import com.exadel.discountwebapp.discount.mapper.DiscountMapper;
 import com.exadel.discountwebapp.discount.repository.DiscountRepository;
@@ -27,6 +28,7 @@ public class DiscountService
     private final DiscountRepository discountRepository;
     private final ApplicationEventPublisher eventPublisher;
     private final UserRepository userRepository;
+    private final ImageUploadService imageUploadService;
 
     @Transactional(propagation = Propagation.REQUIRED)
     public DiscountResponseVO findById(Long id) {
@@ -51,16 +53,29 @@ public class DiscountService
 
     @Transactional(propagation = Propagation.REQUIRED)
     public DiscountResponseVO update(Long id, DiscountRequestVO request) {
-        Discount discount = discountRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(Discount.class, "id", id));
+        Discount discount = getDiscountById(id);
+        String imageUrl = discount.getImageUrl();
+
         discountMapper.updateEntity(request, discount);
         discountRepository.save(discount);
+
+        if (imageUrl != null && !imageUrl.equals(request.getImageUrl())) {
+            imageUploadService.delete(imageUrl);
+        }
+
         return discountMapper.toVO(discount);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public void deleteById(Long id) {
-        discountRepository.deleteById(id);
+        Discount discount = getDiscountById(id);
+        discountRepository.deleteById(discount.getId());
+        imageUploadService.delete(discount.getImageUrl());
+    }
+
+    private Discount getDiscountById(Long id) {
+        return discountRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(Discount.class, "id", id));
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

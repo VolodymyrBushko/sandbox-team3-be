@@ -1,5 +1,6 @@
 package com.exadel.discountwebapp.vendor.controller;
 
+import com.exadel.discountwebapp.fileupload.image.ImageUploadService;
 import com.exadel.discountwebapp.vendor.repository.VendorRepository;
 import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
@@ -33,6 +35,9 @@ class VendorControllerIntegrationTest {
     private ObjectMapper mapper;
     @Autowired
     private VendorRepository repository;
+
+    @MockBean
+    private ImageUploadService imageUploadService;
 
     @Test
     @WithMockUser(roles = "USER")

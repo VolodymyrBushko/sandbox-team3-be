@@ -2,6 +2,7 @@ package com.exadel.discountwebapp.vendor.service;
 
 import com.exadel.discountwebapp.baseclasses.BaseEntityMapper;
 import com.exadel.discountwebapp.baseclasses.BaseFilterService;
+import com.exadel.discountwebapp.fileupload.image.ImageUploadService;
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.user.entity.User;
 import com.exadel.discountwebapp.user.service.UserService;
@@ -28,6 +29,7 @@ public class VendorService extends BaseFilterService<Vendor, VendorResponseVO> {
     private final VendorRepository vendorRepository;
     private final VendorEmailValidator vendorEmailValidator;
     private final UserService userService;
+    private final ImageUploadService imageUploadService;
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public VendorResponseVO findById(Long id) {
@@ -49,18 +51,28 @@ public class VendorService extends BaseFilterService<Vendor, VendorResponseVO> {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public VendorResponseVO update(Long id, VendorRequestVO request) {
-        var vendor = getVendorById(id);
+        Vendor vendor = getVendorById(id);
+        String imageUrl = vendor.getImageUrl();
+
         if (!vendor.getEmail().equals(request.getEmail())) {
             vendorEmailValidator.validate(request);
         }
+
         vendorMapper.update(request, vendor);
-        var updatedVendor = vendorRepository.save(vendor);
+        Vendor updatedVendor = vendorRepository.save(vendor);
+
+        if (imageUrl != null && !imageUrl.equals(request.getImageUrl())) {
+            imageUploadService.delete(imageUrl);
+        }
+
         return vendorMapper.toVO(updatedVendor);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public void deleteById(Long id) {
-        vendorRepository.deleteById(id);
+        Vendor vendor = getVendorById(id);
+        vendorRepository.deleteById(vendor.getId());
+        imageUploadService.delete(vendor.getImageUrl());
     }
 
     private Vendor getVendorById(Long id) {

@@ -2,6 +2,7 @@ package com.exadel.discountwebapp.discount.controller;
 
 import com.exadel.discountwebapp.discount.repository.DiscountRepository;
 import com.exadel.discountwebapp.discount.vo.DiscountRequestVO;
+import com.exadel.discountwebapp.fileupload.image.ImageUploadService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
@@ -28,7 +30,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -40,6 +41,9 @@ class DiscountControllerIntegrationTest {
     private MockMvc mockMvc;
     @Autowired
     private DiscountRepository repository;
+
+    @MockBean
+    private ImageUploadService imageUploadService;
 
     @RegisterExtension
     static GreenMailExtension greenMail = new GreenMailExtension(ServerSetupTest.SMTP)
@@ -71,7 +75,7 @@ class DiscountControllerIntegrationTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/discounts/{id}", "1"))
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.title").value("38% discount"))
-                .andExpect(jsonPath("$.imageUrl").value("sport_life_discount_image_1.jsp"))
+                .andExpect(jsonPath("$.imageUrl").value("https://res.cloudinary.com/hudrds7km/image/upload/v1626823788/ltcgv0hmuszxheoa6i1p.png"))
                 .andExpect(jsonPath("$.id").value("1"))
                 .andExpect(status().isOk());
     }
@@ -82,7 +86,7 @@ class DiscountControllerIntegrationTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/discounts/{id}", "2"))
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.title").value("50% discount"))
-                .andExpect(jsonPath("$.imageUrl").value("domino`s_pizza_discount_image_1.jsp"))
+                .andExpect(jsonPath("$.imageUrl").value("https://res.cloudinary.com/hudrds7km/image/upload/v1626823788/ltcgv0hmuszxheoa6i1p.png"))
                 .andExpect(jsonPath("$.id").value("2"))
                 .andExpect(status().isOk());
     }

@@ -1,6 +1,7 @@
 package com.exadel.discountwebapp.exception;
 
 import com.exadel.discountwebapp.exception.exception.client.*;
+import com.exadel.discountwebapp.exception.exception.fileupload.*;
 import com.exadel.discountwebapp.exception.response.ExceptionResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.MailException;
@@ -18,6 +19,7 @@ import static org.springframework.http.HttpStatus.*;
 @RestControllerAdvice
 public class WebExceptionHandler {
 
+    private static final String FAILED_FILE_HANDLING_CODE = "COULD_NOT_HANDLE_FILE";
     private static final String FORBIDDEN_CODE = "FORBIDDEN";
     private static final String AUTHORIZED_EXCEPTION_CODE = "UNAUTHORIZED";
     private static final String FAILED_EMAIL_CODE = "FAILED_TO_SEND_EMAIL";
@@ -80,6 +82,36 @@ public class WebExceptionHandler {
     @ResponseStatus(value = FORBIDDEN)
     public ExceptionResponse forbiddenException(AccessDeniedException ex) {
         return new ExceptionResponse(FORBIDDEN_CODE, ex.getMessage());
+    }
+
+    @ExceptionHandler(FileEmptyException.class)
+    @ResponseStatus(value = CONFLICT)
+    public ExceptionResponse fileEmptyException(FileEmptyException ex) {
+        return new ExceptionResponse(FAILED_FILE_HANDLING_CODE, ex.getMessage());
+    }
+
+    @ExceptionHandler(FileOverSizeException.class)
+    @ResponseStatus(value = CONFLICT)
+    public ExceptionResponse fileOverSizeException(FileOverSizeException ex) {
+        return new ExceptionResponse(FAILED_FILE_HANDLING_CODE, ex.getMessage());
+    }
+
+    @ExceptionHandler(IncorrectFileUrlException.class)
+    @ResponseStatus(value = CONFLICT)
+    public ExceptionResponse incorrectFileUrlException(IncorrectFileUrlException ex) {
+        return new ExceptionResponse(FAILED_FILE_HANDLING_CODE, ex.getMessage());
+    }
+
+    @ExceptionHandler(FileUploadException.class)
+    @ResponseStatus(value = BAD_REQUEST)
+    public ExceptionResponse fileUploadException(FileUploadException ex) {
+        return new ExceptionResponse(FAILED_FILE_HANDLING_CODE, ex.getMessage());
+    }
+
+    @ExceptionHandler(FileDestroyException.class)
+    @ResponseStatus(value = BAD_REQUEST)
+    public ExceptionResponse fileDestroyException(FileDestroyException ex) {
+        return new ExceptionResponse(FAILED_FILE_HANDLING_CODE, ex.getMessage());
     }
 
     @ExceptionHandler(MailException.class)
