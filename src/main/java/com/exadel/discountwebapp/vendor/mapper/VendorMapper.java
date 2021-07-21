@@ -1,5 +1,6 @@
 package com.exadel.discountwebapp.vendor.mapper;
 
+import com.exadel.discountwebapp.baseclasses.BaseEntityMapper;
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.location.entity.Location;
 import com.exadel.discountwebapp.location.mapper.LocationMapper;
@@ -18,7 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class VendorMapper {
+public class VendorMapper implements BaseEntityMapper<Vendor, VendorResponseVO> {
     private final LocationMapper locationMapper;
     private final ModelMapper modelMapper = new ModelMapper();
     private final LocationRepository locationRepository;
@@ -30,6 +31,7 @@ public class VendorMapper {
         configureModelMapper();
     }
 
+    @Override
     public VendorResponseVO toVO(Vendor vendor) {
         VendorResponseVO response = modelMapper.map(vendor, VendorResponseVO.class);
 

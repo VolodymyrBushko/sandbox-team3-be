@@ -1,5 +1,6 @@
 package com.exadel.discountwebapp.location.mapper;
 
+import com.exadel.discountwebapp.baseclasses.BaseEntityMapper;
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.location.entity.Country;
 import com.exadel.discountwebapp.location.entity.Location;
@@ -13,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class LocationMapper {
+public class LocationMapper implements BaseEntityMapper<Location, LocationResponseVO> {
 
     private final CountryRepository countryRepository;
 
@@ -31,6 +32,7 @@ public class LocationMapper {
         configureModelMapper();
     }
 
+    @Override
     public LocationResponseVO toVO(Location location) {
         LocationResponseVO response = modelMapper.map(location, LocationResponseVO.class);
         response.setCity(location.getCity());

@@ -1,5 +1,7 @@
 package com.exadel.discountwebapp.location.service;
 
+import com.exadel.discountwebapp.baseclasses.BaseEntityMapper;
+import com.exadel.discountwebapp.baseclasses.BaseFilterService;
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.filter.SpecificationBuilder;
 import com.exadel.discountwebapp.location.entity.Location;
@@ -13,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +25,8 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class LocationService {
+public class LocationService
+        extends BaseFilterService<Location, LocationResponseVO> {
     private final LocationRepository locationRepository;
     private final LocationMapper locationMapper;
 
@@ -85,5 +89,15 @@ public class LocationService {
     public Location getLocationById(Long id) {
         return locationRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Location.class, "id", id));
+    }
+
+    @Override
+    protected JpaSpecificationExecutor<Location> getEntityRepository() {
+        return locationRepository;
+    }
+
+    @Override
+    protected BaseEntityMapper<Location, LocationResponseVO> getEntityToVOMapper() {
+        return locationMapper;
     }
 }

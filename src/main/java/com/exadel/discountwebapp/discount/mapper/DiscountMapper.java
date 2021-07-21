@@ -1,5 +1,6 @@
 package com.exadel.discountwebapp.discount.mapper;
 
+import com.exadel.discountwebapp.baseclasses.BaseEntityMapper;
 import com.exadel.discountwebapp.category.entity.Category;
 import com.exadel.discountwebapp.category.mapper.CategoryMapper;
 import com.exadel.discountwebapp.category.repository.CategoryRepository;
@@ -28,7 +29,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class DiscountMapper {
+public class DiscountMapper implements BaseEntityMapper<Discount, DiscountResponseVO> {
 
     private final VendorRepository vendorRepository;
     private final CategoryRepository categoryRepository;
@@ -64,6 +65,7 @@ public class DiscountMapper {
         configureModelMapper();
     }
 
+    @Override
     public DiscountResponseVO toVO(Discount discount) {
         var response = modelMapper.map(discount, DiscountResponseVO.class);
         var category = categoryMapper.toVO(discount.getCategory());
@@ -74,7 +76,7 @@ public class DiscountMapper {
                 .collect(Collectors.toList());
 
         List<LocationResponseVO> locations = discount.getLocations().stream().map(locationMapper::toVO)
-                                             .collect(Collectors.toList());
+                .collect(Collectors.toList());
 
         response.setLocations(locations);
         response.setCategory(category);

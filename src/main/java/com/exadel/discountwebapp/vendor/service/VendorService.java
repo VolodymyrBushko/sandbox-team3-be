@@ -1,19 +1,18 @@
 package com.exadel.discountwebapp.vendor.service;
 
-import com.exadel.discountwebapp.vendor.validator.VendorEmailValidator;
+import com.exadel.discountwebapp.baseclasses.BaseEntityMapper;
+import com.exadel.discountwebapp.baseclasses.BaseFilterService;
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
-import com.exadel.discountwebapp.filter.SpecificationBuilder;
 import com.exadel.discountwebapp.user.entity.User;
 import com.exadel.discountwebapp.user.service.UserService;
 import com.exadel.discountwebapp.vendor.entity.Vendor;
 import com.exadel.discountwebapp.vendor.mapper.VendorMapper;
 import com.exadel.discountwebapp.vendor.repository.VendorRepository;
+import com.exadel.discountwebapp.vendor.validator.VendorEmailValidator;
 import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
 import com.exadel.discountwebapp.vendor.vo.VendorResponseVO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,21 +22,12 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class VendorService {
+public class VendorService extends BaseFilterService<Vendor, VendorResponseVO> {
 
     private final VendorMapper vendorMapper;
     private final VendorRepository vendorRepository;
     private final VendorEmailValidator vendorEmailValidator;
     private final UserService userService;
-
-    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    public Page<VendorResponseVO> findAll(String query, Pageable pageable) {
-        SpecificationBuilder<Vendor> specificationBuilder = new SpecificationBuilder<>();
-        Specification<Vendor> specification = specificationBuilder.fromQuery(query);
-
-        Page<Vendor> page = vendorRepository.findAll(specification, pageable);
-        return page.map(vendorMapper::toVO);
-    }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public VendorResponseVO findById(Long id) {
@@ -100,5 +90,15 @@ public class VendorService {
         if (isRemoved) {
             vendorRepository.save(vendor);
         }
+    }
+
+    @Override
+    protected JpaSpecificationExecutor<Vendor> getEntityRepository() {
+        return vendorRepository;
+    }
+
+    @Override
+    protected BaseEntityMapper<Vendor, VendorResponseVO> getEntityToVOMapper() {
+        return vendorMapper;
     }
 }
