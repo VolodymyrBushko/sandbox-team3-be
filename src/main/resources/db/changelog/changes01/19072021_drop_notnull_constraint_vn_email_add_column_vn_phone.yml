@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: 19072021_drop_notnull_constraint_on_column_vn_email
+      author: bozhokmaria@gmail.com
+      changes:
+       -  dropNotNullConstraint:
+           columnDataType:  VARCHAR(255)
+           columnName:  vn_email
+           schemaName:  public
+           tableName:  vendor
+  - changeSet:
+     id: 19072021_add_column_vn_phone
+     author: bozhokmaria@gmail.com
+     changes:
+      - addColumn:
+          tableName: vendor
+          columns:
+            - column:
+               name: vn_phone
+               type: VARCHAR(35)
+               constraints:
+                 unique: true

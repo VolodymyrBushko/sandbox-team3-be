@@ -36,6 +36,7 @@ public abstract class DiscountBaseVO implements Serializable {
     private BigDecimal flatAmount;
 
     @DecimalMin(value = "0.0")
+    @DecimalMax(value = "100.0")
     @Digits(integer = 3, fraction = 1)
     private BigDecimal percentage;
 

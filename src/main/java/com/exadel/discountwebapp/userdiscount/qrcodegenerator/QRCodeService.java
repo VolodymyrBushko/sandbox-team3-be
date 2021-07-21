@@ -35,6 +35,7 @@ public class QRCodeService {
 
         qrcodeResponse.setVendorTitle(discount.getVendor().getTitle());
         qrcodeResponse.setVendorEmail(discount.getVendor().getEmail());
+        qrcodeResponse.setVendorPhone(discount.getVendor().getPhoneNumber());
 
         qrcodeResponse.setDiscountTitle(discount.getTitle());
         qrcodeResponse.setPromocode(discount.getPromocode());

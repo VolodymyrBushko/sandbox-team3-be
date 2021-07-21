@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: 21072021_add_length_country_code_column_country_column
+      author: bozhokmaria@gmail.com
+      changes:
+        - modifyDataType:
+            columnName: country_code
+            newDataType: VARCHAR(3)
+            schemaName: public
+            tableName: country
+  - changeSet:
+      id: 21072021_add_length_country_code_column_location_table
+      author: bozhokmaria@gmail.com
+      changes:
+        - modifyDataType:
+            columnName: country_code
+            newDataType: VARCHAR(3)
+            schemaName: public
+            tableName: location
+  - changeSet:
+      id:  21072021_insert_countries
+      author:  bozhokmaria@gmail.com
+      changes:
+        -  sqlFile:
+             comment:  Inserting data into country table
+             dbms:  'postgresql'
+             path:  ./sql/insert_countries.sql
+             relativeToChangelogFile: true
