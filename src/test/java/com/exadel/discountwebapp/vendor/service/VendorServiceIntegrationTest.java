@@ -2,6 +2,7 @@ package com.exadel.discountwebapp.vendor.service;
 
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.exception.exception.client.IncorrectFilterInputException;
+import com.exadel.discountwebapp.fileupload.image.ImageUploadService;
 import com.exadel.discountwebapp.user.repository.UserRepository;
 import com.exadel.discountwebapp.vendor.entity.Vendor;
 import com.exadel.discountwebapp.vendor.repository.VendorRepository;
@@ -9,8 +10,10 @@ import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
 import com.exadel.discountwebapp.vendor.vo.VendorResponseVO;
 import com.google.common.collect.Lists;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.jdbc.Sql;
@@ -35,6 +38,9 @@ class VendorServiceIntegrationTest {
     private VendorRepository vendorRepository;
     @Autowired
     private UserRepository userRepository;
+
+    @MockBean
+    private ImageUploadService imageUploadService;
 
     @Test
     void shouldFindVendorById() {
