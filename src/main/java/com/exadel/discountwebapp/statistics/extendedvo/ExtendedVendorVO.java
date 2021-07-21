@@ -11,5 +11,6 @@ public class ExtendedVendorVO {
     private String title;
     private String description;
     private String email;
+    private String phoneNumber;
     private Long quantity;
 }

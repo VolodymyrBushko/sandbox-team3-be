@@ -1,9 +1,6 @@
 package com.exadel.discountwebapp.statistics.dto.extendeddto;
 
-import com.exadel.discountwebapp.statistics.extendedvo.ExtendedCategoryVO;
-import com.exadel.discountwebapp.statistics.extendedvo.ExtendedDiscountVO;
-import com.exadel.discountwebapp.statistics.extendedvo.ExtendedUserVO;
-import com.exadel.discountwebapp.statistics.extendedvo.ExtendedVendorVO;
+import com.exadel.discountwebapp.statistics.extendedvo.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,4 +17,5 @@ public class ExtendedSummaryStatsDTO {
     private List<ExtendedCategoryVO> extendedCategoriesStats;
     private List<ExtendedVendorVO> extendedVendorsStats;
     private List<ExtendedDiscountVO> extendedDiscountsStats;
+    private List<ExtendedUsersPreferenceVO> extendedUsersPreference;
 }

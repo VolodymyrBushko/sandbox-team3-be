@@ -7,6 +7,7 @@ import com.exadel.discountwebapp.statistics.dto.VendorDTO;
 import com.exadel.discountwebapp.statistics.dto.extendeddto.ExtendedCategoryDTO;
 import com.exadel.discountwebapp.statistics.dto.extendeddto.ExtendedUserDTO;
 import com.exadel.discountwebapp.statistics.dto.extendeddto.ExtendedVendorDTO;
+import com.exadel.discountwebapp.statistics.dto.extendeddto.ExtendedUsersPreferenceDTO;
 import com.exadel.discountwebapp.userdiscount.entity.UserDiscount;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -39,8 +40,11 @@ public interface UserDiscountRepository extends CrudRepository<UserDiscount, Use
             " FROM UserDiscount ud WHERE  ud.created >= :dateFrom and ud.created <= :dateTo group by ud.discount.category.title")
     List<ExtendedCategoryDTO> getExtendedCategoryDiscountStatistics(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo);
 
-    @Query(value = "SELECT new com.exadel.discountwebapp.statistics.dto.extendeddto.ExtendedVendorDTO(ud.discount.vendor.title, ud.discount.vendor.description, ud.discount.vendor.email, count (ud.discount))" +
-            " FROM UserDiscount ud WHERE  ud.created >= :dateFrom and ud.created <= :dateTo group by ud.discount.vendor.title, ud.discount.vendor.description, ud.discount.vendor.email")
+    @Query(value = "SELECT new com.exadel.discountwebapp.statistics.dto.extendeddto.ExtendedVendorDTO(ud.discount.vendor.title, ud.discount.vendor.description, ud.discount.vendor.email, ud.discount.vendor.phoneNumber, count (ud.discount))" +
+            " FROM UserDiscount ud WHERE  ud.created >= :dateFrom and ud.created <= :dateTo group by ud.discount.vendor.title, ud.discount.vendor.description, ud.discount.vendor.email, ud.discount.vendor.phoneNumber")
     List<ExtendedVendorDTO> getExtendedVendorDiscountStatistics(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo);
 
+    @Query(value = "SELECT new com.exadel.discountwebapp.statistics.dto.extendeddto.ExtendedUsersPreferenceDTO(ud.user.firstName, ud.user.lastName, ud.user.email, ud.user.location.country.countryFullName, ud.user.location.city, ud.user.role.name, ud.discount.category.title, count (ud.user))" +
+            " FROM UserDiscount ud WHERE  ud.created >= :dateFrom and ud.created <= :dateTo group by ud.user.firstName, ud.user.lastName, ud.user.email, ud.user.location.country.countryFullName, ud.user.location.city, ud.user.role.name, ud.discount.category.title")
+    List<ExtendedUsersPreferenceDTO> getExtendedUsersPreference(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo);
 }

@@ -1,12 +1,11 @@
 package com.exadel.discountwebapp.statistics.excelexport;
 
 import com.exadel.discountwebapp.statistics.dto.extendeddto.ExtendedSummaryStatsDTO;
-import com.exadel.discountwebapp.statistics.extendedvo.ExtendedCategoryVO;
-import com.exadel.discountwebapp.statistics.extendedvo.ExtendedDiscountVO;
-import com.exadel.discountwebapp.statistics.extendedvo.ExtendedUserVO;
-import com.exadel.discountwebapp.statistics.extendedvo.ExtendedVendorVO;
+import com.exadel.discountwebapp.statistics.extendedvo.*;
 import lombok.SneakyThrows;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -15,25 +14,36 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.OutputStream;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 
 public class XLSXExported {
-    private static final String QUANTITY = "Quantity";
+    private static final String ACTIVATED_QUANTITY = "Activated Discount Quantity";
+    private static final String VIEWS_QUANTITY = "Views Quantity";
+    private static final String PERIOD = "Period: ";
     private static final String TITLE = "Title";
     private static final String NUMBER_SIGN = "№";
     private static final String EMAIL = "Email";
+    private static final String CATEGORY = "category";
     private static final String DESCRIPTION = "Description";
+    private static final String FIRST_NAME = "First Name";
+    private static final String LAST_NAME = "Last Name";
     private static final String HEADLINE_USERS = "users";
     private static final String HEADLINE_CATEGORIES = "categories";
     private static final String HEADLINE_VENDORS = "vendors";
     private static final String HEADLINE_DIS_VIEWS = "discount views";
-    private static final String DATE_PATTERN = "dd/MM/yyyy HH:mm:ss";
+    private static final String HEADLINE_UR_PREFERENCE = "user preference";
+    private static final String DATE_PATTERN = "dd/MM/yyyy";
 
     private final XSSFWorkbook workbook;
     private XSSFSheet sheet;
     private final ExtendedSummaryStatsDTO extendedSummaryStats;
+    private final LocalDate dateFrom;
+    private final LocalDate dateTo;
 
-    public XLSXExported(ExtendedSummaryStatsDTO summaryStats) {
+    public XLSXExported(ExtendedSummaryStatsDTO summaryStats, LocalDate dateFrom, LocalDate dateTo) {
         this.extendedSummaryStats = summaryStats;
+        this.dateFrom = dateFrom;
+        this.dateTo = dateTo;
         workbook = new XSSFWorkbook();
     }
 
@@ -65,15 +75,17 @@ public class XLSXExported {
         CellStyle style16 = setStyle(16);
         CellStyle style15 = setStyle(15);
 
+        XSSFFont font2 = workbook.createFont();
+        font2.setColor(IndexedColors.CORAL.getIndex());
+        font2.setFontHeight(16);
+        font2.setBold(true);
+        style16.setFont(font2);
+
+        style15.setFillBackgroundColor(IndexedColors.LEMON_CHIFFON.getIndex());
+        style15.setFillPattern(FillPatternType.LESS_DOTS);
+
         createCell(rowTitleUsers, 0, "Active Users", style16);
-        createCell(rowUsers, 0, NUMBER_SIGN, style15);
-        createCell(rowUsers, 1, "First Name", style15);
-        createCell(rowUsers, 2, "Last Name", style15);
-        createCell(rowUsers, 3, EMAIL, style15);
-        createCell(rowUsers, 4, "Country", style15);
-        createCell(rowUsers, 5, "City", style15);
-        createCell(rowUsers, 6, "Role", style15);
-        createCell(rowUsers, 7, QUANTITY, style15);
+        getFieldLabels(rowTitleUsers, rowUsers, style16, style15, ACTIVATED_QUANTITY);
 
         CellStyle style = workbook.createCellStyle();
         XSSFFont font = workbook.createFont();
@@ -102,9 +114,10 @@ public class XLSXExported {
         Row rowCategory = sheet.createRow(rowCount2++);
 
         createCell(rowTitleCategory, 0, "Popular Categories", style16);
+        createCell(rowTitleCategory, 1, PERIOD + dateFrom + " - " + dateTo, style16);
         createCell(rowCategory, 0, NUMBER_SIGN, style15);
         createCell(rowCategory, 1, TITLE, style15);
-        createCell(rowCategory, 2, QUANTITY, style15);
+        createCell(rowCategory, 2, ACTIVATED_QUANTITY, style15);
 
         var catCounter = 1;
         for (ExtendedCategoryVO elem : extendedSummaryStats.getExtendedCategoriesStats()) {
@@ -122,11 +135,13 @@ public class XLSXExported {
         Row rowVendor = sheet.createRow(rowCount3++);
 
         createCell(rowTitleVendor, 0, "Popular Vendors", style16);
+        createCell(rowTitleVendor, 1, PERIOD + dateFrom + " - " + dateTo, style16);
         createCell(rowVendor, 0, NUMBER_SIGN, style15);
         createCell(rowVendor, 1, TITLE, style15);
         createCell(rowVendor, 2, DESCRIPTION, style15);
         createCell(rowVendor, 3, EMAIL, style15);
-        createCell(rowVendor, 4, QUANTITY, style15);
+        createCell(rowVendor, 4, "Phone number", style15);
+        createCell(rowVendor, 5, ACTIVATED_QUANTITY, style15);
 
         var vnCounter = 1;
         for (ExtendedVendorVO elem : extendedSummaryStats.getExtendedVendorsStats()) {
@@ -136,6 +151,7 @@ public class XLSXExported {
             createCell(row, columnCount++, elem.getTitle(), style);
             createCell(row, columnCount++, elem.getDescription(), style);
             createCell(row, columnCount++, elem.getEmail(), style);
+            createCell(row, columnCount++, elem.getPhoneNumber(), style);
             createCell(row, columnCount, elem.getQuantity(), style);
         }
 
@@ -147,6 +163,7 @@ public class XLSXExported {
         Row rowDiscountViews = sheet.createRow(rowCount4++);
 
         createCell(rowTitleDiscountViews, 0, "Popular discounts by views", style16);
+        createCell(rowTitleDiscountViews, 1, "Period: Since Inception ", style16);
         createCell(rowDiscountViews, 0, NUMBER_SIGN, style15);
         createCell(rowDiscountViews, 1, TITLE, style15);
         createCell(rowDiscountViews, 2, "Short Description", style15);
@@ -154,11 +171,12 @@ public class XLSXExported {
         createCell(rowDiscountViews, 4, "Promocode", style15);
         createCell(rowDiscountViews, 5, "Percentage", style15);
         createCell(rowDiscountViews, 6, "Flat amount", style15);
-        createCell(rowDiscountViews, 7, "Start Date", style15);
-        createCell(rowDiscountViews, 8, "Expiration Date", style15);
-        createCell(rowDiscountViews, 9, "Vendor", style15);
-        createCell(rowDiscountViews, 10, "Category", style15);
-        createCell(rowDiscountViews, 11, QUANTITY, style15);
+        createCell(rowDiscountViews, 7, "Created Date", style15);
+        createCell(rowDiscountViews, 8, "Start Date", style15);
+        createCell(rowDiscountViews, 9, "Expiration Date", style15);
+        createCell(rowDiscountViews, 10, "Vendor", style15);
+        createCell(rowDiscountViews, 11, CATEGORY, style15);
+        createCell(rowDiscountViews, 12, VIEWS_QUANTITY, style15);
 
         var disCounter = 1;
         for (ExtendedDiscountVO elem : extendedSummaryStats.getExtendedDiscountsStats()) {
@@ -171,12 +189,51 @@ public class XLSXExported {
             createCell(row, columnCount++, elem.getPromocode(), style);
             createCell(row, columnCount++, String.valueOf(elem.getPercentage() == null ? "" : elem.getPercentage()), style);
             createCell(row, columnCount++, String.valueOf(elem.getFlatAmount()), style);
+            createCell(row, columnCount++, new SimpleDateFormat(DATE_PATTERN).format(Timestamp.valueOf(elem.getCreated())), style);
             createCell(row, columnCount++, new SimpleDateFormat(DATE_PATTERN).format(Timestamp.valueOf(elem.getStartDate())), style);
             createCell(row, columnCount++, new SimpleDateFormat(DATE_PATTERN).format(Timestamp.valueOf(elem.getExpirationDate())), style);
             createCell(row, columnCount++, elem.getVendorTitle(), style);
             createCell(row, columnCount++, elem.getCategoryTitle(), style);
             createCell(row, columnCount, elem.getViewNumber(), style);
         }
+
+        writeHeaderLine(HEADLINE_UR_PREFERENCE);
+
+        var rowCount5 = 0;
+        Row rowTitleUsersPref = sheet.createRow(rowCount5++);
+        rowCount5++;
+        Row rowUsersPref = sheet.createRow(rowCount5++);
+
+        createCell(rowTitleUsersPref, 0, "Users Preference", style16);
+        getFieldLabels(rowTitleUsersPref, rowUsersPref, style16, style15, CATEGORY);
+        createCell(rowUsersPref, 8, ACTIVATED_QUANTITY, style15);
+
+        var urPrefCounter = 1;
+        for (ExtendedUsersPreferenceVO elem : extendedSummaryStats.getExtendedUsersPreference()) {
+            Row row = sheet.createRow(rowCount5++);
+            var columnCount = 0;
+            createCell(row, columnCount++, urPrefCounter++, style);
+            createCell(row, columnCount++, elem.getFirstName(), style);
+            createCell(row, columnCount++, elem.getLastName(), style);
+            createCell(row, columnCount++, elem.getEmail(), style);
+            createCell(row, columnCount++, elem.getCountry(), style);
+            createCell(row, columnCount++, elem.getCity(), style);
+            createCell(row, columnCount++, elem.getRole(), style);
+            createCell(row, columnCount++, elem.getCategory(), style);
+            createCell(row, columnCount, elem.getQuantity(), style);
+        }
+    }
+
+    private void getFieldLabels(Row rowTitleUsers, Row rowUsers, CellStyle style16, CellStyle style15, String activatedQuantity) {
+        createCell(rowTitleUsers, 1, PERIOD + dateFrom + " - " + dateTo, style16);
+        createCell(rowUsers, 0, NUMBER_SIGN, style15);
+        createCell(rowUsers, 1, FIRST_NAME, style15);
+        createCell(rowUsers, 2, LAST_NAME, style15);
+        createCell(rowUsers, 3, EMAIL, style15);
+        createCell(rowUsers, 4, "Country", style15);
+        createCell(rowUsers, 5, "City", style15);
+        createCell(rowUsers, 6, "Role", style15);
+        createCell(rowUsers, 7, activatedQuantity, style15);
     }
 
     @SneakyThrows

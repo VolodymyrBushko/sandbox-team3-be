@@ -41,7 +41,7 @@ public class StatisticsController {
         String headerValue = "attachment; filename=extended_statistics_" + currentDateTime + ".xlsx";
         response.setHeader(headerKey, headerValue);
         var extendedStats = statisticsService.getExtendedStats(dateFrom.atStartOfDay(), dateTo.atStartOfDay().plusHours(24));
-        var xlsxExported = new XLSXExported(extendedStats);
+        var xlsxExported = new XLSXExported(extendedStats, dateFrom, dateTo);
         xlsxExported.export(response.getOutputStream());
     }
 }

@@ -1,13 +1,7 @@
 package com.exadel.discountwebapp.statistics.mapper;
 
-import com.exadel.discountwebapp.statistics.dto.extendeddto.ExtendedCategoryDTO;
-import com.exadel.discountwebapp.statistics.dto.extendeddto.ExtendedDiscountViewsDTO;
-import com.exadel.discountwebapp.statistics.dto.extendeddto.ExtendedUserDTO;
-import com.exadel.discountwebapp.statistics.dto.extendeddto.ExtendedVendorDTO;
-import com.exadel.discountwebapp.statistics.extendedvo.ExtendedCategoryVO;
-import com.exadel.discountwebapp.statistics.extendedvo.ExtendedDiscountVO;
-import com.exadel.discountwebapp.statistics.extendedvo.ExtendedUserVO;
-import com.exadel.discountwebapp.statistics.extendedvo.ExtendedVendorVO;
+import com.exadel.discountwebapp.statistics.dto.extendeddto.*;
+import com.exadel.discountwebapp.statistics.extendedvo.*;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Component;
@@ -34,6 +28,10 @@ public class StatsMapper {
 
     public ExtendedDiscountVO discountToVO(ExtendedDiscountViewsDTO data) {
         return modelMapper.map(data, ExtendedDiscountVO.class);
+    }
+
+    public ExtendedUsersPreferenceVO urPrefToVO(ExtendedUsersPreferenceDTO data) {
+        return modelMapper.map(data, ExtendedUsersPreferenceVO.class);
     }
 
     private void configureModelMapper() {

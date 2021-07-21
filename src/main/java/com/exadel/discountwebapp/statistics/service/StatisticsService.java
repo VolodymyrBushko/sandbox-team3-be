@@ -3,10 +3,7 @@ package com.exadel.discountwebapp.statistics.service;
 import com.exadel.discountwebapp.discount.repository.DiscountRepository;
 import com.exadel.discountwebapp.statistics.dto.*;
 import com.exadel.discountwebapp.statistics.dto.extendeddto.*;
-import com.exadel.discountwebapp.statistics.extendedvo.ExtendedCategoryVO;
-import com.exadel.discountwebapp.statistics.extendedvo.ExtendedDiscountVO;
-import com.exadel.discountwebapp.statistics.extendedvo.ExtendedUserVO;
-import com.exadel.discountwebapp.statistics.extendedvo.ExtendedVendorVO;
+import com.exadel.discountwebapp.statistics.extendedvo.*;
 import com.exadel.discountwebapp.statistics.mapper.*;
 import com.exadel.discountwebapp.statistics.vo.categoryvo.CategoryVO;
 import com.exadel.discountwebapp.statistics.vo.categoryvo.OthersCategoriesVO;
@@ -51,7 +48,8 @@ public class StatisticsService {
         List<ExtendedCategoryVO> extendedCategoriesStats = getExtendedDataActivatedDiscountPerCategory(dateFrom, dateTo);
         List<ExtendedVendorVO> extendedVendorsStats = getExtendedDataActivatedDiscountPerVendor(dateFrom, dateTo);
         List<ExtendedDiscountVO> extendedDiscountsStats = getExtendedDiscountsStats();
-        return new ExtendedSummaryStatsDTO(extendedUsersStats, extendedCategoriesStats, extendedVendorsStats, extendedDiscountsStats);
+        List<ExtendedUsersPreferenceVO> extendedUsersPreference = getExtendedPreferenceUsersStats(dateFrom, dateTo);
+        return new ExtendedSummaryStatsDTO(extendedUsersStats, extendedCategoriesStats, extendedVendorsStats, extendedDiscountsStats, extendedUsersPreference);
     }
 
 
@@ -89,6 +87,15 @@ public class StatisticsService {
                 .filter(e -> e.getViewNumber() != null)
                 .map(statsMapper::discountToVO)
                 .sorted(Comparator.comparing(ExtendedDiscountVO::getViewNumber).reversed())
+                .collect(Collectors.toList());
+    }
+
+    public List<ExtendedUsersPreferenceVO> getExtendedPreferenceUsersStats(LocalDateTime dateFrom, LocalDateTime dateTo) {
+        var usersPreference = userDiscountRepository.getExtendedUsersPreference(dateFrom, dateTo);
+
+        return usersPreference.stream()
+                .map(statsMapper::urPrefToVO)
+                .sorted(Comparator.comparing(ExtendedUsersPreferenceVO::getQuantity).reversed())
                 .collect(Collectors.toList());
     }
 

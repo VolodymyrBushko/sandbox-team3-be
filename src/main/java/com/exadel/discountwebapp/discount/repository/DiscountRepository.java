@@ -18,7 +18,7 @@ public interface DiscountRepository
             " FROM Discount d")
     List<DiscountViewingDTO> getDiscountSummary();
 
-    @Query(value = "SELECT new com.exadel.discountwebapp.statistics.dto.extendeddto.ExtendedDiscountViewsDTO(d.title, d.shortDescription, d.description, d.promocode, d.percentage, d.flatAmount, d.startDate, d.expirationDate, d.vendor.title, d.category.title, d.viewNumber)" +
+    @Query(value = "SELECT new com.exadel.discountwebapp.statistics.dto.extendeddto.ExtendedDiscountViewsDTO(d.title, d.shortDescription, d.description, d.promocode, d.percentage, d.flatAmount, d.created, d.startDate, d.expirationDate, d.vendor.title, d.category.title, d.viewNumber)" +
             " FROM Discount d")
     List<ExtendedDiscountViewsDTO> getExtendedDiscountSummary();
 }

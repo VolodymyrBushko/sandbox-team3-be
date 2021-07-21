@@ -9,10 +9,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ExtendedVendorDTO {
-    private String title;
-    private String description;
+public class ExtendedUsersPreferenceDTO {
+    private String firstName;
+    private String lastName;
     private String email;
-    private String phoneNumber;
+    private String country;
+    private String city;
+    private String role;
+    private String category;
     private long quantity;
 }

@@ -17,6 +17,7 @@ public class ExtendedDiscountVO {
     private String promocode;
     private BigDecimal percentage;
     private BigDecimal flatAmount;
+    private LocalDateTime created;
     private LocalDateTime startDate;
     private LocalDateTime expirationDate;
     private String vendorTitle;
