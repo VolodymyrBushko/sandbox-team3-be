@@ -1,4 +1,4 @@
-package com.exadel.discountwebapp.statistics.vo.discountvo;
+package com.exadel.discountwebapp.statistics.vo.categoryvo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class DiscountVO  {
+public class CategoryVO {
     private Long id;
     private String title;
     private Long quantity;

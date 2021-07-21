@@ -26,22 +26,22 @@ public class StatisticsController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
     public SummaryStatisticsDTO getStatistics(@RequestParam(value = "dateFrom") @DateTimeFormat(pattern = "dd.MM.yyyy", iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
-                                              @RequestParam(value = "dateTo") @DateTimeFormat(pattern = "dd.MM.yyyy", iso = DateTimeFormat.ISO.DATE) LocalDate dateTo) {
-        return statisticsService.getStats(dateFrom.atStartOfDay(), dateTo.atStartOfDay());
+                                              @RequestParam(value = "dateTo") @DateTimeFormat(pattern = "dd.MM.yyyy", iso = DateTimeFormat.ISO.DATE) LocalDate dateTo, @RequestParam(value = "range", defaultValue = "5", required = false) Integer range) {
+        return statisticsService.getStats(dateFrom.atStartOfDay(), dateTo.atStartOfDay().plusHours(24), range);
     }
 
     @SneakyThrows
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping(value = "/export", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    public void getExportStatistics(HttpServletResponse response, @RequestParam(value = "dateFrom") @DateTimeFormat(pattern = "dd.MM.yyyy", iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
-                                    @RequestParam(value = "dateTo") @DateTimeFormat(pattern = "dd.MM.yyyy", iso = DateTimeFormat.ISO.DATE) LocalDate dateTo) {
+    public void getExportExtendedStatistics(HttpServletResponse response, @RequestParam(value = "dateFrom") @DateTimeFormat(pattern = "dd.MM.yyyy", iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
+                                            @RequestParam(value = "dateTo") @DateTimeFormat(pattern = "dd.MM.yyyy", iso = DateTimeFormat.ISO.DATE) LocalDate dateTo) {
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
         String currentDateTime = dateFormatter.format(new Date());
         var headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=statistics_" + currentDateTime + ".xlsx";
+        String headerValue = "attachment; filename=extended_statistics_" + currentDateTime + ".xlsx";
         response.setHeader(headerKey, headerValue);
-        var summaryStats = statisticsService.getStats(dateFrom.atStartOfDay(), dateTo.atStartOfDay());
-        var xlsxExported = new XLSXExported(summaryStats);
+        var extendedStats = statisticsService.getExtendedStats(dateFrom.atStartOfDay(), dateTo.atStartOfDay().plusHours(24));
+        var xlsxExported = new XLSXExported(extendedStats, dateFrom, dateTo);
         xlsxExported.export(response.getOutputStream());
     }
 }

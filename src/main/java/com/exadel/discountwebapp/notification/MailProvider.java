@@ -47,7 +47,7 @@ public class MailProvider {
                 ? String.format("-%.2f%%", discount.getPercentage())
                 : String.format("-%.2fUSD", discount.getFlatAmount());
 
-        variables.put("discountTitle", discount.getTitle());
+        variables.put("title", discount.getTitle());
         variables.put("imageUrl", discount.getImageUrl());
         variables.put("amount", discountAmount);
         variables.put("vendorTitle", discount.getVendor().getTitle());

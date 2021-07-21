@@ -1,6 +1,5 @@
-package com.exadel.discountwebapp.statistics.vo.uservo;
+package com.exadel.discountwebapp.statistics.extendedvo;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,11 +7,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserVO {
-    private Long id;
+public class ExtendedUserVO {
     private String firstName;
     private String lastName;
     private String email;
+    private String country;
+    private String city;
+    private String role;
     private Long quantity;
 }

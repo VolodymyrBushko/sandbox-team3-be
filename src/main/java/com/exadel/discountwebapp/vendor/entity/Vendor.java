@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,8 +43,11 @@ public class Vendor {
     private String imageUrl;
 
     @Email
-    @Column(name = "vn_email", length = 255, nullable = false, unique = true)
+    @Column(name = "vn_email", length = 255, unique = true)
     private String email;
+
+    @Column(name = "vn_phone", length = 35, unique = true)
+    private String phoneNumber;
 
     @EqualsAndHashCode.Exclude
     @CreatedDate

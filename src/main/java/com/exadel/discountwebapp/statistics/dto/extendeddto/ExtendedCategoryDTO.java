@@ -1,4 +1,4 @@
-package com.exadel.discountwebapp.statistics.dto;
+package com.exadel.discountwebapp.statistics.dto.extendeddto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDTO {
-    private Long id;
-    private String firstName;
-    private String lastName;
-    private String email;
+public class ExtendedCategoryDTO {
+    private String title;
     private long quantity;
 }

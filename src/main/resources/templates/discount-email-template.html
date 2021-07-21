@@ -10,6 +10,11 @@
             margin-bottom: 10px;
         }
 
+        body {
+            display: flex;
+            justify-content: center;
+        }
+
         .container {
             padding: 15px;
             width: 100%;
@@ -24,10 +29,15 @@
 
         p {
             margin: 0 0 5px;
+            font-size: 1rem;
+        }
+
+        p.vendor {
+            margin-top: -35px;
         }
 
         p.description {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
         img {
@@ -40,29 +50,19 @@
 
         .discount-label-block {
             text-align: right;
-            margin-bottom: -30px;
         }
 
         .discount-label-block p {
             display: inline-block;
         }
 
-        .discount-label-block .discount-triangle {
-            background-color: #0082CA;
-            height: 17px;
-            width: 17px;
-            margin-right: -32px;
-            margin-bottom: -4px;
-            transform: rotate(45deg);
-        }
-
         .discount-label-block .discount-label {
             position: relative;
             background-color: #0082CA;
             color: #FFFFFF;
-            padding: 3px;
-            margin-left: 20px;
-            border-radius: 0 3px 3px 0;
+            padding: 5px 5px 5px 20px;
+            margin-left: 25px;
+            border-radius: 50% 3px 3px 50%;
         }
 
         a.btn {
@@ -84,15 +84,14 @@
 </head>
 <body>
 <div class="container">
-    <h1 th:text="${discountTitle}"></h1>
+    <h1 th:text="${title}"></h1>
     <div class="img-block mb-10">
-        <img th:src="${imageUrl}" alt="discount"/>
+        <img th:src="${imageUrl}"/>
     </div>
     <div class="discount-label-block">
-        <p class="discount-triangle"></p>
         <p class="discount-label" th:text="${amount}"></p>
     </div>
-    <p th:text="${vendorTitle}"></p>
+    <p class="vendor" th:text="${vendorTitle}"></p>
     <p th:text="${categoryTitle}"></p>
     <p class="description" th:text="${description}"></p>
     <a th:href="${infoUrl}" class="btn">Go to discount</a>

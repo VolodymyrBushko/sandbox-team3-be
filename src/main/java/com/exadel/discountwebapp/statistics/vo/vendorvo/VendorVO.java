@@ -1,5 +1,6 @@
-package com.exadel.discountwebapp.statistics.vo;
+package com.exadel.discountwebapp.statistics.vo.vendorvo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,11 +8,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class VendorVO {
     private Long id;
     private String title;
-
-    public VendorVO(String title) {
-        this.title = title;
-    }
+    private Long quantity;
 }
