@@ -6,6 +6,7 @@ import com.exadel.discountwebapp.discount.repository.DiscountRepository;
 import com.exadel.discountwebapp.discount.vo.DiscountRequestVO;
 import com.exadel.discountwebapp.discount.vo.DiscountResponseVO;
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
+import com.exadel.discountwebapp.exception.exception.client.OccurOptimisticLockException;
 import com.exadel.discountwebapp.filter.SpecificationBuilder;
 import com.exadel.discountwebapp.notification.event.EntityCreateEvent;
 import com.exadel.discountwebapp.user.entity.User;
@@ -18,6 +19,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.OptimisticLockException;
 
 @Service
 @RequiredArgsConstructor
@@ -41,9 +44,17 @@ public class DiscountService {
     public DiscountResponseVO findById(Long id) {
         Discount discount = discountRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Discount.class, "id", id));
-        Long quantity = discount.getViewNumber() == null ? 1 : discount.getViewNumber() + 1;
-        discount.setViewNumber(quantity);
-        discountRepository.save(discount);
+        while (true) {
+            try {
+                Long quantity = discount.getViewNumber() == null ? 1 : discount.getViewNumber() + 1;
+                discount.setViewNumber(quantity);
+                discount.setVersion(discount.getVersion());
+                discountRepository.save(discount);
+                break;
+            } catch (OptimisticLockException ex) {
+                throw new OccurOptimisticLockException("Some race condition happened");
+            }
+        }
         return discountMapper.toVO(discount);
     }
 
