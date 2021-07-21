@@ -1,6 +1,6 @@
 package com.exadel.discountwebapp.discount.service;
 
-import com.exadel.discountwebapp.cloud.ImageCloudService;
+import com.exadel.discountwebapp.fileupload.image.ImageUploadService;
 import com.exadel.discountwebapp.discount.entity.Discount;
 import com.exadel.discountwebapp.discount.mapper.DiscountMapper;
 import com.exadel.discountwebapp.discount.repository.DiscountRepository;
@@ -28,7 +28,7 @@ public class DiscountService {
     private final DiscountRepository discountRepository;
     private final ApplicationEventPublisher eventPublisher;
     private final UserRepository userRepository;
-    private final ImageCloudService imageCloudService;
+    private final ImageUploadService imageUploadService;
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public Page<DiscountResponseVO> findAll(String query, Pageable pageable) {
@@ -68,8 +68,8 @@ public class DiscountService {
         discountMapper.updateEntity(request, discount);
         discountRepository.save(discount);
 
-        if (!imageUrl.equals(request.getImageUrl())) {
-            imageCloudService.destroy(imageUrl);
+        if (imageUrl != null && !imageUrl.equals(request.getImageUrl())) {
+            imageUploadService.delete(imageUrl);
         }
 
         return discountMapper.toVO(discount);
@@ -79,7 +79,7 @@ public class DiscountService {
     public void deleteById(Long id) {
         Discount discount = getDiscountById(id);
         discountRepository.deleteById(discount.getId());
-        imageCloudService.destroy(discount.getImageUrl());
+        imageUploadService.delete(discount.getImageUrl());
     }
 
     private Discount getDiscountById(Long id) {

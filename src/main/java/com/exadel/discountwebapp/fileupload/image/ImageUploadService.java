@@ -1,4 +1,4 @@
-package com.exadel.discountwebapp.cloud;
+package com.exadel.discountwebapp.fileupload.image;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.Transformation;
@@ -6,6 +6,8 @@ import com.cloudinary.utils.ObjectUtils;
 import com.exadel.discountwebapp.exception.exception.fileupload.FileDestroyException;
 import com.exadel.discountwebapp.exception.exception.fileupload.FileUploadException;
 import com.exadel.discountwebapp.exception.exception.fileupload.IncorrectFileUrlException;
+import com.exadel.discountwebapp.fileupload.image.ImageUploadResponse;
+import com.exadel.discountwebapp.fileupload.image.ImageUploadValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,14 +20,16 @@ import java.util.regex.Pattern;
 
 @Slf4j
 @Service
-public class ImageCloudService {
+public class ImageUploadService {
 
     private final Cloudinary cloudinary;
-    private final ImageCloudValidator imageValidator;
+    private final ImageUploadValidator imageValidator;
 
     private final int IMAGE_WIDTH = 200;
     private final int IMAGE_HEIGHT = 200;
+
     private final int PUBLIC_ID_GROUP = 3;
+    private final int EXTENSION_GROUP = 4;
 
     private final String IMAGE_URL_TYPE = "secure_url";
     private final String SUCCESSFUL_DESTROY_STATUS = "ok";
@@ -35,17 +39,18 @@ public class ImageCloudService {
     private static final Pattern pattern = Pattern.compile(CLOUDINARY_IMAGE_URL_REGEXP);
 
     @Autowired
-    public ImageCloudService(Cloudinary cloudinary, ImageCloudValidator imageValidator) {
+    public ImageUploadService(Cloudinary cloudinary, ImageUploadValidator imageValidator) {
         this.cloudinary = cloudinary;
         this.imageValidator = imageValidator;
     }
 
-    public String upload(MultipartFile image) {
+    public ImageUploadResponse upload(MultipartFile image) {
         try {
             imageValidator.validate(image);
             Transformation transformation = new Transformation().width(IMAGE_WIDTH).height(IMAGE_HEIGHT).crop("scale");
-            Map response = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.asMap("transformation", transformation));
-            return response.get(IMAGE_URL_TYPE).toString();
+            Map cloudResponse = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.asMap("transformation", transformation));
+            String url = cloudResponse.get(IMAGE_URL_TYPE).toString();
+            return getImageUploadResponse(url, image.getSize());
         } catch (IOException ex) {
             String filename = image.getName();
             log.error(String.format(EXCEPTION_MESSAGE_PATTERN, filename, ex.getMessage()));
@@ -53,8 +58,8 @@ public class ImageCloudService {
         }
     }
 
-    public boolean destroy(String url) {
-        String publicId = extractPublicIdFromUrl(url);
+    public boolean delete(String url) {
+        String publicId = extractFromUrl(url, PUBLIC_ID_GROUP);
         try {
             Map response = cloudinary.uploader().destroy(publicId, ObjectUtils.asMap("invalidate", true));
             String result = response.get("result").toString();
@@ -65,11 +70,20 @@ public class ImageCloudService {
         }
     }
 
-    public String extractPublicIdFromUrl(String url) {
+    private String extractFromUrl(String url, int group) {
         Matcher matcher = pattern.matcher(url);
         if (matcher.find()) {
-            return matcher.group(PUBLIC_ID_GROUP);
+            return matcher.group(group);
         }
         throw new IncorrectFileUrlException(url);
+    }
+
+    private ImageUploadResponse getImageUploadResponse(String url, long size) {
+        return ImageUploadResponse.builder()
+                .publicId(extractFromUrl(url, PUBLIC_ID_GROUP))
+                .extension(extractFromUrl(url, EXTENSION_GROUP))
+                .size(size)
+                .url(url)
+                .build();
     }
 }

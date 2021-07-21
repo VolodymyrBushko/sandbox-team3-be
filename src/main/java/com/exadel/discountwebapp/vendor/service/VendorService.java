@@ -1,6 +1,6 @@
 package com.exadel.discountwebapp.vendor.service;
 
-import com.exadel.discountwebapp.cloud.ImageCloudService;
+import com.exadel.discountwebapp.fileupload.image.ImageUploadService;
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.filter.SpecificationBuilder;
 import com.exadel.discountwebapp.user.entity.User;
@@ -30,7 +30,7 @@ public class VendorService {
     private final VendorRepository vendorRepository;
     private final VendorEmailValidator vendorEmailValidator;
     private final UserService userService;
-    private final ImageCloudService imageCloudService;
+    private final ImageUploadService imageUploadService;
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public Page<VendorResponseVO> findAll(String query, Pageable pageable) {
@@ -71,8 +71,8 @@ public class VendorService {
         vendorMapper.update(request, vendor);
         Vendor updatedVendor = vendorRepository.save(vendor);
 
-        if (!imageUrl.equals(request.getImageUrl())) {
-            imageCloudService.destroy(imageUrl);
+        if (imageUrl != null && !imageUrl.equals(request.getImageUrl())) {
+            imageUploadService.delete(imageUrl);
         }
 
         return vendorMapper.toVO(updatedVendor);
@@ -82,7 +82,7 @@ public class VendorService {
     public void deleteById(Long id) {
         Vendor vendor = getVendorById(id);
         vendorRepository.deleteById(vendor.getId());
-        imageCloudService.destroy(vendor.getImageUrl());
+        imageUploadService.delete(vendor.getImageUrl());
     }
 
     private Vendor getVendorById(Long id) {
