@@ -2,6 +2,7 @@ package com.exadel.discountwebapp.vendor.service;
 
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.exception.exception.client.IncorrectFilterInputException;
+import com.exadel.discountwebapp.fileupload.image.ImageUploadService;
 import com.exadel.discountwebapp.user.repository.UserRepository;
 import com.exadel.discountwebapp.vendor.entity.Vendor;
 import com.exadel.discountwebapp.vendor.repository.VendorRepository;
@@ -11,6 +12,7 @@ import com.google.common.collect.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.jdbc.Sql;
@@ -35,6 +37,9 @@ class VendorServiceIntegrationTest {
     private VendorRepository vendorRepository;
     @Autowired
     private UserRepository userRepository;
+
+    @MockBean
+    private ImageUploadService imageUploadService;
 
     @Test
     void shouldFindVendorById() {
@@ -322,7 +327,7 @@ class VendorServiceIntegrationTest {
                 .id(1L)
                 .title("Sport Life")
                 .description("Sport Life - a chain of casual fitness centers")
-                .imageUrl("sport_life_image_1.jsp")
+                .imageUrl("https://res.cloudinary.com/hudrds7km/image/upload/v1626823788/ltcgv0hmuszxheoa6i1p.png")
                 .email("sprort_life@com.ua")
                 .created(LocalDateTime.parse("2021-12-06T17:22:21"))
                 .modified(LocalDateTime.parse("2021-12-06T17:22:21"))
@@ -332,7 +337,7 @@ class VendorServiceIntegrationTest {
                 .id(2L)
                 .title("Domino`s Pizza")
                 .description("Domino`s Pizza - an American multinational pizza restaurant chain founded in 1960")
-                .imageUrl("dominos.com_image_1.jsp")
+                .imageUrl("https://res.cloudinary.com/hudrds7km/image/upload/v1626823788/ltcgv0hmuszxheoa6i1p.png")
                 .email("dominos@gmail.com")
                 .created(LocalDateTime.parse("2022-06-06T17:22:21"))
                 .modified(LocalDateTime.parse("2022-06-06T17:22:21"))
@@ -361,7 +366,7 @@ class VendorServiceIntegrationTest {
                 .id(2L)
                 .title("Domino`s Pizza")
                 .description("Domino`s Pizza - an American multinational pizza restaurant chain founded in 1960")
-                .imageUrl("dominos.com_image_1.jsp")
+                .imageUrl("https://res.cloudinary.com/hudrds7km/image/upload/v1626823788/ltcgv0hmuszxheoa6i1p.png")
                 .email("dominos@gmail.com")
                 .created(LocalDateTime.parse("2022-06-06T17:22:21"))
                 .modified(LocalDateTime.parse("2022-06-06T17:22:21"))
@@ -371,7 +376,7 @@ class VendorServiceIntegrationTest {
                 .id(3L)
                 .title("TUI")
                 .description("TUI AG - travel and tourism company")
-                .imageUrl("tui_image_1.jsp")
+                .imageUrl("https://res.cloudinary.com/hudrds7km/image/upload/v1626823788/ltcgv0hmuszxheoa6i1p.png")
                 .email("tuigroup@gmail.com")
                 .created(LocalDateTime.parse("2023-06-06T17:22:21"))
                 .modified(LocalDateTime.parse("2023-06-06T17:22:21"))
@@ -396,7 +401,7 @@ class VendorServiceIntegrationTest {
                 .id(1L)
                 .title("Sport Life")
                 .description("Sport Life - a chain of casual fitness centers")
-                .imageUrl("sport_life_image_1.jsp")
+                .imageUrl("https://res.cloudinary.com/hudrds7km/image/upload/v1626823788/ltcgv0hmuszxheoa6i1p.png")
                 .email("sprort_life@com.ua")
                 .created(LocalDateTime.parse("2021-12-06T17:22:21"))
                 .modified(LocalDateTime.parse("2021-12-06T17:22:21"))
@@ -406,7 +411,7 @@ class VendorServiceIntegrationTest {
                 .id(3L)
                 .title("TUI")
                 .description("TUI AG - travel and tourism company")
-                .imageUrl("tui_image_1.jsp")
+                .imageUrl("https://res.cloudinary.com/hudrds7km/image/upload/v1626823788/ltcgv0hmuszxheoa6i1p.png")
                 .email("tuigroup@gmail.com")
                 .created(LocalDateTime.parse("2023-06-06T17:22:21"))
                 .modified(LocalDateTime.parse("2023-06-06T17:22:21"))
