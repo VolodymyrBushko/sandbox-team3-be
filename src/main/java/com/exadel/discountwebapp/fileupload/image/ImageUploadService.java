@@ -6,8 +6,6 @@ import com.cloudinary.utils.ObjectUtils;
 import com.exadel.discountwebapp.exception.exception.fileupload.FileDestroyException;
 import com.exadel.discountwebapp.exception.exception.fileupload.FileUploadException;
 import com.exadel.discountwebapp.exception.exception.fileupload.IncorrectFileUrlException;
-import com.exadel.discountwebapp.fileupload.image.ImageUploadResponse;
-import com.exadel.discountwebapp.fileupload.image.ImageUploadValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,23 +18,24 @@ import java.util.regex.Pattern;
 
 @Slf4j
 @Service
+@SuppressWarnings("unchecked")
 public class ImageUploadService {
 
     private final Cloudinary cloudinary;
     private final ImageUploadValidator imageValidator;
 
-    private final int IMAGE_WIDTH = 200;
-    private final int IMAGE_HEIGHT = 200;
+    private static final int IMAGE_WIDTH = 200;
+    private static final int IMAGE_HEIGHT = 200;
 
-    private final int PUBLIC_ID_GROUP = 3;
-    private final int EXTENSION_GROUP = 4;
+    private static final int PUBLIC_ID_GROUP = 3;
+    private static final int EXTENSION_GROUP = 4;
 
-    private final String IMAGE_URL_TYPE = "secure_url";
-    private final String SUCCESSFUL_DESTROY_STATUS = "ok";
-    private final String EXCEPTION_MESSAGE_PATTERN = "Failed to handle %s. Exception message: %s";
+    private static final String IMAGE_URL_TYPE = "secure_url";
+    private static final String SUCCESSFUL_DESTROY_STATUS = "ok";
+    private static final String EXCEPTION_MESSAGE_PATTERN = "Failed to handle %s. Exception message: %s";
 
     private static final String CLOUDINARY_IMAGE_URL_REGEXP = "/(.*)([\\/](\\w+))(\\.(jpg|png|gif|jpeg))";
-    private static final Pattern pattern = Pattern.compile(CLOUDINARY_IMAGE_URL_REGEXP);
+    private static final Pattern PATTERN = Pattern.compile(CLOUDINARY_IMAGE_URL_REGEXP);
 
     @Autowired
     public ImageUploadService(Cloudinary cloudinary, ImageUploadValidator imageValidator) {
@@ -71,7 +70,7 @@ public class ImageUploadService {
     }
 
     private String extractFromUrl(String url, int group) {
-        Matcher matcher = pattern.matcher(url);
+        Matcher matcher = PATTERN.matcher(url);
         if (matcher.find()) {
             return matcher.group(group);
         }
