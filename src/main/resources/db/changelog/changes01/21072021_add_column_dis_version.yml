@@ -16,6 +16,6 @@ databaseChangeLog:
               - column:
                   name: dis_version
                   type: BIGINT
-                  defaultValue: 1L
+                  defaultValue: 1
                   constraints:
                     nullable: false

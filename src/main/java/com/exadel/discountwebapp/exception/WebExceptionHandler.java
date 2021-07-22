@@ -126,6 +126,7 @@ public class WebExceptionHandler {
     @ExceptionHandler(ObjectOptimisticLockingFailureException.class)
     @ResponseStatus(value = CONFLICT)
     public ExceptionResponse optimisticLockingException(ObjectOptimisticLockingFailureException ex) {
+        log.error(ERROR_RACE_CONDITION, ex);
         return new ExceptionResponse(CONFLICT_CODE, ERROR_RACE_CONDITION);
     }
 
