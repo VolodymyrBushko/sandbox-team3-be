@@ -1,7 +1,7 @@
 package com.exadel.discountwebapp.location.service;
 
-import com.exadel.discountwebapp.baseclasses.BaseEntityMapper;
-import com.exadel.discountwebapp.baseclasses.BaseFilterService;
+import com.exadel.discountwebapp.common.BaseEntityMapper;
+import com.exadel.discountwebapp.common.BaseFilterService;
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.filter.SpecificationBuilder;
 import com.exadel.discountwebapp.location.entity.Location;

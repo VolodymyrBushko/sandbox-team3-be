@@ -1,7 +1,7 @@
 package com.exadel.discountwebapp.user.service;
 
-import com.exadel.discountwebapp.baseclasses.BaseEntityMapper;
-import com.exadel.discountwebapp.baseclasses.BaseFilterService;
+import com.exadel.discountwebapp.common.BaseEntityMapper;
+import com.exadel.discountwebapp.common.BaseFilterService;
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.role.mapper.RoleMapper;
 import com.exadel.discountwebapp.security.SigninVO;

@@ -1,4 +1,4 @@
-package com.exadel.discountwebapp.baseclasses;
+package com.exadel.discountwebapp.common;
 
 import com.exadel.discountwebapp.filter.SpecificationBuilder;
 import org.springframework.data.domain.Page;

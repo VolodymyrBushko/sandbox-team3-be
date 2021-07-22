@@ -1,6 +1,6 @@
 package com.exadel.discountwebapp.discount.mapper;
 
-import com.exadel.discountwebapp.baseclasses.BaseEntityMapper;
+import com.exadel.discountwebapp.common.BaseEntityMapper;
 import com.exadel.discountwebapp.category.entity.Category;
 import com.exadel.discountwebapp.category.mapper.CategoryMapper;
 import com.exadel.discountwebapp.category.repository.CategoryRepository;

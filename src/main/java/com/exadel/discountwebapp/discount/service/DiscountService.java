@@ -1,7 +1,7 @@
 package com.exadel.discountwebapp.discount.service;
 
-import com.exadel.discountwebapp.baseclasses.BaseEntityMapper;
-import com.exadel.discountwebapp.baseclasses.BaseFilterService;
+import com.exadel.discountwebapp.common.BaseEntityMapper;
+import com.exadel.discountwebapp.common.BaseFilterService;
 import com.exadel.discountwebapp.fileupload.image.ImageUploadService;
 import com.exadel.discountwebapp.discount.entity.Discount;
 import com.exadel.discountwebapp.discount.mapper.DiscountMapper;

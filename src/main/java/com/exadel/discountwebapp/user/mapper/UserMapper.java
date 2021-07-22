@@ -1,6 +1,6 @@
 package com.exadel.discountwebapp.user.mapper;
 
-import com.exadel.discountwebapp.baseclasses.BaseEntityMapper;
+import com.exadel.discountwebapp.common.BaseEntityMapper;
 import com.exadel.discountwebapp.location.mapper.LocationMapper;
 import com.exadel.discountwebapp.location.vo.location.LocationResponseVO;
 import com.exadel.discountwebapp.role.mapper.RoleMapper;

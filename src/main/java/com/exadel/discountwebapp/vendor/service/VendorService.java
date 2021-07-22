@@ -1,7 +1,7 @@
 package com.exadel.discountwebapp.vendor.service;
 
-import com.exadel.discountwebapp.baseclasses.BaseEntityMapper;
-import com.exadel.discountwebapp.baseclasses.BaseFilterService;
+import com.exadel.discountwebapp.common.BaseEntityMapper;
+import com.exadel.discountwebapp.common.BaseFilterService;
 import com.exadel.discountwebapp.fileupload.image.ImageUploadService;
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
 import com.exadel.discountwebapp.user.entity.User;
