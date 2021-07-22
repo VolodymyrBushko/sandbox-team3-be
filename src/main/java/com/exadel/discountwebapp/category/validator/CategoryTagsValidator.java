@@ -35,7 +35,7 @@ public class CategoryTagsValidator {
                     .findFirst();
 
             if (usedId.isPresent()) {
-                throw new EntityAlreadyUsedException(Tag.class, "id", usedId.get());
+                throw new EntityAlreadyUsedException(Tag.class, "Tag can't be deleted, because it's already used");
             }
         });
     }
