@@ -30,6 +30,7 @@
         <json-path.version>2.4.0</json-path.version>
         <hamcrest-library.version>2.2</hamcrest-library.version>
         <greenmail-junit5.version>1.6.4</greenmail-junit5.version>
+        <cloudinary.version>1.29.0</cloudinary.version>
     </properties>
 
     <dependencies>
@@ -165,6 +166,16 @@
             <groupId>org.javers</groupId>
             <artifactId>javers-spring-boot-starter-sql</artifactId>
             <version>${javers.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.cloudinary</groupId>
+            <artifactId>cloudinary-http44</artifactId>
+            <version>${cloudinary.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.cloudinary</groupId>
+            <artifactId>cloudinary-taglib</artifactId>
+            <version>${cloudinary.version}</version>
         </dependency>
     </dependencies>
 

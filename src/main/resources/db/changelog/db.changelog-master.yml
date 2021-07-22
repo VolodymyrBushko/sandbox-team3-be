@@ -77,3 +77,6 @@ databaseChangeLog:
   - include:
       file: changes01/19072021_drop_notnull_constraint_vn_email_add_column_vn_phone.yml
       relativeToChangelogFile: true
+  - include:
+      file: changes01/21072021_add_length_country_code_insert_countries.yml
+      relativeToChangelogFile: true
