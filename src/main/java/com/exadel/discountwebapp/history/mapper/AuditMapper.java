@@ -13,7 +13,7 @@ import java.util.List;
 public class AuditMapper {
     public List<AuditResponseVO> toVO(Changes changes, AuditRequestVO auditRequestVO) {
 
-        ArrayList build = new ArrayList<>();
+        List<AuditResponseVO> auditResponseVOs  = new ArrayList<>();
 
         final List<ValueChange> changesList = changes.getChangesByType(ValueChange.class);
 
@@ -29,8 +29,8 @@ public class AuditMapper {
                     .commitDate(change.getCommitMetadata().get().getCommitDate())
                     .build();
 
-            build.add(auditableResponse);
+            auditResponseVOs .add(auditableResponse);
         }
-        return build;
+        return auditResponseVOs ;
     }
 }
