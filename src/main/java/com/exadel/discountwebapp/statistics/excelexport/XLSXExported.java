@@ -3,10 +3,7 @@ package com.exadel.discountwebapp.statistics.excelexport;
 import com.exadel.discountwebapp.statistics.dto.extendeddto.ExtendedSummaryStatsDTO;
 import com.exadel.discountwebapp.statistics.extendedvo.*;
 import lombok.SneakyThrows;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -17,13 +14,13 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 
 public class XLSXExported {
-    private static final String ACTIVATED_QUANTITY = "Activated Discount Quantity";
+    private static final String ACTIVATED_QUANTITY = "Activated Discounts Quantity";
     private static final String VIEWS_QUANTITY = "Views Quantity";
     private static final String PERIOD = "Period: ";
     private static final String TITLE = "Title";
     private static final String NUMBER_SIGN = "№";
     private static final String EMAIL = "Email";
-    private static final String CATEGORY = "category";
+    private static final String CATEGORY = "Category";
     private static final String DESCRIPTION = "Description";
     private static final String FIRST_NAME = "First Name";
     private static final String LAST_NAME = "Last Name";
@@ -31,7 +28,7 @@ public class XLSXExported {
     private static final String HEADLINE_CATEGORIES = "categories";
     private static final String HEADLINE_VENDORS = "vendors";
     private static final String HEADLINE_DIS_VIEWS = "discount views";
-    private static final String HEADLINE_UR_PREFERENCE = "user preference";
+    private static final String HEADLINE_UR_PREFERENCE = "users preference";
     private static final String DATE_PATTERN = "dd/MM/yyyy";
 
     private final XSSFWorkbook workbook;
@@ -75,14 +72,13 @@ public class XLSXExported {
         CellStyle style16 = setStyle(16);
         CellStyle style15 = setStyle(15);
 
-        XSSFFont font2 = workbook.createFont();
-        font2.setColor(IndexedColors.CORAL.getIndex());
-        font2.setFontHeight(16);
-        font2.setBold(true);
-        style16.setFont(font2);
-
-        style15.setFillBackgroundColor(IndexedColors.LEMON_CHIFFON.getIndex());
-        style15.setFillPattern(FillPatternType.LESS_DOTS);
+        XSSFFont headerFont = workbook.createFont();
+        headerFont.setFontHeight(15);
+        headerFont.setBold(true);
+        headerFont.setColor(IndexedColors.WHITE.index);
+        style15.setFillForegroundColor(IndexedColors.LIGHT_BLUE.index);
+        style15.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        style15.setFont(headerFont);
 
         createCell(rowTitleUsers, 0, "Active Users", style16);
         getFieldLabels(rowTitleUsers, rowUsers, style16, style15, ACTIVATED_QUANTITY);
@@ -243,11 +239,11 @@ public class XLSXExported {
         workbook.close();
     }
 
-    private CellStyle setStyle(Integer num) {
+    private CellStyle setStyle(Integer number) {
         CellStyle style = workbook.createCellStyle();
         XSSFFont font = workbook.createFont();
         font.setBold(true);
-        font.setFontHeight(num);
+        font.setFontHeight(number);
         style.setFont(font);
         return style;
     }
