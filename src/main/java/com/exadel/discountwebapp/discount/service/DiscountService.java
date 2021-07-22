@@ -7,7 +7,6 @@ import com.exadel.discountwebapp.discount.repository.DiscountRepository;
 import com.exadel.discountwebapp.discount.vo.DiscountRequestVO;
 import com.exadel.discountwebapp.discount.vo.DiscountResponseVO;
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
-import com.exadel.discountwebapp.exception.exception.client.OccurOptimisticLockException;
 import com.exadel.discountwebapp.filter.SpecificationBuilder;
 import com.exadel.discountwebapp.notification.event.EntityCreateEvent;
 import com.exadel.discountwebapp.user.entity.User;
@@ -54,7 +53,7 @@ public class DiscountService {
                 discountRepository.save(discount);
                 break;
             } catch (OptimisticLockException ex) {
-                throw new OccurOptimisticLockException("Some race condition happened");
+                ex.getStackTrace();
             }
         }
         return discountMapper.toVO(discount);
