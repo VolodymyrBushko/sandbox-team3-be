@@ -35,10 +35,10 @@ public class DiscountService
     public DiscountResponseVO findByIdAndUpdateStatistics(Long id) {
         Discount discount = discountRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Discount.class, "id", id));
-            Long quantity = discount.getViewNumber() == null ? 1 : discount.getViewNumber() + 1;
-            discount.setViewNumber(quantity);
-            discountRepository.save(discount);
-            return discountMapper.toVO(discount);
+        Long quantity = discount.getViewNumber() == null ? 1 : discount.getViewNumber() + 1;
+        discount.setViewNumber(quantity);
+        discountRepository.save(discount);
+        return discountMapper.toVO(discount);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
