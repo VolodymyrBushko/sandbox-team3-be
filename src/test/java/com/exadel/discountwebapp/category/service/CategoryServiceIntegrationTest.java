@@ -25,6 +25,7 @@ class CategoryServiceIntegrationTest {
     @Autowired
     private CategoryRepository categoryRepository;
 
+
     @Test
     void shouldGetCategoryById() {
         var id = 1L;
