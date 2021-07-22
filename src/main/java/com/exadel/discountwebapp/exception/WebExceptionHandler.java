@@ -5,6 +5,7 @@ import com.exadel.discountwebapp.exception.exception.fileupload.*;
 import com.exadel.discountwebapp.exception.response.ExceptionResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.MailException;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
@@ -21,9 +22,11 @@ public class WebExceptionHandler {
 
     private static final String FAILED_FILE_HANDLING_CODE = "COULD_NOT_HANDLE_FILE";
     private static final String FORBIDDEN_CODE = "FORBIDDEN";
+    private static final String CONFLICT_CODE = "CONFLICT";
     private static final String AUTHORIZED_EXCEPTION_CODE = "UNAUTHORIZED";
     private static final String FAILED_EMAIL_CODE = "FAILED_TO_SEND_EMAIL";
     private static final String GLOBAL_EXCEPTION_CODE = "INTERNAL_SERVER_ERROR";
+    private static final String ERROR_RACE_CONDITION = "ERROR RACE CONDITION DURING CONCURRENCY UPDATE";
 
     private static final String GLOBAL_EXCEPTION_MESSAGE = "Something is wrong";
 
@@ -118,6 +121,12 @@ public class WebExceptionHandler {
     @ResponseStatus(value = CONFLICT)
     public ExceptionResponse mailException(MailException ex) {
         return new ExceptionResponse(FAILED_EMAIL_CODE, ex.getMessage());
+    }
+
+    @ExceptionHandler(ObjectOptimisticLockingFailureException.class)
+    @ResponseStatus(value = CONFLICT)
+    public ExceptionResponse optimisticLockingException(ObjectOptimisticLockingFailureException ex) {
+        return new ExceptionResponse(CONFLICT_CODE, ERROR_RACE_CONDITION);
     }
 
     @ExceptionHandler(Exception.class)

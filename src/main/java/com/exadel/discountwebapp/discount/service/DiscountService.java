@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.OptimisticLockException;
 
 @Service
 @RequiredArgsConstructor
@@ -42,20 +41,12 @@ public class DiscountService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public DiscountResponseVO findById(Long id) {
+    public DiscountResponseVO findByIdAndUpdateStatistics(Long id) {
         Discount discount = discountRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Discount.class, "id", id));
-        while (true) {
-            try {
-                Long quantity = discount.getViewNumber() == null ? 1 : discount.getViewNumber() + 1;
-                discount.setViewNumber(quantity);
-                discount.setVersion(discount.getVersion());
-                discountRepository.save(discount);
-                break;
-            } catch (OptimisticLockException ex) {
-                ex.getStackTrace();
-            }
-        }
+        Long quantity = discount.getViewNumber() == null ? 1 : discount.getViewNumber() + 1;
+        discount.setViewNumber(quantity);
+        discountRepository.save(discount);
         return discountMapper.toVO(discount);
     }
 

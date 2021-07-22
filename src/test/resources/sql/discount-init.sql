@@ -28,15 +28,15 @@ INSERT INTO discount (dis_id, dis_title, dis_short_description, dis_description,
 VALUES (1, '38% discount', 'an unlimited annual subscription',
         '38% discount on the purchase of an unlimited annual subscription to the fitness club "Sport Life"',
         'https://res.cloudinary.com/hudrds7km/image/upload/v1626823788/ltcgv0hmuszxheoa6i1p.png', null, 100, null,
-        '2021-06-06 17:22:21', '2021-12-06 17:22:21', '2021-06-06 17:22:21', '2021-06-06 17:22:21', 10, 10, null, 0),
+        '2021-06-06 17:22:21', '2021-12-06 17:22:21', '2021-06-06 17:22:21', '2021-06-06 17:22:21', 10, 10, null, 1),
        (2, '50% discount', '50% discount on all pizza menus',
         '50% discount on all pizza menus from the pizzeria "Domino`s Pizza"',
         'https://res.cloudinary.com/hudrds7km/image/upload/v1626823788/ltcgv0hmuszxheoa6i1p.png', null, 150, 'promocode11',
-        '2022-06-06 17:22:21', '2022-12-06 17:22:21', '2021-06-06 17:22:21', '2022-06-06 17:22:21', 20, 20, null, 0),
+        '2022-06-06 17:22:21', '2022-12-06 17:22:21', '2021-06-06 17:22:21', '2022-06-06 17:22:21', 20, 20, null, 1),
        (3, 'HappyDrink', '70% discount on all drinks menus',
         '70% discount on all drinks menus from the caffe "Drink House"',
         'https://res.cloudinary.com/hudrds7km/image/upload/v1626823788/ltcgv0hmuszxheoa6i1p.png', null, 150, null,
-        '2023-06-06 17:22:21', '2023-12-06 17:22:21', '2021-06-06 17:22:21', '2023-06-06 17:22:21', 20, 20, null, 0);
+        '2023-06-06 17:22:21', '2023-12-06 17:22:21', '2021-06-06 17:22:21', '2023-06-06 17:22:21', 20, 20, null, 1);
 
 INSERT INTO tag_discount (dis_id, tag_id)
 VALUES (1, 1),
