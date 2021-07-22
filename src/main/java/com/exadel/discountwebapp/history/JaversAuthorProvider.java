@@ -1,22 +1,22 @@
 package com.exadel.discountwebapp.history;
 
 import lombok.NoArgsConstructor;
-import org.springframework.context.annotation.Primary;
+import org.javers.spring.auditable.AuthorProvider;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 @Component
 @NoArgsConstructor
-@Primary
-class JaversAuthorProvider implements org.javers.spring.auditable.AuthorProvider {
-
+class SpringSecurityAuthorProvider implements AuthorProvider {
     @Override
     public String provide() {
-        return SecurityContextHolder.getContext().getAuthentication().getName();
-    }
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-    public JaversAuthorProvider provideJaversAuthor() {
-        return new JaversAuthorProvider();
+        if (auth == null) {
+            return "Unauthenticated";
+        }
+
+        return auth.getName();
     }
 }
-
