@@ -30,7 +30,7 @@ public class DiscountController {
 
     @GetMapping("/{id}")
     public DiscountResponseVO findById(@PathVariable Long id) {
-        return discountService.findById(id);
+        return discountService.findByIdAndUpdateStatistics(id);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

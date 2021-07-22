@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 21072021_add_column_dis_version
+      author: tesliuk.ua@gmail.com
+      preConditions:
+        - onFail: MARK_RAN
+          not:
+            - columnExists:
+                columnName: dis_version
+                tableName: discount
+                schemaName:  pulic
+      changes:
+        - addColumn:
+            tableName: discount
+            columns:
+              - column:
+                  name: dis_version
+                  type: BIGINT
+                  defaultValue: 1
+                  constraints:
+                    nullable: false
