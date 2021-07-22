@@ -1,7 +1,8 @@
 package com.exadel.discountwebapp.user.service;
 
+import com.exadel.discountwebapp.common.BaseEntityMapper;
+import com.exadel.discountwebapp.common.BaseFilterService;
 import com.exadel.discountwebapp.exception.exception.client.EntityNotFoundException;
-import com.exadel.discountwebapp.filter.SpecificationBuilder;
 import com.exadel.discountwebapp.role.mapper.RoleMapper;
 import com.exadel.discountwebapp.security.SigninVO;
 import com.exadel.discountwebapp.user.entity.User;
@@ -9,9 +10,7 @@ import com.exadel.discountwebapp.user.mapper.UserMapper;
 import com.exadel.discountwebapp.user.repository.UserRepository;
 import com.exadel.discountwebapp.user.vo.UserResponseVO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -21,7 +20,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService extends BaseFilterService<User, UserResponseVO> {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
@@ -33,15 +32,6 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(User.class, "id", id));
         return userMapper.toVO(user);
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    public Page<UserResponseVO> findAll(String query, Pageable pageable) {
-        SpecificationBuilder<User> specificationBuilder = new SpecificationBuilder<>();
-        Specification<User> specification = specificationBuilder.fromQuery(query);
-
-        Page<User> page = userRepository.findAll(specification, pageable);
-        return page.map(userMapper::toVO);
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
@@ -74,5 +64,15 @@ public class UserService {
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public List<Long> findSubscribersIdsByEmail(String email) {
         return userRepository.findSubscribersIdsByEmail(email);
+    }
+
+    @Override
+    protected JpaSpecificationExecutor<User> getEntityRepository() {
+        return userRepository;
+    }
+
+    @Override
+    protected BaseEntityMapper<User, UserResponseVO> getEntityToVOMapper() {
+        return userMapper;
     }
 }
