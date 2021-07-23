@@ -158,7 +158,7 @@ public class XLSXExported {
         rowCount4++;
         Row rowDiscountViews = sheet.createRow(rowCount4++);
 
-        createCell(rowTitleDiscountViews, 0, "Activated discounts by views", style16);
+        createCell(rowTitleDiscountViews, 0, "Popular discounts by views", style16);
         createCell(rowTitleDiscountViews, 1, "Period: Since Inception ", style16);
         createCell(rowDiscountViews, 0, NUMBER_SIGN, style15);
         createCell(rowDiscountViews, 1, TITLE, style15);
@@ -192,7 +192,7 @@ public class XLSXExported {
             createCell(row, columnCount++, elem.getVendorTitle(), style);
             createCell(row, columnCount++, elem.getCategoryTitle(), style);
             createCell(row, columnCount++, elem.getViewNumber(), style);
-            createCell(row, columnCount, elem.getActivated(), style);
+            createCell(row, columnCount, elem.getActivated() == null ? 0 : elem.getActivated(), style);
         }
 
         writeHeaderLine(HEADLINE_UR_PREFERENCE);

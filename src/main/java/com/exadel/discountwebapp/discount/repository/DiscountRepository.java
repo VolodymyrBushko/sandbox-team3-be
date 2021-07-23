@@ -20,25 +20,28 @@ public interface DiscountRepository
             " FROM Discount d")
     List<DiscountViewingDTO> getDiscountSummary();
 
-    @Query(value = "select dis.dis_title as title, dis.dis_short_description as shortDescription, " +
-            "dis.dis_description as description, dis.dis_promocode as promocode, dis.dis_percentage as percentage, " +
-            "dis.dis_flat_amount as flatAmount, " +
-            "dis.dis_created as created, " +
-            "dis.dis_start_date as startDate, " +
-            "dis.dis_expiration_date as expirationDate, " +
-            "vn.vn_title as vendorTitle, " +
-            "cat.cat_title as categoryTitle, " +
-            "dis.dis_viewed as viewNumber, dis_activated as activated " +
-            "from discount dis " +
-            "inner join vendor vn " +
-            "on vn.vn_id= dis.vn_id " +
-            "inner join category cat " +
-            "on cat.cat_id=dis.cat_id " +
-            "inner join " +
-            "(select ud.dis_id as dis_id, count(1) as dis_activated " +
-            "from discount d " +
-            "inner join user_discount ud on d.dis_id=ud.dis_id " +
-            "group by ud.dis_id) as grouped_discounts " +
-            "on grouped_discounts.dis_id=dis.dis_id", nativeQuery = true)
+        @Query(value = "select dis.dis_title as title, " +
+                              "dis.dis_short_description as shortDescription, " +
+                              "dis.dis_description as description, " +
+                              "dis.dis_promocode as promocode, " +
+                              "dis.dis_percentage as percentage, " +
+                              "dis.dis_flat_amount as flatAmount, " +
+                              "dis.dis_created as created, " +
+                              "dis.dis_start_date as startDate, " +
+                              "dis.dis_expiration_date as expirationDate, " +
+                              "vn.vn_title as vendorTitle, " +
+                              "cat.cat_title as categoryTitle, " +
+                              "dis.dis_viewed as viewNumber, " +
+                              "(select count(1) " +
+                              "from discount d  " +
+                              "inner join user_discount ud on " +
+                              "d.dis_id=ud.dis_id " +
+                              "where d.dis_id=dis.dis_id " +
+                              "group by ud.dis_id) as activated " +
+                "from discount dis " +
+                "inner join vendor vn " +
+                "on vn.vn_id= dis.vn_id " +
+                "inner join category cat " +
+                "on cat.cat_id=dis.cat_id ", nativeQuery = true)
     List<ExtendedDiscountViews> getExtendedDiscountSummary();
 }
