@@ -71,8 +71,12 @@ public class VendorService extends BaseFilterService<Vendor, VendorResponseVO> {
     @Transactional(propagation = Propagation.REQUIRED)
     public void deleteById(Long id) {
         Vendor vendor = getVendorById(id);
+        String imageUrl = vendor.getImageUrl();
         vendorRepository.deleteById(vendor.getId());
-        imageUploadService.delete(vendor.getImageUrl());
+
+        if (imageUrl != null) {
+            imageUploadService.delete(imageUrl);
+        }
     }
 
     private Vendor getVendorById(Long id) {

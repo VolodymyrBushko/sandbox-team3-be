@@ -14,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class VendorResponseVO extends VendorBaseVO {
+
     @NotNull
     private Long id;
 

@@ -23,8 +23,7 @@ public class VendorBaseVO implements Serializable {
     @Size(min = 2, max = 510)
     private String description;
 
-    @NotBlank
-    @Size(min = 2, max = 510)
+    @Size(max = 510)
     private String imageUrl;
 
     @Email
