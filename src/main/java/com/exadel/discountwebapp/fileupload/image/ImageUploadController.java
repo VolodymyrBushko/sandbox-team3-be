@@ -15,9 +15,4 @@ public class ImageUploadController {
     public ImageUploadResponse uploadImage(@RequestParam("image") MultipartFile image) {
         return imageUploadService.upload(image);
     }
-
-    @DeleteMapping("/delete")
-    public boolean deleteImage(@RequestBody String url) {
-        return imageUploadService.delete(url);
-    }
 }
