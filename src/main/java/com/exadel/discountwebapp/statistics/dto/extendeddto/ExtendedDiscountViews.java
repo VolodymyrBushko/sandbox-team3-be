@@ -16,5 +16,5 @@ public interface ExtendedDiscountViews {
     String getVendorTitle();
     String getCategoryTitle();
     Long getViewNumber();
-    int getActivated();
+    Long getActivated();
 }
