@@ -1,0 +1,9 @@
+databaseChangeLog:
+    - changeSet:
+        id: 23072021_add_uk_location_table
+        author: bozhokmaria@gmail.com
+        changes:
+          - addUniqueConstraint:
+              columnNames: country_code, loc_city, loc_address_line
+              constraintName: uk_country_code_loc_city_loc_address_line
+              tableName: location

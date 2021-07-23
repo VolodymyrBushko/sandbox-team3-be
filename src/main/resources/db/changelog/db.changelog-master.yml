@@ -83,3 +83,6 @@ databaseChangeLog:
   - include:
       file: changes01/23072021_drop_notnull_constraint_vn_image_url_from_vendor_table.yml
       relativeToChangelogFile: true
+  - include:
+      file: changes01/23072021_add_uk_location_table.yml
+      relativeToChangelogFile: true
