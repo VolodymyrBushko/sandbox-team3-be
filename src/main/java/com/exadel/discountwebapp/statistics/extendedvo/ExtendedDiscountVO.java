@@ -23,4 +23,5 @@ public class ExtendedDiscountVO {
     private String vendorTitle;
     private String categoryTitle;
     private Long viewNumber;
+    private Long activated;
 }
