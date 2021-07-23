@@ -67,6 +67,10 @@ public class Discount {
     @Column(name = "dis_viewed")
     private Long viewNumber;
 
+    @Version
+    @Column(name = "dis_version", nullable = false)
+    private Long version;
+
     @EqualsAndHashCode.Exclude
     @CreatedDate
     @Column(name = "dis_created", nullable = false, updatable = false)

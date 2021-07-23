@@ -67,7 +67,7 @@ class DiscountServiceIntegrationTest {
     void shouldFindDiscountById() {
         var id = 1L;
         var expected = discountRepository.findById(id).get();
-        var actual = discountService.findById(id);
+        var actual = discountService.findByIdAndUpdateStatistics(id);
 
         matchOne(expected, actual);
     }
@@ -76,7 +76,7 @@ class DiscountServiceIntegrationTest {
     void shouldThrowExceptionIfNoDiscountFoundById() {
         var id = 12345L;
         assertThrows(EntityNotFoundException.class, () -> {
-            discountService.findById(id);
+            discountService.findByIdAndUpdateStatistics(id);
         });
     }
 

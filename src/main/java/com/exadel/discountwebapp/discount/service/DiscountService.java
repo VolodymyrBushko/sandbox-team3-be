@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+
 @Service
 @RequiredArgsConstructor
 public class DiscountService
@@ -31,7 +32,7 @@ public class DiscountService
     private final ImageUploadService imageUploadService;
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public DiscountResponseVO findById(Long id) {
+    public DiscountResponseVO findByIdAndUpdateStatistics(Long id) {
         Discount discount = discountRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Discount.class, "id", id));
         Long quantity = discount.getViewNumber() == null ? 1 : discount.getViewNumber() + 1;
