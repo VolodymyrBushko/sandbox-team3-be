@@ -19,6 +19,8 @@ public interface VendorRepository
 
     Optional<Vendor> findByEmail(String email);
 
+    Optional<Vendor> findByPhoneNumber(String email);
+
     @Query("select u.email from User u left join u.subscriptions s where s.id = ?1")
     List<String> findAllSubEmailsByVendorId(Long id);
 }
