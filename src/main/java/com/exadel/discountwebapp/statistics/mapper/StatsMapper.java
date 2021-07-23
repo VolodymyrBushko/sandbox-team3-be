@@ -26,7 +26,7 @@ public class StatsMapper {
         return modelMapper.map(data, ExtendedUserVO.class);
     }
 
-    public ExtendedDiscountVO discountToVO(ExtendedDiscountViewsDTO data) {
+    public ExtendedDiscountVO discountToVO(ExtendedDiscountViews data) {
         return modelMapper.map(data, ExtendedDiscountVO.class);
     }
 

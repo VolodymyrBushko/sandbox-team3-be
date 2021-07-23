@@ -136,7 +136,7 @@ public class XLSXExported {
         createCell(rowVendor, 1, TITLE, style15);
         createCell(rowVendor, 2, DESCRIPTION, style15);
         createCell(rowVendor, 3, EMAIL, style15);
-        createCell(rowVendor, 4, "Phone number", style15);
+        createCell(rowVendor, 4, "Phone Number", style15);
         createCell(rowVendor, 5, ACTIVATED_QUANTITY, style15);
 
         var vnCounter = 1;
@@ -166,13 +166,14 @@ public class XLSXExported {
         createCell(rowDiscountViews, 3, DESCRIPTION, style15);
         createCell(rowDiscountViews, 4, "Promocode", style15);
         createCell(rowDiscountViews, 5, "Percentage", style15);
-        createCell(rowDiscountViews, 6, "Flat amount", style15);
+        createCell(rowDiscountViews, 6, "Flat Amount", style15);
         createCell(rowDiscountViews, 7, "Created Date", style15);
         createCell(rowDiscountViews, 8, "Start Date", style15);
         createCell(rowDiscountViews, 9, "Expiration Date", style15);
         createCell(rowDiscountViews, 10, "Vendor", style15);
         createCell(rowDiscountViews, 11, CATEGORY, style15);
         createCell(rowDiscountViews, 12, VIEWS_QUANTITY, style15);
+        createCell(rowDiscountViews, 13, "Activated", style15);
 
         var disCounter = 1;
         for (ExtendedDiscountVO elem : extendedSummaryStats.getExtendedDiscountsStats()) {
@@ -190,7 +191,8 @@ public class XLSXExported {
             createCell(row, columnCount++, new SimpleDateFormat(DATE_PATTERN).format(Timestamp.valueOf(elem.getExpirationDate())), style);
             createCell(row, columnCount++, elem.getVendorTitle(), style);
             createCell(row, columnCount++, elem.getCategoryTitle(), style);
-            createCell(row, columnCount, elem.getViewNumber(), style);
+            createCell(row, columnCount++, elem.getViewNumber(), style);
+            createCell(row, columnCount, elem.getActivated(), style);
         }
 
         writeHeaderLine(HEADLINE_UR_PREFERENCE);
