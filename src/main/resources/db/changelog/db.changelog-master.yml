@@ -83,3 +83,6 @@ databaseChangeLog:
   - include:
       file: changes01/21072021_add_column_dis_version.yml
       relativeToChangelogFile: true
+  - include:
+      file: changes01/23072021_add_uk_location_table.yml
+      relativeToChangelogFile: true
