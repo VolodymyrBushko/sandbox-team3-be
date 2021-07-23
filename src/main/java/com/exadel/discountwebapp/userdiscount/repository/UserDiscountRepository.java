@@ -4,10 +4,7 @@ import com.exadel.discountwebapp.statistics.dto.CategoryDTO;
 import com.exadel.discountwebapp.statistics.dto.UserDTO;
 
 import com.exadel.discountwebapp.statistics.dto.VendorDTO;
-import com.exadel.discountwebapp.statistics.dto.extendeddto.ExtendedCategoryDTO;
-import com.exadel.discountwebapp.statistics.dto.extendeddto.ExtendedUserDTO;
-import com.exadel.discountwebapp.statistics.dto.extendeddto.ExtendedVendorDTO;
-import com.exadel.discountwebapp.statistics.dto.extendeddto.ExtendedUsersPreferenceDTO;
+import com.exadel.discountwebapp.statistics.dto.extendeddto.*;
 import com.exadel.discountwebapp.userdiscount.entity.UserDiscount;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
