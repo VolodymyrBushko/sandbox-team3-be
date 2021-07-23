@@ -9,7 +9,7 @@ import com.exadel.discountwebapp.user.service.UserService;
 import com.exadel.discountwebapp.vendor.entity.Vendor;
 import com.exadel.discountwebapp.vendor.mapper.VendorMapper;
 import com.exadel.discountwebapp.vendor.repository.VendorRepository;
-import com.exadel.discountwebapp.vendor.validator.VendorEmailValidator;
+import com.exadel.discountwebapp.vendor.validator.VendorValidator;
 import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
 import com.exadel.discountwebapp.vendor.vo.VendorResponseVO;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class VendorService extends BaseFilterService<Vendor, VendorResponseVO> {
 
     private final VendorMapper vendorMapper;
     private final VendorRepository vendorRepository;
-    private final VendorEmailValidator vendorEmailValidator;
+    private final VendorValidator vendorValidator;
     private final UserService userService;
     private final ImageUploadService imageUploadService;
 
@@ -45,7 +45,7 @@ public class VendorService extends BaseFilterService<Vendor, VendorResponseVO> {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public VendorResponseVO create(VendorRequestVO request) {
-        vendorEmailValidator.validate(request);
+        vendorValidator.validateForCreate(request);
         return vendorMapper.toVO(vendorRepository.save(vendorMapper.toEntity(request)));
     }
 
@@ -54,9 +54,7 @@ public class VendorService extends BaseFilterService<Vendor, VendorResponseVO> {
         Vendor vendor = getVendorById(id);
         String imageUrl = vendor.getImageUrl();
 
-        if (!vendor.getEmail().equals(request.getEmail())) {
-            vendorEmailValidator.validate(request);
-        }
+        vendorValidator.validateForUpdate(vendor, request);
 
         vendorMapper.update(request, vendor);
         Vendor updatedVendor = vendorRepository.save(vendor);
