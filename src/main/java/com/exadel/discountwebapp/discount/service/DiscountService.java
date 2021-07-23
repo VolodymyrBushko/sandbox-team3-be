@@ -70,8 +70,12 @@ public class DiscountService
     @Transactional(propagation = Propagation.REQUIRED)
     public void deleteById(Long id) {
         Discount discount = getDiscountById(id);
+        String imageUrl = discount.getImageUrl();
         discountRepository.deleteById(discount.getId());
-        imageUploadService.delete(discount.getImageUrl());
+
+        if (imageUrl != null) {
+            imageUploadService.delete(imageUrl);
+        }
     }
 
     private Discount getDiscountById(Long id) {

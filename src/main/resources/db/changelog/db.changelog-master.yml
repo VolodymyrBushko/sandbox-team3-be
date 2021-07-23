@@ -65,9 +65,6 @@ databaseChangeLog:
   - include:
       file: changes01/12072021_create_favorites_table.yml
       relativeToChangelogFile: true
-#  - include:
-#      file: changes01/14072021_add_location_composite_constraint.yml
-#      relativeToChangelogFile: true
   - include:
       file: changes01/13072021_add_column_dis_viewed.yml
       relativeToChangelogFile: true
@@ -82,4 +79,7 @@ databaseChangeLog:
       relativeToChangelogFile: true
   - include:
       file: changes01/21072021_add_column_dis_version.yml
+      relativeToChangelogFile: true
+  - include:
+      file: changes01/23072021_drop_notnull_constraint_vn_image_url_from_vendor_table.yml
       relativeToChangelogFile: true
