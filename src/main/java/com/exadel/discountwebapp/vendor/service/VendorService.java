@@ -45,8 +45,7 @@ public class VendorService extends BaseFilterService<Vendor, VendorResponseVO> {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public VendorResponseVO create(VendorRequestVO request) {
-        vendorValidator.checkDuplicateEmail(request);
-        vendorValidator.checkDuplicatePhones(request);
+        vendorValidator.validateForCreate(request);
         return vendorMapper.toVO(vendorRepository.save(vendorMapper.toEntity(request)));
     }
 
@@ -55,8 +54,7 @@ public class VendorService extends BaseFilterService<Vendor, VendorResponseVO> {
         Vendor vendor = getVendorById(id);
         String imageUrl = vendor.getImageUrl();
 
-        vendorValidator.checkDuplicateEmailForUpdate(vendor, request);
-        vendorValidator.checkDuplicatePhonesForUpdate(vendor, request);
+        vendorValidator.validateForUpdate(vendor, request);
 
         vendorMapper.update(request, vendor);
         Vendor updatedVendor = vendorRepository.save(vendor);

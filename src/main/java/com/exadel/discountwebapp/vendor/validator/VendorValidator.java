@@ -7,11 +7,23 @@ import com.exadel.discountwebapp.vendor.vo.VendorRequestVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 @Component
 @RequiredArgsConstructor
 public class VendorValidator {
 
     private final VendorRepository vendorRepository;
+
+    public void validateForCreate(VendorRequestVO request) {
+        checkDuplicateEmail(request);
+        checkDuplicatePhones(request);
+    }
+
+    public void validateForUpdate(Vendor vendor, VendorRequestVO request) {
+        checkDuplicateEmailForUpdate(vendor, request);
+        checkDuplicatePhonesForUpdate(vendor, request);
+    }
 
     public void checkDuplicateEmail(VendorRequestVO request) {
         if (request.getEmail() != null) {
@@ -31,23 +43,14 @@ public class VendorValidator {
         }
     }
 
-
     public void checkDuplicateEmailForUpdate(Vendor vendor, VendorRequestVO request) {
-        if (vendor.getEmail() != null) {
-            if (!vendor.getEmail().equals(request.getEmail())) {
-                checkDuplicateEmail(request);
-            }
-        } else {
+        if (!Objects.equals(vendor.getEmail(), request.getEmail())) {
             checkDuplicateEmail(request);
         }
     }
 
     public void checkDuplicatePhonesForUpdate(Vendor vendor, VendorRequestVO request) {
-        if (vendor.getPhoneNumber() != null) {
-            if (!vendor.getPhoneNumber().equals(request.getPhoneNumber())) {
-                checkDuplicatePhones(request);
-            }
-        } else {
+        if (!Objects.equals(vendor.getPhoneNumber(), request.getPhoneNumber())) {
             checkDuplicatePhones(request);
         }
     }
