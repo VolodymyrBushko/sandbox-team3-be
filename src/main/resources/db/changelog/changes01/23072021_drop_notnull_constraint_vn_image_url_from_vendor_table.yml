@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: 23072021_drop_notnull_constraint_vn_image_url_from_vendor_table
+      author: volodymyr.bushko@gmail.com
+      changes:
+        - dropNotNullConstraint:
+            columnDataType: VARCHAR(510)
+            columnName: vn_image_url
+            schemaName: public
+            tableName: vendor
