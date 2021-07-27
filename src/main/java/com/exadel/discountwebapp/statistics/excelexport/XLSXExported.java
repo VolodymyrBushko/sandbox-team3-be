@@ -185,7 +185,7 @@ public class XLSXExported {
             createCell(row, columnCount++, elem.getDescription(), style);
             createCell(row, columnCount++, elem.getPromocode(), style);
             createCell(row, columnCount++, String.valueOf(elem.getPercentage() == null ? "" : elem.getPercentage()), style);
-            createCell(row, columnCount++, String.valueOf(elem.getFlatAmount()), style);
+            createCell(row, columnCount++, String.valueOf(elem.getFlatAmount() == null ? "" : elem.getFlatAmount()), style);
             createCell(row, columnCount++, new SimpleDateFormat(DATE_PATTERN).format(Timestamp.valueOf(elem.getCreated())), style);
             createCell(row, columnCount++, new SimpleDateFormat(DATE_PATTERN).format(Timestamp.valueOf(elem.getStartDate())), style);
             createCell(row, columnCount++, new SimpleDateFormat(DATE_PATTERN).format(Timestamp.valueOf(elem.getExpirationDate())), style);
