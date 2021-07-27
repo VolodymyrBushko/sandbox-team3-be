@@ -9,6 +9,8 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -53,12 +55,23 @@ public class XLSXExported {
         var cell = row.createCell(columnCount);
         if (value instanceof Long) {
             cell.setCellValue((Long) value);
+            cell.setCellStyle(style);
         } else if (value instanceof Integer) {
             cell.setCellValue((Integer) value);
+            cell.setCellStyle(style);
+        } else if (value instanceof BigDecimal) {
+            cell.setCellValue(((BigDecimal) value).setScale(2, RoundingMode.HALF_UP).doubleValue());
+            CreationHelper creationHelper = workbook.getCreationHelper();
+            CellStyle cellStyle = workbook.createCellStyle();
+            XSSFFont font = workbook.createFont();
+            font.setFontHeight(14);
+            cellStyle.setFont(font);
+            cellStyle.setDataFormat(creationHelper.createDataFormat().getFormat("##0.00"));
+            cell.setCellStyle(cellStyle);
         } else {
             cell.setCellValue((String) value);
+            cell.setCellStyle(style);
         }
-        cell.setCellStyle(style);
     }
 
     private void writeDataLines() {
@@ -184,8 +197,8 @@ public class XLSXExported {
             createCell(row, columnCount++, elem.getShortDescription(), style);
             createCell(row, columnCount++, elem.getDescription(), style);
             createCell(row, columnCount++, elem.getPromocode(), style);
-            createCell(row, columnCount++, String.valueOf(elem.getPercentage() == null ? "" : elem.getPercentage()), style);
-            createCell(row, columnCount++, String.valueOf(elem.getFlatAmount() == null ? "" : elem.getFlatAmount()), style);
+            createCell(row, columnCount++, elem.getPercentage(), style);
+            createCell(row, columnCount++, elem.getFlatAmount(), style);
             createCell(row, columnCount++, new SimpleDateFormat(DATE_PATTERN).format(Timestamp.valueOf(elem.getCreated())), style);
             createCell(row, columnCount++, new SimpleDateFormat(DATE_PATTERN).format(Timestamp.valueOf(elem.getStartDate())), style);
             createCell(row, columnCount++, new SimpleDateFormat(DATE_PATTERN).format(Timestamp.valueOf(elem.getExpirationDate())), style);
